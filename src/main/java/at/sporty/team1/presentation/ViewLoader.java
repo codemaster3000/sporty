@@ -50,6 +50,8 @@ public class ViewLoader<T extends IJfxController> {
 	}
 
 	private static class ViewLoaderException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+
 		public ViewLoaderException(Exception e) {
 			super(e);
 		}
