@@ -28,6 +28,13 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>javafx</artifactId>
+			<version>2.2.3</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/jfxrt.jar</systemPath>
+		</dependency>
 		<!-- JUnit Dependency -->
 		<dependency>
 			<groupId>junit</groupId>
