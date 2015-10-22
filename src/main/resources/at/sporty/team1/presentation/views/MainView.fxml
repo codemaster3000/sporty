@@ -21,7 +21,7 @@
 				<Label fx:id="_usernameLabel" text="%usernameLabel"/>
 				<Button mnemonicParsing="false" text="%userLogout"/>
 				-->
-				<Label text="TEST LABEL by TEAM1"/>
+				<Label text="TEST LABEL by TEAM1  // test for Jenkins"/>
 			</items>
 		</ToolBar>
 	</top>
