@@ -20,6 +20,14 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.zenjava</groupId>
+				<artifactId>javafx-maven-plugin</artifactId>
+				<version>1.3</version>
+				<configuration>
+					<mainClass>MainApp.java</mainClass>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
