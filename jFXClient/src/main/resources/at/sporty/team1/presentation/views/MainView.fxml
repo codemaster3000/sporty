@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+			xmlns="http://javafx.com/javafx/8"
+			fx:id="_borderPanel"
+			fx:controller="at.sporty.team1.presentation.controllers.MainViewController">
+	<top>
+		<ToolBar BorderPane.alignment="CENTER">
+			<items>
+				<!-- TODO 
+				<ComboBox fx:id="_searchTextField"
+						  minWidth="400.0"
+						  promptText="%searchBar.promptText"
+						  editable="true"
+						  onAction="#onSearch"/>
+				<Button text="Search" onAction="#onSearch"/>
+				<Separator orientation="VERTICAL"/>
+				<Label fx:id="_usernameLabel" text="%usernameLabel"/>
+				<Button mnemonicParsing="false" text="%userLogout"/>
+				-->
+				<Label text="TEST LABEL by TEAM1  // test for Jenkins"/>
+			</items>
+		</ToolBar>
+	</top>
+	<center>
+		<TabPane fx:id="_tabPanel" BorderPane.alignment="CENTER" tabMaxHeight="Infinity"/>
+	</center>
+</BorderPane>
