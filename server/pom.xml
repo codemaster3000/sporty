@@ -33,7 +33,7 @@
                             </descriptorRefs>
                             <archive>
                                 <manifest>
-                                    <mainClass>at.sporty.team1.DummyClass</mainClass>
+                                    <mainClass>at.sporty.team1.Server</mainClass>
                                 </manifest>
                             </archive>
                         </configuration>
