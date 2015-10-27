@@ -12,8 +12,10 @@
     <packaging>pom</packaging>
 
     <properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+        <project.tests.junit.version>4.12</project.tests.junit.version>
+        <project.logger.log4j2.version>2.4.1</project.logger.log4j2.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <modules>
 		<module>server</module>
@@ -35,15 +37,27 @@
 		</plugins>
 	</build>
 
-	<dependencies>
+    <!-- Managed Dependencies For All Project Modules -->
+	<dependencyManagement>
+        <dependencies>
+            <!-- JUnit Dependency -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${project.tests.junit.version}</version>
+            </dependency>
 
-
-			<dependency>
-				<groupId>org.apache.logging.log4j</groupId>
-				<artifactId>log4j</artifactId>
-				<version>2.4.1</version>
-			</dependency>
-
-
-	</dependencies>
+		    <!-- Log4J2 Dependency -->
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${project.logger.log4j2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${project.logger.log4j2.version}</version>
+            </dependency>
+        </dependencies>
+	</dependencyManagement>
 </project>
