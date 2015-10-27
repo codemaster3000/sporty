@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * Represents a controller to handle the login.
+ * TODO
  */
 public class LoginController {
     private static LoginController _loginController;
@@ -39,9 +40,10 @@ public class LoginController {
      *          if the login is invalid it logs the failed login attempt and prompts the loginscreen again
      *
      *          -1 false
-     *          0 receptionist
-     *          1 doc
-     *          2 orthoptist
+     *          0 admin
+     *          1 undefiedUserrole1
+     *          2 userrole3
+     *          .....
      *
      * @param[in] username Users Username
      * @param[in] password Users Password
@@ -67,7 +69,7 @@ public class LoginController {
             List<IRMember> user = null;
 
             try {
-                user = memberDAO.findByName(username);
+                user = memberDAO.findByName(username, true); // TODO
             } catch (SQLException e) {
                 e.printStackTrace();
                 Loggers.APPLICATION.info(e.toString() + " caused while logging in");
@@ -85,13 +87,13 @@ public class LoginController {
                 // Collection<UserRole> users = user.get(0).getUserRoles();
 
                 // TODO Userroles
-                if (false/* doctor*/)
+                if (false/* Admin*/)
                     return 1;
-                if (false/*receptionist*/)
+                if (false/*Userrole2*/)
                     return 0;
-                if (false/*orthoptist*/)
+                if (false/*Uerrole3*/)
                     return 3;
-                // meanwhile return 0 (receptionist view)
+                // meanwhile return 0 (sportler view)
                 return 0;
             }
         } else {

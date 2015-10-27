@@ -28,7 +28,7 @@ public class Member implements IMember {
 
     @Override
     @Id
-    @Column(name = "member_id")
+    @Column(name = "memberId")
     public int getMemberId() {
         return memberId;
     }
@@ -40,7 +40,7 @@ public class Member implements IMember {
 
     @Override
     @Basic
-    @Column(name = "firstname")
+    @Column(name = "fname")
     public String getFirstname() {
         return firstname;
     }
@@ -52,7 +52,7 @@ public class Member implements IMember {
 
     @Override
     @Basic
-    @Column(name = "lastname")
+    @Column(name = "lname")
     public String getLastname() {
         return lastname;
     }
@@ -76,7 +76,7 @@ public class Member implements IMember {
 
     @Override
     @Basic
-    @Column(name = "date_of_birth")
+    @Column(name = "dateOfBirth")
     public Date getDateOfBirth() {
         return dateOfBirth;
     }
@@ -88,7 +88,7 @@ public class Member implements IMember {
 
     @Override
     @Basic
-    @Column(name = "e_mail")
+    @Column(name = "email")
     public String getEMail() {
         return eMail;
     }
@@ -110,6 +110,10 @@ public class Member implements IMember {
         this.address = address;
     }
 
+    /**
+     * many to many? TODO
+     * @return TODO
+     */
     @Override
     @Basic
     @Column(name = "department")

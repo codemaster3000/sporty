@@ -1,12 +1,89 @@
 package at.sporty.team1.persistence.daos;
 
 import at.sporty.team1.domain.Member;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
+
+import java.sql.SQLException;
+import java.util.List;
 
 /**
- * Created by f00 on 27.10.15.
+ * Represents a concrete DAO for Members
  */
 public class MemberDAO extends HibernateGenericDao<Member> {
-    public MemberDAO(Class<Member> domainClass) {
-        super(domainClass);
+//    public MemberDAO(Class<Member> domainClass) {
+//        super(domainClass);
+//    }
+
+    /**
+     * Creates a new patient DAO.
+     */
+    public MemberDAO() {
+        super(Member.class);
+    }
+
+    /**
+     * Find member by name.
+     *
+     * @param name          The name (firstname or lastname).
+     * @param caseSensitive True if search should be case sensitive.
+     * @return The found member.
+     */
+    public List<Member> findByName(String name, boolean caseSensitive) throws SQLException {
+        Criterion criterion;
+        if (caseSensitive) {
+            criterion = Restrictions.or(
+                    Restrictions.like("fname", name, MatchMode.EXACT),
+                    Restrictions.like("lname", name, MatchMode.EXACT));
+        } else {
+            criterion = Restrictions.or(
+                    Restrictions.like("fname", name, MatchMode.ANYWHERE),
+                    Restrictions.like("lname", name, MatchMode.ANYWHERE));
+        }
+
+        return super.findByCriteria(criterion);
+    }
+
+    /**
+     * Find member with a given id.
+     *
+     * @param id            memberId
+     * @param caseSensitive True if search should be case sensitive.
+     * @return The list of found members.
+     */
+    public List<Member> findById(String id, boolean caseSensitive) throws SQLException {
+        Criterion criterion;
+        if (caseSensitive) {
+            criterion = Restrictions.like("memberId", id, MatchMode.EXACT);
+        } else {
+            criterion = Restrictions.like("memberId", id, MatchMode.ANYWHERE);
+        }
+        return super.findByCriteria(criterion);
+    }
+    // http://docs.jboss.org/hibernate/search/4.1/reference/en-US/html/search-query.html
+
+    /**
+     * Find members by name or id
+     *
+     * @param nameOrId      The name (firstname or lastname) or id.
+     * @param caseSensitive True if search should be case sensitive.
+     * @return The found members.
+     */
+    public List<Member> findByNameOrId(String nameOrId, boolean caseSensitive) throws SQLException {
+        Criterion criterion;
+        if (caseSensitive) {
+            criterion = Restrictions.or(
+                    Restrictions.like("fname", nameOrId, MatchMode.EXACT),
+                    Restrictions.like("lname", nameOrId, MatchMode.EXACT),
+                    Restrictions.like("memberId", nameOrId, MatchMode.EXACT));
+        } else {
+            criterion = Restrictions.or(
+                    Restrictions.like("fname", nameOrId, MatchMode.ANYWHERE),
+                    Restrictions.like("lname", nameOrId, MatchMode.ANYWHERE),
+                    Restrictions.like("memberId", nameOrId, MatchMode.ANYWHERE));
+        }
+
+        return super.findByCriteria(criterion);
     }
 }
