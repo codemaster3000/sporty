@@ -1,3 +1,7 @@
+package at.sporty.team1.misc;
+
+import org.apache.logging.log4j.core.config.Loggers;
+
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -59,6 +63,7 @@ public class Crypto {
      * @param bytes byte[] to be parsed to hex-String
      * @return HexString representing the sha512(byte[])
      */
+
     public static String bytesToHex(byte[] bytes) {
         final char[] hexArray = "0123456789ABCDEF".toCharArray();
 

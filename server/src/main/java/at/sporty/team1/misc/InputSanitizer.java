@@ -1,5 +1,8 @@
 package at.sporty.team1.misc;
 
+import at.sporty.team1.logging.Loggers;
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.RegularExpression;
+
 import java.util.regex.PatternSyntaxException;
 
 /**
@@ -13,11 +16,17 @@ public class InputSanitizer {
     }
 
     /**
-     * @param value the value that needs to be tested
-     * @param type  the Type of Format that shall be matched
+     **********************************************************************************
+     * @brief only method of this class - checks if a Value matches the type it should
+     *
+     * @param[in] value the value that needs to be tested
+     * @param[in] type  the Type of Format that shall be matched
+     *
      * @return Boolean True if matched, false if not
+     *
      * @throws PatternSyntaxException
-     */
+     **********************************************************************************/
+
     public boolean check(String value, TYPE type) throws PatternSyntaxException {
 
         Loggers.GUI.debug("InputSanitizer.check(" + value + "," + type.toString() + ")" + "called");

@@ -1,5 +1,6 @@
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+package at.sporty.team1.logging;
+
+import org.apache.logging.log4j.*;
 
 import java.io.PrintStream;
 import java.util.Date;
@@ -11,7 +12,7 @@ import java.util.Date;
 
 
 /*TODO: log4j lib */
-public class Loggers {
+public class  Loggers {
     //TODO determine which loggers we want to use
     public static final Logger STANDARD = LogManager.getLogger("STANDARD");
     public static final Logger DEBUG = LogManager.getLogger("DEBUG");
