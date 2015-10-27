@@ -17,7 +17,7 @@ public class MainApp extends Application {
     /**
      * Default (empty) constructor for this utility class.
      */
-    private MainApp() {
+    public MainApp() {
     }
 
     @Override

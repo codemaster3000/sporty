@@ -1,6 +1,7 @@
 package at.sporty.team1.persistence.hibernate;
 
 import at.sporty.team1.persistence.api.IGenericDao;
+import org.hibernate.criterion.Criterion;
 
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
@@ -16,6 +17,11 @@ public class HibernateGenericDao<T> implements IGenericDao<T> {
 
     @Override
     public List<T> findAll() throws PersistenceException {
+        return null;
+    }
+
+    @Override
+    public List<T> findByCriteria(Criterion... criterion) throws PersistenceException {
         return null;
     }
 
