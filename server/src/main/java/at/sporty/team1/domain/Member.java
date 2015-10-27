@@ -41,24 +41,24 @@ public class Member implements IMember {
     @Override
     @Basic
     @Column(name = "firstname")
-    public String getFirstname() {
+    public String getFirstName() {
         return firstname;
     }
 
     @Override
-    public void setFirstname(String firstname) {
+    public void setFirstName(String firstname) {
         this.firstname = firstname;
     }
 
     @Override
     @Basic
     @Column(name = "lastname")
-    public String getLastname() {
+    public String getLastName() {
         return lastname;
     }
 
     @Override
-    public void setLastname(String lastname) {
+    public void setLastName(String lastname) {
         this.lastname = lastname;
     }
 
