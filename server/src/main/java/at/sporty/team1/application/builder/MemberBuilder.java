@@ -23,13 +23,13 @@ public class MemberBuilder {
     private String _username;
     private String _password;
 
-    public MemberBuilder setFirstName(String firstname) {
-        _firstName = firstname;
+    public MemberBuilder setFirstName(String firstName) {
+        _firstName = firstName;
         return this;
     }
 
-    public MemberBuilder setLastName(String lastname) {
-        _lastName = lastname;
+    public MemberBuilder setLastName(String lastName) {
+        _lastName = lastName;
         return this;
     }
 

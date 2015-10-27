@@ -26,6 +26,6 @@ public class PersistenceFacade {
      * @return an instance of IMemberDAO
      */
     public static IMemberDAO getNewMemberDAO() {
-        return new MemberDAO();
+        return (IMemberDAO) new MemberDAO();
     }
 }

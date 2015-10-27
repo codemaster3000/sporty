@@ -15,7 +15,7 @@ public class Department implements IDepartment {
 
     @Override
     @Id
-    @Column(name = "department_id")
+    @Column(name = "departmentId")
     public int getDepartmentId() {
         return departmentId;
     }

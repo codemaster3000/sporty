@@ -12,10 +12,6 @@ import java.util.List;
  * Represents a concrete DAO for Members
  */
 public class MemberDAO extends HibernateGenericDAO<Member> {
-//    public MemberDAO(Class<Member> domainClass) {
-//        super(domainClass);
-//    }
-
     /**
      * Creates a new patient DAO.
      */

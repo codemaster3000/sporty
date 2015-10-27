@@ -40,7 +40,7 @@ public class Member implements IMember {
 
     @Override
     @Basic
-    @Column(name = "firstname")
+    @Column(name = "fname")
     public String getFirstName() {
         return firstname;
     }
@@ -52,7 +52,7 @@ public class Member implements IMember {
 
     @Override
     @Basic
-    @Column(name = "lastname")
+    @Column(name = "lname")
     public String getLastName() {
         return lastname;
     }

@@ -7,7 +7,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
 
 import javax.persistence.PersistenceException;
 import java.util.Properties;
@@ -71,12 +70,9 @@ public class HibernateSessionUtil {
             Configuration configuration = new Configuration().configure(getClass().getResource(HIBERNATE_CONFIG_FILE));
             Properties properties = configuration.getProperties();
 
-//            SESSION_FACTORY = configuration.buildSessionFactory(
-//                new StandardServiceRegistryBuilder().applySettings(properties).build()
-//            );
-
-            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-            SESSION_FACTORY = configuration.buildSessionFactory(serviceRegistry);
+            SESSION_FACTORY = configuration.buildSessionFactory(
+                new StandardServiceRegistryBuilder().applySettings(properties).build()
+            );
         } catch (Throwable ex) {
             throw new ExceptionInInitializerError(ex);
         }
