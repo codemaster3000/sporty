@@ -10,15 +10,15 @@ import java.sql.Date;
 public interface IMember extends IRMember {
     void setMemberId(int memberId);
 
-    void setFirstname(String firstname);
+    void setFirstName(String firstname);
 
-    void setLastname(String lastname);
+    void setLastName(String lastname);
 
     void setGender(String gender);
 
     void setDateOfBirth(Date dateOfBirth);
 
-    void setEMail(String eMail);
+    void setEmail(String eMail);
 
     void setAddress(String address);
 

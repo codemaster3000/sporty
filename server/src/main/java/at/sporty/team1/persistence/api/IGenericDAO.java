@@ -4,9 +4,11 @@ import org.hibernate.criterion.Criterion;
 
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
-public interface IGenericDao<T> {
+public interface IGenericDAO<T> {
     /**
      * Returns all existing objects of the given type in the data store.
      * @return a list of all objects of the type {@code T}.
@@ -25,13 +27,30 @@ public interface IGenericDao<T> {
     List<T> findByCriteria(Criterion... criterion) throws PersistenceException;
 
     /**
+     * Returns a list of objects that are matched by a given hql query.
+     * @param hql The hibernate query with named parameters.
+     * @return The found objects.
+     * @throws SQLException
+     */
+    List<T> findByHQL(String hql);
+
+    /**
+     * Returns a list of objects that are matched by a given hql query.
+     * @param hql The hibernate query with named parameters.
+     * @param map The map with the named parameters. Example: {@code HashMap<String,Object>}
+     * @return The found objects.
+     * @throws SQLException
+     */
+    List<T> findByHQL(String hql, Map map);
+
+    /**
      * Returns a specific object identified by its id from the data store.
      * @param id an object representing the id of the specific entity
      * (usually it is a unique {@code Integer} value).
      * @return the entity with the matching id.
      * @throws PersistenceException
      */
-    T getById(Serializable id) throws PersistenceException;
+    T findById(Serializable id) throws PersistenceException;
 
     /**
      * Refreshes the given object to the actual state from the data store.

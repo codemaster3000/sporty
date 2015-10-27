@@ -40,7 +40,7 @@ public class Member implements IMember {
 
     @Override
     @Basic
-    @Column(name = "fname")
+    @Column(name = "firstname")
     public String getFirstname() {
         return firstname;
     }
@@ -52,7 +52,7 @@ public class Member implements IMember {
 
     @Override
     @Basic
-    @Column(name = "lname")
+    @Column(name = "lastname")
     public String getLastname() {
         return lastname;
     }
@@ -89,13 +89,13 @@ public class Member implements IMember {
     @Override
     @Basic
     @Column(name = "email")
-    public String getEMail() {
+    public String getEmail() {
         return eMail;
     }
 
     @Override
-    public void setEMail(String eMail) {
-        this.eMail = eMail;
+    public void setEmail(String email) {
+        this.eMail = email;
     }
 
     @Override

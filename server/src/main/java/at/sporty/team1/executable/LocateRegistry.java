@@ -1,4 +1,4 @@
-package at.sporty.team1;
+package at.sporty.team1.executable;
 
 import java.rmi.RemoteException;
 

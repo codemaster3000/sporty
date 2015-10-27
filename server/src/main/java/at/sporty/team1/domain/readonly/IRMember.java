@@ -8,15 +8,15 @@ import java.sql.Date;
 public interface IRMember {
     int getMemberId();
 
-    String getFirstname();
+    String getFirstName();
 
-    String getLastname();
+    String getLastName();
 
     String getGender();
 
     Date getDateOfBirth();
 
-    String getEMail();
+    String getEmail();
 
     String getAddress();
 
