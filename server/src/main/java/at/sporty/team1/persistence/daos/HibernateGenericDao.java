@@ -1,4 +1,4 @@
-package at.sporty.team1.persistence.hibernate;
+package at.sporty.team1.persistence.daos;
 
 import at.sporty.team1.persistence.api.IGenericDao;
 import org.hibernate.criterion.Criterion;

@@ -1,6 +1,7 @@
 package at.sporty.team1.application.controller;
 
 import at.sporty.team1.domain.Member;
+import at.sporty.team1.domain.readonly.IRMember;
 import at.sporty.team1.logging.Loggers;
 import at.sporty.team1.misc.Crypto;
 import at.sporty.team1.misc.InputSanitizer;
@@ -62,8 +63,8 @@ public class LoginController {
 
             String userpwHash = Crypto.bytesToHex(Crypto.sha512(password));
 
-            MemberDAO memberDAO = new MemberDAO();
-            List<Member> user = null;
+            MemberDAO memberDAO = new MemberDAO(Member.class);
+            List<IRMember> user = null;
 
             try {
                 user = memberDAO.findByName(username);
