@@ -1,7 +1,6 @@
 package at.sporty.team1.misc;
 
-import org.apache.logging.log4j.core.config.Loggers;
-
+import at.sporty.team1.logging.Loggers;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
