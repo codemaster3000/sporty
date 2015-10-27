@@ -33,7 +33,7 @@
                             </descriptorRefs>
                             <archive>
                                 <manifest>
-                                    <mainClass>at.sporty.team1.Server</mainClass>
+                                    <mainClass>at.sporty.team1.executable.Server</mainClass>
                                 </manifest>
                             </archive>
                         </configuration>
@@ -48,7 +48,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.0.2.Final</version>
+            <version>4.3.8.Final</version>
         </dependency>
 
         <!-- JDBC Driver for MySQL DB Dependency -->
@@ -65,9 +65,10 @@
         </dependency>
 
         <!-- Log4J2 API Dependency -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-        </dependency>
+        <!-- FIXME: Temporarily disabled. -->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.logging.log4j</groupId>-->
+            <!--<artifactId>log4j-api</artifactId>-->
+        <!--</dependency>-->
     </dependencies>
 </project>

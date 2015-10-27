@@ -14,11 +14,11 @@ import java.sql.Date;
 @Table(name = "member")
 public class Member implements IMember {
     private int memberId;
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private String gender;
     private Date dateOfBirth;
-    private String eMail;
+    private String email;
     private String address;
     private String department;
     private String sport;
@@ -28,7 +28,7 @@ public class Member implements IMember {
 
     @Override
     @Id
-    @Column(name = "member_id")
+    @Column(name = "memberId")
     public int getMemberId() {
         return memberId;
     }
@@ -40,26 +40,26 @@ public class Member implements IMember {
 
     @Override
     @Basic
-    @Column(name = "firstname")
-    public String getFirstname() {
-        return firstname;
+    @Column(name = "fname")
+    public String getFirstName() {
+        return firstName;
     }
 
     @Override
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     @Override
     @Basic
-    @Column(name = "lastname")
-    public String getLastname() {
-        return lastname;
+    @Column(name = "lname")
+    public String getLastName() {
+        return lastName;
     }
 
     @Override
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     @Override
@@ -76,7 +76,7 @@ public class Member implements IMember {
 
     @Override
     @Basic
-    @Column(name = "date_of_birth")
+    @Column(name = "dateOfBirth")
     public Date getDateOfBirth() {
         return dateOfBirth;
     }
@@ -88,14 +88,14 @@ public class Member implements IMember {
 
     @Override
     @Basic
-    @Column(name = "e_mail")
-    public String getEMail() {
-        return eMail;
+    @Column(name = "email")
+    public String getEmail() {
+        return email;
     }
 
     @Override
-    public void setEMail(String eMail) {
-        this.eMail = eMail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
@@ -178,11 +178,11 @@ public class Member implements IMember {
         Member member = (Member) o;
 
         if (memberId != member.memberId) return false;
-        if (firstname != null ? !firstname.equals(member.firstname) : member.firstname != null) return false;
-        if (lastname != null ? !lastname.equals(member.lastname) : member.lastname != null) return false;
+        if (firstName != null ? !firstName.equals(member.firstName) : member.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(member.lastName) : member.lastName != null) return false;
         if (gender != null ? !gender.equals(member.gender) : member.gender != null) return false;
         if (dateOfBirth != null ? !dateOfBirth.equals(member.dateOfBirth) : member.dateOfBirth != null) return false;
-        if (eMail != null ? !eMail.equals(member.eMail) : member.eMail != null) return false;
+        if (email != null ? !email.equals(member.email) : member.email != null) return false;
         if (address != null ? !address.equals(member.address) : member.address != null) return false;
         if (department != null ? !department.equals(member.department) : member.department != null) return false;
         if (sport != null ? !sport.equals(member.sport) : member.sport != null) return false;
@@ -196,11 +196,11 @@ public class Member implements IMember {
     @Override
     public int hashCode() {
         int result = memberId;
-        result = 31 * result + (firstname != null ? firstname.hashCode() : 0);
-        result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
         result = 31 * result + (dateOfBirth != null ? dateOfBirth.hashCode() : 0);
-        result = 31 * result + (eMail != null ? eMail.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (department != null ? department.hashCode() : 0);
         result = 31 * result + (sport != null ? sport.hashCode() : 0);
