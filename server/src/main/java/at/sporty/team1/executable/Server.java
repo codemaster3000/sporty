@@ -15,6 +15,7 @@ public class Server {
 
     /**
      * Binds servants to their string naming representation.
+     *
      * @param servant servant to be bind.
      */
     private static void bindName(IServant servant) {
@@ -30,6 +31,7 @@ public class Server {
 
     /**
      * Method should be executed on the server start.
+     *
      * @throws Exception
      */
     private static void start() throws Exception {
@@ -39,6 +41,7 @@ public class Server {
 
     /**
      * Method should be executed on the server stop.
+     *
      * @throws Exception
      */
     private static void stop() throws Exception {
@@ -47,6 +50,7 @@ public class Server {
 
     /**
      * Default main method. Starts "this" application.
+     *
      * @param args the command line arguments passed to the application.
      */
     public static void main(String[] args) {
