@@ -56,7 +56,7 @@ CREATE TABLE `member` (
   `address` varchar(80) DEFAULT NULL,
   `department` varchar(45) DEFAULT NULL COMMENT 'department == sport??',
   `sport` varchar(45) DEFAULT NULL,
-  `role` varchar(45) DEFAULT NULL,
+  `role` varchar(45) DEFAULT NULL COMMENT 'roles: \nplayer (Spieler), trainer (Trainer), management (Vorstand), departmentHead (Abteilungsleiter) ',
   `username` varchar(45) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`memberId`)
@@ -82,4 +82,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-10-28 10:41:31
+-- Dump completed on 2015-10-28 11:18:55

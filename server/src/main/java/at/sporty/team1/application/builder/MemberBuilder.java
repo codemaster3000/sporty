@@ -94,6 +94,8 @@ public class MemberBuilder {
         member.setUsername(_username);
         member.setPassword(_password);
 
+        // use IRMember for checking if new member already exists?
+        
         try {
             PersistenceFacade.getNewGenericDAO(Member.class).saveOrUpdate((Member) member);
 
