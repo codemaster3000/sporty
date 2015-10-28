@@ -79,7 +79,7 @@ public class MemberBuilder {
     }
 
     public void save() {
-        //TODO conditions validation
+        //TODO conditions validation: if member exists
 
         IMember member = new Member();
         member.setFirstName(_firstName);
