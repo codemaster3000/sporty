@@ -60,10 +60,11 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
     // http://docs.jboss.org/hibernate/search/4.1/reference/en-US/html/search-query.html
 
     /**
-     * Find members by name or id
+     * Find members by name or id.
      *
      * @param nameOrId      The name (firstname or lastname) or id.
      * @param caseSensitive True if search should be case sensitive.
+     *
      * @return The found members.
      */
     public List<Member> findByNameOrId(String nameOrId, boolean caseSensitive) throws SQLException {
@@ -79,6 +80,40 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
                     Restrictions.like("lname", nameOrId, MatchMode.ANYWHERE),
                     Restrictions.like("memberId", nameOrId, MatchMode.ANYWHERE));
         }
+
+        return super.findByCriteria(criterion);
+    }
+
+    /**
+     * Find Member(s) by department.
+     *
+     * @param   department
+     *
+     * @return  List<Member>
+     *
+     * @throws  SQLException
+     */
+    public List<Member> findByDepartment(String department) throws SQLException {
+
+        Criterion criterion;
+        criterion = Restrictions.or(Restrictions.like("department",department, MatchMode.ANYWHERE));
+
+        return  super.findByCriteria(criterion);
+    }
+
+    /**
+     * Find Member(s) by sport.
+     *
+     * @param sport
+     *
+     * @return List<Member>
+     *
+     * @throws SQLException
+     */
+    public List<Member> findBySport(String sport) throws SQLException {
+
+        Criterion criterion;
+        criterion = Restrictions.or(Restrictions.like("sport", sport, MatchMode.ANYWHERE));
 
         return super.findByCriteria(criterion);
     }
