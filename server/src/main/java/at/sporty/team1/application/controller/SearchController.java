@@ -9,5 +9,5 @@ import java.util.List;
  */
 public class SearchController {
 
-    public List<Member>
+    //public List<Member>
 }
