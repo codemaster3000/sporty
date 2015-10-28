@@ -1,7 +1,5 @@
 package at.sporty.team1.executable;
 
-import at.sporty.team1.application.controller.MemberController;
-import at.sporty.team1.application.dtos.MemberDTO;
 import at.sporty.team1.misc.IServant;
 import at.sporty.team1.persistence.HibernateSessionUtil;
 
@@ -59,6 +57,11 @@ public class Server {
             start();
 
 
+//            //Following code is just for testing. It should be removed after testing phase.
+//            EntityCreateController.createNewMember()
+//                    .setFirstName("Test Member #1 FIRST Name")
+//                    .setLastName("Test Member #1 LAST Name")
+//                    .save();
             //Following code is just for testing. It should be removed after testing phase.
             MemberDTO memberDTO = MemberController.getNewMemberDTO()
                     .setFirstName("Test Member #1 FIRST Name")

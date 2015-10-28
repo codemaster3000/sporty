@@ -1,7 +1,5 @@
 package at.sporty.team1.application.controller;
 
-import java.util.List;
-
 /**
  * This Controller searches anything
  *
