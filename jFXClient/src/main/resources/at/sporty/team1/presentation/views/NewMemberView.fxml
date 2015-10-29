@@ -5,7 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.sporty.team1.presentation.controllers.NewMemberController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.sporty.team1.presentation.controllers.MemberController">
   <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="0.0" prefWidth="55.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="159.0" />
@@ -35,8 +35,8 @@
       <Label text="Sport" GridPane.columnIndex="1" GridPane.rowIndex="7" />
       <TextField fx:id="emailTextField" GridPane.columnIndex="2" GridPane.rowIndex="4" />
       <TextField fx:id="phoneTextField" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-      <TextField fx:id="sportTextField" GridPane.columnIndex="2" GridPane.rowIndex="7" />
       <TextField fx:id="addressTextField" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+      <TextField fx:id="sportTextField" GridPane.columnIndex="2" GridPane.rowIndex="7" /> 
       <Label text="Address" GridPane.columnIndex="1" GridPane.rowIndex="6" />
       <Label text="Gender" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <FlowPane prefHeight="17.0" prefWidth="300.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
@@ -53,6 +53,6 @@
              </RadioButton>
          </children>
       </FlowPane>
-      <Button fx:id="saveButton" onAction="#saveForm" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Save" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="8" />
+      <Button onAction="#saveForm" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Save" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="8" />
    </children>
 </GridPane>

@@ -18,7 +18,7 @@ import java.rmi.RemoteException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class NewMemberController implements IJfxController {
+public class MemberController implements IJfxController {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String YELLOW_BACKGROUND_STYLE = "-fx-control-inner-background: lightgoldenrodyellow";
 
