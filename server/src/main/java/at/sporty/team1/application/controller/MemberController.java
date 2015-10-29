@@ -71,14 +71,22 @@ public class MemberController {
         }
     }
 
-    public static void delete(String memberId) {
-
+    public static void delete(String memberId) { //TODO
+//        MemberDAO memberDAO = PersistenceFacade.getNewGenericDAO(Class<Member>);
+//       Member member = .findById(memberId);
+//        PersistenceFacade.
     }
 
     public static void saveChanges(Member member) {
 
+
     }
 
+    /**
+     * A helping function
+     * @param s
+     * @return
+     */
     private static Date readDate(String s) {
         return s != null ? Date.valueOf(s) : null;
     }
