@@ -25,12 +25,12 @@ public class MainViewController implements IJfxController {
 	@FXML
 	private void openNewMemberView()
 	{
-		ViewLoader<NewMemberController> viewLoader = ViewLoader.loadView(NewMemberController.class);	
+		ViewLoader<MemberController> viewLoader = ViewLoader.loadView(MemberController.class);	
 		Node node = viewLoader.loadNode();
 		Tab t = new Tab(); 
 		t.setText("New Member");
 		t.setContent(node);
-		NewMemberController c = viewLoader.getController();
+		MemberController c = viewLoader.getController();
 		
 		_tabPanel.getTabs().add(t);
 		
