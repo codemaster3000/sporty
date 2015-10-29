@@ -20,6 +20,7 @@
     <modules>
 		<module>server</module>
 		<module>jFXClient</module>
+        <module>remoteAPI</module>
 	</modules>
 
     <build>

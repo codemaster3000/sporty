@@ -101,10 +101,10 @@ public class InputSanitizer {
                 return isNull(value) || value.length() >= 1 && expression.matches(value);
             }
 
-            case TELEPHONE: {
+            case PHONE_NUMBER: {
                 // telephone, like: "0043 69917183173"
                 RegularExpression expr = new RegularExpression("[0-9]{4} ?[0-9]{3,12}");
-                lastFailedValidation = DataType.TELEPHONE;
+                lastFailedValidation = DataType.PHONE_NUMBER;
                 return isNull(value) || value.length() >= 4 && expr.matches(value);
             }
 

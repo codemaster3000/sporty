@@ -1,32 +1,36 @@
 package at.sporty.team1.executable;
 
 import at.sporty.team1.application.controller.MemberController;
-import at.sporty.team1.application.dtos.MemberDTO;
-import at.sporty.team1.misc.IServant;
 import at.sporty.team1.persistence.HibernateSessionUtil;
+import at.sporty.team1.rmi.stubs.CommunicationStub;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.rmi.Naming;
+import java.rmi.Remote;
+import java.rmi.registry.LocateRegistry;
 
 /**
  * Created by sereGkaluv on 23-Oct-15.
  * Sporty server starter class.
  */
 public class Server {
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final String DEFAULT_RMI = "rmi://localhost/%s";
+    private static final int DEFAULT_PORT = 1099;
 
     /**
      * Binds servants to their string naming representation.
      *
-     * @param servant servant to be bind.
+     * @param obj Object to be bounded.
      */
-    private static void bindName(IServant servant) {
+    private static void bindName(CommunicationStub stub, Remote obj) {
         try {
-            String servantName = servant.getClass().getName();
-            Naming.bind(String.format(DEFAULT_RMI, servantName), servant);
+            Naming.bind(String.format(DEFAULT_RMI, stub.getNaming()), obj);
 
-            System.out.println(servantName + " bounded in registry.");
+            LOGGER.info("{} bounded to the registry.", stub.getNaming());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("{} was not bounded to the registry.", stub.getNaming(), e);
         }
     }
 
@@ -36,7 +40,8 @@ public class Server {
      * @throws Exception
      */
     private static void start() throws Exception {
-        //bindName();
+        //TODO: this is a temp solution
+        LocateRegistry.createRegistry(DEFAULT_PORT);
         HibernateSessionUtil.getInstance().openSession();
     }
 
@@ -56,20 +61,10 @@ public class Server {
      */
     public static void main(String[] args) {
         try {
+
             start();
 
-
-//            //Following code is just for testing. It should be removed after testing phase.
-//            EntityCreateController.createNewMember()
-//                    .setFirstName("Test Member #1 FIRST Name")
-//                    .setLastName("Test Member #1 LAST Name")
-//                    .save();
-            //Following code is just for testing. It should be removed after testing phase.
-            MemberDTO memberDTO = MemberController.getNewMemberDTO()
-                    .setFirstName("Test Member #1 FIRST Name")
-                    .setLastName("Test Member #1 LAST Name");
-
-            MemberController.create(memberDTO);
+            bindName(CommunicationStub.MEMBER_CONTROLLER, new MemberController());
 
         } catch (Exception e) {
             e.printStackTrace();

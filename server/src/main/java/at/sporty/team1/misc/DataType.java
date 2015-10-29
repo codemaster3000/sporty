@@ -12,7 +12,7 @@ public enum DataType {
     PASSWORD,
     EMAIL,
     ZIP,
-    TELEPHONE,
+    PHONE_NUMBER,
     ADDRESS,
     GENDER,
     STREET_NUMBER

@@ -50,10 +50,22 @@
             <artifactId>junit</artifactId>
         </dependency>
 
-        <!-- Log4J2 API Dependency -->
+        <!-- Log4J2 api Dependencies -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+        </dependency>
+
+        <!-- Remote api Dependency -->
+        <dependency>
+            <groupId>at.fhv.itb13.team1.sporty</groupId>
+            <artifactId>remoteAPI</artifactId>
+            <version>0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

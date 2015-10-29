@@ -11,6 +11,7 @@ import java.util.Date;
 
 
 /*TODO: log4j lib */
+@Deprecated
 public class  Loggers {
     //TODO determine which loggers we want to use
 
