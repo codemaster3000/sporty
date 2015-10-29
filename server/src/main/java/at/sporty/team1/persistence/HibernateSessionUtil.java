@@ -14,13 +14,13 @@ import java.util.Properties;
 public class HibernateSessionUtil {
     public static final String HIBERNATE_CONFIG_FILE = "/hibernate.cfg.xml";
     private final SessionFactory SESSION_FACTORY;
-    private static HibernateSessionUtil INSTANCE;
+    private static HibernateSessionUtil instance;
 
     public static HibernateSessionUtil getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new HibernateSessionUtil();
+        if (instance == null) {
+            instance = new HibernateSessionUtil();
         }
-        return INSTANCE;
+        return instance;
     }
 
     public Session openSession() throws HibernateException {

@@ -13,6 +13,7 @@ hs_err_pid*
 
 #custom ignore
 target/
+logs/
 
 
 #eclipse ignore

@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Appenders>
-        <Console name="console" target="SYSTEM_OUT">
+        <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="[%-4level] %d{HH:mm:ss.SSS} %c - %msg%n"/>
         </Console>
+        <File name="FileAppender" fileName="logs/javaFxClient.log">
+            <PatternLayout pattern="[%-4level] %d{HH:mm:ss.SSS} %c - %msg%n"/>
+        </File>
+        <Async name="Async">
+            <AppenderRef ref="FileAppender"/>
+        </Async>
     </Appenders>
     <Loggers>
-        <Root level="info" additivity="false">
-            <AppenderRef ref="console"/>
+        <Root level="info" additivity="true">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="Async"/>
         </Root>
     </Loggers>
 </Configuration>
