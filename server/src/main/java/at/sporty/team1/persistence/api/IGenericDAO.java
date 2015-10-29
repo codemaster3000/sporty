@@ -41,7 +41,7 @@ public interface IGenericDAO<T> {
      * @return The found objects.
      * @throws SQLException
      */
-    List<T> findByHQL(String hql, Map map);
+    List<T> findByHQL(String hql, Map<?, ?> map);
 
     /**
      * Returns a specific object identified by its id from the data store.

@@ -51,7 +51,7 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
 
     @SuppressWarnings("unchecked") //NON Generic Hibernate Criteria.
     @Override
-    public List<T> findByHQL(String hql, Map map) {
+    public List<T> findByHQL(String hql, Map<?, ?> map) {
         return HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
             Query query = session.createQuery(hql);
             if (map != null) {
