@@ -7,7 +7,6 @@ import java.util.Date;
 
 /**
  * Represents a class with predefined loggers.
- * Created by Jasper Reichardt on 05.04.2015.
  */
 
 
