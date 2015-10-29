@@ -63,7 +63,7 @@ public class NewMemberController implements IJfxController {
 
         //Alert Box if a mandatory field is not filled
         //check if mandatory fields are filled with data
-        if (fName.isEmpty()) {
+        if (fName == null) {
             filled = false;
             fNameTextField.requestFocus();
             fNameTextField.setStyle(YELLOW_BACKGROUND_STYLE);
@@ -71,7 +71,7 @@ public class NewMemberController implements IJfxController {
             return;
         }
 
-        if (lName.isEmpty()) {
+        if (lName == null) {
             filled = false;
             lNameTextField.requestFocus();
             lNameTextField.setStyle(YELLOW_BACKGROUND_STYLE);
@@ -79,7 +79,7 @@ public class NewMemberController implements IJfxController {
             return;
         }
 
-        if (bday.isEmpty()) {
+        if (bday == null) {
             filled = false;
             birthTextField.requestFocus();
             birthTextField.setStyle(YELLOW_BACKGROUND_STYLE);
