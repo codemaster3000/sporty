@@ -1,5 +1,7 @@
 package at.sporty.team1.executable;
 
+import at.sporty.team1.application.controller.MemberController;
+import at.sporty.team1.application.dtos.MemberDTO;
 import at.sporty.team1.misc.IServant;
 import at.sporty.team1.persistence.HibernateSessionUtil;
 

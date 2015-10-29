@@ -5,6 +5,7 @@ import at.sporty.team1.application.exceptions.ValidationException;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.misc.InputSanitizer;
+import at.sporty.team1.misc.DataType;
 import at.sporty.team1.persistence.PersistenceFacade;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,17 +26,19 @@ public class MemberController {
     public static void create(MemberDTO memberDTO) throws ValidationException {
 
         /* Validating Input */
-        if (InputSanitizer.check(memberDTO.getFirstName(), InputSanitizer.TYPE.name) &&
-                InputSanitizer.check(memberDTO.getLastName(), InputSanitizer.TYPE.name) &&
-                InputSanitizer.check(memberDTO.getGender(), InputSanitizer.TYPE.gender) &&
-                InputSanitizer.check(memberDTO.getDateOfBirth(), InputSanitizer.TYPE.daydate) &&
-                InputSanitizer.check(memberDTO.getEmail(), InputSanitizer.TYPE.email) &&
-                InputSanitizer.check(memberDTO.getAddress(), InputSanitizer.TYPE.address) &&
-                InputSanitizer.check(memberDTO.getDepartment(), InputSanitizer.TYPE.text) &&
-                InputSanitizer.check(memberDTO.getRole(), InputSanitizer.TYPE.text) &&
-                InputSanitizer.check(memberDTO.getSport(), InputSanitizer.TYPE.text) &&
-                InputSanitizer.check(memberDTO.getUsername(), InputSanitizer.TYPE.username) &&
-                InputSanitizer.check(memberDTO.getPassword(), InputSanitizer.TYPE.password))
+        InputSanitizer inputSanitizer = new InputSanitizer();
+
+        if (inputSanitizer.check(memberDTO.getFirstName(), DataType.NAME) &&
+                inputSanitizer.check(memberDTO.getLastName(), DataType.NAME) &&
+                inputSanitizer.check(memberDTO.getGender(), DataType.GENDER) &&
+                inputSanitizer.check(memberDTO.getDateOfBirth(), DataType.DAY_DATE) &&
+                inputSanitizer.check(memberDTO.getEmail(), DataType.EMAIL) &&
+                inputSanitizer.check(memberDTO.getAddress(), DataType.ADDRESS) &&
+                inputSanitizer.check(memberDTO.getDepartment(), DataType.TEXT) &&
+                inputSanitizer.check(memberDTO.getRole(), DataType.TEXT) &&
+                inputSanitizer.check(memberDTO.getSport(), DataType.TEXT) &&
+                inputSanitizer.check(memberDTO.getUsername(), DataType.USERNAME) &&
+                inputSanitizer.check(memberDTO.getPassword(), DataType.PASSWORD))
         {
             // all Input validated and OK
 
@@ -62,16 +65,17 @@ public class MemberController {
 
         } else {
             // There has been bad Input, throw the Exception
-            LOGGER.error("Wrong Input creating Member: {}", InputSanitizer.lastFailedValidation);
+            LOGGER.error("Wrong Input creating Member: {}", inputSanitizer.getLastFailedValidation());
 
             ValidationException validationException = new ValidationException();
-            validationException.setReason(InputSanitizer.lastFailedValidation);
+            validationException.setReason(inputSanitizer.getLastFailedValidation());
 
             throw validationException;
         }
     }
 
-    public static void delete(String memberId) { //TODO
+    public static void delete(String memberId) {
+        //TODO Delete member
 //        MemberDAO memberDAO = PersistenceFacade.getNewGenericDAO(Class<Member>);
 //       Member member = .findById(memberId);
 //        PersistenceFacade.
