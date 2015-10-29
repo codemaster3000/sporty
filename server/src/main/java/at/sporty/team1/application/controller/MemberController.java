@@ -19,7 +19,11 @@ import java.sql.Date;
  * Created by f00 on 28.10.15.
  */
 public class MemberController extends UnicastRemoteObject implements IMemberController {
-    private static final Logger LOGGER = LogManager.getLogger();
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = LogManager.getLogger();
 
     public MemberController() throws RemoteException {
         super();

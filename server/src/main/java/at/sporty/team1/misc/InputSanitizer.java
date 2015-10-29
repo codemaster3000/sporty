@@ -115,7 +115,7 @@ public class InputSanitizer {
             }
 
             case GENDER: {
-                RegularExpression expression = new RegularExpression("F|M");
+                RegularExpression expression = new RegularExpression("female|male");
                 lastFailedValidation = DataType.GENDER;
                 return isNull(value) || value.length() >= 4 && expression.matches(value);
             }
