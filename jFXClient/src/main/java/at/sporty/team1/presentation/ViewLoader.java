@@ -2,7 +2,7 @@ package at.sporty.team1.presentation;
 
 import at.sporty.team1.presentation.controllers.IJfxController;
 import at.sporty.team1.presentation.controllers.MainViewController;
-import at.sporty.team1.presentation.controllers.MemberController;
+import at.sporty.team1.presentation.controllers.MemberViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 
@@ -27,7 +27,7 @@ public class ViewLoader<T extends IJfxController> {
 
 		//All UI-Controller relations should be defined here.
 		_viewPaths.put(MainViewController.class, "/at/sporty/team1/presentation/views/MainView.fxml");
-		_viewPaths.put(MemberController.class, "/at/sporty/team1/presentation/views/NewMemberView.fxml");
+		_viewPaths.put(MemberViewController.class, "/at/sporty/team1/presentation/views/NewMemberView.fxml");
 	}
 
 	private FXMLLoader _loader;
