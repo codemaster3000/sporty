@@ -36,9 +36,9 @@ public class Server {
 
             start();
 
-            bindName(RemoteObject.MEMBER_CONTROLLER, new MemberController());
-
             LOGGER.info("Server started successfully.");
+
+            bindName(RemoteObject.MEMBER_CONTROLLER, new MemberController());
 
             listenForCommands();
 
