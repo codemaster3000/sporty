@@ -2,8 +2,7 @@ package at.sporty.team1.executable;
 
 import at.sporty.team1.application.controller.MemberController;
 import at.sporty.team1.persistence.HibernateSessionUtil;
-import at.sporty.team1.rmi.stubs.CommunicationStub;
-import com.sun.org.apache.bcel.internal.generic.SWITCH;
+import at.sporty.team1.rmi.RemoteObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,7 +36,7 @@ public class Server {
 
             start();
 
-            bindName(CommunicationStub.MEMBER_CONTROLLER, new MemberController());
+            bindName(RemoteObject.MEMBER_CONTROLLER, new MemberController());
 
             LOGGER.info("Server started successfully.");
 
@@ -53,7 +52,7 @@ public class Server {
      *
      * @param obj Object to be bounded.
      */
-    private static void bindName(CommunicationStub stub, Remote obj) {
+    private static void bindName(RemoteObject stub, Remote obj) {
         try {
             Naming.bind(String.format(DEFAULT_RMI, stub.getNaming()), obj);
 

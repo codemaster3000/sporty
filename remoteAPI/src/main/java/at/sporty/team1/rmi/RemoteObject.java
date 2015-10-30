@@ -1,12 +1,12 @@
-package at.sporty.team1.rmi.stubs;
+package at.sporty.team1.rmi;
 
-public enum CommunicationStub {
+public enum RemoteObject {
     MEMBER_CONTROLLER("MEMBER_CONTROLLER");
 
 
     private final String _naming;
 
-    CommunicationStub(String naming) {
+    RemoteObject(String naming) {
         _naming = naming;
     }
 

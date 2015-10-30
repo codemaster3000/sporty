@@ -2,7 +2,7 @@ package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.rmi.api.IMemberController;
-import at.sporty.team1.rmi.stubs.CommunicationStub;
+import at.sporty.team1.rmi.RemoteObject;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -103,8 +103,8 @@ public class MemberController implements IJfxController {
             //save
             try {
 
-                IMemberController controller = CommunicationFacade.lookupForStub(CommunicationStub.MEMBER_CONTROLLER);
-                controller.createNewMember(
+                IMemberController imc = CommunicationFacade.lookupForMemberController(RemoteObject.MEMBER_CONTROLLER);
+                imc.createNewMember(
                     fName,
                     lName,
                     bday,

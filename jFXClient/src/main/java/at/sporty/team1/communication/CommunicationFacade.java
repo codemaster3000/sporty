@@ -1,11 +1,11 @@
 package at.sporty.team1.communication;
 
-import at.sporty.team1.rmi.stubs.CommunicationStub;
+import at.sporty.team1.rmi.api.IMemberController;
+import at.sporty.team1.rmi.RemoteObject;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public class CommunicationFacade {
@@ -14,9 +14,8 @@ public class CommunicationFacade {
     private CommunicationFacade() {
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T extends Remote> T lookupForStub(CommunicationStub stub)
+    public static IMemberController lookupForMemberController(RemoteObject rObj)
     throws RemoteException, NotBoundException, MalformedURLException {
-        return (T) Naming.lookup(String.format(DEFAULT_RMI, stub.getNaming()));
+        return (IMemberController) Naming.lookup(String.format(DEFAULT_RMI, rObj.getNaming()));
     }
 }
