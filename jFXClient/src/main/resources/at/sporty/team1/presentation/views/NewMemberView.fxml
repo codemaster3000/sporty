@@ -26,7 +26,7 @@
    <children>
       <Label text="First Name" GridPane.columnIndex="1" />
       <Label text="Last Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <Label text="Date of Birth (dd.mm.yyyy)" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Label text="Date of Birth (yyyy-mm-dd)" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <TextField fx:id="fNameTextField" promptText="Mandatory" GridPane.columnIndex="2" />
       <TextField fx:id="lNameTextField" promptText="Mandatory" GridPane.columnIndex="2" GridPane.rowIndex="1" />
       <TextField fx:id="birthTextField" promptText="Mandatory" GridPane.columnIndex="2" GridPane.rowIndex="2" />

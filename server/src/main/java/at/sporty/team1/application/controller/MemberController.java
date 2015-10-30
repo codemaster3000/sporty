@@ -37,7 +37,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
         if (inputSanitizer.check(fName, DataType.NAME) &&
             inputSanitizer.check(lName, DataType.NAME) &&
-            inputSanitizer.check(bday, DataType.DAY_DATE) &&
+            inputSanitizer.check(bday, DataType.SQL_DATE) &&
             inputSanitizer.check(email, DataType.EMAIL) &&
             inputSanitizer.check(phone, DataType.PHONE_NUMBER) &&
             inputSanitizer.check(address, DataType.ADDRESS) &&
