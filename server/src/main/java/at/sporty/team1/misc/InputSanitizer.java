@@ -47,7 +47,7 @@ public class InputSanitizer {
                 return isNull(value) || value.length() <= 10 && expr.matches(value);
             }
 
-            case SQL_DATE: { //TODO
+            case SQL_DATE: { //TODO fix
                 //yyyy-mm-dd
                 RegularExpression expression = new RegularExpression("^\\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$");
                 lastFailedValidation = DataType.SQL_DATE;
