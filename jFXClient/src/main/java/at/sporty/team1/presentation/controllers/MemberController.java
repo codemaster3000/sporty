@@ -34,7 +34,7 @@ public class MemberController implements IJfxController {
     @FXML private RadioButton radioGenderFemale;
     @FXML private RadioButton radioGenderMale;
 
-    private ToggleGroup _group = new ToggleGroup();
+    private final ToggleGroup _group = new ToggleGroup();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
