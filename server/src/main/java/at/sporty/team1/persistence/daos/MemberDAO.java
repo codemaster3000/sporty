@@ -117,4 +117,20 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
 
         return super.findByCriteria(criterion);
     }
+
+    /**
+     * Find Member(s) by birthdate
+     *
+     * @param birthdate SQL_DATE format: yyy-mm-dd
+     *
+     * @return List<Member>
+     *
+     * @throws SQLException
+     */
+    public List<Member> findByBirthday(String birthdate) throws SQLException {
+        Criterion criterion;
+        criterion = Restrictions.or(Restrictions.like("dateOfBirth", birthdate ,MatchMode.ANYWHERE));
+
+        return super.findByCriteria(criterion);
+    }
 }
