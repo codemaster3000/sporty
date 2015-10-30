@@ -21,6 +21,8 @@ import java.util.ResourceBundle;
 public class MemberController implements IJfxController {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String YELLOW_BACKGROUND_STYLE = "-fx-control-inner-background: lightgoldenrodyellow";
+    private static final String FEMALE = "F";
+    private static final String MALE = "M";
 
     @FXML private TextField fNameTextField;
     @FXML private TextField lNameTextField;
@@ -88,9 +90,9 @@ public class MemberController implements IJfxController {
         }
 
         if (radioGenderFemale.isSelected()) {
-            gender = "female";
+            gender = FEMALE;
         } else if (radioGenderMale.isSelected()) {
-            gender = "male";
+            gender = MALE;
         } else {
             filled = false;
             showValidationAlert("Please choose Gender.");
