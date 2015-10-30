@@ -54,14 +54,13 @@ public class InputSanitizer {
                 return  isNull(value) || value.length() == 10 && expression.matches(value);
             }
 
+            //this matches e.g.:
+            //Manuel-Max Mustermann
+            //Sarah Submit
+            //Heinz-Michael
+            //Maximilian
+            //Ölaf-Test van ölüfää O'Ström
             case NAME: {
-                //this matches e.g.:
-                //Manuel-Max Mustermann
-                //Sarah Submit
-                //Heinz-Michael
-                //Maximilian
-                //Ölaf-Test van ölüfää O'Ström
-
                 RegularExpression expr = new RegularExpression("([ \\u00c0-\\u01ffa-zA-Z'\\-])+");
                 lastFailedValidation = DataType.NAME;
                 return isNull(value) || value.length() <= 100 && expr.matches(value);
