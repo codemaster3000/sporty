@@ -4,6 +4,7 @@ public enum DataType {
     USERNAME,
     EXACT_DATE,
     DAY_DATE,
+    SQL_DATE,
     NAME,
     INTEGER_TYPE,
     SIN,
@@ -16,4 +17,5 @@ public enum DataType {
     ADDRESS,
     GENDER,
     STREET_NUMBER
+
 }
