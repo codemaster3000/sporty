@@ -1,8 +1,9 @@
 package at.sporty.team1.application.controller;
 
 import at.sporty.team1.domain.Member;
-import at.sporty.team1.logging.Loggers;
 import at.sporty.team1.persistence.daos.MemberDAO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
  * TODO
  */
 public class LoginController {
+    private static final Logger LOGGER = LogManager.getLogger();
     private static LoginController _loginController;
 
     private LoginController() {
@@ -54,7 +56,7 @@ public class LoginController {
 //                sanitizer.check(username, InputSanitizer.DataType.username)
 //                && sanitizer.check(password, InputSanitizer.DataType.password)) {
 
-            Loggers.APPLICATION.info("Login by: " + username);
+            LOGGER.info("Login by: " + username);
 
             // user "testuser"
             // password "testpw" as sha512 hex-string:
@@ -68,8 +70,7 @@ public class LoginController {
             try {
                 user = memberDAO.findByName(username, true); // TODO
             } catch (SQLException e) {
-                e.printStackTrace();
-                Loggers.APPLICATION.info(e.toString() + " caused while logging in");
+                LOGGER.info("{} caused while logging in.", e.toString(), e);
             }
 
             if (user == null)
@@ -78,7 +79,7 @@ public class LoginController {
             String databasepwHash = user.get(0).getPassword();
 
             if (password.equals(databasepwHash)) {
-                Loggers.APPLICATION.info("User's Password does match");
+                LOGGER.info("User's Password does match");
 
                 // UserRight doc = new UserRight();
                 // Collection<UserRole> users = user.get(0).getUserRoles();
@@ -94,7 +95,7 @@ public class LoginController {
                 return 0;
 
         } else {
-            Loggers.APPLICATION.warn("Login by: " + username + " failed due to bad credentials");
+            LOGGER.warn("Login by: \"{}\" failed due to bad credentials.",  username);
             // do nothing for a 2 second timespan
         }
         return -1;
