@@ -24,11 +24,11 @@ public interface IMember extends IRMember {
 
     void setDepartment(String department);
 
-    void setSport(String sport);
+    void setTeam(String team);
+
+    void setSquad(String squad);
 
     void setRole(String role);
 
     void setUsername(String username);
-
-    void setPassword(String password);
 }

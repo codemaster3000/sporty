@@ -21,10 +21,10 @@ public class Member implements IMember {
     private String eMail;
     private String address;
     private String department;
-    private String sport;
+    private String team;
+    private String squad;
     private String role;
     private String username;
-    private String password;
 
     @Override
     @Id
@@ -128,18 +128,6 @@ public class Member implements IMember {
 
     @Override
     @Basic
-    @Column(name = "sport")
-    public String getSport() {
-        return sport;
-    }
-
-    @Override
-    public void setSport(String sport) {
-        this.sport = sport;
-    }
-
-    @Override
-    @Basic
     @Column(name = "role")
     public String getRole() {
         return role;
@@ -152,6 +140,30 @@ public class Member implements IMember {
 
     @Override
     @Basic
+    @Column(name = "team")
+    public String getTeam() {
+        return team;
+    }
+
+    @Override
+    public void setTeam(String team) {
+        this.team = team;
+    }
+
+    @Override
+    @Basic
+    @Column(name = "squad")
+    public String getSquad() {
+        return squad;
+    }
+
+    @Override
+    public void setSquad(String squad) {
+        this.squad = squad;
+    }
+
+    @Override
+    @Basic
     @Column(name = "username")
     public String getUsername() {
         return username;
@@ -160,18 +172,6 @@ public class Member implements IMember {
     @Override
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    @Override
-    @Basic
-    @Column(name = "password")
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     @Override
@@ -189,10 +189,10 @@ public class Member implements IMember {
         if (eMail != null ? !eMail.equals(member.eMail) : member.eMail != null) return false;
         if (address != null ? !address.equals(member.address) : member.address != null) return false;
         if (department != null ? !department.equals(member.department) : member.department != null) return false;
-        if (sport != null ? !sport.equals(member.sport) : member.sport != null) return false;
+        if (team != null ? !team.equals(member.team) : member.team != null) return false;
+        if (squad != null ? !squad.equals(member.squad) : member.squad != null) return false;
         if (role != null ? !role.equals(member.role) : member.role != null) return false;
         if (username != null ? !username.equals(member.username) : member.username != null) return false;
-        if (password != null ? !password.equals(member.password) : member.password != null) return false;
 
         return true;
     }
@@ -207,10 +207,10 @@ public class Member implements IMember {
         result = 31 * result + (eMail != null ? eMail.hashCode() : 0);
         result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (department != null ? department.hashCode() : 0);
-        result = 31 * result + (sport != null ? sport.hashCode() : 0);
+        result = 31 * result + (team != null ? team.hashCode() : 0);
+        result = 31 * result + (squad != null ? squad.hashCode() : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
         result = 31 * result + (username != null ? username.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
         return result;
     }
 }

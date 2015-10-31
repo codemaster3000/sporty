@@ -76,28 +76,30 @@ public class LoginController {
             if (user == null)
                 return -1;
 
-            String databasepwHash = user.get(0).getPassword();
+            //There is no password field in our DB anymore
 
-            if (password.equals(databasepwHash)) {
-                LOGGER.info("User's Password does match");
-
-                // UserRight doc = new UserRight();
-                // Collection<UserRole> users = user.get(0).getUserRoles();
-
-                // TODO Userroles
-                if (false/* Admin*/)
-                    return 1;
-                if (false/*Userrole2*/)
-                    return 0;
-                if (false/*Uerrole3*/)
-                    return 3;
-                // meanwhile return 0 (sportler view)
-                return 0;
-
-        } else {
-            LOGGER.warn("Login by: \"{}\" failed due to bad credentials.",  username);
-            // do nothing for a 2 second timespan
-        }
+//            String databasepwHash = user.get(0).getPassword();
+//
+//            if (password.equals(databasepwHash)) {
+//                LOGGER.info("User's Password does match");
+//
+//                // UserRight doc = new UserRight();
+//                // Collection<UserRole> users = user.get(0).getUserRoles();
+//
+//                // TODO Userroles
+//                if (false/* Admin*/)
+//                    return 1;
+//                if (false/*Userrole2*/)
+//                    return 0;
+//                if (false/*Uerrole3*/)
+//                    return 3;
+//                // meanwhile return 0 (sportler view)
+//                return 0;
+//
+//        } else {
+//            LOGGER.warn("Login by: \"{}\" failed due to bad credentials.",  username);
+//            // do nothing for a 2 second timespan
+//        }
         return -1;
     }
 }

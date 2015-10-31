@@ -8,25 +8,11 @@
 			fx:id="_borderPanel"
 			fx:controller="at.sporty.team1.presentation.controllers.MainViewController">
 	<top>
-		<ToolBar BorderPane.alignment="CENTER">
-			<items>
-				<!-- TODO 
-				<ComboBox fx:id="_searchTextField"
-						  minWidth="400.0"
-						  promptText="%searchBar.promptText"
-						  editable="true"
-						  onAction="#onSearch"/>
-				<Button text="Search" onAction="#onSearch"/>
-				<Separator orientation="VERTICAL"/>
-				<Label fx:id="_usernameLabel" text="%usernameLabel"/>
-				<Button mnemonicParsing="false" text="%userLogout"/>
-				-->
-				<!-- <Label text="TEST LABEL by TEAM1  // test for Jenkins"/> -->
-				<Button fx:id="newMemberButton" text="Add Member" onAction="#openNewMemberView"></Button>
-			</items>
-		</ToolBar>
+        <ToolBar BorderPane.alignment="CENTER">
+            <Button mnemonicParsing="false" text="Add Member" onAction="#openNewMemberView"/>
+        </ToolBar>
 	</top>
 	<center>
-		<TabPane fx:id="_tabPanel" BorderPane.alignment="CENTER" tabMaxHeight="Infinity"/>
+		<TabPane fx:id="_tabPanel" BorderPane.alignment="CENTER" tabMaxHeight="Infinity" styleClass="tabPane"/>
 	</center>
 </BorderPane>

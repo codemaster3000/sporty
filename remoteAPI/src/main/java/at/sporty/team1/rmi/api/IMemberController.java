@@ -1,17 +1,15 @@
 package at.sporty.team1.rmi.api;
 
+import at.sporty.team1.rmi.dtos.MemberDTO;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 
 public interface IMemberController extends Remote {
-    void createNewMember(
-        String fName,
-        String lName,
-        String bday,
-        String email,
-        String phone,
-        String address,
-        String sport,
-        String gender
-    ) throws RemoteException;
+    void createNewMember(MemberDTO memberDTO) throws RemoteException;
+
+    MemberDTO loadMemberById(int memberId) throws RemoteException;
+
+    List<MemberDTO> searchForMembers(String searchQuery) throws RemoteException;
 }

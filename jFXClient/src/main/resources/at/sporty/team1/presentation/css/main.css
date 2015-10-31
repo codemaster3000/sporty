@@ -1,0 +1,15 @@
+.mainPane {
+    -fx-background-image: url("../img/tabBack.png");
+}
+
+.scroll-pane:default, .scroll-pane:focused, .list-view {
+    -fx-border-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.progress {
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-image: url("../img/progress.gif");
+}

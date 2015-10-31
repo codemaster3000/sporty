@@ -1,13 +1,16 @@
 package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
+import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.IMemberController;
-import at.sporty.team1.rmi.RemoteObject;
+import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,12 +18,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class MemberViewController implements IJfxController {
+public class MemberViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String YELLOW_BACKGROUND_STYLE = "-fx-control-inner-background: lightgoldenrodyellow";
     private static final String FEMALE = "F";
     private static final String MALE = "M";
 
@@ -34,113 +35,140 @@ public class MemberViewController implements IJfxController {
     @FXML private RadioButton radioGenderFemale;
     @FXML private RadioButton radioGenderMale;
 
-    private final ToggleGroup _group = new ToggleGroup();
+    private static MemberDTO _activeMemberDTO;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ToggleGroup _group = new ToggleGroup();
         radioGenderFemale.setToggleGroup(_group);
         radioGenderMale.setToggleGroup(_group);
 
         Platform.runLater(fNameTextField::requestFocus);
     }
 
+    /**
+     * Pre-loads data into all view fields.
+     * @param memberDTO MemberDTO that will be preloaded.
+     */
+    public void displayMemberData(MemberDTO memberDTO) {
+        if (memberDTO != null) {
+            _activeMemberDTO = memberDTO;
+
+            fNameTextField.setText(_activeMemberDTO.getFirstName());
+            lNameTextField.setText(_activeMemberDTO.getLastName());
+
+            if (FEMALE.equals(_activeMemberDTO.getGender())) {
+                radioGenderFemale.setSelected(true);
+            } else if (MALE.equals(_activeMemberDTO.getGender())) {
+                radioGenderMale.setSelected(true);
+            }
+
+            birthTextField.setText(_activeMemberDTO.getDateOfBirth());
+            emailTextField.setText(_activeMemberDTO.getEmail());
+            addressTextField.setText(_activeMemberDTO.getAddress());
+        }
+    }
+
+    /**
+     * Pre-loads data into all view fields by id the member.
+     * @param memberId Id of the member that will be preloaded.
+     */
+    public void displayMemberDataById(int memberId) {
+        try {
+            displayMemberData(CommunicationFacade.lookupForMemberController().loadMemberById(memberId));
+        } catch (RemoteException | MalformedURLException | NotBoundException e) {
+            LOGGER.error("Error occurs while loading MemberDTO from the server.", e);
+        }
+    }
 
     /**
      * Save Form-Method
-     * saves the member data into database
+     * saves the member data into the database
      */
     @FXML
     private void saveForm(ActionEvent actionEvent) {
+        String fName = GUIHelper.readNullOrEmpty(fNameTextField.getText());
+        String lName = GUIHelper.readNullOrEmpty(lNameTextField.getText());
+        String bday = GUIHelper.readNullOrEmpty(birthTextField.getText());
+        String email = GUIHelper.readNullOrEmpty(emailTextField.getText());
+        String phone = GUIHelper.readNullOrEmpty(phoneTextField.getText());
+        String address = GUIHelper.readNullOrEmpty(addressTextField.getText());
+        String sport = GUIHelper.readNullOrEmpty(sportTextField.getText());
 
-        String fName = readNullOrEmpty(fNameTextField.getText());
-        String lName = readNullOrEmpty(lNameTextField.getText());
-        String bday = readNullOrEmpty(birthTextField.getText());
-        String email = readNullOrEmpty(emailTextField.getText());
-        String phone = readNullOrEmpty(phoneTextField.getText());
-        String address = readNullOrEmpty(addressTextField.getText());
-        String sport = readNullOrEmpty(sportTextField.getText());
         String gender = null;
-        boolean filled = true;
-        boolean isSaved = false;
-
-        //Alert Box if a mandatory field is not filled
-        //check if mandatory fields are filled with data
-        if (fName == null) {
-            filled = false;
-            fNameTextField.requestFocus();
-            fNameTextField.setStyle(YELLOW_BACKGROUND_STYLE);
-            showValidationAlert("Please fill in First Name.");
-            return;
-        }
-
-        if (lName == null) {
-            filled = false;
-            lNameTextField.requestFocus();
-            lNameTextField.setStyle(YELLOW_BACKGROUND_STYLE);
-            showValidationAlert("Please fill in Last Name.");
-            return;
-        }
-
-        if (bday == null) {
-            filled = false;
-            birthTextField.requestFocus();
-            birthTextField.setStyle(YELLOW_BACKGROUND_STYLE);
-            showValidationAlert("Please fill in Date of Birth.");
-            return;
-        }
-
         if (radioGenderFemale.isSelected()) {
             gender = FEMALE;
         } else if (radioGenderMale.isSelected()) {
             gender = MALE;
-        } else {
-            filled = false;
-            showValidationAlert("Please choose Gender.");
-            return;
         }
 
-        //FIXME: filled var is always true;
-        if (filled) {
-
-            //save
+        //check if mandatory fields are filled with data,
+        //validation was moved to a separate method for refactoring convenience (DTO)
+        if(isValidForm(fName, lName, bday, gender)) {
             try {
 
-                IMemberController imc = CommunicationFacade.lookupForMemberController(RemoteObject.MEMBER_CONTROLLER);
-                imc.createNewMember(
-                    fName,
-                    lName,
-                    bday,
-                    email,
-                    phone,
-                    address,
-                    sport,
-                    gender
-                );
+                //check if we are creating a new or editing an existing Member
+                if (_activeMemberDTO == null) {
+                    //this is a new Member
+                    _activeMemberDTO = new MemberDTO();
+                }
+
+                //if it is an already existing member, changed member data will be simply updated.
+                _activeMemberDTO.setFirstName(fName)
+                        .setLastName(lName)
+                        .setGender(gender)
+                        .setDateOfBirth(bday)
+                        .setEmail(email)
+                        .setAddress(address);
+    //TODO
+    //                .setDepartment(department)
+    //                .setTeam(team)
+    //                .setSquad(squad)
+    //                .setRole(role)
+    //                .setUsername(username);
+
+                IMemberController imc = CommunicationFacade.lookupForMemberController();
+                imc.createNewMember(_activeMemberDTO);
+
+                //Logging and closing the tab
+                LOGGER.info("Member \"{} {}\" was successfully created.", fName, lName);
+                dispose(this);
 
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
-                //TODO handling
-                LOGGER.error(e);
+                LOGGER.error("Error occurs while saving new member.", e);
             }
-
-        } else {
-            showValidationAlert("Please fill in mandatory fields");
         }
     }
 
-    private Optional<ButtonType> showValidationAlert(String context) {
-        return showAlert(AlertType.INFORMATION, "Information", "Mandatory field not filled", context);
-    }
+    private boolean isValidForm(String fName, String lName, String bday, String gender) {
+        //Alert Box if a mandatory field is not filled
+        if (fName == null) {
+            GUIHelper.highlightNotValidTextField(fNameTextField);
+            GUIHelper.showValidationAlert("Please fill in First Name.");
 
-    private Optional<ButtonType> showAlert(AlertType type, String title, String header, String context) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(context);
+            return false;
+        }
 
-        return alert.showAndWait();
-    }
+        if (lName == null) {
+            GUIHelper.highlightNotValidTextField(lNameTextField);
+            GUIHelper.showValidationAlert("Please fill in Last Name.");
 
-    private String readNullOrEmpty(String s) {
-        return (s == null || s.isEmpty()) ? null : s;
+            return false;
+        }
+
+        if (bday == null) {
+            GUIHelper.highlightNotValidTextField(birthTextField);
+            GUIHelper.showValidationAlert("Please fill in Date of Birth.");
+
+            return false;
+        }
+
+        if (gender == null) {
+            GUIHelper.showValidationAlert("Please choose Gender.");
+
+            return false;
+        }
+
+        return true;
     }
 }

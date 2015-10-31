@@ -14,8 +14,8 @@ public class CommunicationFacade {
     private CommunicationFacade() {
     }
 
-    public static IMemberController lookupForMemberController(RemoteObject rObj)
+    public static IMemberController lookupForMemberController()
     throws RemoteException, NotBoundException, MalformedURLException {
-        return (IMemberController) Naming.lookup(String.format(DEFAULT_RMI, rObj.getNaming()));
+        return (IMemberController) Naming.lookup(String.format(DEFAULT_RMI, RemoteObject.MEMBER_CONTROLLER.getNaming()));
     }
 }

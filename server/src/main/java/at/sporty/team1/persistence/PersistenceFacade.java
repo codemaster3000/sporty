@@ -21,11 +21,11 @@ public class PersistenceFacade {
     }
 
     /**
-     * Returns an implementation of the IMemberDAO interface providing
+     * Returns an implementation of the MemberDAO interface providing
      * further operations with members.
-     * @return an instance of IMemberDAO
+     * @return an instance of MemberDAO
      */
-    public static IMemberDAO getNewMemberDAO() {
-        return (IMemberDAO) new MemberDAO();
+    public static MemberDAO getNewMemberDAO() {
+        return new MemberDAO();
     }
 }

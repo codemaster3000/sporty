@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.rmi.Naming;
 import java.rmi.NoSuchObjectException;
+import java.rmi.RMISecurityManager;
 import java.rmi.Remote;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -94,8 +95,8 @@ public class Server {
     private static void start() throws Exception {
         Runtime.getRuntime().addShutdownHook(new Thread(Server::shutdown, "Shutdown-thread"));
 
-        rmiRegistry = LocateRegistry.createRegistry(DEFAULT_PORT);
         HibernateSessionUtil.getInstance().openSession();
+        rmiRegistry = LocateRegistry.createRegistry(DEFAULT_PORT);
     }
 
     /**

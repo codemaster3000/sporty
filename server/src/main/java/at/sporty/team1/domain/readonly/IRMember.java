@@ -22,11 +22,11 @@ public interface IRMember {
 
     String getDepartment();
 
-    String getSport();
+    String getTeam();
+
+    String getSquad();
 
     String getRole();
 
     String getUsername();
-
-    String getPassword();
 }
