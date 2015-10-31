@@ -18,7 +18,21 @@ public class GUIHelper {
     }
 
     public static Optional<ButtonType> showValidationAlert(String context) {
-        return GUIHelper.showAlert(Alert.AlertType.INFORMATION, "Information", "Mandatory field not filled", context);
+        return GUIHelper.showAlert(
+            Alert.AlertType.INFORMATION,
+            "Validation problem",
+            "Validation problem occurs.",
+            context
+        );
+    }
+
+    public static Optional<ButtonType> showSuccessAlert(String context) {
+        return GUIHelper.showAlert(
+            Alert.AlertType.INFORMATION,
+            "Success",
+            null,
+            context
+        );
     }
 
     public static Optional<ButtonType> showAlert(Alert.AlertType type, String title, String header, String context) {

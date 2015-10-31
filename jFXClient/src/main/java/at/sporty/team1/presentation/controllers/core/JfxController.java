@@ -14,7 +14,7 @@ public abstract class JfxController implements IJfxController {
     }
 
     @Override
-    public void dispose(IJfxController childController) {
-        if (_disposeFunction != null) _disposeFunction.accept(childController);
+    public void dispose() {
+        if (_disposeFunction != null) _disposeFunction.accept(this);
     }
 }

@@ -26,8 +26,6 @@ public interface IJfxController extends Initializable {
     /**
      * Disposes {@code this} view if disposeFunction was registered and {@code this} view
      * is a child of the different view.
-     *
-     * @param childController {@code this} controller class that will be disposed.
      */
-    void dispose(IJfxController childController);
+    void dispose();
 }

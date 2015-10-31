@@ -8,6 +8,7 @@ import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -22,6 +23,7 @@ import java.util.ResourceBundle;
 
 public class MemberViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final String SUCCESSFULL_MEMBER_SAVE = "Member was successfully saved.";
     private static final String FEMALE = "F";
     private static final String MALE = "M";
 
@@ -130,9 +132,11 @@ public class MemberViewController extends JfxController {
                 IMemberController imc = CommunicationFacade.lookupForMemberController();
                 imc.createNewMember(_activeMemberDTO);
 
+                GUIHelper.showSuccessAlert(SUCCESSFULL_MEMBER_SAVE);
+
                 //Logging and closing the tab
                 LOGGER.info("Member \"{} {}\" was successfully created.", fName, lName);
-                dispose(this);
+                dispose();
 
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
                 LOGGER.error("Error occurs while saving new member.", e);
