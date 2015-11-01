@@ -8,10 +8,14 @@ import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,10 +48,19 @@ public class SearchViewController extends JfxController {
                 }
             }
         });
+        
+        _searchField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+        	@Override
+        	public void handle(KeyEvent keyevent){
+        		if(keyevent.getCode() == KeyCode.ENTER){
+        			startSearch();
+        		}
+        	}
+		});
     }
 
     @FXML
-    private void startSearch(ActionEvent actionEvent) {
+    private void startSearch() {
         String searchQuery = GUIHelper.readNullOrEmpty(_searchField.getText());
 
         if (searchQuery != null) {
