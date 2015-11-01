@@ -17,13 +17,14 @@ import java.util.ResourceBundle;
 
 public class MainViewController extends JfxController {
     private static final String NEW_MEMBER_TAB_CAPTION = "New Member";
+    private static final String MEMBER_TAB_CAPTION = "Member";
     private final Map<IJfxController, Tab> _tabControllerMap = new HashMap<>();
-
+    
+    private SearchViewController _searchViewController;
+    
 	@FXML private BorderPane _borderPanel;
 	@FXML private TabPane _tabPanel;
-
-    private SearchViewController _searchViewController;
-
+    
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
         new Thread(() -> {
@@ -38,7 +39,7 @@ public class MainViewController extends JfxController {
     }
 	
 	@FXML
-	private void openNewMemberView() {
+	public void openNewMemberView() {
         new Thread(() -> {
 
             ViewLoader<MemberViewController> viewLoader = ViewLoader.loadView(MemberViewController.class);

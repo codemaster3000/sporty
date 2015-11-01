@@ -1,20 +1,24 @@
 package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
+import at.sporty.team1.presentation.ViewLoader;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,6 +36,8 @@ import java.util.ResourceBundle;
 public class SearchViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String PROGRESS = "progress";
+    
+    private MemberViewController _memberViewController;
 
     @FXML private TextField _searchField;
     @FXML private ListView<MemberDTO> _searchResultsListView;
@@ -85,6 +91,18 @@ public class SearchViewController extends JfxController {
 
             }).start();
         }
+        
+        _searchResultsListView.setOnMouseClicked(new EventHandler<MouseEvent>(){
+        	@Override
+        	public void handle(MouseEvent event){
+        		if(event.getButton().equals(MouseButton.PRIMARY)){
+                    if(event.getClickCount() == 2){
+                        //TODO: open MemberView
+                    	//openMemberView();
+                    }
+                }
+        	}
+        });
     }
 
     private void displayNewSearchResults(List<MemberDTO> resultList) {
@@ -93,4 +111,37 @@ public class SearchViewController extends JfxController {
         _searchResultsListView.getSelectionModel().select(0);
         _searchResultsListView.getFocusModel().focus(0);
     }
+    
+	/*public void openMemberView() {
+        new Thread(() -> {
+
+            ViewLoader<MemberViewController> viewLoader = ViewLoader.loadView(MemberViewController.class);
+            Node node = viewLoader.loadNode();
+
+            Tab t = new Tab();
+            t.setText("Member");
+            t.setContent(node);
+            t.setClosable(true);
+
+            //assigning dispose function
+            MemberViewController controller = viewLoader.getController();
+            controller.setDisposeFunction(disposableController -> {
+                Tab disposableTab = _tabControllerMap.get(disposableController);
+                if (disposableTab != null) {
+                    _tabPanel.getTabs().remove(disposableTab);
+                }
+                _tabControllerMap.remove(disposableController);
+            });
+
+            //registering child controller
+            _tabControllerMap.put(controller, t);
+
+            Platform.runLater(() -> {
+                _tabPanel.getTabs().add(t);
+                _tabPanel.getSelectionModel().select(t);
+            });
+
+        }).start();
+	}	*/
+
 }
