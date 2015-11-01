@@ -29,10 +29,10 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public void createNewMember(MemberDTO memberDTO)
+    public boolean createNewMember(MemberDTO memberDTO)
     throws RemoteException {
 
-        if (memberDTO == null) return;
+        if (memberDTO == null) return true;
 
         try {
             /* pulling a MemberDAO and save the Member */
@@ -70,6 +70,8 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 //            //
 //            //throw validationException;
 //        }
+        
+        return false;
     }
 
     @Override

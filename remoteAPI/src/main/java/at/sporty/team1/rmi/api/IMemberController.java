@@ -7,7 +7,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 public interface IMemberController extends Remote {
-    void createNewMember(MemberDTO memberDTO) throws RemoteException;
+    boolean createNewMember(MemberDTO memberDTO) throws RemoteException;
 
     MemberDTO loadMemberById(int memberId) throws RemoteException;
 
