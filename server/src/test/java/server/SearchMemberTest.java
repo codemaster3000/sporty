@@ -47,12 +47,39 @@ public class SearchMemberTest {
 	}
 	
 	/**
-	 * One Member found with fName Claudia
+	 * One Member found with lName Field
 	 */
 	@Test
 	public void searchMemberTest_2() {
 		
-		String searchString = "Claudia";
+		String searchString = "Field";
+		MemberController mem = null;
+		List<MemberDTO> members = new ArrayList<>();
+		
+		try {
+			mem = new MemberController();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			members = mem.searchForMembers(searchString);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Assert.assertEquals(1, members.size());
+	}
+	
+	/**
+	 * One Member found with bDay Field
+	 */
+	@Test
+	public void searchMemberTest_3() {
+		
+		String searchString = "2001-01-01";
 		MemberController mem = null;
 		List<MemberDTO> members = new ArrayList<>();
 		
