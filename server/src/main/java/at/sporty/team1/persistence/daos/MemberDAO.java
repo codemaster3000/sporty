@@ -85,6 +85,28 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
     }
 
     /**
+     * Find by arbitrary String
+     *
+     * @param string ...Name, Department, Birthdate, memberId
+     *
+     * @return List<Member>
+     *
+     * @throws SQLException
+     */
+    public List<Member> findByString(String string) throws SQLException {
+        Criterion criterion;
+
+        criterion = Restrictions.or(
+                Restrictions.like("fname", string, MatchMode.ANYWHERE),
+                Restrictions.like("lname", string, MatchMode.ANYWHERE),
+                Restrictions.like("memberId", string, MatchMode.ANYWHERE),
+                Restrictions.like("dateOfBirth",string, MatchMode.ANYWHERE),
+                Restrictions.like("department",string, MatchMode.ANYWHERE));
+
+        return super.findByCriteria(criterion);
+    }
+
+    /**
      * Find Member(s) by department.
      *
      * @param   department

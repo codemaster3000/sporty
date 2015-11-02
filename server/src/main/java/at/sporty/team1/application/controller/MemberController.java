@@ -5,6 +5,7 @@ import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.domain.readonly.IRMember;
 import at.sporty.team1.persistence.PersistenceFacade;
+import at.sporty.team1.persistence.daos.MemberDAO;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import org.apache.logging.log4j.LogManager;
@@ -14,6 +15,7 @@ import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -80,22 +82,42 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         return convertMemberToDTO(PersistenceFacade.getNewMemberDAO().findById(memberId));
     }
 
+    /**
+     * Search for members by String (name, birthdate, department, teamname)
+     *
+     * @param searchQuery
+     *
+     * @return null or List<IMember>
+     * @throws RemoteException
+     */
     @Override
     public List<MemberDTO> searchForMembers(String searchQuery)
     throws RemoteException {
-        List<? extends IMember> rawSearchResultsList = PersistenceFacade.getNewMemberDAO().findAll();
+
+//        List<? extends IMember> rawSearchResultsList = PersistenceFacade.getNewMemberDAO().findAll();
+//
+
+        List<? extends IMember> rawResultsSearchList = null;
+
+        try {
+            rawResultsSearchList = PersistenceFacade.getNewMemberDAO().findByString(searchQuery);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
 
         //Converting results to MemberDTO
-        return rawSearchResultsList.stream()
+        return rawResultsSearchList.stream()
             .map(MemberController::convertMemberToDTO)
             .collect(Collectors.toList());
     }
 
-    public void delete(String memberId) {
-        //TODO Delete member
-        //MemberDAO memberDAO = PersistenceFacade.getNewGenericDAO(Class<Member>);
-        //Member member = .findById(memberId);
-        //PersistenceFacade.
+    public void delete(String memberId) throws SQLException {
+        //TODO test
+
+        MemberDAO memberDAO = PersistenceFacade.getNewMemberDAO();
+        Member member = memberDAO.findById(memberId);
+        memberDAO.delete(member);
     }
 
     public void saveChanges(MemberDTO member) {
