@@ -2,6 +2,7 @@ package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.ViewLoader;
+import at.sporty.team1.presentation.controllers.core.IJfxController;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
@@ -13,7 +14,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -29,6 +29,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 /**
  * Created by sereGkaluv on 30-Oct-15.
@@ -36,8 +37,9 @@ import java.util.ResourceBundle;
 public class SearchViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String PROGRESS = "progress";
+    private static MemberDTO _activeMemberDTO;
     
-    private MemberViewController _memberViewController;
+    private Consumer<MemberDTO> _targetConsumer;
 
     @FXML private TextField _searchField;
     @FXML private ListView<MemberDTO> _searchResultsListView;
@@ -64,9 +66,15 @@ public class SearchViewController extends JfxController {
         	}
 		});
     }
+    
+    public void setTargetConsumer(Consumer<MemberDTO> consumerFunction) {
+    	_targetConsumer = consumerFunction;
+    }
+    
 
     @FXML
     private void startSearch() {
+    	
         String searchQuery = GUIHelper.readNullOrEmpty(_searchField.getText());
 
         if (searchQuery != null) {
@@ -96,9 +104,14 @@ public class SearchViewController extends JfxController {
         	@Override
         	public void handle(MouseEvent event){
         		if(event.getButton().equals(MouseButton.PRIMARY)){
-                    if(event.getClickCount() == 2){
+                    if(event.getClickCount() == 2 && _targetConsumer != null){
+                    	_activeMemberDTO = _searchResultsListView.getSelectionModel().getSelectedItem();
+                    	_targetConsumer.accept(_activeMemberDTO);
+                    	
                         //TODO: open MemberView
-                    	//openMemberView();
+//                    	ViewLoader<MemberViewController> viewLoader = ViewLoader.loadView(MemberViewController.class);
+//                        Node node = viewLoader.loadNode();
+//                        _memberViewController = viewLoader.getController();
                     }
                 }
         	}
@@ -112,36 +125,6 @@ public class SearchViewController extends JfxController {
         _searchResultsListView.getFocusModel().focus(0);
     }
     
-	/*public void openMemberView() {
-        new Thread(() -> {
-
-            ViewLoader<MemberViewController> viewLoader = ViewLoader.loadView(MemberViewController.class);
-            Node node = viewLoader.loadNode();
-
-            Tab t = new Tab();
-            t.setText("Member");
-            t.setContent(node);
-            t.setClosable(true);
-
-            //assigning dispose function
-            MemberViewController controller = viewLoader.getController();
-            controller.setDisposeFunction(disposableController -> {
-                Tab disposableTab = _tabControllerMap.get(disposableController);
-                if (disposableTab != null) {
-                    _tabPanel.getTabs().remove(disposableTab);
-                }
-                _tabControllerMap.remove(disposableController);
-            });
-
-            //registering child controller
-            _tabControllerMap.put(controller, t);
-
-            Platform.runLater(() -> {
-                _tabPanel.getTabs().add(t);
-                _tabPanel.getSelectionModel().select(t);
-            });
-
-        }).start();
-	}	*/
+	
 
 }

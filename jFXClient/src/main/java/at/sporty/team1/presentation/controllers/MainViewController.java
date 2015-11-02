@@ -3,6 +3,7 @@ package at.sporty.team1.presentation.controllers;
 import at.sporty.team1.presentation.ViewLoader;
 import at.sporty.team1.presentation.controllers.core.IJfxController;
 import at.sporty.team1.presentation.controllers.core.JfxController;
+import at.sporty.team1.rmi.dtos.MemberDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -32,6 +33,8 @@ public class MainViewController extends JfxController {
             ViewLoader<SearchViewController> viewLoader = ViewLoader.loadView(SearchViewController.class);
             Node node = viewLoader.loadNode();
             _searchViewController = viewLoader.getController();
+            
+            _searchViewController.setTargetConsumer(this::openMemberView);
 
             Platform.runLater(() -> _borderPanel.setLeft(node));
 
@@ -52,6 +55,40 @@ public class MainViewController extends JfxController {
 
             //assigning dispose function
             MemberViewController controller = viewLoader.getController();
+            controller.setDisposeFunction(disposableController -> {
+                Tab disposableTab = _tabControllerMap.get(disposableController);
+                if (disposableTab != null) {
+                    _tabPanel.getTabs().remove(disposableTab);
+                }
+                _tabControllerMap.remove(disposableController);
+            });
+
+            //registering child controller
+            _tabControllerMap.put(controller, t);
+
+            Platform.runLater(() -> {
+                _tabPanel.getTabs().add(t);
+                _tabPanel.getSelectionModel().select(t);
+            });
+
+        }).start();
+	}	
+	
+	public void openMemberView(MemberDTO memberDTO) {
+        new Thread(() -> {
+
+            ViewLoader<MemberViewController> viewLoader = ViewLoader.loadView(MemberViewController.class);
+            Node node = viewLoader.loadNode();
+
+            Tab t = new Tab();
+            t.setText("Member");
+            t.setContent(node);
+            t.setClosable(true);
+
+            //assigning dispose function
+            MemberViewController controller = viewLoader.getController();
+            controller.displayMemberData(memberDTO);
+            
             controller.setDisposeFunction(disposableController -> {
                 Tab disposableTab = _tabControllerMap.get(disposableController);
                 if (disposableTab != null) {
