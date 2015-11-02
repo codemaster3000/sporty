@@ -8,7 +8,13 @@
         <!--<property name="connection.autocommit">true</property>-->
         <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+
+        <!--local db-->
+        <!--<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/sporty</property>-->
+
+        <!--remote db-->
         <property name="hibernate.connection.url">jdbc:mysql://5.35.247.12:3306/sporty</property>
+
         <property name="hibernate.connection.username">sporty</property>
         <property name="hibernate.connection.password">sporty123</property>
         <property name="hibernate.current_session_context_class">thread</property>

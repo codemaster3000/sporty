@@ -1,22 +1,19 @@
 package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
-import at.sporty.team1.presentation.ViewLoader;
-import at.sporty.team1.presentation.controllers.core.IJfxController;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
@@ -57,20 +54,16 @@ public class SearchViewController extends JfxController {
             }
         });
         
-        _searchField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-        	@Override
-        	public void handle(KeyEvent keyevent){
-        		if(keyevent.getCode() == KeyCode.ENTER){
-        			startSearch();
-        		}
-        	}
-		});
+        _searchField.setOnKeyPressed(e -> {
+            if(e.getCode() == KeyCode.ENTER){
+                startSearch();
+            }
+        });
     }
     
     public void setTargetConsumer(Consumer<MemberDTO> consumerFunction) {
     	_targetConsumer = consumerFunction;
     }
-    
 
     @FXML
     private void startSearch() {
@@ -100,18 +93,11 @@ public class SearchViewController extends JfxController {
             }).start();
         }
         
-        _searchResultsListView.setOnMouseClicked(new EventHandler<MouseEvent>(){
-        	@Override
-        	public void handle(MouseEvent event){
-        		if(event.getButton().equals(MouseButton.PRIMARY)){
-
-                    if(event.getClickCount() == 2 && _targetConsumer != null){
-                    	_activeMemberDTO = _searchResultsListView.getSelectionModel().getSelectedItem();
-                    	_targetConsumer.accept(_activeMemberDTO);
-                    }
-
-                }
-        	}
+        _searchResultsListView.setOnMouseClicked(event -> {
+            if(isDoubleClick(event, MouseButton.PRIMARY) && _targetConsumer != null){
+                _activeMemberDTO = _searchResultsListView.getSelectionModel().getSelectedItem();
+                _targetConsumer.accept(_activeMemberDTO);
+            }
         });
     }
 
@@ -121,7 +107,8 @@ public class SearchViewController extends JfxController {
         _searchResultsListView.getSelectionModel().select(0);
         _searchResultsListView.getFocusModel().focus(0);
     }
-    
-	
 
+    private boolean isDoubleClick(MouseEvent event, MouseButton mouseButton) {
+        return event.getButton().equals(mouseButton) && event.getClickCount() == 2;
+    }
 }

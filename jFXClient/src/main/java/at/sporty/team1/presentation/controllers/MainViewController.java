@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 public class MainViewController extends JfxController {
-    private static final String NEW_MEMBER_TAB_CAPTION = "New Member";
     private static final String MEMBER_TAB_CAPTION = "Member";
     private final Map<IJfxController, Tab> _tabControllerMap = new HashMap<>();
     
@@ -43,35 +42,7 @@ public class MainViewController extends JfxController {
 	
 	@FXML
 	public void openNewMemberView() {
-        new Thread(() -> {
-
-            ViewLoader<MemberViewController> viewLoader = ViewLoader.loadView(MemberViewController.class);
-            Node node = viewLoader.loadNode();
-
-            Tab t = new Tab();
-            t.setText(NEW_MEMBER_TAB_CAPTION);
-            t.setContent(node);
-            t.setClosable(true);
-
-            //assigning dispose function
-            MemberViewController controller = viewLoader.getController();
-            controller.setDisposeFunction(disposableController -> {
-                Tab disposableTab = _tabControllerMap.get(disposableController);
-                if (disposableTab != null) {
-                    _tabPanel.getTabs().remove(disposableTab);
-                }
-                _tabControllerMap.remove(disposableController);
-            });
-
-            //registering child controller
-            _tabControllerMap.put(controller, t);
-
-            Platform.runLater(() -> {
-                _tabPanel.getTabs().add(t);
-                _tabPanel.getSelectionModel().select(t);
-            });
-
-        }).start();
+        openMemberView(null);
 	}	
 	
 	public void openMemberView(MemberDTO memberDTO) {
@@ -81,14 +52,16 @@ public class MainViewController extends JfxController {
             Node node = viewLoader.loadNode();
 
             Tab t = new Tab();
-            t.setText("Member");
+            t.setText(MEMBER_TAB_CAPTION);
             t.setContent(node);
             t.setClosable(true);
 
-            //assigning dispose function
             MemberViewController controller = viewLoader.getController();
-            controller.displayMemberData(memberDTO);
-            
+
+            //check if need to load an existing member
+            if (memberDTO != null) controller.displayMemberData(memberDTO);
+
+            //assigning dispose function
             controller.setDisposeFunction(disposableController -> {
                 Tab disposableTab = _tabControllerMap.get(disposableController);
                 if (disposableTab != null) {

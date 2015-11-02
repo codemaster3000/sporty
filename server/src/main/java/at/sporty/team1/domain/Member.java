@@ -213,8 +213,4 @@ public class Member implements IMember {
         result = 31 * result + (username != null ? username.hashCode() : 0);
         return result;
     }
-
-    public String getDateOfBirthString() {
-        return getDateOfBirth().toString();
-    }
 }

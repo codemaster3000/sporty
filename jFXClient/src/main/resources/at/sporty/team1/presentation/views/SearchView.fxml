@@ -4,8 +4,7 @@
 <?import javafx.scene.layout.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/8"
-            fx:controller="at.sporty.team1.presentation.controllers.SearchViewController"
-            style="-fx-background-color: #c8c8c8;">
+            fx:controller="at.sporty.team1.presentation.controllers.SearchViewController">
     <HBox spacing="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" AnchorPane.rightAnchor="5.0">
         <TextField fx:id="_searchField" HBox.hgrow="ALWAYS"/>
         <Button text="GO" onAction="#startSearch" HBox.hgrow="NEVER"/>
