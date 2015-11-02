@@ -5,6 +5,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
