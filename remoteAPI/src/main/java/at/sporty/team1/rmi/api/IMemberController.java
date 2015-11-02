@@ -9,7 +9,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 public interface IMemberController extends Remote {
-    void createNewMember(MemberDTO memberDTO) throws RemoteException, ValidationException;
+    void createOrSaveMember(MemberDTO memberDTO) throws RemoteException, ValidationException;
 
     MemberDTO loadMemberById(int memberId) throws RemoteException;
 

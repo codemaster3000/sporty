@@ -4,7 +4,6 @@ import java.rmi.RemoteException;
 
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.Assert;
 import org.junit.Rule;
 
 import at.sporty.team1.rmi.dtos.MemberDTO;
@@ -41,7 +40,7 @@ public class NewMemberTest {
 		}
 		
         try {
-			memberCon.createNewMember(_activeMemberDTO);
+			memberCon.createOrSaveMember(_activeMemberDTO);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -89,7 +88,7 @@ public class NewMemberTest {
 		
         try {
 			
-			memberCon.createNewMember(_activeMemberDTO);			
+			memberCon.createOrSaveMember(_activeMemberDTO);
 		} catch (RemoteException | ValidationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -136,7 +135,7 @@ public class NewMemberTest {
 		}
 		
         try {
-			memberCon.createNewMember(_activeMemberDTO);
+			memberCon.createOrSaveMember(_activeMemberDTO);
 		} catch (RemoteException e) {			
 			e.printStackTrace();
 		} catch (ValidationException e) {
@@ -180,7 +179,7 @@ public class NewMemberTest {
 		}
 		
         try {
-			memberCon.createNewMember(_activeMemberDTO);
+			memberCon.createOrSaveMember(_activeMemberDTO);
 		} catch (RemoteException e) {
 			
 			e.printStackTrace();

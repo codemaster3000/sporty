@@ -35,7 +35,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public void createNewMember(MemberDTO memberDTO)
+    public void createOrSaveMember(MemberDTO memberDTO)
     throws RemoteException, ValidationException {
 
         if (memberDTO == null) return;
@@ -140,7 +140,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
                 .setEmail(member.getEmail())
                 .setAddress(member.getAddress())
                 .setDepartment(member.getDepartment())
-                .setTeam(member.getTeam())
+                .setTeamId(member.getTeamId())
                 .setSquad(member.getSquad())
                 .setRole(member.getRole())
                 .setUsername(member.getUsername());
@@ -166,7 +166,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             member.setEmail(memberDTO.getEmail());
             member.setAddress(memberDTO.getAddress());
             member.setDepartment(memberDTO.getDepartment());
-            member.setTeam(memberDTO.getTeam());
+            member.setTeamId(memberDTO.getTeamId());
             member.setSquad(memberDTO.getSquad());
             member.setRole(memberDTO.getRole());
             member.setUsername(memberDTO.getUsername());

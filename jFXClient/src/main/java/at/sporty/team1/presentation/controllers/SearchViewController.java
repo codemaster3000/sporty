@@ -2,13 +2,12 @@ package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.JfxController;
+import at.sporty.team1.rmi.api.IDTO;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -16,7 +15,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,7 +34,7 @@ public class SearchViewController extends JfxController {
     private static final String PROGRESS = "progress";
     private static MemberDTO _activeMemberDTO;
     
-    private Consumer<MemberDTO> _targetConsumer;
+    private Consumer<IDTO> _targetDelegator;
 
     @FXML private TextField _searchField;
     @FXML private ListView<MemberDTO> _searchResultsListView;
@@ -59,10 +57,30 @@ public class SearchViewController extends JfxController {
                 startSearch();
             }
         });
+
+        _searchResultsListView.setOnMouseClicked(e -> {
+            if (isDoubleClick(e, MouseButton.PRIMARY) && _targetDelegator != null) {
+
+                MemberDTO selectedMember = _searchResultsListView.getSelectionModel().getSelectedItem();
+                if (selectedMember != null) {
+                    _targetDelegator.accept(selectedMember);
+                }
+            }
+        });
+
+        _searchResultsListView.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.RIGHT && _targetDelegator != null) {
+
+                MemberDTO selectedMember = _searchResultsListView.getSelectionModel().getSelectedItem();
+                if (selectedMember != null) {
+                    _targetDelegator.accept(selectedMember);
+                }
+            }
+        });
     }
     
-    public void setTargetConsumer(Consumer<MemberDTO> consumerFunction) {
-    	_targetConsumer = consumerFunction;
+    public void setTargetDelgator(Consumer<IDTO> consumerFunction) {
+        _targetDelegator = consumerFunction;
     }
 
     @FXML
@@ -83,7 +101,10 @@ public class SearchViewController extends JfxController {
 
                     Platform.runLater(() -> {
                         _searchResultsListView.getStyleClass().remove(PROGRESS);
-                        displayNewSearchResults(rawSearchResults);
+                        _searchResultsListView.setItems(FXCollections.observableArrayList(rawSearchResults));
+                        _searchResultsListView.requestFocus();
+                        _searchResultsListView.getSelectionModel().select(0);
+                        _searchResultsListView.getFocusModel().focus(0);
                     });
 
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
@@ -92,20 +113,6 @@ public class SearchViewController extends JfxController {
 
             }).start();
         }
-        
-        _searchResultsListView.setOnMouseClicked(event -> {
-            if(isDoubleClick(event, MouseButton.PRIMARY) && _targetConsumer != null){
-                _activeMemberDTO = _searchResultsListView.getSelectionModel().getSelectedItem();
-                _targetConsumer.accept(_activeMemberDTO);
-            }
-        });
-    }
-
-    private void displayNewSearchResults(List<MemberDTO> resultList) {
-        _searchResultsListView.setItems(FXCollections.observableArrayList(resultList));
-        _searchResultsListView.requestFocus();
-        _searchResultsListView.getSelectionModel().select(0);
-        _searchResultsListView.getFocusModel().focus(0);
     }
 
     private boolean isDoubleClick(MouseEvent event, MouseButton mouseButton) {

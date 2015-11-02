@@ -4,6 +4,8 @@ import at.sporty.team1.domain.interfaces.IMember;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -12,7 +14,8 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "member")
-public class Member implements IMember {
+public class Member {
+//public class Member implements IMember {
     private int memberId;
     private String firstname;
     private String lastname;
@@ -21,91 +24,91 @@ public class Member implements IMember {
     private String eMail;
     private String address;
     private String department;
-    private String team;
+    private Team teams;
     private String squad;
     private String role;
     private String username;
 
-    @Override
+    //@Override
     @Id
     @Column(name = "memberId")
     public int getMemberId() {
         return memberId;
     }
 
-    @Override
+    //@Override
     public void setMemberId(int memberId) {
         this.memberId = memberId;
     }
 
-    @Override
+    //@Override
     @Basic
     @Column(name = "fname")
     public String getFirstName() {
         return firstname;
     }
 
-    @Override
+    //@Override
     public void setFirstName(String firstname) {
         this.firstname = firstname;
     }
 
-    @Override
+    //@Override
     @Basic
     @Column(name = "lname")
     public String getLastName() {
         return lastname;
     }
 
-    @Override
+    //@Override
     public void setLastName(String lastname) {
         this.lastname = lastname;
     }
 
-    @Override
+    //@Override
     @Basic
     @Column(name = "gender")
     public String getGender() {
         return gender;
     }
 
-    @Override
+    //@Override
     public void setGender(String gender) {
         this.gender = gender;
     }
 
-    @Override
+    //@Override
     @Basic
     @Column(name = "dateOfBirth")
     public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    @Override
+    //@Override
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
-    @Override
+    //@Override
     @Basic
     @Column(name = "email")
     public String getEmail() {
         return eMail;
     }
 
-    @Override
+    //@Override
     public void setEmail(String email) {
         this.eMail = email;
     }
 
-    @Override
+    //@Override
     @Basic
     @Column(name = "address")
     public String getAddress() {
         return address;
     }
 
-    @Override
+    //@Override
     public void setAddress(String address) {
         this.address = address;
     }
@@ -114,67 +117,67 @@ public class Member implements IMember {
      * many to many? TODO
      * @return TODO
      */
-    @Override
+    //@Override
     @Basic
-    @Column(name = "department")
+    @Column(name = "departmentId")
     public String getDepartment() {
         return department;
     }
 
-    @Override
+    //@Override
     public void setDepartment(String department) {
         this.department = department;
     }
 
-    @Override
+    //@Override
     @Basic
     @Column(name = "role")
     public String getRole() {
         return role;
     }
 
-    @Override
+    //@Override
     public void setRole(String role) {
         this.role = role;
     }
 
-    @Override
-    @Basic
-    @Column(name = "team")
-    public String getTeam() {
-        return team;
+    //@Override
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="teamId")
+    public Team getTeams() {
+        return teams;
     }
 
-    @Override
-    public void setTeam(String team) {
-        this.team = team;
+    //@Override
+    public void setTeams(Team teams) {
+//        this.teams = teams;
     }
 
-    @Override
+    //@Override
     @Basic
     @Column(name = "squad")
     public String getSquad() {
         return squad;
     }
 
-    @Override
+    //@Override
     public void setSquad(String squad) {
         this.squad = squad;
     }
 
-    @Override
+    //@Override
     @Basic
     @Column(name = "username")
     public String getUsername() {
         return username;
     }
 
-    @Override
+    //@Override
     public void setUsername(String username) {
         this.username = username;
     }
 
-    @Override
+    //@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -189,7 +192,7 @@ public class Member implements IMember {
         if (eMail != null ? !eMail.equals(member.eMail) : member.eMail != null) return false;
         if (address != null ? !address.equals(member.address) : member.address != null) return false;
         if (department != null ? !department.equals(member.department) : member.department != null) return false;
-        if (team != null ? !team.equals(member.team) : member.team != null) return false;
+        if (teams != null ? !teams.equals(member.teams) : member.teams != null) return false;
         if (squad != null ? !squad.equals(member.squad) : member.squad != null) return false;
         if (role != null ? !role.equals(member.role) : member.role != null) return false;
         if (username != null ? !username.equals(member.username) : member.username != null) return false;
@@ -197,7 +200,7 @@ public class Member implements IMember {
         return true;
     }
 
-    @Override
+    //@Override
     public int hashCode() {
         int result = memberId;
         result = 31 * result + (firstname != null ? firstname.hashCode() : 0);
@@ -207,7 +210,7 @@ public class Member implements IMember {
         result = 31 * result + (eMail != null ? eMail.hashCode() : 0);
         result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (department != null ? department.hashCode() : 0);
-        result = 31 * result + (team != null ? team.hashCode() : 0);
+        result = 31 * result + (teams != null ? teams.hashCode() : 0);
         result = 31 * result + (squad != null ? squad.hashCode() : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
         result = 31 * result + (username != null ? username.hashCode() : 0);

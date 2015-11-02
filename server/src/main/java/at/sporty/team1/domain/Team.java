@@ -9,10 +9,10 @@ import java.util.List;
  *
  */
 @Entity
+@PrimaryKeyJoinColumn(name = "teamId", referencedColumnName = "teamId")
 @Table(name = "team")
 public class Team implements ITeam {
-
-    public String teamId; //do we want ints here? IDs must not be incremental... can be hashes aswell
+    public int teamId;
     public String teamname;
     public Department department;
     public Member trainer;
@@ -22,18 +22,18 @@ public class Team implements ITeam {
     @Override
     @Id
     @Column(name = "teamId")
-    public String getTeamId() {
+    public int getTeamId() {
         return teamId;
     }
 
     @Override
-    public void setTeamId(String teamId) {
+    public void setTeamId(int teamId) {
         this.teamId = teamId;
     }
 
     @Override
-    @Basic
-    @Column(name = "") //TODO
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "teamId", referencedColumnName = "teamId")
     public List<Member> getMembers() {
         return members;
     }
@@ -45,7 +45,7 @@ public class Team implements ITeam {
 
     @Override
     @Basic
-    @Column(name = "department")
+    @Column(name = "department") //TODO refactor
     public Department getDepartment() {
         return department;
     }
@@ -57,13 +57,13 @@ public class Team implements ITeam {
 
     @Override
     @Basic
-    @Column(name = "teamname")
-    public String getTeamname() {
+    @Column(name = "teamName")
+    public String getTeamName() {
         return teamname;
     }
 
     @Override
-    public void setTeamname(String teamname) {
+    public void setTeamName(String teamname) {
         this.teamname = teamname;
     }
 

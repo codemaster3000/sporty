@@ -1,11 +1,13 @@
 package at.sporty.team1.rmi.dtos;
 
+import at.sporty.team1.rmi.api.IDTO;
+
 import java.io.Serializable;
 
 /**
- * This DTO Object implements Object Builder pattern.
+ * This IDTO Object implements Object Builder pattern.
  */
-public class MemberDTO implements Serializable {
+public class MemberDTO implements Serializable, IDTO {
     private int _memberId;
     private String _firstName;
     private String _lastName;
@@ -14,7 +16,7 @@ public class MemberDTO implements Serializable {
     private String _email;
     private String _address;
     private String _department;
-    private String _team;
+    private int _teamId;
     private String _squad;
     private String _role;
     private String _username;
@@ -94,12 +96,12 @@ public class MemberDTO implements Serializable {
         return this;
     }
 
-    public String getTeam() {
-        return _team;
+    public int getTeamId() {
+        return _teamId;
     }
 
-    public MemberDTO setTeam(String team) {
-        _team = team;
+    public MemberDTO setTeamId(int teamId) {
+        _teamId = teamId;
         return this;
     }
 
