@@ -2,6 +2,8 @@ package at.sporty.team1.persistence;
 
 import at.sporty.team1.misc.functional.ThrowingConsumer;
 import at.sporty.team1.misc.functional.ThrowingFunction;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,6 +14,7 @@ import javax.persistence.PersistenceException;
 import java.util.Properties;
 
 public class HibernateSessionUtil {
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final String HIBERNATE_CONFIG_FILE = "/hibernate.cfg.xml";
     private final SessionFactory SESSION_FACTORY;
     private static HibernateSessionUtil instance;
@@ -74,6 +77,10 @@ public class HibernateSessionUtil {
                 new StandardServiceRegistryBuilder().applySettings(properties).build()
             );
         } catch (Throwable ex) {
+            LOGGER.fatal(
+                "Something went wrong by initializing hibernate. Check config files for errors and DB availability."
+            );
+
             throw new ExceptionInInitializerError(ex);
         }
     }
