@@ -104,15 +104,12 @@ public class SearchViewController extends JfxController {
         	@Override
         	public void handle(MouseEvent event){
         		if(event.getButton().equals(MouseButton.PRIMARY)){
+
                     if(event.getClickCount() == 2 && _targetConsumer != null){
                     	_activeMemberDTO = _searchResultsListView.getSelectionModel().getSelectedItem();
                     	_targetConsumer.accept(_activeMemberDTO);
-                    	
-                        //TODO: open MemberView
-//                    	ViewLoader<MemberViewController> viewLoader = ViewLoader.loadView(MemberViewController.class);
-//                        Node node = viewLoader.loadNode();
-//                        _memberViewController = viewLoader.getController();
                     }
+
                 }
         	}
         });

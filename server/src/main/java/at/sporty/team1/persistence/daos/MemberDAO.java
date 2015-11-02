@@ -5,6 +5,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -96,12 +97,26 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
     public List<Member> findByString(String string) throws SQLException {
         Criterion criterion;
 
-        criterion = Restrictions.or(
-                Restrictions.like("firstname", string, MatchMode.ANYWHERE),
-                Restrictions.like("lastname", string, MatchMode.ANYWHERE),
-                Restrictions.like("memberId", string, MatchMode.ANYWHERE),
-                Restrictions.like("dateOfBirth",string, MatchMode.ANYWHERE),
-                Restrictions.like("department",string, MatchMode.ANYWHERE));
+        //TODO Optimise?
+
+        Date date = parseDate(string);
+
+        if (date != null) {
+            criterion = Restrictions.or(
+                Restrictions.like("firstName", string, MatchMode.ANYWHERE),
+                Restrictions.like("lastName", string, MatchMode.ANYWHERE),
+                Restrictions.like("team", string, MatchMode.ANYWHERE),
+                Restrictions.like("department", string, MatchMode.ANYWHERE),
+                Restrictions.eq("dateOfBirth", date)
+            );
+        } else {
+            criterion = Restrictions.or(
+                Restrictions.like("firstName", string, MatchMode.ANYWHERE),
+                Restrictions.like("lastName", string, MatchMode.ANYWHERE),
+                Restrictions.like("team", string, MatchMode.ANYWHERE),
+                Restrictions.like("department", string, MatchMode.ANYWHERE)
+            );
+        }
 
         return super.findByCriteria(criterion);
     }
@@ -154,5 +169,15 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
         criterion = Restrictions.or(Restrictions.like("dateOfBirth", birthdate ,MatchMode.ANYWHERE));
 
         return super.findByCriteria(criterion);
+    }
+
+    /**
+     * A helping method.
+     *
+     * @param s String to be parsed as a date
+     * @return parsed date
+     */
+    private static Date parseDate(String s) {
+        return s != null ? Date.valueOf(s) : null;
     }
 }
