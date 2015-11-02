@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Rule;
 
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.application.controller.*;
 
 
@@ -32,8 +33,6 @@ public class NewMemberTest {
         
         MemberController memberCon = null;
         
-        boolean error = false;
-        
 		try {
 			memberCon = new MemberController();
 		} catch (RemoteException e1) {
@@ -42,13 +41,14 @@ public class NewMemberTest {
 		}
 		
         try {
-			error = memberCon.createNewMember(_activeMemberDTO);
+			memberCon.createNewMember(_activeMemberDTO);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ValidationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-        
-        Assert.assertTrue(error);
    
 	}
 
@@ -58,9 +58,8 @@ public class NewMemberTest {
 	@Test
 	public void newMemberTest_2() {
 		
-		
 		MemberDTO _activeMemberDTO = new MemberDTO();
-		boolean error = false;
+		
 		String fName = "Anne";
         String lName = "Tester";
         String bday = "2001-01-01";
@@ -89,14 +88,13 @@ public class NewMemberTest {
 		}
 		
         try {
-			error = memberCon.createNewMember(_activeMemberDTO);
-		} catch (RemoteException e) {
+			
+			memberCon.createNewMember(_activeMemberDTO);			
+		} catch (RemoteException | ValidationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
-        Assert.assertFalse(error);
-   
+  
 	}
 	
 	/**
@@ -106,10 +104,10 @@ public class NewMemberTest {
 	@Test
 	public void newMemberTest_3() {
 		
-		thrown.expect(java.lang.IllegalArgumentException.class);
+		//thrown.expect(java.lang.IllegalArgumentException.class);
+		//thrown.expect(at.sporty.team1.rmi.exceptions.ValidationException.class);
 	    
 		MemberDTO _activeMemberDTO = new MemberDTO();
-		boolean error = false;
 		String fName = "Fred";
         String lName = "Tester";
         String bday = "01.01.1900";
@@ -133,31 +131,27 @@ public class NewMemberTest {
 		try {
 			memberCon = new MemberController();
 		} catch (RemoteException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
-			error = true;
 		}
 		
         try {
-			error = memberCon.createNewMember(_activeMemberDTO);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
+			memberCon.createNewMember(_activeMemberDTO);
+		} catch (RemoteException e) {			
 			e.printStackTrace();
-			error = true;
+		} catch (ValidationException e) {
+			e.printStackTrace();
 		}
 	}
 	
 	/**
-	 * Bday in false format
+	 * Bday in right format
 	 * @throws Exception 
 	 */
 	@Test
 	public void newMemberTest_4() {
-		
-		thrown.expect(java.lang.IllegalArgumentException.class);
 	    
 		MemberDTO _activeMemberDTO = new MemberDTO();
-		boolean error = false;
 		String fName = "Fred";
         String lName = "Tester";
         String bday = "1900-12-12";
@@ -181,18 +175,17 @@ public class NewMemberTest {
 		try {
 			memberCon = new MemberController();
 		} catch (RemoteException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
-			error = true;
 		}
 		
         try {
-			error = memberCon.createNewMember(_activeMemberDTO);
+			memberCon.createNewMember(_activeMemberDTO);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
-			error = true;
+		} catch (ValidationException e) {
+			e.printStackTrace();
 		}
 	}
-
 }

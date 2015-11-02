@@ -4,10 +4,14 @@ package at.sporty.team1.application.controller;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.domain.readonly.IRMember;
+import at.sporty.team1.misc.DataType;
+import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.persistence.daos.MemberDAO;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.exceptions.ValidationException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,49 +35,48 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public boolean createNewMember(MemberDTO memberDTO)
-    throws RemoteException {
+    public void createNewMember(MemberDTO memberDTO)
+    throws RemoteException, ValidationException {
 
-        if (memberDTO == null) return true;
+        if (memberDTO == null) return;
 
-        try {
-            /* pulling a MemberDAO and save the Member */
-            PersistenceFacade.getNewMemberDAO().saveOrUpdate(
-                convertDTOToMember(memberDTO)
-            );
+        /* Validating Input */
+        InputSanitizer inputSanitizer = new InputSanitizer();
 
-            LOGGER.info("New member \"{} {}\" was created.", memberDTO.getFirstName(), memberDTO.getLastName());
+        if (inputSanitizer.check(memberDTO.getFirstName(), DataType.NAME) &&
+            inputSanitizer.check(memberDTO.getLastName(), DataType.NAME) &&
+            inputSanitizer.check(memberDTO.getDateOfBirth(), DataType.SQL_DATE) &&
+            inputSanitizer.check(memberDTO.getEmail(), DataType.EMAIL) &&
+            inputSanitizer.check(memberDTO.getAddress(), DataType.ADDRESS) &&
+            inputSanitizer.check(memberDTO.getDepartment(), DataType.TEXT) &&
+            inputSanitizer.check(memberDTO.getGender(), DataType.GENDER))
+        {
+        	
+	    	 try {
+	             /* pulling a MemberDAO and save the Member */
+	             PersistenceFacade.getNewMemberDAO().saveOrUpdate(
+	                 convertDTOToMember(memberDTO)
+	             );
+	
+	             LOGGER.info("New member \"{} {}\" was created.", memberDTO.getFirstName(), memberDTO.getLastName());
+	
+	         } catch (PersistenceException e) {
+	             LOGGER.error("Error occurs while communicating with DB.", e);
+	         }
+        	
+     
+        } else {
+            // There has been bad Input, throw the Exception
+            LOGGER.error("Wrong Input creating Member: {}", inputSanitizer.getLastFailedValidation());
 
-        } catch (PersistenceException e) {
-            LOGGER.error("Error occurs while communicating with DB.", e);
+            //TODO  throws ValidationException;
+            ValidationException validationException = new ValidationException();
+            validationException.setReason(inputSanitizer.getLastFailedValidation());
+            
+            throw validationException;
         }
-
-        //TODO rewrite validation
-//        /* Validating Input */
-//        InputSanitizer inputSanitizer = new InputSanitizer();
-
-//        if (inputSanitizer.check(fName, DataType.NAME) &&
-//            inputSanitizer.check(lName, DataType.NAME) &&
-//            inputSanitizer.check(bday, DataType.SQL_DATE) &&
-//            inputSanitizer.check(email, DataType.EMAIL) &&
-//            inputSanitizer.check(phone, DataType.PHONE_NUMBER) &&
-//            inputSanitizer.check(address, DataType.ADDRESS) &&
-//            inputSanitizer.check(sport, DataType.TEXT) &&
-//            inputSanitizer.check(gender, DataType.GENDER))
-//        {
-        // all Input validated and OK
-//        } else {
-//            // There has been bad Input, throw the Exception
-//            LOGGER.error("Wrong Input creating Member: {}", inputSanitizer.getLastFailedValidation());
-//
-//            //TODO  throws ValidationException;
-//            //ValidationException validationException = new ValidationException();
-//            //validationException.setReason(inputSanitizer.getLastFailedValidation());
-//            //
-//            //throw validationException;
-//        }
         
-        return false;
+       
     }
 
     @Override

@@ -4,6 +4,7 @@ import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -140,7 +141,12 @@ public class MemberViewController extends JfxController {
 
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
                 LOGGER.error("Error occurs while saving new member.", e);
-            }
+            } catch (ValidationException e) {
+            	String context = String.format("Validation exception %s while saving member.", e.getCause());
+            	
+            	GUIHelper.showValidationAlert(context);
+				LOGGER.error(context, e);
+			}
         }
     }
 

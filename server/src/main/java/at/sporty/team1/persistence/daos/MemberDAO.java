@@ -5,7 +5,6 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -96,8 +95,6 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
      */
     public List<Member> findByString(String string) throws SQLException {
         Criterion criterion;
-
-        //TODO Optimise?
 
         Date date = parseDate(string);
 

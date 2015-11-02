@@ -1,4 +1,4 @@
-package at.sporty.team1.application.exceptions;
+package at.sporty.team1.rmi.exceptions;
 
 /**
  * Created by f00 on 29.10.15.
