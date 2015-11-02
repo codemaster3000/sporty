@@ -97,8 +97,8 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
         Criterion criterion;
 
         criterion = Restrictions.or(
-                Restrictions.like("fname", string, MatchMode.ANYWHERE),
-                Restrictions.like("lname", string, MatchMode.ANYWHERE),
+                Restrictions.like("firstname", string, MatchMode.ANYWHERE),
+                Restrictions.like("lastname", string, MatchMode.ANYWHERE),
                 Restrictions.like("memberId", string, MatchMode.ANYWHERE),
                 Restrictions.like("dateOfBirth",string, MatchMode.ANYWHERE),
                 Restrictions.like("department",string, MatchMode.ANYWHERE));

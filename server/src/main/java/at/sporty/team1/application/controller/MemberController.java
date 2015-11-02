@@ -93,10 +93,6 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     @Override
     public List<MemberDTO> searchForMembers(String searchQuery)
     throws RemoteException {
-
-//        List<? extends IMember> rawSearchResultsList = PersistenceFacade.getNewMemberDAO().findAll();
-//
-
         List<? extends IMember> rawResultsSearchList = null;
 
         try {
