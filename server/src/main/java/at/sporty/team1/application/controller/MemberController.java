@@ -55,7 +55,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 	                 convertDTOToMember(memberDTO)
 	             );
 	
-	             LOGGER.info("New member \"{} {}\" was created.", memberDTO.getFirstName(), memberDTO.getLastName());
+	             LOGGER.info("Member \"{} {}\" was successfully saved.", memberDTO.getFirstName(), memberDTO.getLastName());
 	
 	         } catch (PersistenceException e) {
 	             LOGGER.error("Error occurs while communicating with DB.", e);
@@ -63,16 +63,14 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         	
      
         } else {
-            // There has been bad Input, throw the Exception
-            LOGGER.error("Wrong Input creating Member: {}", inputSanitizer.getLastFailedValidation());
+            // There has been bad input, throw the Exception
+            LOGGER.error("Wrong input saving Member: {}", inputSanitizer.getLastFailedValidation());
 
             ValidationException validationException = new ValidationException();
             validationException.setReason(inputSanitizer.getLastFailedValidation());
             
             throw validationException;
         }
-        
-       
     }
 
     @Override
@@ -83,7 +81,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     /**
-     * Search for members by String (name, birthdate, department, teamname)
+     * Search for memberList by String (name, birthdate, department, teamname)
      *
      * @param searchQuery
      *

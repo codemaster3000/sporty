@@ -1,7 +1,5 @@
 package at.sporty.team1.domain.readonly;
 
-import at.sporty.team1.domain.Department;
-import at.sporty.team1.domain.League;
 import at.sporty.team1.domain.Member;
 
 import java.util.List;
@@ -10,15 +8,15 @@ import java.util.List;
  * Created by f00 on 30.10.15.
  */
 public interface IRTeam {
-    int getTeamId();
+    Integer getTeamId();
 
-    Member getTrainer();
+    Integer getTrainerId();
 
-    Department getDepartment();
+    Integer getDepartmentId();
 
-    League getLeague();
-
-    List<Member> getMembers();
+    Integer getLeagueId();
 
     String getTeamName();
+
+    List<Member> getMemberList();
 }

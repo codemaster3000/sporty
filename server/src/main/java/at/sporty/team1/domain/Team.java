@@ -12,46 +12,58 @@ import java.util.List;
 @PrimaryKeyJoinColumn(name = "teamId", referencedColumnName = "teamId")
 @Table(name = "team")
 public class Team implements ITeam {
-    public int teamId;
+    public Integer teamId;
+    public Integer trainerId;
+    public Integer departmentId;
+    public Integer leagueId;
     public String teamname;
-    public Department department;
-    public Member trainer;
-    public League league;
-    public List<Member> members;
+    public List<Member> memberList;
 
     @Override
     @Id
     @Column(name = "teamId")
-    public int getTeamId() {
+    public Integer getTeamId() {
         return teamId;
     }
 
     @Override
-    public void setTeamId(int teamId) {
+    public void setTeamId(Integer teamId) {
         this.teamId = teamId;
     }
 
     @Override
-    @OneToMany(mappedBy="owner", fetch = FetchType.LAZY)
-    public List<Member> getMembers() {
-        return members;
+    @Basic
+    @Column(name = "trainerId")
+    public Integer getTrainerId() {
+        return trainerId;
     }
 
-    @Override
-    public void setMembers(List<Member> members) {
-        this.members = members;
+    public void setTrainerId(Integer trainerId) {
+        this.trainerId = trainerId;
     }
 
     @Override
     @Basic
-    @Column(name = "department") // TODO many to one && return: List<Department>
-    public Department getDepartment() {
-        return department;
+    @Column(name = "departmentId") // TODO many to one && return: List<Department>
+    public Integer getDepartmentId() {
+        return departmentId;
     }
 
     @Override
-    public void setDepartment(Department department) {
-        this.department = department;
+    public void setDepartmentId(Integer departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    @Override
+    @Basic
+    @Column(name = "leagueId")
+    public Integer getLeagueId() {
+        return leagueId;
+    }
+
+    @Override
+    public void setLeagueId(Integer leagueId) {
+        this.leagueId = leagueId;
     }
 
     @Override
@@ -62,32 +74,18 @@ public class Team implements ITeam {
     }
 
     @Override
-    public void setTeamName(String teamname) {
-        this.teamname = teamname;
+    public void setTeamName(String teamName) {
+        this.teamname = teamName;
     }
 
     @Override
-    @Basic
-    @Column(name = "trainer")
-    public Member getTrainer() {
-        return trainer;
-    }
-
-    public void setTrainer(Member trainer) {
-        this.trainer = trainer;
-    }
-
-
-    @Override
-    @Basic
-    @Column(name = "league")
-    public League getLeague() {
-        return league;
+    @OneToMany(mappedBy="teamId", fetch = FetchType.LAZY) // TODO check
+    public List<Member> getMemberList() {
+        return memberList;
     }
 
     @Override
-    public void setLeague(League league) {
-        this.league = league;
+    public void setMemberList(List<Member> memberList) {
+        this.memberList = memberList;
     }
-
 }

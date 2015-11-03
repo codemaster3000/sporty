@@ -48,7 +48,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
      *
      * @param id            memberId
      * @param caseSensitive True if search should be case sensitive.
-     * @return The list of found members.
+     * @return The list of found memberList.
      */
     public List<Member> findById(String id, boolean caseSensitive) throws PersistenceException {
         Criterion criterion;
@@ -62,12 +62,12 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
     // http://docs.jboss.org/hibernate/search/4.1/reference/en-US/html/search-query.html
 
     /**
-     * Find members by name or id.
+     * Find memberList by name or id.
      *
      * @param nameOrId      The name (firstname or lastname) or id.
      * @param caseSensitive True if search should be case sensitive.
      *
-     * @return The found members.
+     * @return The found memberList.
      */
     public List<Member> findByNameOrId(String nameOrId, boolean caseSensitive) throws PersistenceException {
         Criterion criterion;

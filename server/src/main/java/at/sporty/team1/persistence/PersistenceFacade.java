@@ -4,6 +4,7 @@ import at.sporty.team1.persistence.api.IGenericDAO;
 import at.sporty.team1.persistence.api.IMemberDAO;
 import at.sporty.team1.persistence.daos.HibernateGenericDAO;
 import at.sporty.team1.persistence.daos.MemberDAO;
+import at.sporty.team1.persistence.daos.TeamDAO;
 
 /**
  * Created by sereGkaluv on 27-Oct-15.
@@ -22,10 +23,19 @@ public class PersistenceFacade {
 
     /**
      * Returns an implementation of the MemberDAO interface providing
-     * further operations with members.
+     * further operations with memberList.
      * @return an instance of MemberDAO
      */
     public static MemberDAO getNewMemberDAO() {
         return new MemberDAO();
+    }
+
+    /**
+     * Returns an implementation of the TeamDAO interface providing
+     * further operations with teams.
+     * @return an instance of TeamDAO
+     */
+    public static TeamDAO getNewTeamDAO() {
+        return new TeamDAO();
     }
 }
