@@ -1,13 +1,14 @@
 package at.sporty.team1.rmi;
 
-public enum RemoteObject {
+public enum RemoteObjectRegistry {
     MEMBER_CONTROLLER("MEMBER_CONTROLLER"),
-    TEAM_CONTROLLER("TEAM_CONTROLLER");
+    TEAM_CONTROLLER("TEAM_CONTROLLER"),
+    DEPARTMENT_CONTROLLER("DEPARTMENT_CONTROLLER");
 
 
     private final String _naming;
 
-    RemoteObject(String naming) {
+    RemoteObjectRegistry(String naming) {
         _naming = naming;
     }
 
