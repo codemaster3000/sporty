@@ -57,7 +57,7 @@ public class DepartmentController extends UnicastRemoteObject implements  IDepar
                         convertDTOToDepartment(departmentDTO)
                 );
                 //TODO
-                LOGGER.info("New Department \"{}\" was created.", departmentDTO.getSport());
+                LOGGER.info("New Department \"{} {}\" was created.", departmentDTO.getSport(), departmentDTO.getDepartmentId());
 
             } catch (PersistenceException e) {
                 LOGGER.error("Error occurs while communicating with DB.", e);
