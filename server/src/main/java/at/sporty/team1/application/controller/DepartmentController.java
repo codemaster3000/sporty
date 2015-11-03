@@ -5,6 +5,7 @@ import at.sporty.team1.domain.readonly.IRDepartment;
 import at.sporty.team1.misc.DataType;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
+import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.exceptions.ValidationException;
@@ -18,7 +19,7 @@ import java.rmi.server.UnicastRemoteObject;
 /**
  * Created by f00 on 03.11.15.
  */
-public class DepartmentController extends UnicastRemoteObject implements IDepartmentController {
+public class DepartmentController extends UnicastRemoteObject implements  IDepartmentController {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LogManager.getLogger();
 

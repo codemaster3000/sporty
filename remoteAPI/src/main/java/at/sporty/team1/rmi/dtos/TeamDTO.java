@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Created by sereGkaluv on 02-Nov-15.
+ * TODO!
  */
 public class TeamDTO implements Serializable, IDTO {
     private List<MemberDTO> _memberList;

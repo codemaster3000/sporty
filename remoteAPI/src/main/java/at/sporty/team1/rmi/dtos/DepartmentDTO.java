@@ -1,12 +1,11 @@
 package at.sporty.team1.rmi.dtos;
 
-import java.io.Serializable;
-import java.util.List;
-
 import at.sporty.team1.rmi.api.IDTO;
 
+import java.io.Serializable;
+
 /**
- * Created by f00 on 03.11.15.
+ *
  */
 public class DepartmentDTO implements Serializable, IDTO{
 	
