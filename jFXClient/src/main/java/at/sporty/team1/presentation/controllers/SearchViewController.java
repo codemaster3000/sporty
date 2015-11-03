@@ -9,6 +9,7 @@ import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -33,6 +34,7 @@ import java.util.function.Consumer;
 public class SearchViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String PROGRESS = "progress";
+    private static final String NO_RESULTS = "No results found";
     
     private Consumer<MemberDTO> _targetDelegator;
 
@@ -98,7 +100,14 @@ public class SearchViewController extends JfxController {
 
                     IMemberController memberController = CommunicationFacade.lookupForMemberController();
                     List<MemberDTO> rawSearchResults = memberController.searchForMembers(searchQuery);
-                    rawSearchResults.sort(null);
+                    
+                    if(!rawSearchResults.isEmpty()){
+                    	rawSearchResults.sort(null);
+                    }else{
+                    	
+                    	//TODO show alert "no search results"
+                    }
+                    
 
                     Platform.runLater(() -> {
                         _searchResultsListView.getStyleClass().remove(PROGRESS);
