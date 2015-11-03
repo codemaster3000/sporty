@@ -135,7 +135,7 @@ public class MemberViewController extends JfxController {
                 dispose();
 
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
-                LOGGER.error("Error occurs while saving new member.", e);
+                LOGGER.error("Error occurs while saving the member.", e);
             } catch (ValidationException e) {
             	String context = String.format("Validation exception %s while saving member.", e.getCause());
             	

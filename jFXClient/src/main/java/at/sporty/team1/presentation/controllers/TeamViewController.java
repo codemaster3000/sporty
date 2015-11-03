@@ -42,24 +42,26 @@ public class TeamViewController extends JfxController {
             @Override
             protected void updateItem(MemberDTO m, boolean bln) {
                 super.updateItem(m, bln);
+
                 if (m != null) {
-                    setText(m.getFirstName() + " " + m.getLastName());
+                    String fullName = m.getFirstName() + " " + m.getLastName();
+                    setText(fullName);
+
+                    MenuItem deleteItem = new MenuItem();
+                    deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", fullName));
+                    deleteItem.setOnAction(event -> _membersListView.getItems().remove(getItem()));
+
+                    ContextMenu contextMenu = new ContextMenu();
+                    contextMenu.getItems().add(deleteItem);
+
+                    emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+                        if (isNowEmpty) {
+                            setContextMenu(null);
+                        } else {
+                            setContextMenu(contextMenu);
+                        }
+                    });
                 }
-
-                MenuItem deleteItem = new MenuItem();
-                deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", itemProperty()));
-                deleteItem.setOnAction(event -> _membersListView.getItems().remove(getItem()));
-
-                ContextMenu contextMenu = new ContextMenu();
-                contextMenu.getItems().add(deleteItem);
-
-                emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
-                    if (isNowEmpty) {
-                        setContextMenu(null);
-                    } else {
-                        setContextMenu(contextMenu);
-                    }
-                });
             }
         });
     }
@@ -86,27 +88,37 @@ public class TeamViewController extends JfxController {
             List<MemberDTO> memberList = _activeTeamDTO.getMemberList();
             if (memberList != null && !memberList.isEmpty())  {
                 _membersListView.setItems(FXCollections.observableArrayList(
-                        _activeTeamDTO.getMemberList()
+                    _activeTeamDTO.getMemberList()
                 ));
             }
         }
     }
 
     public void addNewMemberToTeam(MemberDTO memberDTO) {
-        if (memberDTO != null) {
+        if (memberDTO != null && !_membersListView.getItems().contains(memberDTO)) {
             _membersListView.getItems().add(memberDTO);
         }
     }
 
     @FXML
     private void removeSelectedMember(ActionEvent event) {
-        ObservableList<MemberDTO> removeList = _membersListView.getSelectionModel().getSelectedItems();
+        MemberDTO memberDTO = _membersListView.getSelectionModel().getSelectedItem();
 
-        List<MemberDTO> storedList = _activeTeamDTO.getMemberList();
-        storedList.removeAll(removeList);
+        if (_activeTeamDTO != null) {
 
-        _activeTeamDTO.setMemberList(storedList);
-        displayTeamData(_activeTeamDTO);
+            List<MemberDTO> storedList = _activeTeamDTO.getMemberList();
+            storedList.remove(memberDTO);
+
+            _activeTeamDTO.setMemberList(storedList);
+            displayTeamData(_activeTeamDTO);
+
+        } else if (memberDTO != null) {
+
+            //Simply remove from list view, this part of the code
+            //will be executed only when new team will be created
+            _membersListView.getItems().remove(memberDTO);
+
+        }
     }
 
     @FXML
@@ -126,13 +138,13 @@ public class TeamViewController extends JfxController {
                 GUIHelper.showSuccessAlert(SUCCESSFUL_TEAM_SAVE);
 
                 //Logging and closing the tab
-                LOGGER.info("Member \"{}\" was successfully saved.", _activeTeamDTO.getTeamName());
+                LOGGER.info("Team \"{}\" was successfully saved.", _activeTeamDTO.getTeamName());
                 dispose();
 
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
-                LOGGER.error("Error occurs while saving new member.", e);
+                LOGGER.error("Error occurs while saving the team.", e);
             } catch (ValidationException e) {
-                String context = String.format("Validation exception %s while saving member.", e.getCause());
+                String context = String.format("Validation exception %s while saving team.", e.getCause());
 
                 GUIHelper.showValidationAlert(context);
                 LOGGER.error(context, e);
