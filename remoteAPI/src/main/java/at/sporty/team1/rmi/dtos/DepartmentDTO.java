@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  *
  */
-public class DepartmentDTO implements Serializable, IDTO{
+public class DepartmentDTO implements IDTO {
 	
     private Integer _departmentId;
     private String _sport;

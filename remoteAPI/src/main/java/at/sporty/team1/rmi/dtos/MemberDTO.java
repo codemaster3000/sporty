@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * This IDTO Object implements Object Builder pattern.
  */
-public class MemberDTO implements Serializable, IDTO {
+public class MemberDTO implements IDTO {
     private Integer _memberId;
     private Integer _teamId;
     private Integer _departmentId;

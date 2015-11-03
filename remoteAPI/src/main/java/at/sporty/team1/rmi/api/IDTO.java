@@ -1,9 +1,11 @@
 package at.sporty.team1.rmi.api;
 
+import java.io.Serializable;
+
 /**
  * Created by sereGkaluv on 02-Nov-15.
  *
  * This is a Marker Interface.
  */
-public interface IDTO {
+public interface IDTO extends Serializable {
 }

@@ -7,6 +7,6 @@ import java.io.Serializable;
 /**
  * Created by f00 on 03.11.15.
  */
-public class LeagueDTO implements Serializable, IDTO {
+public class LeagueDTO implements IDTO {
     //TODO
 }

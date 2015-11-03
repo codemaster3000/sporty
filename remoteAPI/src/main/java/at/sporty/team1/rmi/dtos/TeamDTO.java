@@ -7,9 +7,8 @@ import java.util.List;
 
 /**
  * Created by sereGkaluv on 02-Nov-15.
- * TODO!
  */
-public class TeamDTO implements Serializable, IDTO {
+public class TeamDTO implements IDTO {
     public Integer _teamId;
     public Integer _trainerId;
     public Integer _departmentId;

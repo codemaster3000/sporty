@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by f00 on 03.11.15.
  */
-public class MatchDTO  implements Serializable, IDTO {
+public class MatchDTO  implements IDTO {
     //TODO everything
 
     public MatchDTO() {
