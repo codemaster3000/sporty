@@ -68,7 +68,6 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             // There has been bad Input, throw the Exception
             LOGGER.error("Wrong Input creating Member: {}", inputSanitizer.getLastFailedValidation());
 
-            //TODO  throws ValidationException;
             ValidationException validationException = new ValidationException();
             validationException.setReason(inputSanitizer.getLastFailedValidation());
             
@@ -109,10 +108,6 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         MemberDAO memberDAO = PersistenceFacade.getNewMemberDAO();
         Member member = memberDAO.findById(memberId);
         memberDAO.delete(member);
-    }
-
-    public void saveChanges(MemberDTO member) {
-        //TODO Save member
     }
 
     /**

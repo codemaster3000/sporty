@@ -15,6 +15,7 @@ import java.rmi.RMISecurityManager;
  * This is Utility class which starts the whole application.
  */
 public class MainApp extends Application {
+
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SECURITY_PROPERTY = "java.security.policy";
 
@@ -35,8 +36,13 @@ public class MainApp extends Application {
     public void stop() throws Exception {
     }
 
+    /**
+     * TODO comment
+     *
+     * @param initStage ...the FX-initial-Stage
+     */
     @Override
-    public void start(Stage initStage) throws Exception {
+    public void start(Stage initStage) {
         URL securityPoliciesURL = getClass().getClassLoader().getResource(PATH_TO_SECURITY_POLICIES_FILE);
         if (securityPoliciesURL != null) {
 
@@ -51,6 +57,7 @@ public class MainApp extends Application {
 
     /**
      * Displays the main stage of the application.
+     *
      * @param primaryStage stage to be shown.
      */
     private void showMainStage(Stage primaryStage) {

@@ -48,7 +48,7 @@ public class ViewLoader<T extends IJfxController> {
 
 		_loader = new FXMLLoader(viewResource);
 		
-		// TODO i18n RB
+		// TODO i18n RB = localisation
 	}
 
     /**

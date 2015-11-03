@@ -44,7 +44,7 @@ public class Team implements ITeam {
 
     @Override
     @Basic
-    @Column(name = "department") //TODO refactor
+    @Column(name = "department") // TODO many to one && return: List<Department>
     public Department getDepartment() {
         return department;
     }
