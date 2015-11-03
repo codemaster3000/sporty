@@ -50,12 +50,7 @@ public class DepartmentController extends UnicastRemoteObject implements  IDepar
         InputSanitizer inputSanitizer = new InputSanitizer();
 
         //TODO
-        if (inputSanitizer.check(departmentDTO.getFirstName(), DataType.NAME) &&
-                inputSanitizer.check(departmentDTO.getLastName(), DataType.NAME) &&
-                inputSanitizer.check(departmentDTO.getDateOfBirth(), DataType.SQL_DATE) &&
-                inputSanitizer.check(departmentDTO.getEmail(), DataType.EMAIL) &&
-                inputSanitizer.check(departmentDTO.getAddress(), DataType.ADDRESS) &&
-                inputSanitizer.check(departmentDTO.getGender(), DataType.GENDER))
+        if (inputSanitizer.check(departmentDTO.getSport(), DataType.TEXT))
         {
 
             try {
@@ -64,7 +59,7 @@ public class DepartmentController extends UnicastRemoteObject implements  IDepar
                         convertDTOToDepartment(departmentDTO)
                 );
         //TODO
-                LOGGER.info("New Department \"{} {}\" was created.", departmentDTO.getFirstName(), departmentDTO.getLastName());
+                LOGGER.info("New Department \"{}\" was created.", departmentDTO.getSport());
 
             } catch (PersistenceException e) {
                 LOGGER.error("Error occurs while communicating with DB.", e);
@@ -73,7 +68,7 @@ public class DepartmentController extends UnicastRemoteObject implements  IDepar
 
         } else {
             // There has been bad Input, throw the Exception
-            LOGGER.error("Wrong Input creating Member: {}", inputSanitizer.getLastFailedValidation());
+            LOGGER.error("Wrong Input creating Department: {}", inputSanitizer.getLastFailedValidation());
 
             ValidationException validationException = new ValidationException();
             validationException.setReason(inputSanitizer.getLastFailedValidation());
