@@ -22,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
@@ -97,6 +98,7 @@ public class SearchViewController extends JfxController {
 
                     IMemberController memberController = CommunicationFacade.lookupForMemberController();
                     List<MemberDTO> rawSearchResults = memberController.searchForMembers(searchQuery);
+                    rawSearchResults.sort(null);
 
                     Platform.runLater(() -> {
                         _searchResultsListView.getStyleClass().remove(PROGRESS);

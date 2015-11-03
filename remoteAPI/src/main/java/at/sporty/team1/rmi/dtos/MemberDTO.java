@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * This IDTO Object implements Object Builder pattern.
  */
-public class MemberDTO implements IDTO {
+public class MemberDTO implements IDTO, Comparable<MemberDTO>{
     private Integer _memberId;
     private Integer _teamId;
     private Integer _departmentId;
@@ -131,4 +131,9 @@ public class MemberDTO implements IDTO {
         _username = username;
         return this;
     }
+
+	@Override
+	public int compareTo(MemberDTO member) {
+		return this._lastName.compareTo(member._lastName);
+	}
 }
