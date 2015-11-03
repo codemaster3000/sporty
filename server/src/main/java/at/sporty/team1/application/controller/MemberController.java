@@ -48,7 +48,6 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             inputSanitizer.check(memberDTO.getDateOfBirth(), DataType.SQL_DATE) &&
             inputSanitizer.check(memberDTO.getEmail(), DataType.EMAIL) &&
             inputSanitizer.check(memberDTO.getAddress(), DataType.ADDRESS) &&
-            inputSanitizer.check(memberDTO.getDepartment(), DataType.TEXT) &&
             inputSanitizer.check(memberDTO.getGender(), DataType.GENDER))
         {
         	
@@ -96,19 +95,12 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     @Override
     public List<MemberDTO> searchForMembers(String searchQuery)
     throws RemoteException {
-        List<? extends IMember> rawResultsSearchList = null;
-
-        try {
-            rawResultsSearchList = PersistenceFacade.getNewMemberDAO().findByString(searchQuery);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+        List<? extends IMember> rawSearchResultsList = PersistenceFacade.getNewMemberDAO().findByString(searchQuery);
 
         //Converting results to MemberDTO
-        return rawResultsSearchList.stream()
-            .map(MemberController::convertMemberToDTO)
-            .collect(Collectors.toList());
+        return rawSearchResultsList.stream()
+                .map(MemberController::convertMemberToDTO)
+                .collect(Collectors.toList());
     }
 
     public void delete(String memberId) throws SQLException {

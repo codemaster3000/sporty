@@ -1,16 +1,18 @@
 package at.sporty.team1.domain.interfaces;
 
-import at.sporty.team1.domain.Team;
 import at.sporty.team1.domain.readonly.IRMember;
 
 import java.sql.Date;
-import java.util.List;
 
 /**
  * Created by sereGkaluv on 27-Oct-15.
  */
 public interface IMember extends IRMember {
-    void setMemberId(int memberId);
+    void setMemberId(Integer memberId);
+
+    void setTeamId(Integer teamId);
+
+    void setDepartment(Integer department);
 
     void setFirstName(String firstname);
 
@@ -23,10 +25,6 @@ public interface IMember extends IRMember {
     void setEmail(String eMail);
 
     void setAddress(String address);
-
-    void setDepartment(String department);
-
-    void setTeam(Team team);
 
     void setSquad(String squad);
 

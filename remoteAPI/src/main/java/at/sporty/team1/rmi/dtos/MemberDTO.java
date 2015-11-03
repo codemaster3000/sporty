@@ -8,15 +8,15 @@ import java.io.Serializable;
  * This IDTO Object implements Object Builder pattern.
  */
 public class MemberDTO implements Serializable, IDTO {
-    private int _memberId;
+    private Integer _memberId;
+    private Integer _teamId;
+    private Integer _department;
     private String _firstName;
     private String _lastName;
     private String _gender;
     private String _dateOfBirth;
     private String _email;
     private String _address;
-    private String _department;
-    private int _teamId;
     private String _squad;
     private String _role;
     private String _username;
@@ -24,12 +24,30 @@ public class MemberDTO implements Serializable, IDTO {
     public MemberDTO() {
     }
 
-    public int getMemberId() {
+    public Integer getMemberId() {
         return _memberId;
     }
 
-    public MemberDTO setMemberId(int memberId) {
+    public MemberDTO setMemberId(Integer memberId) {
         _memberId = memberId;
+        return this;
+    }
+
+    public Integer getTeamId() {
+        return _teamId;
+    }
+
+    public MemberDTO setTeamId(Integer teamId) {
+        _teamId = teamId;
+        return this;
+    }
+
+    public Integer getDepartment() {
+        return _department;
+    }
+
+    public MemberDTO setDepartment(Integer department) {
+        _department = department;
         return this;
     }
 
@@ -84,24 +102,6 @@ public class MemberDTO implements Serializable, IDTO {
 
     public MemberDTO setAddress(String address) {
         _address = address;
-        return this;
-    }
-
-    public String getDepartment() {
-        return _department;
-    }
-
-    public MemberDTO setDepartment(String department) {
-        _department = department;
-        return this;
-    }
-
-    public int getTeamId() {
-        return _teamId;
-    }
-
-    public MemberDTO setTeamId(int teamId) {
-        _teamId = teamId;
         return this;
     }
 

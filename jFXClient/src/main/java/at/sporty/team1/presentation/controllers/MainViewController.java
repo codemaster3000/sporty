@@ -41,7 +41,7 @@ public class MainViewController extends JfxController {
             Node node = viewLoader.loadNode();
             _searchViewController = viewLoader.getController();
 
-            _searchViewController.setTargetDelgator(this::delegateToTarget);
+            _searchViewController.setTargetDelegator(this::delegateToTarget);
 
             Platform.runLater(() -> _borderPanel.setLeft(node));
 

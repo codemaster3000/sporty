@@ -77,7 +77,7 @@ public class NewMemberTest {
         //_activeMemberDTO.setPhone(phone);
         _activeMemberDTO.setGender(gender);
         _activeMemberDTO.setAddress(address);
-        _activeMemberDTO.setDepartment(sport);
+//        _activeMemberDTO.setDepartment(sport);
         
 		try {
 			memberCon = new MemberController();
@@ -125,7 +125,7 @@ public class NewMemberTest {
         //_activeMemberDTO.setPhone(phone);
         _activeMemberDTO.setGender(gender);
         _activeMemberDTO.setAddress(address);
-        _activeMemberDTO.setDepartment(sport);
+//        _activeMemberDTO.setDepartment(sport);
         
 		try {
 			memberCon = new MemberController();
@@ -169,7 +169,7 @@ public class NewMemberTest {
         //_activeMemberDTO.setPhone(phone);
         _activeMemberDTO.setGender(gender);
         _activeMemberDTO.setAddress(address);
-        _activeMemberDTO.setDepartment(sport);
+//        _activeMemberDTO.setDepartment(sport);
         
 		try {
 			memberCon = new MemberController();

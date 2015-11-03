@@ -5,6 +5,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
+import javax.persistence.PersistenceException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
@@ -27,7 +28,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
      * @param caseSensitive True if search should be case sensitive.
      * @return The found member.
      */
-    public List<Member> findByName(String name, boolean caseSensitive) throws SQLException {
+    public List<Member> findByName(String name, boolean caseSensitive) throws PersistenceException {
         Criterion criterion;
         if (caseSensitive) {
             criterion = Restrictions.or(
@@ -49,7 +50,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
      * @param caseSensitive True if search should be case sensitive.
      * @return The list of found members.
      */
-    public List<Member> findById(String id, boolean caseSensitive) throws SQLException {
+    public List<Member> findById(String id, boolean caseSensitive) throws PersistenceException {
         Criterion criterion;
         if (caseSensitive) {
             criterion = Restrictions.like("memberId", id, MatchMode.EXACT);
@@ -68,7 +69,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
      *
      * @return The found members.
      */
-    public List<Member> findByNameOrId(String nameOrId, boolean caseSensitive) throws SQLException {
+    public List<Member> findByNameOrId(String nameOrId, boolean caseSensitive) throws PersistenceException {
         Criterion criterion;
         if (caseSensitive) {
             criterion = Restrictions.or(
@@ -94,27 +95,13 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
      *
      * @throws SQLException
      */
-    public List<Member> findByString(String string) throws SQLException {
-        Criterion criterion;
-
-        Date date = parseDate(string);
-
-        if (date != null) {
-            criterion = Restrictions.or(
+    public List<Member> findByString(String string) throws PersistenceException {
+        Criterion criterion = Restrictions.or(
                 Restrictions.like("firstName", string, MatchMode.ANYWHERE),
-                Restrictions.like("lastName", string, MatchMode.ANYWHERE),
-                Restrictions.like("team", string, MatchMode.ANYWHERE),
-                Restrictions.like("department", string, MatchMode.ANYWHERE),
-                Restrictions.eq("dateOfBirth", date)
-            );
-        } else {
-            criterion = Restrictions.or(
-                Restrictions.like("firstName", string, MatchMode.ANYWHERE),
-                Restrictions.like("lastName", string, MatchMode.ANYWHERE),
-                Restrictions.like("team", string, MatchMode.ANYWHERE),
-                Restrictions.like("department", string, MatchMode.ANYWHERE)
-            );
-        }
+                Restrictions.like("lastName", string, MatchMode.ANYWHERE)
+//                Restrictions.like("team", string, MatchMode.ANYWHERE),
+//                Restrictions.like("department", string, MatchMode.ANYWHERE)
+        );
 
         return super.findByCriteria(criterion);
     }
@@ -128,7 +115,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
      *
      * @throws  SQLException
      */
-    public List<Member> findByDepartment(String department) throws SQLException {
+    public List<Member> findByDepartment(String department) throws PersistenceException {
 
         Criterion criterion;
         criterion = Restrictions.or(Restrictions.like("department",department, MatchMode.ANYWHERE));
@@ -145,7 +132,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
      *
      * @throws SQLException
      */
-    public List<Member> findBySport(String sport) throws SQLException {
+    public List<Member> findBySport(String sport) throws PersistenceException {
 
         Criterion criterion;
         criterion = Restrictions.or(Restrictions.like("sport", sport, MatchMode.ANYWHERE));
@@ -162,20 +149,10 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
      *
      * @throws SQLException
      */
-    public List<Member> findByBirthday(String birthdate) throws SQLException {
+    public List<Member> findByBirthday(String birthdate) throws PersistenceException {
         Criterion criterion;
         criterion = Restrictions.or(Restrictions.like("dateOfBirth", birthdate ,MatchMode.ANYWHERE));
 
         return super.findByCriteria(criterion);
-    }
-
-    /**
-     * A helping method.
-     *
-     * @param s String to be parsed as a date
-     * @return parsed date
-     */
-    private static Date parseDate(String s) {
-        return s != null ? Date.valueOf(s) : null;
     }
 }

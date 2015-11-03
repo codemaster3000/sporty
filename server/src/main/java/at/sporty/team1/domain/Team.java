@@ -32,8 +32,7 @@ public class Team implements ITeam {
     }
 
     @Override
-//    @OneToMany(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "teamId", referencedColumnName = "teamId")
+    @OneToMany(mappedBy="owner", fetch = FetchType.LAZY)
     public List<Member> getMembers() {
         return members;
     }

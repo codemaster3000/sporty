@@ -1,15 +1,16 @@
 package at.sporty.team1.domain.readonly;
 
-import at.sporty.team1.domain.Team;
-
 import java.sql.Date;
-import java.util.List;
 
 /**
  * Created by sereGkaluv on 27-Oct-15.
  */
 public interface IRMember {
-    int getMemberId();
+    Integer getMemberId();
+
+    Integer getTeamId();
+
+    Integer getDepartment();
 
     String getFirstName();
 
@@ -22,10 +23,6 @@ public interface IRMember {
     String getEmail();
 
     String getAddress();
-
-    String getDepartment();
-
-    Team getTeam();
 
     String getSquad();
 

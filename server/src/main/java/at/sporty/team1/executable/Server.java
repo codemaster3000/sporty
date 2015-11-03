@@ -1,6 +1,7 @@
 package at.sporty.team1.executable;
 
 import at.sporty.team1.application.controller.MemberController;
+import at.sporty.team1.application.controller.TeamController;
 import at.sporty.team1.persistence.HibernateSessionUtil;
 import at.sporty.team1.rmi.RemoteObject;
 import org.apache.logging.log4j.LogManager;
@@ -10,7 +11,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.rmi.Naming;
 import java.rmi.NoSuchObjectException;
-import java.rmi.RMISecurityManager;
 import java.rmi.Remote;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -38,6 +38,7 @@ public class Server {
             start();
 
             bindName(RemoteObject.MEMBER_CONTROLLER, new MemberController());
+            bindName(RemoteObject.TEAM_CONTROLLER, new TeamController());
 
             LOGGER.info("Server started successfully.");
 

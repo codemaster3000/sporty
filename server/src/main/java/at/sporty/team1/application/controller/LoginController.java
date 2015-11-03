@@ -5,7 +5,6 @@ import at.sporty.team1.persistence.daos.MemberDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.SQLException;
 import java.util.List;
 
 
@@ -67,11 +66,11 @@ public class LoginController {
             MemberDAO memberDAO = new MemberDAO();
             List<Member> user = null;
 
-            try {
-                user = memberDAO.findByName(username, true); // TODO
-            } catch (SQLException e) {
-                LOGGER.info("{} caused while logging in.", e.toString(), e);
-            }
+//            try {
+//                user = memberDAO.findByName(username, true); // TODO
+//            } catch (SQLException e) {
+//                LOGGER.info("{} caused while logging in.", e.toString(), e);
+//            }
 
             if (user == null)
                 return -1;

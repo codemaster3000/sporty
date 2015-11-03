@@ -32,7 +32,6 @@ import java.util.function.Consumer;
 public class SearchViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String PROGRESS = "progress";
-    private static MemberDTO _activeMemberDTO;
     
     private Consumer<IDTO> _targetDelegator;
 
@@ -79,7 +78,7 @@ public class SearchViewController extends JfxController {
         });
     }
     
-    public void setTargetDelgator(Consumer<IDTO> consumerFunction) {
+    public void setTargetDelegator(Consumer<IDTO> consumerFunction) {
         _targetDelegator = consumerFunction;
     }
 
