@@ -7,11 +7,9 @@ import at.sporty.team1.domain.readonly.IRMember;
 import at.sporty.team1.misc.DataType;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
-import at.sporty.team1.persistence.daos.MemberDAO;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.exceptions.ValidationException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -80,6 +78,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     @Override
     public MemberDTO loadMemberById(int memberId)
     throws RemoteException {
+        //TODO DAO always returns LIST of member, not a single member !
         return convertMemberToDTO(PersistenceFacade.getNewMemberDAO().findById(memberId));
     }
 
