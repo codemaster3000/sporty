@@ -8,6 +8,7 @@ import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -46,7 +47,8 @@ public class MemberViewController extends JfxController {
         ToggleGroup _group = new ToggleGroup();
         radioGenderFemale.setToggleGroup(_group);
         radioGenderMale.setToggleGroup(_group);
-
+        ObservableList<String> values = null;
+        sportComboBox.setItems(values);
         Platform.runLater(fNameTextField::requestFocus);
     }
 
