@@ -7,4 +7,6 @@ public interface IRDepartment {
     int getDepartmentId();
 
     String getSport();
+    
+    int getDepartmentHeadId();
 }

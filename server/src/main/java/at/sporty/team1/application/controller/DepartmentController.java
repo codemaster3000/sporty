@@ -7,7 +7,6 @@ import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
-import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,7 +47,7 @@ public class DepartmentController extends UnicastRemoteObject implements  IDepar
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
 
-        //TODO
+        //TODO check IDs?
         if (inputSanitizer.check(departmentDTO.getSport(), DataType.TEXT))
         {
 
@@ -58,7 +57,7 @@ public class DepartmentController extends UnicastRemoteObject implements  IDepar
                         convertDTOToDepartment(departmentDTO)
                 );
                 //TODO
-                LOGGER.info("New Department \"{} {}\" was created.", departmentDTO.getFirstName(), departmentDTO.getLastName());
+                LOGGER.info("New Department \"{}\" was created.", departmentDTO.getSport());
 
             } catch (PersistenceException e) {
                 LOGGER.error("Error occurs while communicating with DB.", e);
@@ -110,26 +109,16 @@ public class DepartmentController extends UnicastRemoteObject implements  IDepar
     /**
      * Helping Method. Converts a DTO to a *real* Domain Object
      *
-     * @param memberDTO
+     * @param departmentDTO
      * @return
      */
-    private static Department convertDTOToDepartment(DepartmentDTO memberDTO) {
-        if (memberDTO != null) {
+    private static Department convertDTOToDepartment(DepartmentDTO departmentDTO) {
+        if (departmentDTO != null) {
             Department department = new Department();
 
-            //TODO
-            department.setMemberId(memberDTO.getMemberId());
-            department.setFirstName(memberDTO.getFirstName());
-            department.setLastName(memberDTO.getLastName());
-            department.setGender(memberDTO.getGender());
-            department.setDateOfBirth(parseDate(memberDTO.getDateOfBirth()));
-            department.setEmail(memberDTO.getEmail());
-            department.setAddress(memberDTO.getAddress());
-            department.setDepartment(memberDTO.getDepartment());
-            department.setTeamId(memberDTO.getTeamId());
-            department.setSquad(memberDTO.getSquad());
-            department.setRole(memberDTO.getRole());
-            department.setUsername(memberDTO.getUsername());
+            department.setDepartmentId(departmentDTO.getDepartmentId());
+            department.setSport(departmentDTO.getSport());
+            department.setDepartmentHeadId(departmentDTO.getDepartmentHeadId());
 
             return department;
         }

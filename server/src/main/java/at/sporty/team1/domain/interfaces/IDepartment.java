@@ -9,4 +9,6 @@ public interface IDepartment extends IRDepartment {
     void setDepartmentId(int departmentId);
 
     void setSport(String sport);
+    
+    void setDepartmentHeadId(int headId);
 }

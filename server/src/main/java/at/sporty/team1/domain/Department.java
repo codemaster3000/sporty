@@ -12,6 +12,7 @@ import javax.persistence.*;
 public class Department implements IDepartment {
     private int departmentId;
     private String sport;
+    private int headId;
 
     @Override
     @Id
@@ -38,6 +39,18 @@ public class Department implements IDepartment {
     }
 
     @Override
+    @Basic
+    @Column(name = "headId")
+	public int getDepartmentHeadId() {
+		return headId;
+	}
+
+	@Override
+	public void setDepartmentHeadId(int headId) {
+		this.headId = headId;
+	}
+    
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -56,4 +69,5 @@ public class Department implements IDepartment {
         result = 31 * result + (sport != null ? sport.hashCode() : 0);
         return result;
     }
+
 }
