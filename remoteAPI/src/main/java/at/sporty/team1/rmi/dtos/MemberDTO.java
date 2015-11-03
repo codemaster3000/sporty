@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class MemberDTO implements Serializable, IDTO {
     private Integer _memberId;
     private Integer _teamId;
-    private Integer _department;
+    private Integer _departmentId;
     private String _firstName;
     private String _lastName;
     private String _gender;
@@ -43,11 +43,11 @@ public class MemberDTO implements Serializable, IDTO {
     }
 
     public Integer getDepartment() {
-        return _department;
+        return _departmentId;
     }
 
     public MemberDTO setDepartment(Integer department) {
-        _department = department;
+    	_departmentId = department;
         return this;
     }
 
