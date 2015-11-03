@@ -19,12 +19,30 @@ public class DepartmentDAO extends HibernateGenericDAO<Department> {
         super(Department.class);
     }
 
-    public List<Department> getDepartmentBySport(String sport) {
+    /**
+     * Find Department by Sport
+     *
+     * @param sport
+     *
+     * @return List<Department>
+     */
+    public List<Department> findBySport(String sport) {
         Criterion criterion;
 
         criterion = Restrictions.or(Restrictions.like("sport", sport, MatchMode.ANYWHERE));
 
         return super.findByCriteria(criterion);
+    }
+
+    /**
+     * Find Department By Id
+     *
+     * @param id
+     *
+     * @return Department
+     */
+    public Department findById(Integer id) {
+        return super.findById(id);
     }
 
 }
