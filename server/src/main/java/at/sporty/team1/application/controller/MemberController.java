@@ -68,7 +68,6 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             // There has been bad Input, throw the Exception
             LOGGER.error("Wrong Input creating Member: {}", inputSanitizer.getLastFailedValidation());
 
-            //TODO  throws ValidationException;
             ValidationException validationException = new ValidationException();
             validationException.setReason(inputSanitizer.getLastFailedValidation());
             

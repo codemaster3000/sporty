@@ -52,7 +52,7 @@ public class Member implements IMember {
 
     /**
      * many to many? TODO
-     * @return TODO
+     * @return
      */
     @Override
     @Basic
@@ -138,6 +138,10 @@ public class Member implements IMember {
         this.address = address;
     }
 
+    /**
+     * many to many? TODO
+     * @return TODO
+     */
     @Override
     @Basic
     @Column(name = "role")
