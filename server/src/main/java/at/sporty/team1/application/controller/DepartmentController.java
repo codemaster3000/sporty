@@ -25,6 +25,7 @@ public class DepartmentController extends UnicastRemoteObject implements  IDepar
 
     /**
      * Constructor
+     *
      * @throws RemoteException
      */
     public DepartmentController() throws RemoteException {
@@ -35,9 +36,7 @@ public class DepartmentController extends UnicastRemoteObject implements  IDepar
      * Create or Save a Department
      *
      * @param departmentDTO
-     *
      * @throws RemoteException
-     *
      * @throws ValidationException
      */
     @Override
@@ -54,12 +53,12 @@ public class DepartmentController extends UnicastRemoteObject implements  IDepar
         {
 
             try {
-	             /* pulling a DepartmentDAO and saving the Department */
+                 /* pulling a DepartmentDAO and saving the Department */
                 PersistenceFacade.getNewGenericDAO(Department.class).saveOrUpdate(
                         convertDTOToDepartment(departmentDTO)
                 );
-        //TODO
-                LOGGER.info("New Department \"{}\" was created.", departmentDTO.getSport());
+                //TODO
+                LOGGER.info("New Department \"{} {}\" was created.", departmentDTO.getFirstName(), departmentDTO.getLastName());
 
             } catch (PersistenceException e) {
                 LOGGER.error("Error occurs while communicating with DB.", e);
@@ -87,18 +86,16 @@ public class DepartmentController extends UnicastRemoteObject implements  IDepar
     public DepartmentDTO loadDepartmentById(int departmentId)
             throws RemoteException {
         //TODO DAO always returns LIST of member, not a single member !
-        return convertDepartmentToDTO(PersistenceFacade.getNewGenericDAO(Department.class
-        ).findById(departmentId));
+        return convertDepartmentToDTO(PersistenceFacade.getNewGenericDAO(Department.class).findById(departmentId));
     }
 
     /**
      * A helping method, converts all Department objects to DepartmentDTO
      *
      * @param department Member to be converted to a DepartmentDTO
-     *
      * @return Department representation of the given Department
      */
-    private static MemberDTO convertDepartmentToDTO(IRDepartment department){
+    private static DepartmentDTO convertDepartmentToDTO(IRDepartment department) {
         if (department != null) {
             //TODO
 //            return new DepartmentDTO()
@@ -114,10 +111,9 @@ public class DepartmentController extends UnicastRemoteObject implements  IDepar
      * Helping Method. Converts a DTO to a *real* Domain Object
      *
      * @param memberDTO
-     *
      * @return
      */
-    private static Department convertDTOToDepartment(DepartmentDTO memberDTO){
+    private static Department convertDTOToDepartment(DepartmentDTO memberDTO) {
         if (memberDTO != null) {
             Department department = new Department();
 
