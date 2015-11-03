@@ -10,7 +10,7 @@ import java.util.List;
  * Created by f00 on 30.10.15.
  */
 public interface IRTeam {
-    int getTeamId();
+    Integer getTeamId();
 
     Member getTrainer();
 

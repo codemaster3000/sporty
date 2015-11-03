@@ -12,7 +12,7 @@ import java.util.List;
 @PrimaryKeyJoinColumn(name = "teamId", referencedColumnName = "teamId")
 @Table(name = "team")
 public class Team implements ITeam {
-    public int teamId;
+    public Integer teamId;
     public String teamname;
     public Department department;
     public Member trainer;
@@ -22,12 +22,12 @@ public class Team implements ITeam {
     @Override
     @Id
     @Column(name = "teamId")
-    public int getTeamId() {
+    public Integer getTeamId() {
         return teamId;
     }
 
     @Override
-    public void setTeamId(int teamId) {
+    public void setTeamId(Integer teamId) {
         this.teamId = teamId;
     }
 
