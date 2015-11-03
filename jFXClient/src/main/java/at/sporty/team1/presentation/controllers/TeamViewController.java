@@ -49,7 +49,7 @@ public class TeamViewController extends JfxController {
 
                     MenuItem deleteItem = new MenuItem();
                     deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", fullName));
-                    deleteItem.setOnAction(event -> _membersListView.getItems().remove(getItem()));
+                    deleteItem.setOnAction(event -> _membersListView.getItems().removeAll(getItem()));
 
                     ContextMenu contextMenu = new ContextMenu();
                     contextMenu.getItems().add(deleteItem);
@@ -61,6 +61,9 @@ public class TeamViewController extends JfxController {
                             setContextMenu(contextMenu);
                         }
                     });
+                } else {
+                    //remove caption from list
+                    setText("");
                 }
             }
         });
@@ -87,8 +90,8 @@ public class TeamViewController extends JfxController {
 
             List<MemberDTO> memberList = _activeTeamDTO.getMemberList();
             if (memberList != null && !memberList.isEmpty())  {
-                _membersListView.setItems(FXCollections.observableArrayList(
-                    _activeTeamDTO.getMemberList()
+                _membersListView.setItems(FXCollections.observableList(
+                        _activeTeamDTO.getMemberList()
                 ));
             }
         }

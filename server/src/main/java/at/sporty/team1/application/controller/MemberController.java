@@ -95,24 +95,22 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     @Override
     public List<MemberDTO> searchForMembers(String searchQuery)
     throws RemoteException {
-        List<? extends IMember> rawSearchResultsList = PersistenceFacade.getNewMemberDAO().findByString(searchQuery);
+        try {
+            List<? extends IMember> rawSearchResultsList = PersistenceFacade.getNewMemberDAO().findByString(searchQuery);
 
-        //Converting results to MemberDTO
-        return rawSearchResultsList.stream()
-                .map(MemberController::convertMemberToDTO)
-                .collect(Collectors.toList());
+            //Converting results to MemberDTO
+            return rawSearchResultsList.stream()
+                    .map(MemberController::convertMemberToDTO)
+                    .collect(Collectors.toList());
+        } catch (PersistenceException e) {
+            LOGGER.error("An error occurs while searching for \"{}\".", searchQuery, e);
+            return null;
+        }
     }
 
-    public void delete(String memberId) throws SQLException {
+    public void delete(MemberDTO memberDTO) throws SQLException {
         //TODO test
-
-        MemberDAO memberDAO = PersistenceFacade.getNewMemberDAO();
-        Member member = memberDAO.findById(memberId);
-        memberDAO.delete(member);
-    }
-
-    public void saveChanges(MemberDTO member) {
-        //TODO Save member
+        PersistenceFacade.getNewMemberDAO().delete(convertDTOToMember(memberDTO));
     }
 
     /**
