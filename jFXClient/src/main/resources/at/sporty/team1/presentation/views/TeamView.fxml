@@ -11,6 +11,6 @@
     <ToolBar AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <Button onAction="#removeSelectedMember" text="Remove selected member" mnemonicParsing="false" HBox.hgrow="NEVER"/>
         <Pane HBox.hgrow="ALWAYS"/>
-        <Button onAction="#saveTeam" mnemonicParsing="false" HBox.hgrow="NEVER"/>
+        <Button onAction="#saveTeam" text="Save" mnemonicParsing="false" HBox.hgrow="NEVER"/>
     </ToolBar>
 </AnchorPane>

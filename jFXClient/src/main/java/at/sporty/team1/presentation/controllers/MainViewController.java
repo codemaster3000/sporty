@@ -5,7 +5,6 @@ import at.sporty.team1.presentation.controllers.core.IJfxController;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.IDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.dtos.TeamDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -14,24 +13,20 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 
 import java.net.URL;
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 public class MainViewController extends JfxController {
     private static final String TEAM_TAB_CAPTION = "TEAM";
     private static final String MEMBER_TAB_CAPTION = "Member";
-    private static final Map<IJfxController, Tab> TAB_CONTROLLER_MAP = new HashMap<>();
-    private static final Map<Class<? extends IDTO>, Consumer<IDTO>> TARGETS_MAP = new HashMap<>();
+    private static final Map<IJfxController, Tab> TAB_TO_CONTROLLER_MAP = new HashMap<>();
+    private static final Map<Tab, IJfxController> CONTROLLER_TO_TAB_MAP = new HashMap<>();
 
     private SearchViewController _searchViewController;
     
 	@FXML private BorderPane _borderPanel;
 	@FXML private TabPane _tabPanel;
-
-    public MainViewController() {
-        TARGETS_MAP.put(TeamDTO.class, e -> openTeamView((TeamDTO) e));
-        TARGETS_MAP.put(MemberDTO.class, e -> openMemberView((MemberDTO) e));
-    }
     
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -41,7 +36,7 @@ public class MainViewController extends JfxController {
             Node node = viewLoader.loadNode();
             _searchViewController = viewLoader.getController();
 
-            _searchViewController.setTargetDelegator(this::delegateToTarget);
+            _searchViewController.setTargetDelegator(this::delegateToMemberTarget);
 
             Platform.runLater(() -> _borderPanel.setLeft(node));
 
@@ -50,41 +45,39 @@ public class MainViewController extends JfxController {
 	
 	@FXML
 	public void openNewMemberView() {
-        openMemberView(null);
+        openView(MEMBER_TAB_CAPTION, null, MemberViewController.class);
 	}
 
-    private void delegateToTarget(IDTO dto) {
-        Consumer<IDTO> targetConsumer = TARGETS_MAP.get(dto.getClass());
-        targetConsumer.accept(dto);
+    @FXML
+    public void openNewTeamView() {
+        openView(TEAM_TAB_CAPTION, null, TeamViewController.class);
     }
 
-    public void openTeamView(TeamDTO teamDTO) {
-        new Thread(() -> {
+    private void delegateToMemberTarget(MemberDTO dto) {
+        Tab activeTab = _tabPanel.getSelectionModel().getSelectedItem();
+        if (activeTab != null) {
 
-            ViewLoader<TeamViewController> viewLoader = ViewLoader.loadView(TeamViewController.class);
-            Node node = viewLoader.loadNode();
-            TeamViewController controller = viewLoader.getController();
-
-            //check if need to load an existing member
-            if (teamDTO != null) controller.displayTeamData(teamDTO);
-
-            openNewTab(TEAM_TAB_CAPTION, node, controller);
-
-        }).start();
+            IJfxController controller = CONTROLLER_TO_TAB_MAP.get(activeTab);
+            if (controller != null) {
+                controller.displayDTO(dto);
+            } else {
+                //Default action if no tabs are selected or no tabs are available.
+                openView(MEMBER_TAB_CAPTION, dto, MemberViewController.class);
+            }
+        }
     }
 
-
-    public void openMemberView(MemberDTO memberDTO) {
+    public void openView(String viewCaption, IDTO idto, Class<? extends IJfxController> controllerClass) {
         new Thread(() -> {
 
-            ViewLoader<MemberViewController> viewLoader = ViewLoader.loadView(MemberViewController.class);
+            ViewLoader<? extends IJfxController> viewLoader = ViewLoader.loadView(controllerClass);
             Node node = viewLoader.loadNode();
-            MemberViewController controller = viewLoader.getController();
+            IJfxController controller = viewLoader.getController();
 
-            //check if need to load an existing member
-            if (memberDTO != null) controller.displayMemberData(memberDTO);
+            //check if need to load a dto
+            if (idto != null) controller.displayDTO(idto);
 
-            openNewTab(MEMBER_TAB_CAPTION, node, controller);
+            openNewTab(viewCaption, node, controller);
 
         }).start();
     }
@@ -98,17 +91,19 @@ public class MainViewController extends JfxController {
 
             //assigning dispose function
             controller.setDisposeFunction(disposableController -> {
-                Tab disposableTab = TAB_CONTROLLER_MAP.get(disposableController);
+                Tab disposableTab = TAB_TO_CONTROLLER_MAP.get(disposableController);
                 if (disposableTab != null) {
                     _tabPanel.getTabs().remove(disposableTab);
+                    CONTROLLER_TO_TAB_MAP.remove(disposableTab);
                 }
 
                 //FIXME  check with debug tool amount of instances of controller in map
-//                TAB_CONTROLLER_MAP.remove(disposableController);
+//                TAB_TO_CONTROLLER_MAP.remove(disposableController);
             });
 
-            //registering child controller
-            TAB_CONTROLLER_MAP.put(controller, t);
+            //registering bidirectional relation from tab to controller
+            TAB_TO_CONTROLLER_MAP.put(controller, t);
+            CONTROLLER_TO_TAB_MAP.put(t, controller);
 
             Platform.runLater(() -> {
                 _tabPanel.getTabs().add(t);

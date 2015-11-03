@@ -33,7 +33,7 @@ public class SearchViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String PROGRESS = "progress";
     
-    private Consumer<IDTO> _targetDelegator;
+    private Consumer<MemberDTO> _targetDelegator;
 
     @FXML private TextField _searchField;
     @FXML private ListView<MemberDTO> _searchResultsListView;
@@ -78,7 +78,7 @@ public class SearchViewController extends JfxController {
         });
     }
     
-    public void setTargetDelegator(Consumer<IDTO> consumerFunction) {
+    public void setTargetDelegator(Consumer<MemberDTO> consumerFunction) {
         _targetDelegator = consumerFunction;
     }
 

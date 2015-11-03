@@ -2,6 +2,7 @@ package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.JfxController;
+import at.sporty.team1.rmi.api.IDTO;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.exceptions.ValidationException;
@@ -48,11 +49,18 @@ public class MemberViewController extends JfxController {
         Platform.runLater(fNameTextField::requestFocus);
     }
 
+    @Override
+    public void displayDTO(IDTO idto){
+        if (idto instanceof MemberDTO) {
+            displayMemberDTO((MemberDTO) idto);
+        }
+    }
+
     /**
      * Pre-loads data into all view fields.
      * @param memberDTO MemberDTO that will be preloaded.
      */
-    public void displayMemberData(MemberDTO memberDTO) {
+    private void displayMemberDTO(MemberDTO memberDTO) {
         if (memberDTO != null) {
             _activeMemberDTO = memberDTO;
 
@@ -68,18 +76,6 @@ public class MemberViewController extends JfxController {
             birthTextField.setText(_activeMemberDTO.getDateOfBirth());
             emailTextField.setText(_activeMemberDTO.getEmail());
             addressTextField.setText(_activeMemberDTO.getAddress());
-        }
-    }
-
-    /**
-     * Pre-loads data into all view fields by id the member.
-     * @param memberId Id of the member that will be preloaded.
-     */
-    public void displayMemberDataById(int memberId) {
-        try {
-            displayMemberData(CommunicationFacade.lookupForMemberController().loadMemberById(memberId));
-        } catch (RemoteException | MalformedURLException | NotBoundException e) {
-            LOGGER.error("Error occurs while loading MemberDTO from the server.", e);
         }
     }
 

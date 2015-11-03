@@ -2,6 +2,7 @@ package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.JfxController;
+import at.sporty.team1.rmi.api.IDTO;
 import at.sporty.team1.rmi.api.ITeamController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
@@ -65,11 +66,20 @@ public class TeamViewController extends JfxController {
 
     private static TeamDTO _activeTeamDTO;
 
+    @Override
+    public void displayDTO(IDTO idto) {
+        if (idto instanceof TeamDTO) {
+            displayTeamData((TeamDTO) idto);
+        } else if (idto instanceof MemberDTO) {
+            addNewMemberToTeam((MemberDTO) idto);
+        }
+    }
+
     /**
      * Pre-loads data into all view fields.
      * @param teamDTO TeamDTO that will be preloaded.
      */
-    public void displayTeamData(TeamDTO teamDTO)  {
+    private void displayTeamData(TeamDTO teamDTO)  {
         if (teamDTO != null) {
             _activeTeamDTO = teamDTO;
 

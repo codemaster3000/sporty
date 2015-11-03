@@ -10,9 +10,10 @@
 	<top>
         <ToolBar BorderPane.alignment="CENTER">
             <Button mnemonicParsing="false" text="Add Member" onAction="#openNewMemberView"/>
+			<Button mnemonicParsing="false" text="Test Team" onAction="#openNewTeamView"/>
         </ToolBar>
 	</top>
 	<center>
-		<TabPane fx:id="_tabPanel" BorderPane.alignment="CENTER" tabMaxHeight="Infinity" styleClass="tabPane"/>
+		<TabPane fx:id="_tabPanel" BorderPane.alignment="CENTER" tabMaxHeight="Infinity"/>
 	</center>
 </BorderPane>
