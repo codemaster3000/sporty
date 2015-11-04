@@ -1,12 +1,12 @@
 package at.sporty.team1.persistence.daos;
 
 import at.sporty.team1.domain.Member;
+import at.sporty.team1.domain.Team;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.PersistenceException;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -66,7 +66,6 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
      *
      * @param nameOrId      The name (firstname or lastname) or id.
      * @param caseSensitive True if search should be case sensitive.
-     *
      * @return The found memberList.
      */
     public List<Member> findByNameOrId(String nameOrId, boolean caseSensitive) throws PersistenceException {
@@ -90,9 +89,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
      * Find by arbitrary String
      *
      * @param string ...Name, Department, Birthdate, memberId
-     *
      * @return List<Member>
-     *
      * @throws SQLException
      */
     public List<Member> findByString(String string) throws PersistenceException {
@@ -109,27 +106,23 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
     /**
      * Find Member(s) by department.
      *
-     * @param   department
-     *
-     * @return  List<Member>
-     *
-     * @throws  SQLException
+     * @param department
+     * @return List<Member>
+     * @throws SQLException
      */
     public List<Member> findByDepartment(String department) throws PersistenceException {
 
         Criterion criterion;
-        criterion = Restrictions.or(Restrictions.like("department",department, MatchMode.ANYWHERE));
+        criterion = Restrictions.or(Restrictions.like("department", department, MatchMode.ANYWHERE));
 
-        return  super.findByCriteria(criterion);
+        return super.findByCriteria(criterion);
     }
 
     /**
      * Find Member(s) by sport.
      *
      * @param sport
-     *
      * @return List<Member>
-     *
      * @throws SQLException
      */
     public List<Member> findBySport(String sport) throws PersistenceException {
@@ -141,17 +134,30 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
     }
 
     /**
+     * Find Member(s) by TeamId
+     *
+     * @param team Team
+     * @return List<Member>
+     * @throws PersistenceException TODO: Test!
+     */
+    public List<Member> findByTeam(Team team) throws PersistenceException {
+        Criterion criterion;
+
+        criterion = Restrictions.or(Restrictions.like("teamID", team.getTeamId().toString(), MatchMode.ANYWHERE));
+
+        return super.findByCriteria(criterion);
+    }
+
+    /**
      * Find Member(s) by birthdate
      *
      * @param birthdate SQL_DATE format: yyy-mm-dd
-     *
      * @return List<Member>
-     *
      * @throws SQLException
      */
     public List<Member> findByBirthday(String birthdate) throws PersistenceException {
         Criterion criterion;
-        criterion = Restrictions.or(Restrictions.like("dateOfBirth", birthdate ,MatchMode.ANYWHERE));
+        criterion = Restrictions.or(Restrictions.like("dateOfBirth", birthdate, MatchMode.ANYWHERE));
 
         return super.findByCriteria(criterion);
     }
