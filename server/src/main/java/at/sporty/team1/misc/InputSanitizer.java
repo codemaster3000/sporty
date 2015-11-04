@@ -31,13 +31,6 @@ public class InputSanitizer {
                 return !isNull(value) && value.length() >= 1 && expr.matches(value);
             }
 
-            case EXACT_DATE: {
-                // must be format like: TODO
-                RegularExpression expr = new RegularExpression("TODO");
-                lastFailedValidation = DataType.EXACT_DATE;
-                return isNull(value) || value.length() <= 20 && expr.matches(value);
-            }
-
             case DAY_DATE: {
                 // 13.12.2003 e.g.
                 // this monster regex *should* match all dates of format: dd.mm.yyyy OR dd-mm-yyyy including schaltjahre :) T

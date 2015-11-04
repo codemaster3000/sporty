@@ -24,7 +24,7 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
     @Override
     public List<T> findAll() throws PersistenceException {
         try {
-            return HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
+            return (List<T>) HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
                 return session.createCriteria(_domainClass).list();
             });
         } catch (HibernateException e) {
@@ -35,7 +35,7 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
     @SuppressWarnings("unchecked") //NON Generic Hibernate Criteria.
     @Override
     public List<T> findByCriteria(Criterion... criterion) throws PersistenceException {
-        return HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
+        return (List<T>) HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
             Criteria criteria = session.createCriteria(_domainClass);
             for (Criterion c : criterion) {
                 criteria.add(c);
@@ -52,7 +52,7 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
     @SuppressWarnings("unchecked") //NON Generic Hibernate Criteria.
     @Override
     public List<T> findByHQL(String hql, Map<?, ?> map) {
-        return HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
+        return (List<T>) HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
             Query query = session.createQuery(hql);
             if (map != null) {
                 query.setProperties(map);

@@ -42,11 +42,11 @@ public class MemberDTO implements IDTO, Comparable<MemberDTO>{
         return this;
     }
 
-    public Integer getDepartment() {
+    public Integer getDepartmentId() {
         return _departmentId;
     }
 
-    public MemberDTO setDepartment(Integer department) {
+    public MemberDTO setDepartmentId(Integer department) {
     	_departmentId = department;
         return this;
     }

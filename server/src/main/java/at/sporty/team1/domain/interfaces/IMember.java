@@ -1,5 +1,6 @@
 package at.sporty.team1.domain.interfaces;
 
+import at.sporty.team1.domain.Gender;
 import at.sporty.team1.domain.readonly.IRMember;
 
 import java.sql.Date;
@@ -9,19 +10,13 @@ import java.sql.Date;
  */
 public interface IMember extends IRMember {
 
-    void setIsFeePayed(boolean feePayed);
-
     void setMemberId(Integer memberId);
-
-    void setTeamId(Integer teamId);
-
-    void setDepartment(Integer department);
 
     void setFirstName(String firstname);
 
     void setLastName(String lastname);
 
-    void setGender(String gender);
+    void setGender(Gender gender);
 
     void setDateOfBirth(Date dateOfBirth);
 
@@ -34,4 +29,6 @@ public interface IMember extends IRMember {
     void setRole(String role);
 
     void setUsername(String username);
+
+    void setIsFeePayed(Boolean feePayed);
 }

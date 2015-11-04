@@ -74,9 +74,9 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
         if (team != null) {
             return new TeamDTO()
                 .setTeamId(team.getTeamId())
-                .setTrainerId(team.getTrainerId())
-                .setDepartmentId(team.getDepartmentId())
-                .setLeagueId(team.getLeagueId())
+                .setTrainerId(team.getTrainer().getMemberId())
+                .setDepartmentId(team.getDepartment().getDepartmentId())
+//                .setLeagueId(team.getLeague().getLeagueID())
                 .setTeamName(team.getTeamName());
 //                .setMemberList(List<Member> memberList);
         }
@@ -94,9 +94,9 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
             Team team = new Team();
 
             team.setTeamId(teamDTO.getTeamId());
-            team.setTrainerId(teamDTO.getTrainerId());
-            team.setDepartmentId(teamDTO.getDepartmentId());
-            team.setLeagueId(teamDTO.getLeagueId());
+//            team.setTrainer(teamDTO.getTrainerId());
+//            team.setDepartment(teamDTO.getDepartmentId());
+//            team.setLeague(teamDTO.getLeagueId());
             team.setTeamName(teamDTO.getTeamName());
 //            team.setMemberList(teamDTO.getMemberList());
 

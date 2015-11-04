@@ -20,7 +20,7 @@ public class TeamDAO extends HibernateGenericDAO<Team> {
 
     /**
      * get Team(s) by Name-Search
-     * @param name
+     * @param name name of the team to be searched
      *
      * @return List<Team>
      */

@@ -119,7 +119,7 @@ public class MemberViewController extends JfxController {
                         .setEmail(email)
                         .setAddress(address);
     //TODO
-    //                .setDepartment(department)
+    //                .setDepartmentId(department)
     //                .setTeamId(team)
     //                .setSquad(squad)
     //                .setRole(role)

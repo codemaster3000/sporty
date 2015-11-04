@@ -21,5 +21,10 @@
 
         <mapping class="at.sporty.team1.domain.Member"/>
         <mapping class="at.sporty.team1.domain.Department"/>
+        <mapping class="at.sporty.team1.domain.Team"/>
+        <!--<mapping class="at.sporty.team1.domain.Gender"/>-->
+        <!--<mapping class="at.sporty.team1.domain.League"/>-->
+        <!--<mapping class="at.sporty.team1.domain.Match"/>-->
+        <!--<mapping class="at.sporty.team1.domain.MatchResult"/>-->
     </session-factory>
 </hibernate-configuration>
