@@ -4,6 +4,7 @@ import at.sporty.team1.domain.interfaces.IMember;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
 
 /**
@@ -14,32 +15,22 @@ import java.sql.Date;
 @Table(name = "member")
 public class Member implements IMember {
     private Integer memberId;
-    private Integer teamId;
-    private Integer department;
+    private List<Team> teamList;
     private String firstname;
     private String lastname;
-    private String gender;
+    private Gender gender;
     private Date dateOfBirth;
     private String eMail;
     private String address;
     private String squad;
     private String role;
     private String username;
-    private boolean isFeePayed; //TODO hibernate
-
-    @Override
-    @Basic
-    @Column(name = "isFeePayed")
-    public boolean getIsFeePayed() { return isFeePayed;}
-
-    @Override
-    public void setIsFeePayed(boolean feePayed) {
-        this.isFeePayed = feePayed;
-    }
+    private Boolean isFeePayed;
 
     @Override
     @Id
-    @Column(name = "memberId")
+    @GeneratedValue
+    @Column(name = "memberId", unique=true, nullable=false)
     public Integer getMemberId() {
         return memberId;
     }
@@ -49,32 +40,14 @@ public class Member implements IMember {
         this.memberId = memberId;
     }
 
-    @Override
-    @Basic
-    @Column(name = "teamId")
-    public Integer getTeamId() {
-        return teamId;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teamId")
+    public List<Team> getTeams() {
+        return teamList;
     }
 
-    @Override
-    public void setTeamId(Integer teamId) {
-        this.teamId = teamId;
-    }
-
-    /**
-     * many to many? TODO
-     * @return
-     */
-    @Override
-    @Basic
-    @Column(name = "departmentId")
-    public Integer getDepartment() {
-        return department;
-    }
-
-    @Override
-    public void setDepartment(Integer department) {
-        this.department = department;
+    public void setTeams(List<Team> teamList) {
+        this.teamList = teamList;
     }
 
     @Override
@@ -102,14 +75,15 @@ public class Member implements IMember {
     }
 
     @Override
-    @Basic
-    @Column(name = "gender")
-    public String getGender() {
+    @Basic(optional = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", columnDefinition = "ENUM('M', 'F')")
+    public Gender getGender() {
         return gender;
     }
 
     @Override
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 
@@ -149,10 +123,6 @@ public class Member implements IMember {
         this.address = address;
     }
 
-    /**
-     * many to many? TODO
-     * @return TODO
-     */
     @Override
     @Basic
     @Column(name = "role")
@@ -190,6 +160,16 @@ public class Member implements IMember {
     }
 
     @Override
+    @Basic
+    @Column(name = "isFeePayed")
+    public Boolean getIsFeePayed() { return isFeePayed;}
+
+    @Override
+    public void setIsFeePayed(Boolean feePayed) {
+        this.isFeePayed = feePayed;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -197,8 +177,6 @@ public class Member implements IMember {
         Member member = (Member) o;
 
         if (memberId != null ? !memberId.equals(member.memberId) : member.memberId != null) return false;
-        if (teamId != null ? !teamId.equals(member.teamId) : member.teamId != null) return false;
-        if (department != null ? !department.equals(member.department) : member.department != null) return false;
         if (firstname != null ? !firstname.equals(member.firstname) : member.firstname != null) return false;
         if (lastname != null ? !lastname.equals(member.lastname) : member.lastname != null) return false;
         if (gender != null ? !gender.equals(member.gender) : member.gender != null) return false;
@@ -208,15 +186,13 @@ public class Member implements IMember {
         if (squad != null ? !squad.equals(member.squad) : member.squad != null) return false;
         if (role != null ? !role.equals(member.role) : member.role != null) return false;
         if (username != null ? !username.equals(member.username) : member.username != null) return false;
-
+        if (isFeePayed != null ? isFeePayed.equals(member.isFeePayed) : member.isFeePayed != null) return false;
         return true;
     }
 
     @Override
     public int hashCode() {
         int result = memberId != null ? memberId.hashCode() : 0;
-        result = 31 * result + (teamId != null ? teamId.hashCode() : 0);
-        result = 31 * result + (department != null ? department.hashCode() : 0);
         result = 31 * result + (firstname != null ? firstname.hashCode() : 0);
         result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
@@ -226,6 +202,7 @@ public class Member implements IMember {
         result = 31 * result + (squad != null ? squad.hashCode() : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
         result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (isFeePayed != null ? isFeePayed.hashCode() : 0);
         return result;
     }
 }

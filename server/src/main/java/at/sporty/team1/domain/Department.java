@@ -18,7 +18,8 @@ public class Department implements IDepartment {
 
     @Override
     @Id
-    @Column(name = "departmentId")
+    @GeneratedValue
+    @Column(name = "departmentId", unique=true, nullable=false)
     public int getDepartmentId() {
         return departmentId;
     }

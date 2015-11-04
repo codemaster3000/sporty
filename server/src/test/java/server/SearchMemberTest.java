@@ -32,14 +32,12 @@ public class SearchMemberTest {
 		try {
 			mem = new MemberController();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		try {
 			members = mem.searchForMembers(searchString);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -59,14 +57,12 @@ public class SearchMemberTest {
 		try {
 			mem = new MemberController();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		try {
 			members = mem.searchForMembers(searchString);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -86,14 +82,12 @@ public class SearchMemberTest {
 		try {
 			mem = new MemberController();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		try {
 			members = mem.searchForMembers(searchString);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

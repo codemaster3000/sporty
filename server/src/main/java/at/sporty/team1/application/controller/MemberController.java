@@ -1,6 +1,7 @@
 package at.sporty.team1.application.controller;
 
 
+import at.sporty.team1.domain.Gender;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.domain.readonly.IRMember;
@@ -121,12 +122,13 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
                 .setMemberId(member.getMemberId())
                 .setFirstName(member.getFirstName())
                 .setLastName(member.getLastName())
-                .setGender(member.getGender())
+                .setGender(member.getGender().toString())
                 .setDateOfBirth(convertDateToString(member.getDateOfBirth()))
                 .setEmail(member.getEmail())
                 .setAddress(member.getAddress())
-                .setDepartment(member.getDepartment())
-                .setTeamId(member.getTeamId())
+                    //TODO
+//                .setDepartmentId(member.getDepartment())
+//                .setTeamIds(member.getTeams())
                 .setSquad(member.getSquad())
                 .setRole(member.getRole())
                 .setUsername(member.getUsername());
@@ -147,17 +149,39 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             member.setMemberId(memberDTO.getMemberId());
             member.setFirstName(memberDTO.getFirstName());
             member.setLastName(memberDTO.getLastName());
-            member.setGender(memberDTO.getGender());
+            member.setGender(parseGender(memberDTO.getGender()));
             member.setDateOfBirth(parseDate(memberDTO.getDateOfBirth()));
             member.setEmail(memberDTO.getEmail());
             member.setAddress(memberDTO.getAddress());
-            member.setDepartment(memberDTO.getDepartment());
-            member.setTeamId(memberDTO.getTeamId());
+
+            //TODO
+//            member.setDepartmentId(memberDTO.getDepartmentId());
+//            member.setTeamId(memberDTO.getTeamId());
             member.setSquad(memberDTO.getSquad());
             member.setRole(memberDTO.getRole());
             member.setUsername(memberDTO.getUsername());
 
+            //FIXME: add method to DTO
+            member.setIsFeePayed(false);
+
             return member;
+        }
+        return null;
+    }
+
+    /**
+     * A helping method.
+     *
+     * @param gender String to be parsed as a Gender
+     * @return parsed gender
+     */
+    private static Gender parseGender(String gender) {
+        if (gender != null && !gender.isEmpty() && gender.length() == 1) {
+            try {
+                return Gender.valueOf(gender.trim().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                LOGGER.error("Error occurs while parsing gender.", e);
+            }
         }
         return null;
     }

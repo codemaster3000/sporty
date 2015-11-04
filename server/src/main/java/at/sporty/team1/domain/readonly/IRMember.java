@@ -1,5 +1,7 @@
 package at.sporty.team1.domain.readonly;
 
+import at.sporty.team1.domain.Gender;
+
 import java.sql.Date;
 
 /**
@@ -7,19 +9,13 @@ import java.sql.Date;
  */
 public interface IRMember {
 
-    boolean getIsFeePayed();
-
     Integer getMemberId();
-
-    Integer getTeamId();
-
-    Integer getDepartment();
 
     String getFirstName();
 
     String getLastName();
 
-    String getGender();
+    Gender getGender();
 
     Date getDateOfBirth();
 
@@ -32,4 +28,6 @@ public interface IRMember {
     String getRole();
 
     String getUsername();
+
+    Boolean getIsFeePayed();
 }

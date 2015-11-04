@@ -90,7 +90,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
      *
      * @param string ...Name, Department, Birthdate, memberId
      * @return List<Member>
-     * @throws SQLException
+     * @throws PersistenceException
      */
     public List<Member> findByString(String string) throws PersistenceException {
         Criterion criterion = Restrictions.or(
@@ -108,7 +108,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
      *
      * @param department
      * @return List<Member>
-     * @throws SQLException
+     * @throws PersistenceException
      */
     public List<Member> findByDepartment(String department) throws PersistenceException {
 
@@ -123,7 +123,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
      *
      * @param sport
      * @return List<Member>
-     * @throws SQLException
+     * @throws PersistenceException
      */
     public List<Member> findBySport(String sport) throws PersistenceException {
 
@@ -153,7 +153,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
      *
      * @param birthdate SQL_DATE format: yyy-mm-dd
      * @return List<Member>
-     * @throws SQLException
+     * @throws PersistenceException
      */
     public List<Member> findByBirthday(String birthdate) throws PersistenceException {
         Criterion criterion;

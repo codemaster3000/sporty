@@ -35,17 +35,14 @@ public class NewMemberTest {
 		try {
 			memberCon = new MemberController();
 		} catch (RemoteException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
         try {
 			memberCon.createOrSaveMember(_activeMemberDTO);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ValidationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
    
@@ -77,12 +74,11 @@ public class NewMemberTest {
         //_activeMemberDTO.setPhone(phone);
         _activeMemberDTO.setGender(gender);
         _activeMemberDTO.setAddress(address);
-//        _activeMemberDTO.setDepartment(sport);
+//        _activeMemberDTO.setDepartmentId(sport);
         
 		try {
 			memberCon = new MemberController();
 		} catch (RemoteException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -90,7 +86,6 @@ public class NewMemberTest {
 			
 			memberCon.createOrSaveMember(_activeMemberDTO);
 		} catch (RemoteException | ValidationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
   
@@ -98,7 +93,7 @@ public class NewMemberTest {
 	
 	/**
 	 * Bday in false format
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@Test
 	public void newMemberTest_3() {
@@ -125,7 +120,7 @@ public class NewMemberTest {
         //_activeMemberDTO.setPhone(phone);
         _activeMemberDTO.setGender(gender);
         _activeMemberDTO.setAddress(address);
-//        _activeMemberDTO.setDepartment(sport);
+//        _activeMemberDTO.setDepartmentId(sport);
         
 		try {
 			memberCon = new MemberController();
@@ -136,9 +131,7 @@ public class NewMemberTest {
 		
         try {
 			memberCon.createOrSaveMember(_activeMemberDTO);
-		} catch (RemoteException e) {			
-			e.printStackTrace();
-		} catch (ValidationException e) {
+		} catch (RemoteException | ValidationException e) {
 			e.printStackTrace();
 		}
 	}
@@ -169,7 +162,7 @@ public class NewMemberTest {
         //_activeMemberDTO.setPhone(phone);
         _activeMemberDTO.setGender(gender);
         _activeMemberDTO.setAddress(address);
-//        _activeMemberDTO.setDepartment(sport);
+//        _activeMemberDTO.setDepartmentId(sport);
         
 		try {
 			memberCon = new MemberController();
@@ -180,10 +173,7 @@ public class NewMemberTest {
 		
         try {
 			memberCon.createOrSaveMember(_activeMemberDTO);
-		} catch (RemoteException e) {
-			
-			e.printStackTrace();
-		} catch (ValidationException e) {
+		} catch (RemoteException | ValidationException e) {
 			e.printStackTrace();
 		}
 	}

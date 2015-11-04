@@ -3,48 +3,50 @@ package at.sporty.team1.domain;
 import at.sporty.team1.domain.interfaces.ITeam;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 /**
  *
  */
 @Entity
-@PrimaryKeyJoinColumn(name = "teamId", referencedColumnName = "teamId")
 @Table(name = "team")
 public class Team implements ITeam {
-    public int teamId;
-    public String teamname;
-    public Department department;
+    public Integer teamId;
     public Member trainer;
+    public Department department;
     public League league;
-    public List<Member> members;
+    public String teamname;
+    public List<Member> memberList;
 
     @Override
     @Id
-    @Column(name = "teamId")
-    public int getTeamId() {
+    @GeneratedValue
+    @Column(name = "teamId", unique=true, nullable=false)
+    public Integer getTeamId() {
         return teamId;
     }
 
     @Override
-    public void setTeamId(int teamId) {
+    public void setTeamId(Integer teamId) {
         this.teamId = teamId;
     }
 
     @Override
-    @OneToMany(mappedBy="owner", fetch = FetchType.LAZY)
-    public List<Member> getMembers() {
-        return members;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trainerId")
+    public Member getTrainer() {
+        return trainer;
     }
 
     @Override
-    public void setMembers(List<Member> members) {
-        this.members = members;
+    public void setTrainer(Member trainer) {
+        this.trainer = trainer;
     }
 
     @Override
-    @Basic
-    @Column(name = "department") // TODO many to one && return: List<Department>
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "departmentId")
     public Department getDepartment() {
         return department;
     }
@@ -54,6 +56,19 @@ public class Team implements ITeam {
         this.department = department;
     }
 
+    //TODO League table in db
+//    @Override
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "leagueId")
+//    public League getLeague() {
+//        return league;
+//    }
+//
+//    @Override
+//    public void setLeague(League league) {
+//        this.league = league;
+//    }
+
     @Override
     @Basic
     @Column(name = "teamName")
@@ -62,32 +77,43 @@ public class Team implements ITeam {
     }
 
     @Override
-    public void setTeamName(String teamname) {
-        this.teamname = teamname;
+    public void setTeamName(String teamName) {
+        this.teamname = teamName;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memberId")
+    public List<Member> getMemberList() {
+        return memberList;
+    }
+
+    public void setMemberList(List<Member> memberList) {
+        this.memberList = memberList;
     }
 
     @Override
-    @Basic
-    @Column(name = "trainer")
-    public Member getTrainer() {
-        return trainer;
-    }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    public void setTrainer(Member trainer) {
-        this.trainer = trainer;
-    }
+        Team team = (Team) o;
 
+        if (teamId != null ? !teamId.equals(team.teamId) : team.teamId != null) return false;
+        if (trainer != null ? !trainer.equals(team.trainer) : team.trainer != null) return false;
+        if (department != null ? !department.equals(team.department) : team.department != null) return false;
+//        if (league != null ? !league.equals(team.league) : team.league != null) return false;
+        if (teamname != null ? !teamname.equals(team.teamname) : team.teamname != null) return false;
 
-    @Override
-    @Basic
-    @Column(name = "league")
-    public League getLeague() {
-        return league;
+        return true;
     }
 
     @Override
-    public void setLeague(League league) {
-        this.league = league;
+    public int hashCode() {
+        int result = teamId != null ? teamId.hashCode() : 0;
+        result = 31 * result + (trainer != null ? trainer.hashCode() : 0);
+        result = 31 * result + (department != null ? department.hashCode() : 0);
+//        result = 31 * result + (league != null ? league.hashCode() : 0);
+        result = 31 * result + (teamname != null ? teamname.hashCode() : 0);
+        return result;
     }
-
 }
