@@ -9,8 +9,8 @@
 			fx:controller="at.sporty.team1.presentation.controllers.MainViewController">
 	<top>
         <ToolBar BorderPane.alignment="CENTER">
-            <Button mnemonicParsing="false" text="Add Member" onAction="#openNewMemberView"/>
-			<Button mnemonicParsing="false" text="Test Team" onAction="#openNewTeamView"/>
+            <Button mnemonicParsing="false" text="Member View" onAction="#openNewMemberView"/>
+			<Button mnemonicParsing="false" text="Team View" onAction="#openNewTeamView"/>
         </ToolBar>
 	</top>
 	<center>
