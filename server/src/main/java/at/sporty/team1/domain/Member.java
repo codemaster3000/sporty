@@ -25,6 +25,17 @@ public class Member implements IMember {
     private String squad;
     private String role;
     private String username;
+    private boolean isFeePayed; //TODO hibernate
+
+    @Override
+    @Basic
+    @Column(name = "isFeePayed")
+    public boolean getIsFeePayed() { return isFeePayed;}
+
+    @Override
+    public void setIsFeePayed(boolean feePayed) {
+        this.isFeePayed = feePayed;
+    }
 
     @Override
     @Id

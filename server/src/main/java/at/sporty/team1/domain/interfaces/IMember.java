@@ -8,6 +8,9 @@ import java.sql.Date;
  * Created by sereGkaluv on 27-Oct-15.
  */
 public interface IMember extends IRMember {
+
+    void setIsFeePayed(boolean feePayed);
+
     void setMemberId(Integer memberId);
 
     void setTeamId(Integer teamId);
