@@ -49,7 +49,7 @@ public class SearchViewController extends JfxController {
                 super.updateItem(m, bln);
                 if (m != null) {
                     //Defining how MemberDTO will be displayed in ListView
-                    setText(m.getFirstName() + " " + m.getLastName());
+                    setText(m.getLastName() + " " + m.getFirstName());
                 }
             }
         });
