@@ -8,8 +8,10 @@ import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -33,7 +35,7 @@ public class MemberViewController extends JfxController {
     @FXML private TextField birthTextField;
     @FXML private TextField emailTextField;
     @FXML private TextField phoneTextField;
-    @FXML private TextField sportTextField;
+    @FXML private ComboBox<String> sportComboBox;
     @FXML private TextField addressTextField;
     @FXML private RadioButton radioGenderFemale;
     @FXML private RadioButton radioGenderMale;
@@ -45,7 +47,8 @@ public class MemberViewController extends JfxController {
         ToggleGroup _group = new ToggleGroup();
         radioGenderFemale.setToggleGroup(_group);
         radioGenderMale.setToggleGroup(_group);
-
+        ObservableList<String> values = null;
+        sportComboBox.setItems(values);
         Platform.runLater(fNameTextField::requestFocus);
     }
 
@@ -91,7 +94,7 @@ public class MemberViewController extends JfxController {
         String email = GUIHelper.readNullOrEmpty(emailTextField.getText());
         String phone = GUIHelper.readNullOrEmpty(phoneTextField.getText());
         String address = GUIHelper.readNullOrEmpty(addressTextField.getText());
-        String sport = GUIHelper.readNullOrEmpty(sportTextField.getText());
+        String sport = GUIHelper.readNullOrEmpty(sportComboBox.getValue());
 
         String gender = null;
         if (radioGenderFemale.isSelected()) {
