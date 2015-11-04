@@ -3,6 +3,7 @@ package at.sporty.team1.domain;
 import at.sporty.team1.domain.interfaces.IDepartment;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by sereGkaluv on 27-Oct-15.
@@ -13,6 +14,7 @@ public class Department implements IDepartment {
     private int departmentId;
     private String sport;
     private int headId;
+    private List<Team> teams;  //TODO hibernate
 
     @Override
     @Id

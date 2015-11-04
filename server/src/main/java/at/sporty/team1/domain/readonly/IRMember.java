@@ -6,6 +6,9 @@ import java.sql.Date;
  * Created by sereGkaluv on 27-Oct-15.
  */
 public interface IRMember {
+
+    boolean getIsFeePayed();
+
     Integer getMemberId();
 
     Integer getTeamId();
