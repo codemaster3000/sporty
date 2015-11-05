@@ -33,7 +33,6 @@ public class MainViewController extends JfxController {
     private static final String TEAM_TAB_CAPTION = "TEAM";
     private static final String MEMBER_TAB_CAPTION = "MEMBER";
     private static final Map<Tab, IJfxController> CONTROLLER_TO_TAB_MAP = new HashMap<>();
-    private static final Map<IJfxController, Tab> TAB_TO_CONTROLLER_MAP = new HashMap<>();
     
     @FXML private TextField _searchField;
     @FXML private TabPane _tabPanel;
@@ -154,7 +153,6 @@ public class MainViewController extends JfxController {
             t.setClosable(closable);
 
             //registering bidirectional relation from tab to controller
-            TAB_TO_CONTROLLER_MAP.put(controller, t);
             CONTROLLER_TO_TAB_MAP.put(t, controller);
 
             Platform.runLater(() -> {
