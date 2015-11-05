@@ -92,8 +92,8 @@ public class MemberViewController extends JfxController {
         String lName = GUIHelper.readNullOrEmpty(lNameTextField.getText());
         String bday = GUIHelper.readNullOrEmpty(birthTextField.getText());
         String email = GUIHelper.readNullOrEmpty(emailTextField.getText());
-        String phone = GUIHelper.readNullOrEmpty(phoneTextField.getText());
         String address = GUIHelper.readNullOrEmpty(addressTextField.getText());
+        String phone = GUIHelper.readNullOrEmpty(phoneTextField.getText());
         String sport = GUIHelper.readNullOrEmpty(sportComboBox.getValue());
 
         String gender = null;
@@ -105,7 +105,7 @@ public class MemberViewController extends JfxController {
 
         //check if mandatory fields are filled with data,
         //validation was moved to a separate method for refactoring convenience (IDTO)
-        if(isValidForm(fName, lName, bday, gender)) {
+        if(isValidForm(fName, lName, bday, gender, address)) {
             try {
 
                 //check if we are creating a new or editing an existing Member
@@ -133,7 +133,7 @@ public class MemberViewController extends JfxController {
 
                 GUIHelper.showSuccessAlert(SUCCESSFUL_MEMBER_SAVE);
 
-                //Logging and closing the tab
+                //Logging and cleaning the tab
                 LOGGER.info("Member \"{} {}\" was successfully saved.", fName, lName);
                 dispose();
 
@@ -148,25 +148,25 @@ public class MemberViewController extends JfxController {
         }
     }
 
-    private boolean isValidForm(String fName, String lName, String bday, String gender) {
+    private boolean isValidForm(String fName, String lName, String bday, String gender, String address) {
         //Alert Box if a mandatory field is not filled
         if (fName == null) {
             GUIHelper.highlightNotValidTextField(fNameTextField);
-            GUIHelper.showValidationAlert("Please fill in First Name.");
+            GUIHelper.showValidationAlert("Please fill in First Name field.");
 
             return false;
         }
 
         if (lName == null) {
             GUIHelper.highlightNotValidTextField(lNameTextField);
-            GUIHelper.showValidationAlert("Please fill in Last Name.");
+            GUIHelper.showValidationAlert("Please fill in Last Name field.");
 
             return false;
         }
 
         if (bday == null) {
             GUIHelper.highlightNotValidTextField(birthTextField);
-            GUIHelper.showValidationAlert("Please fill in Date of Birth.");
+            GUIHelper.showValidationAlert("Please fill in Date of Birth field.");
 
             return false;
         }
@@ -176,7 +176,33 @@ public class MemberViewController extends JfxController {
 
             return false;
         }
+        
+        if (address == null) {
+            GUIHelper.highlightNotValidTextField(addressTextField);
+            GUIHelper.showValidationAlert("Please fill in Address.");
+
+            return false;
+        }
+
+        if (address == null) {
+            GUIHelper.showValidationAlert("Please fill in Address field.");
+
+            return false;
+        }
 
         return true;
+    }
+
+    @Override
+    public void dispose() {
+        fNameTextField.clear();
+        lNameTextField.clear();
+        birthTextField.clear();
+        emailTextField.clear();
+        phoneTextField.clear();
+        sportComboBox.getSelectionModel().clearSelection();
+        addressTextField.clear();
+        radioGenderFemale.setSelected(false);
+        radioGenderMale.setSelected(false);
     }
 }

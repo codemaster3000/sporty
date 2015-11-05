@@ -1,11 +1,12 @@
-.mainPane {
-    -fx-background-image: url("../img/tabBack.png");
+.table-view {
+    -fx-background-color: #F4F4F4;
 }
 
-.scroll-pane:default, .scroll-pane:focused, .list-view {
+.scroll-pane, .scroll-pane:focused, .list-view, .list-view:focused, .table-view, .table-view:focused {
     -fx-border-color: transparent;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
+    -fx-background-insets: 0, 0, 0, 2;
 }
 
 .progress {

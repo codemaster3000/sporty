@@ -8,10 +8,12 @@
 			fx:id="_borderPanel"
 			fx:controller="at.sporty.team1.presentation.controllers.MainViewController">
 	<top>
-        <ToolBar BorderPane.alignment="CENTER">
-            <Button mnemonicParsing="false" text="Member View" onAction="#openNewMemberView"/>
-			<Button mnemonicParsing="false" text="Team View" onAction="#openNewTeamView"/>
-        </ToolBar>
+		<ToolBar AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" AnchorPane.rightAnchor="0">
+			<TextField fx:id="_searchField" prefWidth="200.0"/>
+            <ComboBox fx:id="_searchType"  prefWidth="100.0" HBox.hgrow="SOMETIMES"
+                      GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+			<Button text="GO" onAction="#startSearch" HBox.hgrow="NEVER"/>
+		</ToolBar>
 	</top>
 	<center>
 		<TabPane fx:id="_tabPanel" BorderPane.alignment="CENTER" tabMaxHeight="Infinity"/>

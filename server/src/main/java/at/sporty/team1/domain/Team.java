@@ -22,7 +22,7 @@ public class Team implements ITeam {
     @Override
     @Id
     @GeneratedValue
-    @Column(name = "teamId", unique=true, nullable=false)
+    @Column(name = "teamId")
     public Integer getTeamId() {
         return teamId;
     }

@@ -5,55 +5,63 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.sporty.team1.presentation.controllers.MemberViewController">
+<GridPane xmlns="http://javafx.com/javafx/8"
+          xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="at.sporty.team1.presentation.controllers.MemberViewController">
     <columnConstraints>
-        <ColumnConstraints hgrow="NEVER" minWidth="200.0" />
-        <ColumnConstraints hgrow="ALWAYS" minWidth="400.0" />
+        <ColumnConstraints hgrow="NEVER" minWidth="200.0"/>
+        <ColumnConstraints hgrow="ALWAYS" minWidth="400.0"/>
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints vgrow="SOMETIMES" />
-        <RowConstraints vgrow="SOMETIMES" />
-        <RowConstraints vgrow="SOMETIMES" />
-        <RowConstraints vgrow="SOMETIMES" />
-        <RowConstraints vgrow="SOMETIMES" />
-        <RowConstraints vgrow="SOMETIMES" />
-        <RowConstraints vgrow="SOMETIMES" />
-        <RowConstraints vgrow="SOMETIMES" />
-        <RowConstraints vgrow="SOMETIMES" />
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
     </rowConstraints>
     <padding>
-        <Insets left="15.0" right="15.0" />
+        <Insets left="15.0" right="15.0"/>
     </padding>
-   <children>
-       <Label text="First Name" />
-       <Label text="Last Name" GridPane.rowIndex="1" />
-       <Label text="Date of Birth (yyyy-mm-dd)" GridPane.rowIndex="2" />
-       <TextField fx:id="fNameTextField" promptText="Mandatory" GridPane.columnIndex="1" />
-       <TextField fx:id="lNameTextField" promptText="Mandatory" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-       <TextField fx:id="birthTextField" promptText="Mandatory" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-       <Label text="E-mail" GridPane.rowIndex="4" />
-       <Label text="Phone" GridPane.rowIndex="5" />
-       <Label text="Sport" GridPane.rowIndex="7" />
-       <TextField fx:id="emailTextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-       <TextField fx:id="phoneTextField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-       <TextField fx:id="addressTextField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-       <Label text="Address" GridPane.rowIndex="6" />
-       <Label text="Gender" GridPane.rowIndex="3" />
-       <FlowPane prefHeight="17.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-          <children>
-              <RadioButton fx:id="radioGenderMale" mnemonicParsing="false" text="Male">
-                  <padding>
-                      <Insets right="10.0" top="10.0" />
-                  </padding>
-              </RadioButton>
-              <RadioButton fx:id="radioGenderFemale" mnemonicParsing="false" text="Female">
-                  <padding>
-                      <Insets top="10.0" />
-                  </padding>
-              </RadioButton>
-          </children>
-       </FlowPane>
-       <Button mnemonicParsing="false" onAction="#saveForm" text="Save" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="8" />
-      <ComboBox fx:id="sportComboBox" prefHeight="26.0" prefWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-   </children>
+
+    <Label text="First Name"/>
+    <TextField fx:id="fNameTextField" promptText="Mandatory" GridPane.columnIndex="1"/>
+
+    <Label text="Last Name" GridPane.rowIndex="1"/>
+    <TextField fx:id="lNameTextField" promptText="Mandatory" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+    <Label text="Date of Birth (yyyy-mm-dd)" GridPane.rowIndex="2"/>
+    <TextField fx:id="birthTextField" promptText="Mandatory" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+    <Label text="Gender" GridPane.rowIndex="3"/>
+    <FlowPane GridPane.columnIndex="1" GridPane.rowIndex="3">
+        <RadioButton fx:id="radioGenderMale" mnemonicParsing="false" text="Male">
+            <padding>
+                <Insets right="10.0" top="10.0"/>
+            </padding>
+        </RadioButton>
+        <RadioButton fx:id="radioGenderFemale" mnemonicParsing="false" text="Female">
+            <padding>
+                <Insets top="10.0"/>
+            </padding>
+        </RadioButton>
+    </FlowPane>
+
+    <Label text="E-mail" GridPane.rowIndex="4"/>
+    <TextField fx:id="emailTextField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+    <Label text="Phone" GridPane.rowIndex="5"/>
+    <TextField fx:id="phoneTextField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+    <Label text="Address" GridPane.rowIndex="6"/>
+    <TextField fx:id="addressTextField" promptText="Mandatory" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+    <Label text="Sport" GridPane.rowIndex="7"/>
+    <ComboBox fx:id="sportComboBox" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+
+    <Button mnemonicParsing="false" onAction="#saveForm" text="Save" GridPane.columnIndex="1"
+            GridPane.halignment="RIGHT" GridPane.rowIndex="8"/>
 </GridPane>
