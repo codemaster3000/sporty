@@ -15,14 +15,6 @@
 			<Button text="GO" onAction="#startSearch" HBox.hgrow="NEVER"/>
 		</ToolBar>
 	</top>
-    <left>
-        <ScrollPane fitToWidth="true" fitToHeight="true" prefWidth="310.0">
-            <AnchorPane>
-                <ListView fx:id="_searchResultsListView" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0"
-                          AnchorPane.leftAnchor="0" AnchorPane.bottomAnchor="0"/>
-            </AnchorPane>
-        </ScrollPane>
-    </left>
 	<center>
 		<TabPane fx:id="_tabPanel" BorderPane.alignment="CENTER" tabMaxHeight="Infinity"/>
 	</center>

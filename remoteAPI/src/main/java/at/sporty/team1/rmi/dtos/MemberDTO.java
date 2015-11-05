@@ -2,12 +2,10 @@ package at.sporty.team1.rmi.dtos;
 
 import at.sporty.team1.rmi.api.IDTO;
 
-import java.io.Serializable;
-
 /**
  * This IDTO Object implements Object Builder pattern.
  */
-public class MemberDTO implements IDTO, Comparable<MemberDTO>{
+public class MemberDTO implements IDTO {
     private Integer _memberId;
     private Integer _teamId;
     private Integer _departmentId;
@@ -20,6 +18,7 @@ public class MemberDTO implements IDTO, Comparable<MemberDTO>{
     private String _squad;
     private String _role;
     private String _username;
+    private Boolean _isFeePayed;
 
     public MemberDTO() {
     }
@@ -132,8 +131,9 @@ public class MemberDTO implements IDTO, Comparable<MemberDTO>{
         return this;
     }
 
-	@Override
-	public int compareTo(MemberDTO member) {
-		return this._lastName.compareTo(member._lastName);
-	}
+    public Boolean getIsFeePayed() { return _isFeePayed;}
+
+    public void setIsFeePayed(Boolean feePayed) {
+        _isFeePayed = feePayed;
+    }
 }
