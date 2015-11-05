@@ -84,9 +84,7 @@ public class MainViewController extends JfxController {
 
                     if(rawSearchResults != null && !rawSearchResults.isEmpty()){
 
-                        Platform.runLater(() -> {
-                            _searchResultViewController.displayResults(rawSearchResults);
-                        });
+                        Platform.runLater(() -> _searchResultViewController.displayResults(rawSearchResults));
 
                     }else{
                         Platform.runLater(() -> {
