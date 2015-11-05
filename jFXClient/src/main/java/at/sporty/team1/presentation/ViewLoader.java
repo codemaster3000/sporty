@@ -4,7 +4,6 @@ import at.sporty.team1.presentation.controllers.TeamViewController;
 import at.sporty.team1.presentation.controllers.core.IJfxController;
 import at.sporty.team1.presentation.controllers.MainViewController;
 import at.sporty.team1.presentation.controllers.MemberViewController;
-import at.sporty.team1.presentation.controllers.SearchViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 
@@ -30,7 +29,6 @@ public class ViewLoader<T extends IJfxController> {
 		//All UI-Controller relations should be defined here.
 		_viewPaths.put(MainViewController.class, "/at/sporty/team1/presentation/views/MainView.fxml");
 		_viewPaths.put(MemberViewController.class, "/at/sporty/team1/presentation/views/NewMemberView.fxml");
-		_viewPaths.put(SearchViewController.class, "/at/sporty/team1/presentation/views/SearchView.fxml");
 		_viewPaths.put(TeamViewController.class, "/at/sporty/team1/presentation/views/TeamView.fxml");
 	}
 

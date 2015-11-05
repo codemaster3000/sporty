@@ -1,47 +1,95 @@
 package at.sporty.team1.presentation.controllers;
 
+import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.ViewLoader;
 import at.sporty.team1.presentation.controllers.core.IJfxController;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.IDTO;
+import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 public class MainViewController extends JfxController {
+    private static final Logger LOGGER = LogManager.getLogger();
+    private static final String PROGRESS = "progress";
+    private static final String NO_RESULTS_TITLE = "No results";
+    private static final String NO_RESULTS_CONTEXT = "No results were found.";
     private static final String TEAM_TAB_CAPTION = "TEAM";
-    private static final String MEMBER_TAB_CAPTION = "Member";
-    private static final Map<IJfxController, Tab> TAB_TO_CONTROLLER_MAP = new HashMap<>();
+    private static final String MEMBER_TAB_CAPTION = "MEMBER";
     private static final Map<Tab, IJfxController> CONTROLLER_TO_TAB_MAP = new HashMap<>();
+    private static final Map<IJfxController, Tab> TAB_TO_CONTROLLER_MAP = new HashMap<>();
 
     private SearchViewController _searchViewController;
     
-	@FXML private BorderPane _borderPanel;
-	@FXML private TabPane _tabPanel;
-    
+    @FXML private TextField _searchField;
+    @FXML private ListView<MemberDTO> _searchResultsListView;
+    @FXML private TabPane _tabPanel;
+    @FXML private BorderPane _borderPanel;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-        new Thread(() -> {
+        //setting cell factory for result list
+        _searchResultsListView.setCellFactory(m -> new ListCell<MemberDTO>() {
+            @Override
+            protected void updateItem(MemberDTO m, boolean bln) {
+                super.updateItem(m, bln);
+                if (m != null) {
+                    //Defining how MemberDTO will be displayed in ListView
+                    setText(m.getLastName() + " " + m.getFirstName());
+                }
+            }
+        });
 
-            ViewLoader<SearchViewController> viewLoader = ViewLoader.loadView(SearchViewController.class);
-            Node node = viewLoader.loadNode();
-            _searchViewController = viewLoader.getController();
+        //Enter listener for search table
+        _searchField.setOnKeyPressed(e -> {
+            if(e.getCode() == KeyCode.ENTER){
+                startSearch();
+            }
+        });
 
-            _searchViewController.setTargetDelegator(this::delegateToMemberTarget);
+        //Mouse listener for search table
+        _searchResultsListView.setOnMouseClicked(e -> {
+            if (isDoubleClick(e, MouseButton.PRIMARY)) {
 
-            Platform.runLater(() -> _borderPanel.setLeft(node));
+                MemberDTO selectedMember = _searchResultsListView.getSelectionModel().getSelectedItem();
+                if (selectedMember != null) {
+                    delegateToMemberTarget(selectedMember);
+                }
+            }
+        });
 
-        }).start();
+        //Arrow listener for search table
+        _searchResultsListView.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.RIGHT) {
 
+                MemberDTO selectedMember = _searchResultsListView.getSelectionModel().getSelectedItem();
+                if (selectedMember != null) {
+                    delegateToMemberTarget(selectedMember);
+                }
+            }
+        });
+
+        //Opening un-closable tabs
         openNewMemberView(false);
         openNewTeamView(false);
     }
@@ -102,5 +150,60 @@ public class MainViewController extends JfxController {
                 _tabPanel.getSelectionModel().select(t);
             });
         }).start();
+    }
+
+    @FXML
+    private void startSearch() {
+        String searchQuery = GUIHelper.readNullOrEmpty(_searchField.getText());
+
+        if (searchQuery != null) {
+            _searchResultsListView.getItems().clear();
+            _searchResultsListView.getStyleClass().add(PROGRESS);
+
+            new Thread(() -> {
+
+                try {
+
+                    IMemberController memberController = CommunicationFacade.lookupForMemberController();
+                    List<MemberDTO> rawSearchResults = memberController.searchForMembers(searchQuery);
+
+                    if(rawSearchResults != null && !rawSearchResults.isEmpty()){
+                        rawSearchResults.sort(null); //What this one is doing?
+
+                        Platform.runLater(() -> {
+                            _searchResultsListView.getStyleClass().remove(PROGRESS);
+                            _searchResultsListView.setItems(FXCollections.observableArrayList(rawSearchResults));
+                            _searchResultsListView.requestFocus();
+                            _searchResultsListView.getSelectionModel().select(0);
+                            _searchResultsListView.getFocusModel().focus(0);
+                        });
+
+                    }else{
+                        Platform.runLater(() -> {
+                            GUIHelper.showAlert(
+                                Alert.AlertType.INFORMATION,
+                                NO_RESULTS_TITLE,
+                                null,
+                                NO_RESULTS_CONTEXT
+                            );
+
+                            _searchResultsListView.getItems().clear();
+                            _searchResultsListView.getStyleClass().remove(PROGRESS);
+                            _searchResultsListView.requestFocus();
+                            _searchResultsListView.getSelectionModel().select(0);
+                            _searchResultsListView.getFocusModel().focus(0);
+                        });
+                    }
+
+                } catch (RemoteException | MalformedURLException | NotBoundException e) {
+                    LOGGER.error("Error occurs while searching.", e);
+                }
+
+            }).start();
+        }
+    }
+
+    private boolean isDoubleClick(MouseEvent event, MouseButton mouseButton) {
+        return event.getButton().equals(mouseButton) && event.getClickCount() == 2;
     }
 }
