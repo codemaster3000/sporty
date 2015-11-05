@@ -105,7 +105,7 @@ public class MemberViewController extends JfxController {
 
         //check if mandatory fields are filled with data,
         //validation was moved to a separate method for refactoring convenience (IDTO)
-        if(isValidForm(fName, lName, bday, gender)) {
+        if(isValidForm(fName, lName, bday, gender, address)) {
             try {
 
                 //check if we are creating a new or editing an existing Member
@@ -148,7 +148,7 @@ public class MemberViewController extends JfxController {
         }
     }
 
-    private boolean isValidForm(String fName, String lName, String bday, String gender) {
+    private boolean isValidForm(String fName, String lName, String bday, String gender, String address) {
         //Alert Box if a mandatory field is not filled
         if (fName == null) {
             GUIHelper.highlightNotValidTextField(fNameTextField);
@@ -173,6 +173,13 @@ public class MemberViewController extends JfxController {
 
         if (gender == null) {
             GUIHelper.showValidationAlert("Please choose Gender.");
+
+            return false;
+        }
+        
+        if (address == null) {
+            GUIHelper.highlightNotValidTextField(addressTextField);
+            GUIHelper.showValidationAlert("Please fill in Address.");
 
             return false;
         }

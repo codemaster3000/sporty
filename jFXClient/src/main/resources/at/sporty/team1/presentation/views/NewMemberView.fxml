@@ -36,7 +36,7 @@
        <Label text="Sport" GridPane.rowIndex="7" />
        <TextField fx:id="emailTextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
        <TextField fx:id="phoneTextField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-       <TextField fx:id="addressTextField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+       <TextField fx:id="addressTextField" promptText="Mandatory" GridPane.columnIndex="1" GridPane.rowIndex="6" />
        <Label text="Address" GridPane.rowIndex="6" />
        <Label text="Gender" GridPane.rowIndex="3" />
        <FlowPane prefHeight="17.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
