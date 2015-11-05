@@ -34,8 +34,9 @@ import java.util.function.Consumer;
 public class SearchViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String PROGRESS = "progress";
-    private static final String NO_RESULTS = "No results found";
-    
+    private static final String NO_RESULTS_TITLE = "No results";
+    private static final String NO_RESULTS_CONTEXT = "No results were found.";
+
     private Consumer<MemberDTO> _targetDelegator;
 
     @FXML private TextField _searchField;
@@ -101,21 +102,33 @@ public class SearchViewController extends JfxController {
                     IMemberController memberController = CommunicationFacade.lookupForMemberController();
                     List<MemberDTO> rawSearchResults = memberController.searchForMembers(searchQuery);
                     
-                    if(!rawSearchResults.isEmpty()){
-                    	rawSearchResults.sort(null);
-                    }else{
-                    	
-                    	//TODO show alert "no search results"
-                    }
-                    
+                    if(rawSearchResults != null && !rawSearchResults.isEmpty()){
+                        rawSearchResults.sort(null); //What this one is doing?
 
-                    Platform.runLater(() -> {
-                        _searchResultsListView.getStyleClass().remove(PROGRESS);
-                        _searchResultsListView.setItems(FXCollections.observableArrayList(rawSearchResults));
-                        _searchResultsListView.requestFocus();
-                        _searchResultsListView.getSelectionModel().select(0);
-                        _searchResultsListView.getFocusModel().focus(0);
-                    });
+                        Platform.runLater(() -> {
+                            _searchResultsListView.getStyleClass().remove(PROGRESS);
+                            _searchResultsListView.setItems(FXCollections.observableArrayList(rawSearchResults));
+                            _searchResultsListView.requestFocus();
+                            _searchResultsListView.getSelectionModel().select(0);
+                            _searchResultsListView.getFocusModel().focus(0);
+                        });
+
+                    }else{
+                        Platform.runLater(() -> {
+                            GUIHelper.showAlert(
+                                Alert.AlertType.INFORMATION,
+                                NO_RESULTS_TITLE,
+                                null,
+                                NO_RESULTS_CONTEXT
+                            );
+
+                            _searchResultsListView.getItems().clear();
+                            _searchResultsListView.getStyleClass().remove(PROGRESS);
+                            _searchResultsListView.requestFocus();
+                            _searchResultsListView.getSelectionModel().select(0);
+                            _searchResultsListView.getFocusModel().focus(0);
+                        });
+                    }
 
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
                     LOGGER.error("Error occurs while searching.", e);

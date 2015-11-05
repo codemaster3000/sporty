@@ -41,16 +41,17 @@ public class MainViewController extends JfxController {
             Platform.runLater(() -> _borderPanel.setLeft(node));
 
         }).start();
+
+        openNewMemberView(false);
+        openNewTeamView(false);
     }
-	
-	@FXML
-	public void openNewMemberView() {
-        openView(MEMBER_TAB_CAPTION, null, MemberViewController.class);
+
+	private void openNewMemberView(boolean closable) {
+        openView(MEMBER_TAB_CAPTION, closable, null, MemberViewController.class);
 	}
 
-    @FXML
-    public void openNewTeamView() {
-        openView(TEAM_TAB_CAPTION, null, TeamViewController.class);
+    private void openNewTeamView(boolean closable) {
+        openView(TEAM_TAB_CAPTION, closable, null, TeamViewController.class);
     }
 
     private void delegateToMemberTarget(MemberDTO dto) {
@@ -60,14 +61,17 @@ public class MainViewController extends JfxController {
             IJfxController controller = CONTROLLER_TO_TAB_MAP.get(activeTab);
             if (controller != null) {
                 controller.displayDTO(dto);
-            } else {
-                //Default action if no tabs are selected or no tabs are available.
-                openView(MEMBER_TAB_CAPTION, dto, MemberViewController.class);
             }
+
+            //TODO reactivate when there will be more than 2 views;
+//            else {
+//                //Default action if no tabs are selected or no tabs are available.
+//                openView(MEMBER_TAB_CAPTION, false, dto, MemberViewController.class);
+//            }
         }
     }
 
-    public void openView(String viewCaption, IDTO idto, Class<? extends IJfxController> controllerClass) {
+    public void openView(String viewCaption, boolean closable,  IDTO idto, Class<? extends IJfxController> controllerClass) {
         new Thread(() -> {
 
             ViewLoader<? extends IJfxController> viewLoader = ViewLoader.loadView(controllerClass);
@@ -77,29 +81,17 @@ public class MainViewController extends JfxController {
             //check if need to load a dto
             if (idto != null) controller.displayDTO(idto);
 
-            openNewTab(viewCaption, node, controller);
+            openNewTab(viewCaption, closable,  node, controller);
 
         }).start();
     }
 
-    private void openNewTab(String tabName, Node node, IJfxController controller) {
+    private void openNewTab(String tabName, boolean closable, Node node, IJfxController controller) {
         new Thread(() -> {
             Tab t = new Tab();
             t.setText(tabName);
             t.setContent(node);
-            t.setClosable(true);
-
-            //assigning dispose function
-            controller.setDisposeFunction(disposableController -> {
-                Tab disposableTab = TAB_TO_CONTROLLER_MAP.get(disposableController);
-                if (disposableTab != null) {
-                    _tabPanel.getTabs().remove(disposableTab);
-                    CONTROLLER_TO_TAB_MAP.remove(disposableTab);
-                }
-
-                //FIXME  check with debug tool amount of instances of controller in map
-//                TAB_TO_CONTROLLER_MAP.remove(disposableController);
-            });
+            t.setClosable(closable);
 
             //registering bidirectional relation from tab to controller
             TAB_TO_CONTROLLER_MAP.put(controller, t);

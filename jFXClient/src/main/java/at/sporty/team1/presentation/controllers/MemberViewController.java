@@ -133,7 +133,7 @@ public class MemberViewController extends JfxController {
 
                 GUIHelper.showSuccessAlert(SUCCESSFUL_MEMBER_SAVE);
 
-                //Logging and closing the tab
+                //Logging and cleaning the tab
                 LOGGER.info("Member \"{} {}\" was successfully saved.", fName, lName);
                 dispose();
 
@@ -178,5 +178,18 @@ public class MemberViewController extends JfxController {
         }
 
         return true;
+    }
+
+    @Override
+    public void dispose() {
+        fNameTextField.clear();
+        lNameTextField.clear();
+        birthTextField.clear();
+        emailTextField.clear();
+        phoneTextField.clear();
+        sportComboBox.getSelectionModel().clearSelection();
+        addressTextField.clear();
+        radioGenderFemale.setSelected(false);
+        radioGenderMale.setSelected(false);
     }
 }

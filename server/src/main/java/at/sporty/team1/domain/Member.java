@@ -30,7 +30,7 @@ public class Member implements IMember {
     @Override
     @Id
     @GeneratedValue
-    @Column(name = "memberId", unique=true, nullable=false)
+    @Column(name = "memberId")
     public Integer getMemberId() {
         return memberId;
     }
