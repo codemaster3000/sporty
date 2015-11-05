@@ -1,10 +1,7 @@
 package at.sporty.team1.presentation;
 
-import at.sporty.team1.presentation.controllers.SearchResultViewController;
-import at.sporty.team1.presentation.controllers.TeamViewController;
+import at.sporty.team1.presentation.controllers.*;
 import at.sporty.team1.presentation.controllers.core.IJfxController;
-import at.sporty.team1.presentation.controllers.MainViewController;
-import at.sporty.team1.presentation.controllers.MemberViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 
@@ -32,6 +29,7 @@ public class ViewLoader<T extends IJfxController> {
 		_viewPaths.put(MemberViewController.class, "/at/sporty/team1/presentation/views/NewMemberView.fxml");
 		_viewPaths.put(TeamViewController.class, "/at/sporty/team1/presentation/views/TeamView.fxml");
 		_viewPaths.put(SearchResultViewController.class, "/at/sporty/team1/presentation/views/SearchResultView.fxml");
+		_viewPaths.put(TestViewController.class, "/at/sporty/team1/presentation/views/TestView.fxml");
 	}
 
 	private FXMLLoader _loader;
