@@ -176,6 +176,13 @@ public class MemberViewController extends JfxController {
 
             return false;
         }
+        
+        if (address == null) {
+            GUIHelper.highlightNotValidTextField(addressTextField);
+            GUIHelper.showValidationAlert("Please fill in Address.");
+
+            return false;
+        }
 
         if (address == null) {
             GUIHelper.showValidationAlert("Please fill in Address field.");
