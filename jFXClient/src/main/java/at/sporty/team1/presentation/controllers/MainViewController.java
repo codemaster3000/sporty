@@ -65,6 +65,7 @@ public class MainViewController extends JfxController {
         //Opening un-closable tabs
         openMemberView(false);
         openTeamView(false);
+        openNewTab("TEST", true, null, TestViewController.class);
     }
 
     @FXML
