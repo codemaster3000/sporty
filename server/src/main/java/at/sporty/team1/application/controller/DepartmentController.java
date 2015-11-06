@@ -2,7 +2,7 @@ package at.sporty.team1.application.controller;
 
 import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.readonly.IRDepartment;
-import at.sporty.team1.misc.DataType;
+import at.sporty.team1.rmi.exceptions.DataType;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.IDepartmentController;
@@ -47,8 +47,8 @@ public class DepartmentController extends UnicastRemoteObject implements  IDepar
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
 
-        //TODO check IDs?
-        if (inputSanitizer.check(departmentDTO.getSport(), DataType.TEXT))
+        //TODO isValid IDs?
+        if (inputSanitizer.isValid(departmentDTO.getSport(), DataType.TEXT))
         {
 
             try {

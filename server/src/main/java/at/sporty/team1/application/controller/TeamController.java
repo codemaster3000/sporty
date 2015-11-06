@@ -1,8 +1,7 @@
 package at.sporty.team1.application.controller;
 
 import at.sporty.team1.domain.Team;
-import at.sporty.team1.domain.readonly.IRTeam;
-import at.sporty.team1.misc.DataType;
+import at.sporty.team1.rmi.exceptions.DataType;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.ITeamController;
@@ -10,6 +9,8 @@ import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dozer.DozerBeanMapper;
+import org.dozer.Mapper;
 
 import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;
@@ -21,11 +22,11 @@ import java.rmi.server.UnicastRemoteObject;
 public class TeamController extends UnicastRemoteObject implements ITeamController{
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final Mapper MAPPER = new DozerBeanMapper();
 
     public TeamController() throws RemoteException {
         super();
     }
-
 
     @Override
     public void createOrSaveTeam(TeamDTO teamDTO)
@@ -37,12 +38,12 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
         InputSanitizer inputSanitizer = new InputSanitizer();
 
         //TODO further validation
-        if (inputSanitizer.check(teamDTO.getTeamName(), DataType.TEXT)) {
+        if (inputSanitizer.isValid(teamDTO.getTeamName(), DataType.TEXT)) {
 
             try {
 	             /* pulling a TeamDAO and save the Team */
                 PersistenceFacade.getNewTeamDAO().saveOrUpdate(
-                        convertDTOToTeam(teamDTO)
+                    MAPPER.map(teamDTO, Team.class)
                 );
 
                 LOGGER.info("Team \"{}\" was successfully saved.", teamDTO.getTeamName());
@@ -61,47 +62,5 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
 
             throw validationException;
         }
-    }
-
-
-    /**
-     * A helping method, converts all Team objects to TeamDTO.
-     *
-     * @param team Team to be converted to a TeamDTO
-     * @return TeamDTO representation of the given Team.
-     */
-    private static TeamDTO convertTeamToDTO (IRTeam team){
-        if (team != null) {
-            return new TeamDTO()
-                .setTeamId(team.getTeamId())
-                .setTrainerId(team.getTrainer().getMemberId())
-                .setDepartmentId(team.getDepartment().getDepartmentId())
-//                .setLeagueId(team.getLeague().getLeagueID())
-                .setTeamName(team.getTeamName());
-//                .setMemberList(List<Member> memberList);
-        }
-        return null;
-    }
-
-    /**
-     * A helping method, converts all TeamDTO to Team objects.
-     *
-     * @param teamDTO TeamDTO to be converted to a Team
-     * @return Team representation of the given TeamDTO.
-     */
-    private static Team convertDTOToTeam (TeamDTO teamDTO){
-        if (teamDTO != null) {
-            Team team = new Team();
-
-            team.setTeamId(teamDTO.getTeamId());
-//            team.setTrainer(teamDTO.getTrainerId());
-//            team.setDepartment(teamDTO.getDepartmentId());
-//            team.setLeague(teamDTO.getLeagueId());
-            team.setTeamName(teamDTO.getTeamName());
-//            team.setMemberList(teamDTO.getMemberList());
-
-            return team;
-        }
-        return null;
     }
 }

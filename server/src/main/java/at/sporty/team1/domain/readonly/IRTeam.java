@@ -12,7 +12,7 @@ public interface IRTeam {
 
     Member getTrainer();
 
-    Department getDepartment();
+//    Department getDepartment();
 
 //    League getLeagueId();
 

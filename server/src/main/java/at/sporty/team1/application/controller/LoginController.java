@@ -52,8 +52,8 @@ public class LoginController {
 //        InputSanitizer sanitizer = new InputSanitizer();
 //
 //        if (!username.equals("") && !password.equals("") &&
-//                sanitizer.check(username, InputSanitizer.DataType.username)
-//                && sanitizer.check(password, InputSanitizer.DataType.password)) {
+//                sanitizer.isValid(username, InputSanitizer.DataType.username)
+//                && sanitizer.isValid(password, InputSanitizer.DataType.password)) {
 
             LOGGER.info("Login by: " + username);
 

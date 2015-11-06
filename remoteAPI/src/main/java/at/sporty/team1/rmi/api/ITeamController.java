@@ -11,5 +11,7 @@ import java.rmi.RemoteException;
  * Created by sereGkaluv on 02-Nov-15.
  */
 public interface ITeamController extends Remote, Serializable {
+
+
     void createOrSaveTeam(TeamDTO teamDTO) throws RemoteException, ValidationException;
 }

@@ -1,5 +1,6 @@
 package at.sporty.team1.domain.interfaces;
 
+import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.readonly.IRTeam;
 
@@ -12,11 +13,11 @@ public interface ITeam extends IRTeam {
     
     void setTeamId(Integer teamId);
 
-    void setTrainerId(Integer trainerId);
+    void setTrainer(Member trainer);
 
-    void setDepartmentId(Integer departmentId);
+//    void setDepartment(Department department);
 
-    void setLeagueId(Integer leagueId);
+//    void setLeagueId(Integer leagueId);
 
     void setTeamName(String teamName);
 

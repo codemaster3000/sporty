@@ -1,10 +1,12 @@
 package server;
 
+import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.junit.Assert;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,24 +26,13 @@ public class SearchMemberTest {
 	 */
 	@Test
 	public void searchMemberTest_1() {
-		
+
 		String searchString = "Claudia";
-		MemberController mem = null;
-		List<MemberDTO> members = new ArrayList<>();
-		
-		try {
-			mem = new MemberController();
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			members = mem.searchMembersByNameString(searchString);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-		
+		List<MemberDTO> members = testSearchMember(searchString);
+
+		Assert.assertNotNull(members);
 		Assert.assertEquals(1, members.size());
+
 	}
 	
 	/**
@@ -49,49 +40,45 @@ public class SearchMemberTest {
 	 */
 	@Test
 	public void searchMemberTest_2() {
-		
+
 		String searchString = "Field";
-		MemberController mem = null;
-		List<MemberDTO> members = new ArrayList<>();
-		
-		try {
-			mem = new MemberController();
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			members = mem.searchMembersByNameString(searchString);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-		
+		List<MemberDTO> members = testSearchMember(searchString);
+
+		Assert.assertNotNull(members);
 		Assert.assertEquals(1, members.size());
+
 	}
 	
 	/**
-	 * One Member found with bDay Field
+	 * One Member found with bDay 2001-01-01
 	 */
 	@Test
 	public void searchMemberTest_3() {
-		
+
 		String searchString = "2001-01-01";
-		MemberController mem = null;
-		List<MemberDTO> members = new ArrayList<>();
-		
+		List<MemberDTO> members = null;
+
 		try {
-			mem = new MemberController();
-		} catch (RemoteException e) {
+			MemberController mem = new MemberController();
+			members = mem.searchMembersByDateOfBirth(searchString);
+		} catch (RemoteException | ValidationException e) {
 			e.printStackTrace();
 		}
-		
-		try {
-			members = mem.searchMembersByNameString(searchString);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-		
-		Assert.assertEquals(1, members.size());
+
+		Assert.assertNotNull(members);
+		Assert.assertTrue(members.size() > 0);
+
 	}
 
+	private List<MemberDTO> testSearchMember(String searchString){
+
+		try {
+			MemberController mem = new MemberController();
+			return mem.searchMembersByNameString(searchString);
+		} catch (RemoteException | ValidationException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
 }

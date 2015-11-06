@@ -44,17 +44,17 @@ public class Team implements ITeam {
         this.trainer = trainer;
     }
 
-    @Override
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "departmentId")
-    public Department getDepartment() {
-        return department;
-    }
-
-    @Override
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
+//    @Override
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "departmentId")
+//    public Department getDepartment() {
+//        return department;
+//    }
+//
+//    @Override
+//    public void setDepartment(Department department) {
+//        this.department = department;
+//    }
 
     //TODO League table in db
 //    @Override

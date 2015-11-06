@@ -1,35 +1,30 @@
 package at.sporty.team1.persistence.daos;
 
+import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Team;
-import org.hibernate.criterion.Criterion;
+import at.sporty.team1.persistence.api.ITeamDAO;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
+import javax.persistence.PersistenceException;
 import java.util.List;
 
 /**
  * Represents a DAO for Team
  */
-public class TeamDAO extends HibernateGenericDAO<Team> {
+public class TeamDAO extends HibernateGenericDAO<Team> implements ITeamDAO {
+
+    private static final String PROP_TEAM_NAME = "teamName";
+
     /**
-     * Constructor
+     * Creates a new team DAO.
      */
     public TeamDAO() {
         super(Team.class);
     }
 
-    /**
-     * get Team(s) by Name-Search
-     * @param name name of the team to be searched
-     *
-     * @return List<Team>
-     */
-    public List<Team> getTeamByName(String name) {
-        Criterion criterion;
-
-        criterion = Restrictions.or(Restrictions.like("teamname", name, MatchMode.ANYWHERE));
-
-        return super.findByCriteria(criterion);
+    @Override
+    public List<Team> findTeamsByName(String teamName) throws PersistenceException {
+        return findByCriteria(Restrictions.or(Restrictions.like(PROP_TEAM_NAME, teamName, MatchMode.ANYWHERE)));
     }
-
 }

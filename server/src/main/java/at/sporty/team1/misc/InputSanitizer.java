@@ -1,5 +1,6 @@
 package at.sporty.team1.misc;
 
+import at.sporty.team1.rmi.exceptions.DataType;
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.RegularExpression;
 
 import java.util.regex.PatternSyntaxException;
@@ -21,7 +22,7 @@ public class InputSanitizer {
      * @return Boolean True if matched, false if not
      * @throws PatternSyntaxException
      *********************************************************************************/
-    public boolean check(String value, DataType type) throws PatternSyntaxException {
+    public boolean isValid(String value, DataType type) throws PatternSyntaxException {
 
         switch (type) {
 

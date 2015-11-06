@@ -1,8 +1,7 @@
-package at.sporty.team1.misc;
+package at.sporty.team1.rmi.exceptions;
 
 public enum DataType {
     USERNAME,
-    EXACT_DATE,
     DAY_DATE,
     SQL_DATE,
     NAME,
@@ -17,5 +16,4 @@ public enum DataType {
     ADDRESS,
     GENDER,
     STREET_NUMBER
-
 }

@@ -7,6 +7,8 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.PersistenceException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,8 +22,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
     private static final String PROP_FIRST_NAME = "firstName";
     private static final String PROP_LAST_NAME = "lastName";
     private static final String PROP_DATE_OF_BIRTH = "dateOfBirth";
-    private static final String PROP_DEPARTMENT_ID = "departmentId";
-    private static final String PROP_TEAM_ID = "teamId";
+    private static final String PROP_TEAM_NAME = "teamId";
     private static final String DELIMITER = " ";
 
     /**
@@ -85,16 +86,15 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
 
     @Override
     public List<Member> findByDateOfBirth(String dateOfBirth) throws PersistenceException {
-        return findByCriteria(Restrictions.like(PROP_DATE_OF_BIRTH, dateOfBirth, MatchMode.ANYWHERE));
+        Date date = Date.valueOf(dateOfBirth);
+
+        return findByCriteria(Restrictions.eq(PROP_DATE_OF_BIRTH, date));
     }
 
     @Override
-    public List<Member> findByDepartmentId(String departmentId) throws PersistenceException {
-        return findByCriteria(Restrictions.like(PROP_DEPARTMENT_ID, departmentId, MatchMode.ANYWHERE));
-    }
+    public List<Member> findByTeamName(String teamName) throws PersistenceException {
+        String searchString = Util.wrapInWildcard(teamName);
 
-    @Override
-    public List<Member> findByTeamId(String teamId) throws PersistenceException {
-        return findByCriteria(Restrictions.like(PROP_TEAM_ID, teamId, MatchMode.ANYWHERE));
+        return findByCriteria(Restrictions.like(PROP_TEAM_NAME, searchString, MatchMode.ANYWHERE));
     }
 }
