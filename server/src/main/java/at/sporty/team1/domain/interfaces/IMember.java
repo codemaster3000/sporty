@@ -30,5 +30,5 @@ public interface IMember extends IRMember {
 
     void setUsername(String username);
 
-    void setIsFeePayed(Boolean feePayed);
+    void setIsFeePaid(Boolean isFeePaid);
 }

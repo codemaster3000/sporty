@@ -20,7 +20,7 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
         _domainClass = domainClass;
     }
 
-    @SuppressWarnings("unchecked") //NON Generic Hibernate Criteria.
+    @SuppressWarnings("unchecked") //NON Generic Hibernate method.
     @Override
     public List<T> findAll() throws PersistenceException {
         try {
@@ -32,7 +32,7 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
         }
     }
 
-    @SuppressWarnings("unchecked") //NON Generic Hibernate Criteria.
+    @SuppressWarnings("unchecked") //NON Generic Hibernate method.
     @Override
     public List<T> findByCriteria(Criterion... criterion) throws PersistenceException {
         return (List<T>) HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
@@ -49,7 +49,7 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
         return findByHQL(hql, null);
     }
 
-    @SuppressWarnings("unchecked") //NON Generic Hibernate Criteria.
+    @SuppressWarnings("unchecked") //NON Generic Hibernate method.
     @Override
     public List<T> findByHQL(String hql, Map<?, ?> map) {
         return (List<T>) HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
@@ -61,13 +61,19 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
         });
     }
 
-    @SuppressWarnings("unchecked") //NON Generic Hibernate Criteria.
+    @SuppressWarnings("unchecked") //NON Generic Hibernate method.
     @Override
     public T findById(Serializable id) throws PersistenceException {
         try {
-            return HibernateSessionUtil.getInstance().makeSimpleTransaction(session ->
+            List<T> results = (List<T>) HibernateSessionUtil.getInstance().makeSimpleTransaction(session ->
                 (T) session.get(_domainClass, id)
             );
+
+            if (results != null && results.size() == 1) {
+                return results.get(0);
+            }
+            throw new PersistenceException("Many results in find by id. (" + id + ")");
+
         } catch (HibernateException e) {
             throw new PersistenceException(e);
         }

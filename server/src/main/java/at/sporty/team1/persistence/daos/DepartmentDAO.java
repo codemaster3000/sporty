@@ -42,6 +42,7 @@ public class DepartmentDAO extends HibernateGenericDAO<Department> {
      * @return Department
      */
     public Department findById(Integer id) {
+        //rly?
         return super.findById(id);
     }
 

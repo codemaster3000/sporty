@@ -25,7 +25,7 @@ public class Member implements IMember {
     private String squad;
     private String role;
     private String username;
-    private Boolean isFeePayed;
+    private Boolean isFeePaid;
 
     @Override
     @Id
@@ -40,15 +40,15 @@ public class Member implements IMember {
         this.memberId = memberId;
     }
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "teamId")
-    public List<Team> getTeams() {
-        return teamList;
-    }
-
-    public void setTeams(List<Team> teamList) {
-        this.teamList = teamList;
-    }
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "teamId")
+//    public List<Team> getTeams() {
+//        return teamList;
+//    }
+//
+//    public void setTeams(List<Team> teamList) {
+//        this.teamList = teamList;
+//    }
 
     @Override
     @Basic
@@ -159,14 +159,12 @@ public class Member implements IMember {
         this.username = username;
     }
 
-    @Override
     @Basic
-    @Column(name = "isFeePayed")
-    public Boolean getIsFeePayed() { return isFeePayed;}
+    @Column(name = "isFeePaid")
+    public Boolean getIsFeePaid() { return isFeePaid;}
 
-    @Override
-    public void setIsFeePayed(Boolean feePayed) {
-        this.isFeePayed = feePayed;
+    public void setIsFeePaid(Boolean isFeePaid) {
+        this.isFeePaid = isFeePaid;
     }
 
     @Override
@@ -186,7 +184,7 @@ public class Member implements IMember {
         if (squad != null ? !squad.equals(member.squad) : member.squad != null) return false;
         if (role != null ? !role.equals(member.role) : member.role != null) return false;
         if (username != null ? !username.equals(member.username) : member.username != null) return false;
-        if (isFeePayed != null ? isFeePayed.equals(member.isFeePayed) : member.isFeePayed != null) return false;
+        if (isFeePaid != null ? isFeePaid.equals(member.isFeePaid) : member.isFeePaid != null) return false;
         return true;
     }
 
@@ -202,7 +200,7 @@ public class Member implements IMember {
         result = 31 * result + (squad != null ? squad.hashCode() : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
         result = 31 * result + (username != null ? username.hashCode() : 0);
-        result = 31 * result + (isFeePayed != null ? isFeePayed.hashCode() : 0);
+        result = 31 * result + (isFeePaid != null ? isFeePaid.hashCode() : 0);
         return result;
     }
 }

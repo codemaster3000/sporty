@@ -80,7 +80,7 @@ public class MainViewController extends JfxController {
                 try {
 
                     IMemberController memberController = CommunicationFacade.lookupForMemberController();
-                    List<MemberDTO> rawSearchResults = memberController.searchForMembers(searchQuery);
+                    List<MemberDTO> rawSearchResults = memberController.searchMembersByNameString(searchQuery);
 
                     if(rawSearchResults != null && !rawSearchResults.isEmpty()){
 

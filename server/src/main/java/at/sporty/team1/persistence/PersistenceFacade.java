@@ -24,9 +24,9 @@ public class PersistenceFacade {
     /**
      * Returns an implementation of the MemberDAO interface providing
      * further operations with memberList.
-     * @return an instance of MemberDAO
+     * @return an instance of IMemberDAO
      */
-    public static MemberDAO getNewMemberDAO() {
+    public static IMemberDAO getNewMemberDAO() {
         return new MemberDAO();
     }
 

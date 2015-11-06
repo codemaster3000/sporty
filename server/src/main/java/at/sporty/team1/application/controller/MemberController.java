@@ -1,10 +1,8 @@
 package at.sporty.team1.application.controller;
 
 
-import at.sporty.team1.domain.Gender;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IMember;
-import at.sporty.team1.domain.readonly.IRMember;
 import at.sporty.team1.misc.DataType;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
@@ -13,12 +11,12 @@ import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dozer.DozerBeanMapper;
+import org.dozer.Mapper;
 
 import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.sql.Date;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +26,7 @@ import java.util.stream.Collectors;
 public class MemberController extends UnicastRemoteObject implements IMemberController {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LogManager.getLogger();
+    private static final Mapper MAPPER = new DozerBeanMapper();
 
     public MemberController() throws RemoteException {
         super();
@@ -53,7 +52,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 	    	 try {
 	             /* pulling a MemberDAO and save the Member */
 	             PersistenceFacade.getNewMemberDAO().saveOrUpdate(
-	                 convertDTOToMember(memberDTO)
+                     MAPPER.map(memberDTO, Member.class)
 	             );
 	
 	             LOGGER.info("Member \"{} {}\" was successfully saved.", memberDTO.getFirstName(), memberDTO.getLastName());
@@ -75,134 +74,35 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public MemberDTO loadMemberById(int memberId)
-    throws RemoteException {
-        //TODO DAO always returns LIST of member, not a single member !
-        return convertMemberToDTO(PersistenceFacade.getNewMemberDAO().findById(memberId));
-    }
-
-    /**
-     * Search for memberList by String (name, birthdate, department, teamname)
-     *
-     * @param searchQuery
-     *
-     * @return null or List<IMember>
-     * @throws RemoteException
-     */
-    @Override
-    public List<MemberDTO> searchForMembers(String searchQuery)
+    public List<MemberDTO> searchMembersByNameString(String searchString)
     throws RemoteException {
         try {
-            List<? extends IMember> rawSearchResultsList = PersistenceFacade.getNewMemberDAO().findByString(searchQuery);
+            List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByNameString(searchString);
 
             //Converting results to MemberDTO
-            return rawSearchResultsList.stream()
-                    .map(MemberController::convertMemberToDTO)
+            return rawResults.stream()
+                    .map(member -> MAPPER.map(member, MemberDTO.class))
                     .collect(Collectors.toList());
         } catch (PersistenceException e) {
-            LOGGER.error("An error occurs while searching for \"{}\".", searchQuery, e);
+            LOGGER.error("An error occurs while searching for \"{}\".", searchString, e);
             return null;
         }
     }
 
-    public void delete(MemberDTO memberDTO) throws SQLException {
-        //TODO test
-        PersistenceFacade.getNewMemberDAO().delete(convertDTOToMember(memberDTO));
-    }
-
-    /**
-     * A helping method, converts all Member objects to MemberDTO.
-     *
-     * @param member Member to be converted to a MemberDTO
-     * @return MemberDTO representation of the given Member.
-     */
-    private static MemberDTO convertMemberToDTO (IRMember member){
-        if (member != null) {
-            return new MemberDTO()
-                .setMemberId(member.getMemberId())
-                .setFirstName(member.getFirstName())
-                .setLastName(member.getLastName())
-                .setGender(member.getGender().toString())
-                .setDateOfBirth(convertDateToString(member.getDateOfBirth()))
-                .setEmail(member.getEmail())
-                .setAddress(member.getAddress())
-                    //TODO
-//                .setDepartmentId(member.getDepartment())
-//                .setTeamIds(member.getTeams())
-                .setSquad(member.getSquad())
-                .setRole(member.getRole())
-                .setUsername(member.getUsername());
+    @Override
+    public void deleteMember(MemberDTO memberDTO)
+    throws RemoteException {
+        try {
+            PersistenceFacade.getNewMemberDAO().delete(
+                MAPPER.map(memberDTO, Member.class)
+            );
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurs while deleting member \"{}\".",
+                memberDTO.getFirstName(),
+                memberDTO.getLastName(),
+                e
+            );
         }
-        return null;
-    }
-
-    /**
-     * A helping method, converts all MemberDTO to Member objects.
-     *
-     * @param memberDTO MemberDTO to be converted to a Member
-     * @return Member representation of the given MemberDTO.
-     */
-    private static Member convertDTOToMember (MemberDTO memberDTO){
-        if (memberDTO != null) {
-            Member member = new Member();
-
-            member.setMemberId(memberDTO.getMemberId());
-            member.setFirstName(memberDTO.getFirstName());
-            member.setLastName(memberDTO.getLastName());
-            member.setGender(parseGender(memberDTO.getGender()));
-            member.setDateOfBirth(parseDate(memberDTO.getDateOfBirth()));
-            member.setEmail(memberDTO.getEmail());
-            member.setAddress(memberDTO.getAddress());
-
-            //TODO
-//            member.setDepartmentId(memberDTO.getDepartmentId());
-//            member.setTeamId(memberDTO.getTeamId());
-            member.setSquad(memberDTO.getSquad());
-            member.setRole(memberDTO.getRole());
-            member.setUsername(memberDTO.getUsername());
-
-            //FIXME: add method to DTO
-            member.setIsFeePayed(false);
-
-            return member;
-        }
-        return null;
-    }
-
-    /**
-     * A helping method.
-     *
-     * @param gender String to be parsed as a Gender
-     * @return parsed gender
-     */
-    private static Gender parseGender(String gender) {
-        if (gender != null && !gender.isEmpty() && gender.length() == 1) {
-            try {
-                return Gender.valueOf(gender.trim().toUpperCase());
-            } catch (IllegalArgumentException e) {
-                LOGGER.error("Error occurs while parsing gender.", e);
-            }
-        }
-        return null;
-    }
-
-    /**
-     * A helping method.
-     *
-     * @param s String to be parsed as a date
-     * @return parsed date
-     */
-    private static Date parseDate(String s) {
-        return s != null ? Date.valueOf(s) : null;
-    }
-
-    /**
-     * A helping method.
-     *
-     * @param d Date to be converted to String
-     * @return converted date
-     */
-    private static String convertDateToString(Date d) {
-        return d != null ? d.toString() : null;
     }
 }

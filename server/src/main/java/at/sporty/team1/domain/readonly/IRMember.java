@@ -29,5 +29,5 @@ public interface IRMember {
 
     String getUsername();
 
-    Boolean getIsFeePayed();
+    Boolean getIsFeePaid();
 }

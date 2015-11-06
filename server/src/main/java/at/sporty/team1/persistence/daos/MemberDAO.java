@@ -1,19 +1,29 @@
 package at.sporty.team1.persistence.daos;
 
 import at.sporty.team1.domain.Member;
-import at.sporty.team1.domain.Team;
-import org.hibernate.criterion.Criterion;
+import at.sporty.team1.persistence.Util;
+import at.sporty.team1.persistence.api.IMemberDAO;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.PersistenceException;
-import java.sql.SQLException;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a concrete DAO for Members
  */
-public class MemberDAO extends HibernateGenericDAO<Member> {
+public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO {
+
+    private static final String PROP_FIRST_NAME = "firstName";
+    private static final String PROP_LAST_NAME = "lastName";
+    private static final String PROP_DATE_OF_BIRTH = "dateOfBirth";
+    private static final String PROP_DEPARTMENT_ID = "departmentId";
+    private static final String PROP_TEAM_ID = "teamId";
+    private static final String DELIMITER = " ";
+
     /**
      * Creates a new patient DAO.
      */
@@ -21,144 +31,70 @@ public class MemberDAO extends HibernateGenericDAO<Member> {
         super(Member.class);
     }
 
-    /**
-     * Find member by name.
-     *
-     * @param name          The name (firstname or lastname).
-     * @param caseSensitive True if search should be case sensitive.
-     * @return The found member.
-     */
-    public List<Member> findByName(String name, boolean caseSensitive) throws PersistenceException {
-        Criterion criterion;
-        if (caseSensitive) {
-            criterion = Restrictions.or(
-                    Restrictions.like("fname", name, MatchMode.EXACT),
-                    Restrictions.like("lname", name, MatchMode.EXACT));
-        } else {
-            criterion = Restrictions.or(
-                    Restrictions.like("fname", name, MatchMode.ANYWHERE),
-                    Restrictions.like("lname", name, MatchMode.ANYWHERE));
+    @Override
+    public List<Member> findByNameString(String searchString) throws PersistenceException {
+        //Set is used to avoid duplication
+        Set<Member> results = new LinkedHashSet<>();
+        String[] split = searchString.split(DELIMITER);
+
+        switch (split.length) {
+            case 1: {
+                //last or first name
+                results.addAll(findByFirstName(split[0]));
+                results.addAll(findByLastName(split[0]));
+
+                return new LinkedList<>(results);
+            }
+
+            case 2: {
+                //full name with first and last name
+                results.addAll(findByFullName(split[0], split[1]));
+                results.addAll(findByFullName(split[1], split[0]));
+
+                return new LinkedList<>(results);
+            }
+
+            default: return null;
         }
-
-        return super.findByCriteria(criterion);
     }
 
-    /**
-     * Find member with a given id.
-     *
-     * @param id            memberId
-     * @param caseSensitive True if search should be case sensitive.
-     * @return The list of found memberList.
-     */
-    public List<Member> findById(String id, boolean caseSensitive) throws PersistenceException {
-        Criterion criterion;
-        if (caseSensitive) {
-            criterion = Restrictions.like("memberId", id, MatchMode.EXACT);
-        } else {
-            criterion = Restrictions.like("memberId", id, MatchMode.ANYWHERE);
-        }
-        return super.findByCriteria(criterion);
-    }
-    // http://docs.jboss.org/hibernate/search/4.1/reference/en-US/html/search-query.html
+    @Override
+    public List<Member> findByFullName(String firstName, String lastName) throws PersistenceException {
+        String searchFirst = Util.wrapInWildcard(firstName);
+        String searchLast = Util.wrapInWildcard(lastName);
 
-    /**
-     * Find memberList by name or id.
-     *
-     * @param nameOrId      The name (firstname or lastname) or id.
-     * @param caseSensitive True if search should be case sensitive.
-     * @return The found memberList.
-     */
-    public List<Member> findByNameOrId(String nameOrId, boolean caseSensitive) throws PersistenceException {
-        Criterion criterion;
-        if (caseSensitive) {
-            criterion = Restrictions.or(
-                    Restrictions.like("fname", nameOrId, MatchMode.EXACT),
-                    Restrictions.like("lname", nameOrId, MatchMode.EXACT),
-                    Restrictions.like("memberId", nameOrId, MatchMode.EXACT));
-        } else {
-            criterion = Restrictions.or(
-                    Restrictions.like("fname", nameOrId, MatchMode.ANYWHERE),
-                    Restrictions.like("lname", nameOrId, MatchMode.ANYWHERE),
-                    Restrictions.like("memberId", nameOrId, MatchMode.ANYWHERE));
-        }
-
-        return super.findByCriteria(criterion);
+        return findByCriteria(Restrictions.and(
+            Restrictions.like(PROP_FIRST_NAME, searchFirst, MatchMode.ANYWHERE),
+            Restrictions.like(PROP_LAST_NAME, searchLast, MatchMode.ANYWHERE)
+        ));
     }
 
-    /**
-     * Find by arbitrary String
-     *
-     * @param string ...Name, Department, Birthdate, memberId
-     * @return List<Member>
-     * @throws PersistenceException
-     */
-    public List<Member> findByString(String string) throws PersistenceException {
-        Criterion criterion = Restrictions.or(
-                Restrictions.like("firstName", string, MatchMode.ANYWHERE),
-                Restrictions.like("lastName", string, MatchMode.ANYWHERE)
-//                Restrictions.like("team", string, MatchMode.ANYWHERE),
-//                Restrictions.like("department", string, MatchMode.ANYWHERE)
-        );
+    @Override
+    public List<Member> findByFirstName(String firstName) throws PersistenceException {
+        String searchString = Util.wrapInWildcard(firstName);
 
-        return super.findByCriteria(criterion);
+        return findByCriteria(Restrictions.like(PROP_FIRST_NAME, searchString));
     }
 
-    /**
-     * Find Member(s) by department.
-     *
-     * @param department
-     * @return List<Member>
-     * @throws PersistenceException
-     */
-    public List<Member> findByDepartment(String department) throws PersistenceException {
+    @Override
+    public List<Member> findByLastName(String lastName) throws PersistenceException {
+        String searchString = Util.wrapInWildcard(lastName);
 
-        Criterion criterion;
-        criterion = Restrictions.or(Restrictions.like("department", department, MatchMode.ANYWHERE));
-
-        return super.findByCriteria(criterion);
+        return findByCriteria(Restrictions.like(PROP_LAST_NAME, searchString));
     }
 
-    /**
-     * Find Member(s) by sport.
-     *
-     * @param sport
-     * @return List<Member>
-     * @throws PersistenceException
-     */
-    public List<Member> findBySport(String sport) throws PersistenceException {
-
-        Criterion criterion;
-        criterion = Restrictions.or(Restrictions.like("sport", sport, MatchMode.ANYWHERE));
-
-        return super.findByCriteria(criterion);
+    @Override
+    public List<Member> findByDateOfBirth(String dateOfBirth) throws PersistenceException {
+        return findByCriteria(Restrictions.like(PROP_DATE_OF_BIRTH, dateOfBirth, MatchMode.ANYWHERE));
     }
 
-    /**
-     * Find Member(s) by TeamId
-     *
-     * @param team Team
-     * @return List<Member>
-     * @throws PersistenceException TODO: Test!
-     */
-    public List<Member> findByTeam(Team team) throws PersistenceException {
-        Criterion criterion;
-
-        criterion = Restrictions.or(Restrictions.like("teamID", team.getTeamId().toString(), MatchMode.ANYWHERE));
-
-        return super.findByCriteria(criterion);
+    @Override
+    public List<Member> findByDepartmentId(String departmentId) throws PersistenceException {
+        return findByCriteria(Restrictions.like(PROP_DEPARTMENT_ID, departmentId, MatchMode.ANYWHERE));
     }
 
-    /**
-     * Find Member(s) by birthdate
-     *
-     * @param birthdate SQL_DATE format: yyy-mm-dd
-     * @return List<Member>
-     * @throws PersistenceException
-     */
-    public List<Member> findByBirthday(String birthdate) throws PersistenceException {
-        Criterion criterion;
-        criterion = Restrictions.or(Restrictions.like("dateOfBirth", birthdate, MatchMode.ANYWHERE));
-
-        return super.findByCriteria(criterion);
+    @Override
+    public List<Member> findByTeamId(String teamId) throws PersistenceException {
+        return findByCriteria(Restrictions.like(PROP_TEAM_ID, teamId, MatchMode.ANYWHERE));
     }
 }

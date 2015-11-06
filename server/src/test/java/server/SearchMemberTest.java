@@ -36,7 +36,7 @@ public class SearchMemberTest {
 		}
 		
 		try {
-			members = mem.searchForMembers(searchString);
+			members = mem.searchMembersByNameString(searchString);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -61,7 +61,7 @@ public class SearchMemberTest {
 		}
 		
 		try {
-			members = mem.searchForMembers(searchString);
+			members = mem.searchMembersByNameString(searchString);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -86,7 +86,7 @@ public class SearchMemberTest {
 		}
 		
 		try {
-			members = mem.searchForMembers(searchString);
+			members = mem.searchMembersByNameString(searchString);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}

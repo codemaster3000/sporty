@@ -18,7 +18,7 @@ public class MemberDTO implements IDTO {
     private String _squad;
     private String _role;
     private String _username;
-    private Boolean _isFeePayed;
+    private Boolean _isFeePaid;
 
     public MemberDTO() {
     }
@@ -131,9 +131,9 @@ public class MemberDTO implements IDTO {
         return this;
     }
 
-    public Boolean getIsFeePayed() { return _isFeePayed;}
+    public Boolean getIsFeePaid() { return _isFeePaid;}
 
-    public void setIsFeePayed(Boolean feePayed) {
-        _isFeePayed = feePayed;
+    public void setIsFeePaid(Boolean feePaid) {
+        _isFeePaid = feePaid;
     }
 }
