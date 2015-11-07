@@ -40,41 +40,28 @@ public class DepartmentController extends UnicastRemoteObject implements  IDepar
      */
     @Override
     public void createOrSaveDepartment(DepartmentDTO departmentDTO)
-            throws RemoteException, ValidationException {
+    throws RemoteException, ValidationException {
 
         if (departmentDTO == null) return;
 
-        /* Validating Input */
+        /* Validating Input */     //TODO isValid IDs?
         InputSanitizer inputSanitizer = new InputSanitizer();
-
-        //TODO isValid IDs?
-        if (inputSanitizer.isValid(departmentDTO.getSport(), DataType.TEXT))
-        {
-
-            try {
-                 /* pulling a DepartmentDAO and saving the Department */
-                PersistenceFacade.getNewGenericDAO(Department.class).saveOrUpdate(
-                        convertDTOToDepartment(departmentDTO)
-                );
-                //TODO
-                LOGGER.info("New Department \"{} {}\" was created.", departmentDTO.getSport(), departmentDTO.getDepartmentId());
-
-            } catch (PersistenceException e) {
-                LOGGER.error("Error occurs while communicating with DB.", e);
-            }
-
-
-        } else {
-            // There has been bad Input, throw the Exception
-            LOGGER.error("Wrong Input creating Department: {}", inputSanitizer.getLastFailedValidation());
-
-            ValidationException validationException = new ValidationException();
-            validationException.setReason(inputSanitizer.getLastFailedValidation());
-
-            throw validationException;
+        if (!inputSanitizer.isValid(departmentDTO.getSport(), DataType.TEXT)) {
+            throw inputSanitizer.getPreparedValidationException();
         }
 
+        /* Is valid, moving forward */
+        try {
+             /* pulling a DepartmentDAO and saving the Department */
+            PersistenceFacade.getNewGenericDAO(Department.class).saveOrUpdate(
+                    convertDTOToDepartment(departmentDTO)
+            );
+            //TODO
+            LOGGER.info("New Department \"{} {}\" was created.", departmentDTO.getSport(), departmentDTO.getDepartmentId());
 
+        } catch (PersistenceException e) {
+            LOGGER.error("Error occurs while communicating with DB.", e);
+        }
     }
 
 
@@ -83,7 +70,7 @@ public class DepartmentController extends UnicastRemoteObject implements  IDepar
      */
     @Override
     public DepartmentDTO loadDepartmentById(int departmentId)
-            throws RemoteException {
+    throws RemoteException {
         //TODO DAO always returns LIST of member, not a single member !
         return convertDepartmentToDTO(PersistenceFacade.getNewGenericDAO(Department.class).findById(departmentId));
     }
@@ -96,7 +83,7 @@ public class DepartmentController extends UnicastRemoteObject implements  IDepar
      */
     private static DepartmentDTO convertDepartmentToDTO(IRDepartment department) {
         if (department != null) {
-            //TODO
+            //TODO replace with Dozer mapping
 //            return new DepartmentDTO()
 //                    .setMemberId(department.getMemberId())
 //                    .setFirstName(department.getFirstName())

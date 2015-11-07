@@ -1,7 +1,10 @@
 package at.sporty.team1.misc;
 
 import at.sporty.team1.rmi.exceptions.DataType;
+import at.sporty.team1.rmi.exceptions.ValidationException;
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.RegularExpression;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.regex.PatternSyntaxException;
 
@@ -9,9 +12,20 @@ import java.util.regex.PatternSyntaxException;
  * Validation class evaluates different InputForm types.
  */
 public class InputSanitizer {
+    private static final Logger LOGGER = LogManager.getLogger();
     private static DataType lastFailedValidation;
 
     public InputSanitizer() {
+    }
+
+    /**
+     * Checks if a given String value matches is null or not.
+     *
+     * @param value the value that needs to be tested
+     * @return Boolean true if matched, false if not
+     */
+    public boolean isNull(String value) {
+        return value == null;
     }
 
     /**
@@ -19,9 +33,9 @@ public class InputSanitizer {
      *
      * @param value the value that needs to be tested
      * @param type  the Type of Format that shall be matched
-     * @return Boolean True if matched, false if not
+     * @return Boolean true if matched, false if not
      * @throws PatternSyntaxException
-     *********************************************************************************/
+     */
     public boolean isValid(String value, DataType type) throws PatternSyntaxException {
 
         switch (type) {
@@ -130,11 +144,17 @@ public class InputSanitizer {
         }
     }
 
-    public String getLastFailedValidation() {
-        return lastFailedValidation.name();
-    }
+    /**
+     * Prepares ValidationException with exception reason.
+     *
+     * @return ValidationException prepared ValidationException
+     */
+    public ValidationException getPreparedValidationException() {
+        LOGGER.error("Wrong input detected: {}", lastFailedValidation.name());
 
-    public boolean isNull(String value) {
-       return value == null;
+        ValidationException validationException = new ValidationException();
+        validationException.setReason(lastFailedValidation.name());
+
+        return validationException;
     }
 }

@@ -34,33 +34,24 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
 
         if (teamDTO == null) return;
 
-        /* Validating Input */
+        /* Validating Input */   //TODO further validation
         InputSanitizer inputSanitizer = new InputSanitizer();
-
-        //TODO further validation
-        if (inputSanitizer.isValid(teamDTO.getTeamName(), DataType.TEXT)) {
-
-            try {
-	             /* pulling a TeamDAO and save the Team */
-                PersistenceFacade.getNewTeamDAO().saveOrUpdate(
-                    MAPPER.map(teamDTO, Team.class)
-                );
-
-                LOGGER.info("Team \"{}\" was successfully saved.", teamDTO.getTeamName());
-
-            } catch (PersistenceException e) {
-                LOGGER.error("Error occurs while communicating with DB.", e);
-            }
-
-
-        } else {
+        if (!inputSanitizer.isValid(teamDTO.getTeamName(), DataType.TEXT)) {
             // There has been bad Input, throw the Exception
-            LOGGER.error("Wrong Input creating Team: {}", inputSanitizer.getLastFailedValidation());
+            throw inputSanitizer.getPreparedValidationException();
+        }
 
-            ValidationException validationException = new ValidationException();
-            validationException.setReason(inputSanitizer.getLastFailedValidation());
+        /* Is valid, moving forward */
+        try {
+             /* pulling a TeamDAO and save the Team */
+            PersistenceFacade.getNewTeamDAO().saveOrUpdate(
+                MAPPER.map(teamDTO, Team.class)
+            );
 
-            throw validationException;
+            LOGGER.info("Team \"{}\" was successfully saved.", teamDTO.getTeamName());
+
+        } catch (PersistenceException e) {
+            LOGGER.error("Error occurs while communicating with DB.", e);
         }
     }
 }

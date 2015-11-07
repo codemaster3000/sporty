@@ -41,15 +41,15 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
         if (
-            !inputSanitizer.isValid(dto.getFirstName(), DataType.NAME) &&
-            !inputSanitizer.isValid(dto.getLastName(), DataType.NAME) &&
-            !inputSanitizer.isValid(dto.getDateOfBirth(), DataType.SQL_DATE) &&
-            !inputSanitizer.isValid(dto.getEmail(), DataType.EMAIL) &&
-            !inputSanitizer.isValid(dto.getAddress(), DataType.ADDRESS) &&
+            !inputSanitizer.isValid(dto.getFirstName(), DataType.NAME) ||
+            !inputSanitizer.isValid(dto.getLastName(), DataType.NAME) ||
+            !inputSanitizer.isValid(dto.getDateOfBirth(), DataType.SQL_DATE) ||
+            !inputSanitizer.isValid(dto.getEmail(), DataType.EMAIL) ||
+            !inputSanitizer.isValid(dto.getAddress(), DataType.ADDRESS) ||
             !inputSanitizer.isValid(dto.getGender(), DataType.GENDER)
         ) {
             // There has been bad input, throw the Exception
-            throw prepareValidationException(inputSanitizer);
+            throw inputSanitizer.getPreparedValidationException();
         }
 
         /* Is valid, moving forward */
@@ -73,7 +73,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
         if (!inputSanitizer.isValid(searchString, DataType.NAME)) {
-            throw prepareValidationException(inputSanitizer);
+            throw inputSanitizer.getPreparedValidationException();
         }
 
         /* Is valid, moving forward */
@@ -98,7 +98,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
         if (!inputSanitizer.isValid(teamName, DataType.NAME)) {
-            throw prepareValidationException(inputSanitizer);
+            throw inputSanitizer.getPreparedValidationException();
         }
 
         /* Is valid, moving forward */
@@ -123,7 +123,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
         if (!inputSanitizer.isValid(dateOfBirth, DataType.SQL_DATE)) {
-            throw prepareValidationException(inputSanitizer);
+            throw inputSanitizer.getPreparedValidationException();
         }
 
         /* Is valid, moving forward */
@@ -161,18 +161,5 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         }
     }
 
-    /**
-     * Prepares ValidationException with exception reason.
-     *
-     * @param inputSanitizer Instance of the InputSanitizer that was used for validation.
-     * @return ValidationException prepared ValidationException
-     */
-    private ValidationException prepareValidationException(InputSanitizer inputSanitizer) {
-        LOGGER.error("Wrong input saving Member: {}", inputSanitizer.getLastFailedValidation());
 
-        ValidationException validationException = new ValidationException();
-        validationException.setReason(inputSanitizer.getLastFailedValidation());
-
-        return validationException;
-    }
 }
