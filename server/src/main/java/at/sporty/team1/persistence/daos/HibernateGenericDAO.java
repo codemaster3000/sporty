@@ -69,9 +69,11 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
                 (T) session.get(_domainClass, id)
             );
 
-            if (results != null && results.size() == 1) {
-                return results.get(0);
+            if (results != null) {
+                if (results.isEmpty()) return null;
+                if (results.size() == 1) return results.get(0);
             }
+
             throw new PersistenceException("Many results in find by id. (" + id + ")");
 
         } catch (HibernateException e) {

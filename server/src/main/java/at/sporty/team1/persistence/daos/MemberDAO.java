@@ -22,6 +22,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
     private static final String PROP_FIRST_NAME = "firstName";
     private static final String PROP_LAST_NAME = "lastName";
     private static final String PROP_DATE_OF_BIRTH = "dateOfBirth";
+    private static final String PROP_EMAIL = "email";
     private static final String PROP_TEAM_NAME = "teamId";
     private static final String DELIMITER = " ";
 
@@ -89,6 +90,13 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
         Date date = Date.valueOf(dateOfBirth);
 
         return findByCriteria(Restrictions.eq(PROP_DATE_OF_BIRTH, date));
+    }
+
+    @Override
+    public List<Member> findByEmail(String email) throws PersistenceException {
+        String searchString = Util.wrapInWildcard(email);
+
+        return findByCriteria(Restrictions.like(PROP_EMAIL, searchString));
     }
 
     @Override

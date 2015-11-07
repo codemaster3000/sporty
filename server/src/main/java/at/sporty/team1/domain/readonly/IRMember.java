@@ -2,8 +2,6 @@ package at.sporty.team1.domain.readonly;
 
 import at.sporty.team1.domain.Gender;
 
-import java.sql.Date;
-
 /**
  * Created by sereGkaluv on 27-Oct-15.
  */
@@ -17,7 +15,7 @@ public interface IRMember {
 
     Gender getGender();
 
-    Date getDateOfBirth();
+    String getDateOfBirth();
 
     String getEmail();
 

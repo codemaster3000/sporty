@@ -1,9 +1,9 @@
 package at.sporty.team1.domain;
 
 import at.sporty.team1.domain.interfaces.IMember;
+import at.sporty.team1.misc.converters.SQLDateConverter;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.util.List;
 
 
@@ -19,7 +19,7 @@ public class Member implements IMember {
     private String firstname;
     private String lastname;
     private Gender gender;
-    private Date dateOfBirth;
+    private String dateOfBirth;
     private String eMail;
     private String address;
     private String squad;
@@ -89,13 +89,14 @@ public class Member implements IMember {
 
     @Override
     @Basic
+    @Convert(converter = SQLDateConverter.class)
     @Column(name = "dateOfBirth")
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
     @Override
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -160,7 +161,7 @@ public class Member implements IMember {
     }
 
     @Basic
-    @Column(name = "isFeePaid")
+    @Column(name = "isFeePaid", columnDefinition = "false")
     public Boolean getIsFeePaid() { return isFeePaid;}
 
     public void setIsFeePaid(Boolean isFeePaid) {

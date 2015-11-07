@@ -3,8 +3,6 @@ package at.sporty.team1.domain.interfaces;
 import at.sporty.team1.domain.Gender;
 import at.sporty.team1.domain.readonly.IRMember;
 
-import java.sql.Date;
-
 /**
  * Created by sereGkaluv on 27-Oct-15.
  */
@@ -18,7 +16,7 @@ public interface IMember extends IRMember {
 
     void setGender(Gender gender);
 
-    void setDateOfBirth(Date dateOfBirth);
+    void setDateOfBirth(String dateOfBirth);
 
     void setEmail(String eMail);
 

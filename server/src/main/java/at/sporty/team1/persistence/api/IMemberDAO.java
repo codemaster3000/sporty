@@ -56,6 +56,15 @@ public interface IMemberDAO extends IGenericDAO<Member> {
     List<Member> findByDateOfBirth(String dateOfBirth) throws PersistenceException;
 
     /**
+     * Find member(s) by email.
+     *
+     * @param email  member's email
+     * @return List<Member> List of all Members who's email matched given data.
+     * @throws PersistenceException
+     */
+    List<Member> findByEmail(String email) throws PersistenceException;
+
+    /**
      * Find member(s) by team name.
      *
      * @param teamName name of the given team
