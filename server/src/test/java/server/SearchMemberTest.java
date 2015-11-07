@@ -55,7 +55,7 @@ public class SearchMemberTest {
 	@Test
 	public void searchMemberTest_3() {
 
-		String searchString = "2001-01-01";
+		String searchString = "1950-05-10";
 		List<MemberDTO> members = null;
 
 		try {

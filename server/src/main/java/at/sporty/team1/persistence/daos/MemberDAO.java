@@ -1,6 +1,7 @@
 package at.sporty.team1.persistence.daos;
 
 import at.sporty.team1.domain.Member;
+import at.sporty.team1.misc.converters.SQLDateConverter;
 import at.sporty.team1.persistence.Util;
 import at.sporty.team1.persistence.api.IMemberDAO;
 import org.hibernate.criterion.MatchMode;
@@ -87,9 +88,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
 
     @Override
     public List<Member> findByDateOfBirth(String dateOfBirth) throws PersistenceException {
-        Date date = Date.valueOf(dateOfBirth);
-
-        return findByCriteria(Restrictions.eq(PROP_DATE_OF_BIRTH, date));
+        return findByCriteria(Restrictions.eq(PROP_DATE_OF_BIRTH, dateOfBirth));
     }
 
     @Override

@@ -6,7 +6,6 @@ import org.apache.logging.log4j.Logger;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.sql.Date;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 /**
@@ -21,8 +20,8 @@ public class SQLDateConverter implements AttributeConverter<String, Date> {
     @Override
     public Date convertToDatabaseColumn(String attribute) {
         try {
-            return new java.sql.Date(DATE_FORMATTER.parse(attribute).getTime());
-        } catch (ParseException e) {
+            return attribute != null ? Date.valueOf(attribute) : null;
+        } catch (IllegalArgumentException e) {
             LOGGER.error("Error occurs while parsing date \"{}\".", attribute, e);
             return null;
         }
@@ -30,6 +29,6 @@ public class SQLDateConverter implements AttributeConverter<String, Date> {
 
     @Override
     public String convertToEntityAttribute(Date dbData) {
-        return dbData != null ? DATE_FORMATTER.format(dbData) : null;
+        return dbData != null ? DATE_FORMATTER.format(new java.util.Date(dbData.getTime())) : null;
     }
 }
