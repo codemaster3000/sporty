@@ -93,13 +93,12 @@ public class NewMemberTest {
 	
 	/**
 	 * Bday in false format
+	 * @throws RemoteException 
+	 * @throws ValidationException 
 	 * @throws Exception
 	 */
 	@Test
-	public void newMemberTest_3() {
-		
-		//thrown.expect(java.lang.IllegalArgumentException.class);
-		//thrown.expect(at.sporty.team1.rmi.exceptions.ValidationException.class);
+	public void newMemberTest_3() throws RemoteException, ValidationException {
 	    
 		MemberDTO _activeMemberDTO = new MemberDTO();
 		String fName = "Fred";
@@ -121,19 +120,12 @@ public class NewMemberTest {
         _activeMemberDTO.setGender(gender);
         _activeMemberDTO.setAddress(address);
 //        _activeMemberDTO.setDepartmentId(sport);
-        
-		try {
-			memberCon = new MemberController();
-		} catch (RemoteException e1) {
-			
-			e1.printStackTrace();
-		}
+
+		memberCon = new MemberController();
 		
-        try {
-			memberCon.createOrSaveMember(_activeMemberDTO);
-		} catch (RemoteException | ValidationException e) {
-			e.printStackTrace();
-		}
+		thrown.expect(at.sporty.team1.rmi.exceptions.ValidationException.class);
+		
+		memberCon.createOrSaveMember(_activeMemberDTO);	
 	}
 	
 	/**
