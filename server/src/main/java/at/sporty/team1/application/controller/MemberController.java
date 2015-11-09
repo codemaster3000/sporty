@@ -106,7 +106,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             List<? extends IMember> rawResultsByName = PersistenceFacade.getNewMemberDAO().findByNameString(searchString);
             
             if(notPaidCheckbox){
-            	rawResultsByFee = PersistenceFacade.getNewMemberDAO().findByPayedFee();
+            	rawResultsByFee = PersistenceFacade.getNewMemberDAO().findByNotPayedFee();
             }else if(paidCheckbox){
             	rawResultsByFee = PersistenceFacade.getNewMemberDAO().findByPayedFee();
             }
