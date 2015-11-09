@@ -125,6 +125,20 @@ public class MainViewController extends JfxController {
                 }
 
             }).start();
+        }else{
+        	_searchResultViewController.showProgressAnimation();
+        	
+        	new Thread(() -> {
+                try {
+
+                    IMemberController memberController = CommunicationFacade.lookupForMemberController();
+                    displaySearchResults(memberController.searchAllMembers());
+
+                } catch (RemoteException | MalformedURLException | NotBoundException e) {
+                    LOGGER.error("Error occurs while searching.", e);
+                }
+
+            }).start();
         }
     }
 

@@ -66,10 +66,30 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             LOGGER.error("Error occurs while communicating with DB.", e);
         }
     }
+    
+    @Override
+    public List<MemberDTO> searchAllMembers()
+    throws RemoteException {
+
+        try {
+
+            List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findAll();
+
+            //Converting results to MemberDTO
+            return rawResults.stream()
+                    .map(member -> MAPPER.map(member, MemberDTO.class))
+                    .collect(Collectors.toList());
+
+        } catch (PersistenceException e) {
+            LOGGER.error("An error occurs while searching for \"all Members\".", e);
+            return null;
+        }
+    }
 
     @Override
     public List<MemberDTO> searchMembersByNameString(String searchString)
     throws RemoteException, ValidationException {
+    	
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
         if (!inputSanitizer.isValid(searchString, DataType.NAME)) {

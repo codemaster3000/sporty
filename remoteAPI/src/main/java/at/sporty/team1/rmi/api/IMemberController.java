@@ -56,4 +56,13 @@ public interface IMemberController extends Remote, Serializable {
      * @throws RemoteException
      */
     void deleteMember(MemberDTO memberDTO) throws RemoteException;
+
+    /**
+     * Search for all Members.
+     *
+     * @param 
+     * @return List<MemberDTO> List of all members 
+     * @throws RemoteException
+     */
+	List<MemberDTO> searchAllMembers() throws RemoteException;
 }
