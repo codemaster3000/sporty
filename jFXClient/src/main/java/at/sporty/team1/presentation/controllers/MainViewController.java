@@ -35,11 +35,15 @@ public class MainViewController extends JfxController {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Map<Tab, IJfxController> CONTROLLER_TO_TAB_MAP = new HashMap<>();
+    private boolean _checkboxPaid = false;
+    private boolean _checkboxNotPaid = false;
 
     @FXML private TextField _searchField;
     @FXML private ComboBox<SearchType> _searchType;
     @FXML private TabPane _tabPanel;
     @FXML private BorderPane _borderPanel;
+    @FXML private CheckBox _feePaidCheckbox;
+    @FXML private CheckBox _feeNotPaidCheckbox;
 
     private SearchResultViewController _searchResultViewController;
 
@@ -76,9 +80,21 @@ public class MainViewController extends JfxController {
 
     @FXML
     private void startSearch() {
+    	
         String searchQuery = GUIHelper.readNullOrEmpty(_searchField.getText());
+        
+        
+        //Verarbeite Checkboxen
+        if(_feeNotPaidCheckbox.isSelected()){
+        	_checkboxNotPaid = true;
+        }
+        
+        if(_feePaidCheckbox.isSelected()){
+        	_checkboxPaid = true;
+        }
 
-        if (searchQuery != null) {
+        if 	(searchQuery != null) {
+        	
             _searchResultViewController.showProgressAnimation();
 
             new Thread(() -> {
@@ -90,7 +106,7 @@ public class MainViewController extends JfxController {
                     switch(_searchType.getValue()) {
                         case MEMBER_NAME: {
                             displaySearchResults(
-                                memberController.searchMembersByNameString(searchQuery)
+                                memberController.searchMembersByNameString(searchQuery, _checkboxNotPaid, _checkboxPaid)
                             );
 
                             break;
@@ -98,7 +114,7 @@ public class MainViewController extends JfxController {
 
                         case DATE_OF_BIRTH: {
                             displaySearchResults(
-                                memberController.searchMembersByDateOfBirth(searchQuery)
+                                memberController.searchMembersByDateOfBirth(searchQuery, _checkboxNotPaid, _checkboxPaid)
                             );
 
                             break;
@@ -106,7 +122,7 @@ public class MainViewController extends JfxController {
 
                         case TEAM_NAME: {
                             displaySearchResults(
-                                memberController.searchMembersByTeamName(searchQuery)
+                                memberController.searchMembersByTeamName(searchQuery, _checkboxNotPaid, _checkboxPaid)
                             );
 
                             break;
@@ -125,6 +141,7 @@ public class MainViewController extends JfxController {
                 }
 
             }).start();
+            
         }else{
         	_searchResultViewController.showProgressAnimation();
         	

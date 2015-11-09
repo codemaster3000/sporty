@@ -27,7 +27,7 @@ public interface IMemberController extends Remote, Serializable {
      * @return List<MemberDTO> List of all members who's full name matched given data, or null.
      * @throws RemoteException
      */
-    List<MemberDTO> searchMembersByNameString(String searchString) throws RemoteException, ValidationException;
+    List<MemberDTO> searchMembersByNameString(String searchString, boolean notPaidCheckbox, boolean paidCheckbox) throws RemoteException, ValidationException;
 
 
     /**
@@ -37,7 +37,7 @@ public interface IMemberController extends Remote, Serializable {
      * @return List<MemberDTO> List of all members who is assigned to the given team, or null.
      * @throws RemoteException
      */
-    List<MemberDTO> searchMembersByTeamName(String teamName) throws RemoteException, ValidationException;
+    List<MemberDTO> searchMembersByTeamName(String teamName, boolean notPaidCheckbox, boolean paidCheckbox) throws RemoteException, ValidationException;
 
 
     /**
@@ -47,7 +47,7 @@ public interface IMemberController extends Remote, Serializable {
      * @return List<MemberDTO> List of all members who's date of birth matched given data, or null.
      * @throws RemoteException
      */
-    List<MemberDTO> searchMembersByDateOfBirth(String dateOfBirth) throws RemoteException, ValidationException;
+    List<MemberDTO> searchMembersByDateOfBirth(String dateOfBirth, boolean notPaidCheckbox, boolean paidCheckbox) throws RemoteException, ValidationException;
 
     /**
      * Deletes member form the data storage with data from the DTO.
