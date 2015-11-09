@@ -17,6 +17,7 @@ import org.dozer.Mapper;
 import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -90,6 +91,9 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     public List<MemberDTO> searchMembersByNameString(String searchString, boolean notPaidCheckbox, boolean paidCheckbox)
     throws RemoteException, ValidationException {
     	
+    	List<IMember> rawResults = new LinkedList<IMember>();
+    	List<? extends IMember> rawResultsByFee = null;
+    	
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
         if (!inputSanitizer.isValid(searchString, DataType.NAME)) {
@@ -99,8 +103,26 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         /* Is valid, moving forward */
         try {
 
-            List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByNameString(searchString);
-
+            List<? extends IMember> rawResultsByName = PersistenceFacade.getNewMemberDAO().findByNameString(searchString);
+            
+            if(notPaidCheckbox){
+            	rawResultsByFee = PersistenceFacade.getNewMemberDAO().findByPayedFee();
+            }else if(paidCheckbox){
+            	rawResultsByFee = PersistenceFacade.getNewMemberDAO().findByPayedFee();
+            }
+            
+            //Compare the two lists
+            if(rawResultsByFee != null){
+            	
+            	for(IMember member : rawResultsByFee){
+            		if(rawResultsByName.contains(member)){
+            			rawResults.add(member);
+            		}
+            	}
+            }else{
+            	rawResults.addAll(rawResultsByName);
+            }
+            
             //Converting results to MemberDTO
             return rawResults.stream()
                     .map(member -> MAPPER.map(member, MemberDTO.class))
