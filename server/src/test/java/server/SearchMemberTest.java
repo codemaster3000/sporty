@@ -60,7 +60,7 @@ public class SearchMemberTest {
 
 		try {
 			MemberController mem = new MemberController();
-			members = mem.searchMembersByDateOfBirth(searchString);
+			members = mem.searchMembersByDateOfBirth(searchString, false, false);
 		} catch (RemoteException | ValidationException e) {
 			e.printStackTrace();
 		}
@@ -74,7 +74,7 @@ public class SearchMemberTest {
 
 		try {
 			MemberController mem = new MemberController();
-			return mem.searchMembersByNameString(searchString);
+			return mem.searchMembersByNameString(searchString, false, false);
 		} catch (RemoteException | ValidationException e) {
 			e.printStackTrace();
 			return null;

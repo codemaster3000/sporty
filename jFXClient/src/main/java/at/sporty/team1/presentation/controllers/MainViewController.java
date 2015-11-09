@@ -35,6 +35,8 @@ public class MainViewController extends JfxController {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Map<Tab, IJfxController> CONTROLLER_TO_TAB_MAP = new HashMap<>();
+    private boolean _checkboxPaid = false;
+    private boolean _checkboxNotPaid = false;
 
     @FXML private TextField _searchField;
     @FXML private ComboBox<SearchType> _searchType;
@@ -80,16 +82,15 @@ public class MainViewController extends JfxController {
     private void startSearch() {
     	
         String searchQuery = GUIHelper.readNullOrEmpty(_searchField.getText());
-        boolean checkboxPaid = false;
-        boolean checkboxNotPaid = false;
+        
         
         //Verarbeite Checkboxen
         if(_feeNotPaidCheckbox.isSelected()){
-        	checkboxNotPaid = true;
+        	_checkboxNotPaid = true;
         }
         
         if(_feePaidCheckbox.isSelected()){
-        	checkboxPaid = true;
+        	_checkboxPaid = true;
         }
 
         if 	(searchQuery != null) {
@@ -105,7 +106,7 @@ public class MainViewController extends JfxController {
                     switch(_searchType.getValue()) {
                         case MEMBER_NAME: {
                             displaySearchResults(
-                                memberController.searchMembersByNameString(searchQuery, checkboxNotPaid, checkboxPaid)
+                                memberController.searchMembersByNameString(searchQuery, _checkboxNotPaid, _checkboxPaid)
                             );
 
                             break;
@@ -113,7 +114,7 @@ public class MainViewController extends JfxController {
 
                         case DATE_OF_BIRTH: {
                             displaySearchResults(
-                                memberController.searchMembersByDateOfBirth(searchQuery, checkboxNotPaid, checkboxPaid)
+                                memberController.searchMembersByDateOfBirth(searchQuery, _checkboxNotPaid, _checkboxPaid)
                             );
 
                             break;
@@ -121,7 +122,7 @@ public class MainViewController extends JfxController {
 
                         case TEAM_NAME: {
                             displaySearchResults(
-                                memberController.searchMembersByTeamName(searchQuery, checkboxNotPaid, checkboxPaid)
+                                memberController.searchMembersByTeamName(searchQuery, _checkboxNotPaid, _checkboxPaid)
                             );
 
                             break;
