@@ -76,4 +76,6 @@ public interface IMemberDAO extends IGenericDAO<Member> {
     List<Member> findByPayedFee() throws PersistenceException;
 
     List<Member> findByNotPayedFee() throws PersistenceException;
+
+
 }
