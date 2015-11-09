@@ -1,7 +1,10 @@
 package at.sporty.team1.persistence;
 
+import at.sporty.team1.persistence.api.IDepartmentDAO;
 import at.sporty.team1.persistence.api.IGenericDAO;
 import at.sporty.team1.persistence.api.IMemberDAO;
+import at.sporty.team1.persistence.api.ITeamDAO;
+import at.sporty.team1.persistence.daos.DepartmentDAO;
 import at.sporty.team1.persistence.daos.HibernateGenericDAO;
 import at.sporty.team1.persistence.daos.MemberDAO;
 import at.sporty.team1.persistence.daos.TeamDAO;
@@ -22,7 +25,7 @@ public class PersistenceFacade {
     }
 
     /**
-     * Returns an implementation of the MemberDAO interface providing
+     * Returns an implementation of the IMemberDAO interface providing
      * further operations with memberList.
      * @return an instance of IMemberDAO
      */
@@ -31,11 +34,20 @@ public class PersistenceFacade {
     }
 
     /**
-     * Returns an implementation of the TeamDAO interface providing
+     * Returns an implementation of the ITeamDAO interface providing
      * further operations with teams.
-     * @return an instance of TeamDAO
+     * @return an instance of ITeamDAO
      */
-    public static TeamDAO getNewTeamDAO() {
+    public static ITeamDAO getNewTeamDAO() {
         return new TeamDAO();
+    }
+
+    /**
+     * Returns an implementation of the IDepartmentDAO interface providing
+     * further operations with teams.
+     * @return an instance of IDepartmentDAO
+     */
+    public static IDepartmentDAO getNewDepartmentDAO() {
+        return new DepartmentDAO();
     }
 }

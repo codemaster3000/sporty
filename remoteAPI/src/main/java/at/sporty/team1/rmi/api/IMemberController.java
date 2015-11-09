@@ -60,7 +60,6 @@ public interface IMemberController extends Remote, Serializable {
     /**
      * Search for all Members.
      *
-     * @param 
      * @return List<MemberDTO> List of all members 
      * @throws RemoteException
      */

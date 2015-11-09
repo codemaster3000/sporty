@@ -18,7 +18,8 @@ public class Team implements ITeam {
     public String teamname;
     public List<Member> memberList;
 
-
+    public Team() {
+    }
 
     @Override
     @Id
@@ -46,8 +47,8 @@ public class Team implements ITeam {
     }
 
 //    @Override
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "departmentId")
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinTable(name = "department_teams")
 //    public Department getDepartment() {
 //        return department;
 //    }
@@ -57,9 +58,19 @@ public class Team implements ITeam {
 //        this.department = department;
 //    }
 
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinTable(name = "team_members")
+//    public List<Members> getMembers() {
+//        return memberList;
+//    }
+//
+//    public void setMembers(List<Members> memberList) {
+//        this.memberList = memberList;
+//    }
+
     //TODO League table in db
 //    @Override
-//    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.EAGER)
 //    @JoinColumn(name = "leagueId")
 //    public League getLeague() {
 //        return league;

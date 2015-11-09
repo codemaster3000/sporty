@@ -17,7 +17,7 @@ public interface ITeam extends IRTeam {
 
 //    void setDepartment(Department department);
 
-//    void setLeagueId(Integer leagueId);
+//    void setLeague(Integer leagueId);
 
     void setTeamName(String teamName);
 

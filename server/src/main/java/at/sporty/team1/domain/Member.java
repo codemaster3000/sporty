@@ -27,6 +27,9 @@ public class Member implements IMember {
     private String username;
     private Boolean isFeePaid;
 
+    public Member() {
+    }
+
     @Override
     @Id
     @GeneratedValue
@@ -40,8 +43,8 @@ public class Member implements IMember {
         this.memberId = memberId;
     }
 
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "teamId")
+//    @OneToMany(fetch = FetchType.EAGER)
+//    @JoinTable(name = "team_members")
 //    public List<Team> getTeams() {
 //        return teamList;
 //    }

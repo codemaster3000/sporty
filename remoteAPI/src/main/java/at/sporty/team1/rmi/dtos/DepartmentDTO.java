@@ -2,16 +2,17 @@ package at.sporty.team1.rmi.dtos;
 
 import at.sporty.team1.rmi.api.IDTO;
 
-import java.io.Serializable;
+import java.util.List;
 
 /**
- *
+ * This IDTO Object implements Object Builder pattern.
  */
 public class DepartmentDTO implements IDTO {
 	
     private Integer _departmentId;
     private String _sport;
-    private Integer _headId;
+    private MemberDTO _head;
+    private List<TeamDTO> _teamList;
 
     public DepartmentDTO() {
     }
@@ -34,13 +35,24 @@ public class DepartmentDTO implements IDTO {
         return this;
     }
     
-    public Integer getDepartmentHeadId() {
-        return _headId;
+    public MemberDTO getDepartmentHead() {
+        return _head;
     }
 
-    public DepartmentDTO setDepartmentHeadId(Integer headId) {
-        _headId = headId;
+    public DepartmentDTO setDepartmentHead(MemberDTO head) {
+        _head = head;
         return this;
     }
-	
+
+    @Deprecated // not supported yet
+    public List<TeamDTO> getTeams() {
+        return _teamList;
+    }
+
+    @Deprecated // not supported yet
+    public DepartmentDTO setTeams(List<TeamDTO> teamList) {
+        _teamList = teamList;
+        return this;
+    }
+
 }

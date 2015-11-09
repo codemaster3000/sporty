@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by sereGkaluv on 06-Nov-15.
  */
-public interface ITeamDAO {
+public interface ITeamDAO extends IGenericDAO<Team> {
 
     /**
      * Find team(s) by name.

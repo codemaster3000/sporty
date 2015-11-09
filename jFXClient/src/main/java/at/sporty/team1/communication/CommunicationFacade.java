@@ -17,11 +17,22 @@ public class CommunicationFacade {
 
     public static IMemberController lookupForMemberController()
     throws RemoteException, NotBoundException, MalformedURLException {
-        return (IMemberController) Naming.lookup(String.format(DEFAULT_RMI, RemoteObjectRegistry.MEMBER_CONTROLLER.getNaming()));
+        return (IMemberController) Naming.lookup(
+            String.format(DEFAULT_RMI, RemoteObjectRegistry.MEMBER_CONTROLLER.getNaming())
+        );
     }
 
     public static ITeamController lookupForTeamController()
-            throws RemoteException, NotBoundException, MalformedURLException {
-        return (ITeamController) Naming.lookup(String.format(DEFAULT_RMI, RemoteObjectRegistry.TEAM_CONTROLLER.getNaming()));
+    throws RemoteException, NotBoundException, MalformedURLException {
+        return (ITeamController) Naming.lookup(
+            String.format(DEFAULT_RMI, RemoteObjectRegistry.TEAM_CONTROLLER.getNaming())
+        );
+    }
+
+    public static ITeamController lookupForDepartmentController()
+    throws RemoteException, NotBoundException, MalformedURLException {
+        return (ITeamController) Naming.lookup(
+            String.format(DEFAULT_RMI, RemoteObjectRegistry.DEPARTMENT_CONTROLLER.getNaming())
+        );
     }
 }

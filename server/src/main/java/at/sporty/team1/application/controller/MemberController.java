@@ -180,6 +180,4 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             );
         }
     }
-
-
 }

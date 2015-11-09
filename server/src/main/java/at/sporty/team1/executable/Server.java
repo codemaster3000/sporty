@@ -1,9 +1,11 @@
 package at.sporty.team1.executable;
 
+import at.sporty.team1.application.controller.DepartmentController;
 import at.sporty.team1.application.controller.MemberController;
 import at.sporty.team1.application.controller.TeamController;
 import at.sporty.team1.persistence.HibernateSessionUtil;
 import at.sporty.team1.rmi.RemoteObjectRegistry;
+import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,6 +17,7 @@ import java.rmi.Remote;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 
 /**
  * Created by sereGkaluv on 23-Oct-15.
@@ -39,6 +42,7 @@ public class Server {
 
             bindName(RemoteObjectRegistry.MEMBER_CONTROLLER, new MemberController());
             bindName(RemoteObjectRegistry.TEAM_CONTROLLER, new TeamController());
+            bindName(RemoteObjectRegistry.DEPARTMENT_CONTROLLER, new DepartmentController());
 
             LOGGER.info("Server started successfully.");
 
