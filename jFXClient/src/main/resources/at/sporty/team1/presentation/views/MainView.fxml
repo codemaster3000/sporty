@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1"
-			xmlns="http://javafx.com/javafx/8"
-			fx:id="_borderPanel"
-			fx:controller="at.sporty.team1.presentation.controllers.MainViewController">
+<BorderPane fx:id="_borderPanel" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.sporty.team1.presentation.controllers.MainViewController">
 	<top>
-		<ToolBar AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" AnchorPane.rightAnchor="0">
-			<TextField fx:id="_searchField" promptText="SEARCH" prefWidth="200.0"/>
-			<Label text="by"/>
-            <ComboBox fx:id="_searchType" HBox.hgrow="SOMETIMES"
-                      GridPane.columnIndex="1" GridPane.rowIndex="7"/>
-			<Button text="GO" onAction="#startSearch" HBox.hgrow="NEVER"/>
+		<ToolBar AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+   <items>
+   			<TextField fx:id="_searchField" prefWidth="200.0" promptText="SEARCH" />
+   			<Label text="by" />
+               <ComboBox fx:id="_searchType" GridPane.columnIndex="1" GridPane.rowIndex="7" HBox.hgrow="SOMETIMES" />
+   			<Button onAction="#startSearch" text="GO" HBox.hgrow="NEVER" />
+            <CheckBox fx:id="_feePaidCheckbox" mnemonicParsing="false" text="Fee paid" />
+            <CheckBox fx:id="_feeNotPaidCheckbox" mnemonicParsing="false" text="Fee not paid" />
+   </items>
 		</ToolBar>
 	</top>
 	<center>
-		<TabPane fx:id="_tabPanel" BorderPane.alignment="CENTER" tabMaxHeight="Infinity"/>
+		<TabPane fx:id="_tabPanel" tabMaxHeight="Infinity" BorderPane.alignment="CENTER" />
 	</center>
 </BorderPane>

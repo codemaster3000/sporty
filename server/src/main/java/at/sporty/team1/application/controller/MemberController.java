@@ -87,7 +87,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public List<MemberDTO> searchMembersByNameString(String searchString)
+    public List<MemberDTO> searchMembersByNameString(String searchString, boolean notPaidCheckbox, boolean paidCheckbox)
     throws RemoteException, ValidationException {
     	
         /* Validating Input */
@@ -113,7 +113,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public List<MemberDTO> searchMembersByTeamName(String teamName)
+    public List<MemberDTO> searchMembersByTeamName(String teamName, boolean notPaidCheckbox, boolean paidCheckbox)
     throws RemoteException, ValidationException {
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -138,7 +138,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public List<MemberDTO> searchMembersByDateOfBirth(String dateOfBirth)
+    public List<MemberDTO> searchMembersByDateOfBirth(String dateOfBirth, boolean notPaidCheckbox, boolean paidCheckbox)
     throws RemoteException, ValidationException {
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
