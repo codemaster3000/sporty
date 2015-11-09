@@ -3,7 +3,6 @@ package at.sporty.team1.domain;
 import at.sporty.team1.domain.interfaces.ITeam;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 /**
@@ -18,6 +17,8 @@ public class Team implements ITeam {
     public League league;
     public String teamname;
     public List<Member> memberList;
+
+
 
     @Override
     @Id
