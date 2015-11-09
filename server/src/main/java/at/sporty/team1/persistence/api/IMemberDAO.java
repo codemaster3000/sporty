@@ -72,4 +72,8 @@ public interface IMemberDAO extends IGenericDAO<Member> {
      * @throws PersistenceException
      */
     List<Member> findByTeamName(String teamName) throws PersistenceException;
+
+    List<Member> findByFeePayed() throws PersistenceException;
+
+    List<Member> findByFeeNotPayed() throws PersistenceException;
 }
