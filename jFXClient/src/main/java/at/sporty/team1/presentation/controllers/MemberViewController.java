@@ -5,12 +5,14 @@ import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.IDTO;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -35,10 +37,17 @@ public class MemberViewController extends JfxController {
     @FXML private TextField birthTextField;
     @FXML private TextField emailTextField;
     @FXML private TextField phoneTextField;
-    @FXML private ComboBox<String> sportComboBox;
     @FXML private TextField addressTextField;
     @FXML private RadioButton radioGenderFemale;
     @FXML private RadioButton radioGenderMale;
+    @FXML private CheckBox memberSportCheckboxSoccer;
+    @FXML private CheckBox memberSportCheckboxVolleyball;
+    @FXML private CheckBox memberSportCheckboxBaseball;
+    @FXML private CheckBox memberSportCheckboxFootball;
+    @FXML private ComboBox<TeamDTO> memberTeamComboBoxSoccer;
+    @FXML private ComboBox<TeamDTO> memberTeamComboboxVolleyball;
+    @FXML private ComboBox<TeamDTO> memberTeamComboboxBaseball;
+    @FXML private ComboBox<TeamDTO> memberTeamComboboxFootball;
 
     private static MemberDTO _activeMemberDTO;
 
@@ -48,7 +57,6 @@ public class MemberViewController extends JfxController {
         radioGenderFemale.setToggleGroup(_group);
         radioGenderMale.setToggleGroup(_group);
         ObservableList<String> values = null;
-        sportComboBox.setItems(values);
         Platform.runLater(fNameTextField::requestFocus);
     }
 
@@ -94,7 +102,7 @@ public class MemberViewController extends JfxController {
         String email = GUIHelper.readNullOrEmpty(emailTextField.getText());
         String address = GUIHelper.readNullOrEmpty(addressTextField.getText());
         String phone = GUIHelper.readNullOrEmpty(phoneTextField.getText());
-        String sport = GUIHelper.readNullOrEmpty(sportComboBox.getValue());
+
 
         String gender = null;
         if (radioGenderFemale.isSelected()) {
@@ -200,7 +208,7 @@ public class MemberViewController extends JfxController {
         birthTextField.clear();
         emailTextField.clear();
         phoneTextField.clear();
-        sportComboBox.getSelectionModel().clearSelection();
+
         addressTextField.clear();
         radioGenderFemale.setSelected(false);
         radioGenderMale.setSelected(false);
