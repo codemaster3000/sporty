@@ -44,11 +44,11 @@ public class LoginViewController extends JfxController {
     private ILoginController loginController;
     private MainViewController mainViewController;
 
-    //TODO
-    @Override
-    public void setScreenParent(ViewLoader screenPage) {
-        viewLoader = screenPage;
-    }
+//    //TODO
+//    @Override
+//    public void setScreenParent(ViewLoader screenPage) {
+//        viewLoader = screenPage;
+//    }
 
     /*
      * initialize Controller and add function to hit enter to login
@@ -96,30 +96,30 @@ public class LoginViewController extends JfxController {
 //            _screenController.setScreen(ScreensFramework.screen2ID);
 
         // user
-        if (loginController.authorize(tfUserName.getText(), tfPassword.getText()) == 0)
-            mainViewController.setScreen(viewLoade.screen2ID);
-
-//        // abteilungsleiter
-//        if (_loginController.authorize(tfUserName.getText(), tfPassword.getText()) == 1)
-//            _screenController.setScreen(ScreensFramework.screen3ID); // TODO set correct screen
-
-//        // trainer
-//        if(_loginController.authorize(tfUserName.getText(), tfPassword.getText()) == 2)
-//             _screenController.setScreen(ScreensFramework.screen2ID); // TODO set correct screen
+//        if (loginController.authorize(tfUserName.getText(), tfPassword.getText()) == 0)
+//            mainViewController.setScreen(viewLoade.screen2ID);
 //
-        // login unsucessfull
-        if (loginController.authorize(tfUserName.getText(), tfPassword.getText()) == -1)
-            mainViewController.setScreen(ScreensFramework.screen1ID);
+////        // abteilungsleiter
+////        if (_loginController.authorize(tfUserName.getText(), tfPassword.getText()) == 1)
+////            _screenController.setScreen(ScreensFramework.screen3ID); // TODO set correct screen
+//
+////        // trainer
+////        if(_loginController.authorize(tfUserName.getText(), tfPassword.getText()) == 2)
+////             _screenController.setScreen(ScreensFramework.screen2ID); // TODO set correct screen
+////
+//        // login unsucessfull
+//        if (loginController.authorize(tfUserName.getText(), tfPassword.getText()) == -1)
+//            mainViewController.setScreen(ScreensFramework.screen1ID);
+//    }
+//
+//    public void minimize(ActionEvent actionEvent) {
+//        mainViewController.getPrimaryStage().setIconified(true);
+//    }
+//
+//    public void closeApp(ActionEvent actionEvent) {
+//        mainViewController.getPrimaryStage().close();
+//    }
     }
-
-    public void minimize(ActionEvent actionEvent) {
-        mainViewController.getPrimaryStage().setIconified(true);
-    }
-
-    public void closeApp(ActionEvent actionEvent) {
-        mainViewController.getPrimaryStage().close();
-    }
-
 
 }
 

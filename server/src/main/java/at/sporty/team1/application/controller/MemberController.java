@@ -106,52 +106,43 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         if (!inputSanitizer.isValid(searchString, DataType.NAME)) {
             throw inputSanitizer.getPreparedValidationException();
         }
-
-        if((searchString != null) && (!searchString.equals(" "))){
         
-	        /* Is valid, moving forward */
-	        try {
-	
-	            rawResults = PersistenceFacade.getNewMemberDAO().findByNameString(searchString);
-	
-	            //filtering results for fee
-	            rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
-	
-	            //Converting results to MemberDTO
-	            return rawResults.stream()
-	                    .map(member -> MAPPER.map(member, MemberDTO.class))
-	                    .collect(Collectors.toList());
-	
-	        } catch (PersistenceException e) {
-	            LOGGER.error("An error occurs while searching for \"{}\".", searchString, e);
-	            return null;
-	        }
-        }else{
-        	rawResults = PersistenceFacade.getNewMemberDAO().findAll();
-        	
-        	//filtering results for fee
+        /* Is valid, moving forward */
+        try {
+
+            rawResults = PersistenceFacade.getNewMemberDAO().findByNameString(searchString);
+
+            //filtering results for fee
             rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
-        	
-        	//Converting results to MemberDTO
+
+            //Converting results to MemberDTO
             return rawResults.stream()
                     .map(member -> MAPPER.map(member, MemberDTO.class))
                     .collect(Collectors.toList());
+
+        } catch (PersistenceException e) {
+            LOGGER.error("An error occurs while searching for \"{}\".", searchString, e);
+            return null;
         }
     }
 
     @Override
     public List<MemberDTO> searchMembersByTeamName(String teamName, boolean notPaidCheckbox, boolean paidCheckbox)
     throws RemoteException, ValidationException {
+    	
+    	List<? extends IMember> rawResults = null;
+    	
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
         if (!inputSanitizer.isValid(teamName, DataType.NAME)) {
             throw inputSanitizer.getPreparedValidationException();
         }
 
+       
         /* Is valid, moving forward */
         try {
 
-            List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByTeamName(teamName);
+            rawResults = PersistenceFacade.getNewMemberDAO().findByTeamName(teamName);
 
             //filtering results for fee
             rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
