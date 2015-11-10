@@ -70,9 +70,6 @@ public class MemberViewController extends JfxController {
      */
     private void doComboBoxAndCheckBoxInitialization() {
     	
-//    	DepartmentDTO department = null;
-//    	TeamDTO team = new TeamDTO();
-    	
     	ObservableList<TeamDTO> soccerTeams = null;
     	ObservableList<TeamDTO> volleyballTeams = null;
     	ObservableList<TeamDTO> footballTeams = null;

@@ -76,6 +76,14 @@ public class MainViewController extends JfxController {
         //Opening un-closable tabs
         openMemberView(false);
         openTeamView(false);
+        
+        _feeNotPaidCheckbox.setOnAction((event) -> {
+        	_checkboxNotPaid = _feeNotPaidCheckbox.isSelected();
+        });
+        
+        _feePaidCheckbox.setOnAction((event) ->{
+        	_checkboxPaid = _feePaidCheckbox.isSelected();
+        });
     }
 
     @FXML

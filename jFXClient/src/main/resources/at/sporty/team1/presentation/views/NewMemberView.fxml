@@ -1,135 +1,155 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<GridPane hgap="5.0" vgap="5.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="at.sporty.team1.presentation.controllers.MemberViewController">
+
+<GridPane hgap="5.0" vgap="5.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.sporty.team1.presentation.controllers.MemberViewController">
     <columnConstraints>
-        <ColumnConstraints hgrow="NEVER" minWidth="200.0"/>
-        <ColumnConstraints hgrow="ALWAYS" minWidth="400.0"/>
+        <ColumnConstraints hgrow="NEVER" minWidth="200.0" />
+        <ColumnConstraints hgrow="ALWAYS" minWidth="400.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints vgrow="SOMETIMES"/>
-        <RowConstraints vgrow="SOMETIMES"/>
-        <RowConstraints vgrow="SOMETIMES"/>
-        <RowConstraints vgrow="SOMETIMES"/>
-        <RowConstraints vgrow="SOMETIMES"/>
-        <RowConstraints vgrow="SOMETIMES"/>
-        <RowConstraints vgrow="SOMETIMES"/>
-        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES"/>
-        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES"/>
-        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES"/>
-        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES"/>
-        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES" />
+        <RowConstraints vgrow="SOMETIMES" />
+        <RowConstraints vgrow="SOMETIMES" />
+        <RowConstraints vgrow="SOMETIMES" />
+        <RowConstraints vgrow="SOMETIMES" />
+        <RowConstraints vgrow="SOMETIMES" />
+        <RowConstraints vgrow="SOMETIMES" />
+        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints vgrow="SOMETIMES" />
     </rowConstraints>
     <padding>
-        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
     </padding>
-
-    <Label text="First Name"/>
-    <TextField fx:id="fNameTextField" promptText="Mandatory" GridPane.columnIndex="1"/>
-
-    <Label text="Last Name" GridPane.rowIndex="1"/>
-    <TextField fx:id="lNameTextField" promptText="Mandatory" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-
-    <Label text="Date of Birth (yyyy-mm-dd)" GridPane.rowIndex="2"/>
-    <TextField fx:id="birthTextField" promptText="Mandatory" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-
-    <Label text="Gender" GridPane.rowIndex="3"/>
-    <FlowPane GridPane.columnIndex="1" GridPane.rowIndex="3">
-        <RadioButton fx:id="radioGenderMale" mnemonicParsing="false" text="Male">
-            <padding>
-                <Insets right="10.0" top="10.0"/>
-            </padding>
-        </RadioButton>
-        <RadioButton fx:id="radioGenderFemale" mnemonicParsing="false" text="Female">
-            <padding>
-                <Insets top="10.0"/>
-            </padding>
-        </RadioButton>
-    </FlowPane>
-
-    <Label text="E-mail" GridPane.rowIndex="4"/>
-    <TextField fx:id="emailTextField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
-
-    <Label text="Phone" GridPane.rowIndex="5"/>
-    <TextField fx:id="phoneTextField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
-
-    <Label text="Address" GridPane.rowIndex="6"/>
-    <TextField fx:id="addressTextField" promptText="Mandatory" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
-
-    <Label text="Sport" GridPane.rowIndex="7"/>
-
-    <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
-        <GridPane>
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES"/>
-                <ColumnConstraints hgrow="SOMETIMES"/>
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            </rowConstraints>
-            <CheckBox fx:id="memberSportCheckboxSoccer" mnemonicParsing="false" text="Soccer">
-                <padding>
-                    <Insets right="50.0"/>
-                </padding>
-            </CheckBox>
-            <ComboBox fx:id="memberTeamComboBoxSoccer" prefWidth="180.0" GridPane.columnIndex="1"/>
-        </GridPane>
-    </FlowPane>
-    <FlowPane prefHeight="200.0" prefWidth="200.0"  GridPane.columnIndex="1" GridPane.rowIndex="8">
-        <GridPane>
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES"/>
-                <ColumnConstraints hgrow="SOMETIMES"/>
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints vgrow="SOMETIMES"/>
-            </rowConstraints>
-            <CheckBox fx:id="memberSportCheckboxVolleyball" mnemonicParsing="false" text="Volleyball">
-                <padding>
-                    <Insets right="50.0"/>
-                </padding>
-            </CheckBox>
-            <ComboBox fx:id="memberTeamComboBoxVolleyball" prefWidth="180.0" GridPane.columnIndex="1"/>
-        </GridPane>
-    </FlowPane>
-    <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
-        <GridPane>
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES"/>
-                <ColumnConstraints hgrow="SOMETIMES"/>
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints vgrow="SOMETIMES"/>
-            </rowConstraints>
-            <CheckBox fx:id="memberSportCheckboxBaseball" mnemonicParsing="false" text="Baseball">
-                <padding>
-                    <Insets right="50.0"/>
-                </padding>
-            </CheckBox>
-            <ComboBox fx:id="memberTeamComboBoxBaseball" prefWidth="180.0" GridPane.columnIndex="1"/>
-        </GridPane>
-    </FlowPane>
-    <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
-        <GridPane>
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES"/>
-                <ColumnConstraints hgrow="SOMETIMES"/>
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints vgrow="SOMETIMES"/>
-            </rowConstraints>
-            <CheckBox fx:id="memberSportCheckboxFootball" mnemonicParsing="false" text="Football">
-                <padding>
-                    <Insets right="50.0"/>
-                </padding>
-            </CheckBox>
-            <ComboBox fx:id="memberTeamComboBoxFootball" prefWidth="180.0" GridPane.columnIndex="1"/>
-        </GridPane>
-    </FlowPane>
-
-    <Button mnemonicParsing="false" onAction="#saveForm" text="Save" GridPane.columnIndex="1"
-            GridPane.halignment="RIGHT" GridPane.rowIndex="11"/>
+   <children>
+   
+       <Label text="First Name" />
+       <TextField fx:id="fNameTextField" promptText="Mandatory" GridPane.columnIndex="1" />
+   
+       <Label text="Last Name" GridPane.rowIndex="1" />
+       <TextField fx:id="lNameTextField" promptText="Mandatory" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+   
+       <Label text="Date of Birth (yyyy-mm-dd)" GridPane.rowIndex="2" />
+       <TextField fx:id="birthTextField" promptText="Mandatory" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+   
+       <Label text="Gender" GridPane.rowIndex="3" />
+       <FlowPane GridPane.columnIndex="1" GridPane.rowIndex="3">
+          <children>
+              <RadioButton fx:id="radioGenderMale" mnemonicParsing="false" text="Male">
+                  <padding>
+                      <Insets right="10.0" top="10.0" />
+                  </padding>
+              </RadioButton>
+              <RadioButton fx:id="radioGenderFemale" mnemonicParsing="false" text="Female">
+                  <padding>
+                      <Insets top="10.0" />
+                  </padding>
+              </RadioButton>
+          </children>
+       </FlowPane>
+   
+       <Label text="E-mail" GridPane.rowIndex="4" />
+       <TextField fx:id="emailTextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+   
+       <Label text="Phone" GridPane.rowIndex="5" />
+       <TextField fx:id="phoneTextField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+   
+       <Label text="Address" GridPane.rowIndex="6" />
+       <TextField fx:id="addressTextField" promptText="Mandatory" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+   
+       <Label text="Sport" GridPane.rowIndex="7" />
+   
+       <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+      <children>
+              <GridPane>
+                  <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="130.0" prefWidth="145.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" />
+                  </columnConstraints>
+                  <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  </rowConstraints>
+                 <children>
+                     <CheckBox fx:id="memberSportCheckboxSoccer" mnemonicParsing="false" text="Soccer">
+                         <padding>
+                             <Insets right="50.0" />
+                         </padding>
+                     </CheckBox>
+                     <ComboBox fx:id="memberTeamComboBoxSoccer" prefWidth="180.0" GridPane.columnIndex="1" />
+                 </children>
+              </GridPane>
+      </children>
+       </FlowPane>
+       <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
+          <children>
+              <GridPane>
+                  <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="130.0" prefWidth="145.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" />
+                  </columnConstraints>
+                  <rowConstraints>
+                      <RowConstraints vgrow="SOMETIMES" />
+                  </rowConstraints>
+                 <children>
+                     <CheckBox fx:id="memberSportCheckboxVolleyball" mnemonicParsing="false" text="Volleyball">
+                         <padding>
+                             <Insets right="50.0" />
+                         </padding>
+                     </CheckBox>
+                     <ComboBox fx:id="memberTeamComboBoxVolleyball" prefWidth="180.0" GridPane.columnIndex="1" />
+                 </children>
+              </GridPane>
+          </children>
+       </FlowPane>
+       <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+          <children>
+              <GridPane>
+                  <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="130.0" prefWidth="145.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" />
+                  </columnConstraints>
+                  <rowConstraints>
+                      <RowConstraints vgrow="SOMETIMES" />
+                  </rowConstraints>
+                 <children>
+                     <CheckBox fx:id="memberSportCheckboxBaseball" mnemonicParsing="false" text="Baseball">
+                         <padding>
+                             <Insets right="50.0" />
+                         </padding>
+                     </CheckBox>
+                     <ComboBox fx:id="memberTeamComboBoxBaseball" prefWidth="180.0" GridPane.columnIndex="1" />
+                 </children>
+              </GridPane>
+          </children>
+       </FlowPane>
+       <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
+          <children>
+              <GridPane>
+                  <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="130.0" prefWidth="145.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" />
+                  </columnConstraints>
+                  <rowConstraints>
+                      <RowConstraints vgrow="SOMETIMES" />
+                  </rowConstraints>
+                 <children>
+                     <CheckBox fx:id="memberSportCheckboxFootball" mnemonicParsing="false" text="Football">
+                         <padding>
+                             <Insets right="50.0" />
+                         </padding>
+                     </CheckBox>
+                     <ComboBox fx:id="memberTeamComboBoxFootball" prefWidth="180.0" GridPane.columnIndex="1" />
+                 </children>
+              </GridPane>
+          </children>
+       </FlowPane>
+   
+       <Button mnemonicParsing="false" onAction="#saveForm" text="Save" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="11" />
+   </children>
 </GridPane>
