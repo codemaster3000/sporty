@@ -70,7 +70,7 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
              /* pulling a TeamDAO and save the Team */
             List<? extends ITeam> rawResults = PersistenceFacade.getNewTeamDAO().findTeamsBySport(sport);
 
-            //Converting results to MemberDTO
+            //Converting results to TeamDTO
             return rawResults.stream()
                     .map(team -> MAPPER.map(team, TeamDTO.class))
                     .collect(Collectors.toList());
