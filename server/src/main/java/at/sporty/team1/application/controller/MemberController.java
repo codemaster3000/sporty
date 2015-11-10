@@ -31,19 +31,6 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 	private static final Logger LOGGER = LogManager.getLogger();
     private static final Mapper MAPPER = new DozerBeanMapper();
 
-    //creating predicate basic predicate for filtering (Object != null)
-    private static final Predicate<IRMember> NON_NULL_PREDICATE = Objects::nonNull;
-
-    //creating predicate for members who paid their Fee
-    private static final Predicate<IRMember> PAID_PREDICATE = NON_NULL_PREDICATE.and(
-        member -> member.getIsFeePaid().equals(true)
-    );
-
-    //creating predicate for members who didn't pay their Fee
-    private static final Predicate<IRMember> NOT_PAID_PREDICATE = NON_NULL_PREDICATE.and(
-        member -> member.getIsFeePaid().equals(false)
-    );
-
 
     public MemberController() throws RemoteException {
         super();
@@ -214,16 +201,29 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         //check if list is not null
         if (rawResults == null || rawResults.isEmpty()) return null;
 
+        //creating predicate basic predicate for filtering (Object != null)
+        Predicate<IRMember> nonNullPredicate = Objects::nonNull;
+
         //filtering all rawResultsByName for isFeePaid
         if (paid && !notPaid) {
 
+            //creating predicate for members who paid their Fee
+            Predicate<IRMember> paidPredicate = nonNullPredicate.and(
+                member -> member.getIsFeePaid().equals(true)
+            );
+
             //filter for members who paid their Fee
-            return rawResults.stream().filter(PAID_PREDICATE).collect(Collectors.toList());
+            return rawResults.stream().filter(paidPredicate).collect(Collectors.toList());
 
         } else if (notPaid && !paid) {
 
+            //creating predicate for members who didn't pay their Fee
+            Predicate<IRMember> notPaidPredicate = nonNullPredicate.and(
+                member -> member.getIsFeePaid().equals(false)
+            );
+
             //filter for members who didn't pay their Fee
-            return rawResults.stream().filter(NOT_PAID_PREDICATE).collect(Collectors.toList());
+            return rawResults.stream().filter(notPaidPredicate).collect(Collectors.toList());
 
         }
         return rawResults;
