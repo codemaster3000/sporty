@@ -2,6 +2,7 @@ package at.sporty.team1.application.controller;
 
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.persistence.daos.MemberDAO;
+import at.sporty.team1.rmi.api.ILoginController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * Represents a controller to handle the login.
  * TODO
  */
-public class LoginController {
+public class LoginController implements ILoginController {
     private static final Logger LOGGER = LogManager.getLogger();
     private static LoginController _loginController;
 
@@ -48,6 +49,7 @@ public class LoginController {
      *
      * @return Integer Code to distinguish which default screen to load; -1 if denied
      ****************************************************************************************************/
+    @Override
     public int authorize(String username, String password) {
 //        InputSanitizer sanitizer = new InputSanitizer();
 //
