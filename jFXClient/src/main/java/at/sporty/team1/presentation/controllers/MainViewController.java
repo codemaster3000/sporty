@@ -236,7 +236,7 @@ public class MainViewController extends JfxController {
     private enum SearchType {
         MEMBER_NAME("member name"),
         DATE_OF_BIRTH("date of birth"),
-        TEAM_NAME("team name(N/A)");
+        TEAM_NAME("team name");
 
         private final String _stringValue;
 

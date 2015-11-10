@@ -46,27 +46,25 @@ public class Team implements ITeam {
         this.trainer = trainer;
     }
 
-//    @Override
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinTable(name = "department_teams")
-//    public Department getDepartment() {
-//        return department;
-//    }
-//
-//    @Override
-//    public void setDepartment(Department department) {
-//        this.department = department;
-//    }
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinTable(name = "departmentTeams")
+    public Department getDepartment() {
+        return department;
+    }
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinTable(name = "team_members")
-//    public List<Members> getMembers() {
-//        return memberList;
-//    }
-//
-//    public void setMembers(List<Members> memberList) {
-//        this.memberList = memberList;
-//    }
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "teamMembers")
+    public List<Member> getMembers() {
+        return memberList;
+    }
+
+    public void setMembers(List<Member> memberList) {
+        this.memberList = memberList;
+    }
 
     //TODO League table in db
 //    @Override

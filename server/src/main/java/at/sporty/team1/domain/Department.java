@@ -56,16 +56,15 @@ public class Department implements IDepartment {
 		this.head = head;
 	}
 
-//    @OneToMany(fetch = FetchType.EAGER)
-//    @JoinTable(name = "department_teams")
-//    public List<Team> getTeams() {
-//        return teamList;
-//    }
-//
-//    public void setTeams(List<Team> teamList) {
-//        this.teamList = teamList;
-//    }
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "departmentTeams")
+    public List<Team> getTeams() {
+        return teamList;
+    }
 
+    public void setTeams(List<Team> teamList) {
+        this.teamList = teamList;
+    }
 
     @Override
     public boolean equals(Object o) {
