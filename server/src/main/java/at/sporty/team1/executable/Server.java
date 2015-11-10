@@ -1,6 +1,7 @@
 package at.sporty.team1.executable;
 
 import at.sporty.team1.application.controller.DepartmentController;
+import at.sporty.team1.application.controller.LoginController;
 import at.sporty.team1.application.controller.MemberController;
 import at.sporty.team1.application.controller.TeamController;
 import at.sporty.team1.persistence.HibernateSessionUtil;
@@ -14,6 +15,7 @@ import java.io.InputStreamReader;
 import java.rmi.Naming;
 import java.rmi.NoSuchObjectException;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -40,9 +42,7 @@ public class Server {
 
             start();
 
-            bindName(RemoteObjectRegistry.MEMBER_CONTROLLER, new MemberController());
-            bindName(RemoteObjectRegistry.TEAM_CONTROLLER, new TeamController());
-            bindName(RemoteObjectRegistry.DEPARTMENT_CONTROLLER, new DepartmentController());
+            bindRemoteObjects();
 
             LOGGER.info("Server started successfully.");
 
@@ -51,6 +51,13 @@ public class Server {
         } catch (Exception e) {
             LOGGER.error("Error occurs on server initialisation stage.", e);
         }
+    }
+
+    private static void bindRemoteObjects() throws RemoteException {
+        bindName(RemoteObjectRegistry.MEMBER_CONTROLLER, new MemberController());
+        bindName(RemoteObjectRegistry.TEAM_CONTROLLER, new TeamController());
+        bindName(RemoteObjectRegistry.DEPARTMENT_CONTROLLER, new DepartmentController());
+        bindName(RemoteObjectRegistry.LOGIN_CONTROLLER, new LoginController());
     }
 
     /**

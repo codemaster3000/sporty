@@ -6,6 +6,8 @@ import at.sporty.team1.rmi.api.ILoginController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 
@@ -13,23 +15,12 @@ import java.util.List;
  * Represents a controller to handle the login.
  * TODO
  */
-public class LoginController implements ILoginController {
+public class LoginController extends UnicastRemoteObject implements ILoginController {
     private static final Logger LOGGER = LogManager.getLogger();
     private static LoginController _loginController;
 
-    private LoginController() {
-    }
-
-    /**
-     * Returns an instance of LoginController
-     *
-     * @return
-     */
-    public static LoginController getInstance() {
-        if (_loginController == null) {
-            _loginController = new LoginController();
-        }
-        return _loginController;
+    public LoginController() throws RemoteException {
+        super();
     }
 
     /**
@@ -50,7 +41,8 @@ public class LoginController implements ILoginController {
      * @return Integer Code to distinguish which default screen to load; -1 if denied
      ****************************************************************************************************/
     @Override
-    public int authorize(String username, String password) {
+    public int authorize(String username, String password)
+    throws RemoteException {
 //        InputSanitizer sanitizer = new InputSanitizer();
 //
 //        if (!username.equals("") && !password.equals("") &&

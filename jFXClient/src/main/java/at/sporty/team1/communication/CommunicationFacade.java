@@ -39,7 +39,7 @@ public class CommunicationFacade {
 
     public static ILoginController lookupForLoginController() throws  RemoteException, NotBoundException, MalformedURLException {
         return (ILoginController) Naming.lookup(
-                String.format(DEFAULT_RMI, RemoteObjectRegistry.LOGIN_CONTROLLER.getNaming())
+            String.format(DEFAULT_RMI, RemoteObjectRegistry.LOGIN_CONTROLLER.getNaming())
         );
     }
 }
