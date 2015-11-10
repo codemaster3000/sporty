@@ -151,7 +151,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         /* Is valid, moving forward */
         try {
 
-            List<? extends IMember> rawResults = PersistenceFacade.getNewTeamDAO().findByTeamName(teamName);
+            List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByTeamName(teamName);
 
             //Converting results to MemberDTO
             return rawResults.stream()
