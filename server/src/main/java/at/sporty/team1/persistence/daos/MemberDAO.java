@@ -24,9 +24,9 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
     private static final String PROP_LAST_NAME = "lastName";
     private static final String PROP_DATE_OF_BIRTH = "dateOfBirth";
     private static final String PROP_EMAIL = "email";
-    private static final String PROP_TEAM_NAME = "teamId";
     private static final String DELIMITER = " ";
-    private static final String FEE_PAYED = "isFeePayed";
+    private static final String FEE_PAID = "isFeePaid";
+    private static final String PROP_TEAM_NAME = "teamName"; 
 
     /**
      * Creates a new patient DAO.
@@ -105,14 +105,15 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
 
         return findByCriteria(Restrictions.like(PROP_TEAM_NAME, searchString, MatchMode.ANYWHERE));
     }
+    
 
     @Override
     public List<Member> findByPayedFee() throws PersistenceException {
-        return findByCriteria(Restrictions.eq(FEE_PAYED, true));
+        return findByCriteria(Restrictions.eq(FEE_PAID, true));
     }
 
     @Override
     public List<Member> findByNotPayedFee() throws PersistenceException {
-        return findByCriteria(Restrictions.eq(FEE_PAYED, false));
+        return findByCriteria(Restrictions.eq(FEE_PAID, false));
     }
 }
