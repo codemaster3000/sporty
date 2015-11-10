@@ -11,21 +11,24 @@ import java.util.List;
 @Entity
 @Table(name = "department")
 public class Department implements IDepartment {
-    private int departmentId;
+    private Integer departmentId;
     private String sport;
-    private int headId;
-    private List<Team> teams;  //TODO hibernate
+    private Member head;
+    private List<Team> teamList;
+
+    public Department(){
+    }
 
     @Override
     @Id
     @GeneratedValue
     @Column(name = "departmentId")
-    public int getDepartmentId() {
+    public Integer getDepartmentId() {
         return departmentId;
     }
 
     @Override
-    public void setDepartmentId(int departmentId) {
+    public void setDepartmentId(Integer departmentId) {
         this.departmentId = departmentId;
     }
 
@@ -42,34 +45,46 @@ public class Department implements IDepartment {
     }
 
     @Override
-    @Basic
-    @Column(name = "headId")
-	public int getDepartmentHeadId() {
-		return headId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "headId")
+	public Member getDepartmentHead() {
+		return head;
 	}
 
 	@Override
-	public void setDepartmentHeadId(int headId) {
-		this.headId = headId;
+	public void setDepartmentHead(Member head) {
+		this.head = head;
 	}
-    
+
+//    @OneToMany(fetch = FetchType.EAGER)
+//    @JoinTable(name = "department_teams")
+//    public List<Team> getTeams() {
+//        return teamList;
+//    }
+//
+//    public void setTeams(List<Team> teamList) {
+//        this.teamList = teamList;
+//    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Department that = (Department) o;
+        Department dept = (Department) o;
 
-        if (departmentId != that.departmentId) return false;
-        if (sport != null ? !sport.equals(that.sport) : that.sport != null) return false;
-
+        if (departmentId != null ? !departmentId.equals(dept.departmentId) : dept.departmentId != null) return false;
+        if (sport != null ? !sport.equals(dept.sport) : dept.sport != null) return false;
+        if (head != null ? !head.equals(dept.head) : dept.head != null) return false;
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = departmentId;
+        int result = departmentId != null ? departmentId.hashCode() :0;
         result = 31 * result + (sport != null ? sport.hashCode() : 0);
+        result = 31 * result + (head != null ? head.hashCode() : 0);
         return result;
     }
 

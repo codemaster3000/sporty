@@ -2,13 +2,14 @@ package at.sporty.team1.rmi.dtos;
 
 import at.sporty.team1.rmi.api.IDTO;
 
+import java.util.List;
+
 /**
  * This IDTO Object implements Object Builder pattern.
  */
 public class MemberDTO implements IDTO {
     private Integer _memberId;
-    private Integer _teamId;
-    private Integer _departmentId;
+    private List<TeamDTO> _teamList;
     private String _firstName;
     private String _lastName;
     private String _gender;
@@ -32,21 +33,14 @@ public class MemberDTO implements IDTO {
         return this;
     }
 
-    public Integer getTeamId() {
-        return _teamId;
+    @Deprecated // not supported yet
+    public List<TeamDTO> getTeams() {
+        return _teamList;
     }
 
-    public MemberDTO setTeamId(Integer teamId) {
-        _teamId = teamId;
-        return this;
-    }
-
-    public Integer getDepartmentId() {
-        return _departmentId;
-    }
-
-    public MemberDTO setDepartmentId(Integer department) {
-    	_departmentId = department;
+    @Deprecated // not supported yet
+    public MemberDTO setTeams(List<TeamDTO> teamList) {
+        _teamList = teamList;
         return this;
     }
 
@@ -133,7 +127,8 @@ public class MemberDTO implements IDTO {
 
     public Boolean getIsFeePaid() { return _isFeePaid;}
 
-    public void setIsFeePaid(Boolean feePaid) {
+    public MemberDTO setIsFeePaid(Boolean feePaid) {
         _isFeePaid = feePaid;
+        return this;
     }
 }

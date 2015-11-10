@@ -1,6 +1,5 @@
 package at.sporty.team1.persistence.daos;
 
-import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Team;
 import at.sporty.team1.persistence.Util;
 import at.sporty.team1.persistence.api.ITeamDAO;

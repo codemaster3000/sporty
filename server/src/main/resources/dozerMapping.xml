@@ -114,7 +114,88 @@
             <a>getTeamId</a>
             <b>getTeamId</b>
         </field>
-        <!--TODO other methods-->
+        <field>
+            <a>setTeamId</a>
+            <b>setTeamId</b>
+        </field>
+        <field>
+            <a>getTrainer</a>
+            <b>getTrainer</b>
+        </field>
+        <field>
+            <a>setTrainer</a>
+            <b>setTrainer</b>
+        </field>
+        <!--<field>-->
+            <!--<a>getDepartment</a>-->
+            <!--<b>getDepartment</b>-->
+        <!--</field>-->
+        <!--<field>-->
+            <!--<a>setDepartment</a>-->
+            <!--<b>setDepartment</b>-->
+        <!--</field>-->
+        <!--<field>-->
+            <!--<a>getMembers</a>-->
+            <!--<b>getMembers</b>-->
+        <!--</field>-->
+        <!--<field>-->
+            <!--<a>setMembers</a>-->
+            <!--<b>setMembers</b>-->
+        <!--</field>-->
+        <field>
+            <a>getTeamName</a>
+            <b>getTeamName</b>
+        </field>
+        <field>
+            <a>setTeamName</a>
+            <b>setTeamName</b>
+        </field>
+        <field>
+            <a>getMemberList</a>
+            <b>getMemberList</b>
+        </field>
+        <field>
+            <a>setMemberList</a>
+            <b>setMemberList</b>
+        </field>
+    </mapping>
+
+    <!--DEPARTMENT TO DTO MAPPING-->
+    <mapping>
+        <class-a>at.sporty.team1.domain.Department</class-a>
+        <class-b>at.sporty.team1.rmi.dtos.DepartmentDTO</class-b>
+        <field>
+            <a>getDepartmentId</a>
+            <b>getDepartmentId</b>
+        </field>
+        <field>
+            <a>setDepartmentId</a>
+            <b>setDepartmentId</b>
+        </field>
+        <field>
+            <a>getSport</a>
+            <b>getSport</b>
+        </field>
+        <field>
+            <a>setSport</a>
+            <b>setSport</b>
+        </field>
+        <field>
+            <a>getDepartmentHead</a>
+            <b>getDepartmentHead</b>
+        </field>
+        <field>
+            <a>setDepartmentHead</a>
+            <b>setDepartmentHead</b>
+        </field>
+        <!--<field>-->
+            <!--<a>getTeams</a>-->
+            <!--<b>getTeams</b>-->
+        <!--</field>-->
+        <!--<field>-->
+            <!--<a>setTeams</a>-->
+            <!--<b>setTeams</b>-->
+        <!--</field>-->
     </mapping>
 
 </mappings>

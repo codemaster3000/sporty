@@ -14,7 +14,7 @@ public interface IRTeam {
 
 //    Department getDepartment();
 
-//    League getLeagueId();
+//    League getLeague();
 
     String getTeamName();
 }

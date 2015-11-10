@@ -2,17 +2,16 @@ package at.sporty.team1.rmi.dtos;
 
 import at.sporty.team1.rmi.api.IDTO;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by sereGkaluv on 02-Nov-15.
+ * This IDTO Object implements Object Builder pattern.
  */
 public class TeamDTO implements IDTO {
     public Integer _teamId;
-    public Integer _trainerId;
-    public Integer _departmentId;
-    public Integer _leagueId;
+    public MemberDTO _trainer;
+    public DepartmentDTO _department;
+    public Integer _league; //TODO replace with league DTO
     private String _teamName;
     private List<MemberDTO> _memberList;
 
@@ -28,30 +27,34 @@ public class TeamDTO implements IDTO {
         return this;
     }
 
-    public Integer getTrainerId() {
-        return _trainerId;
+    public MemberDTO getTrainer() {
+        return _trainer;
     }
 
-    public TeamDTO setTrainerId(Integer trainerId) {
-        _trainerId = trainerId;
+    public TeamDTO setTrainer(MemberDTO trainer) {
+        _trainer = trainer;
         return this;
     }
 
-    public Integer getDepartmentId() {
-        return _departmentId;
+    @Deprecated // not supported yet
+    public DepartmentDTO getDepartment() {
+        return _department;
     }
 
-    public TeamDTO setDepartmentId(Integer departmentId) {
-        _departmentId = departmentId;
+    @Deprecated // not supported yet
+    public TeamDTO setDepartment(DepartmentDTO department) {
+        _department = department;
         return this;
     }
 
-    public Integer getLeagueId() {
-        return _leagueId;
+    @Deprecated // not supported yet
+    public Integer getLeague() {
+        return _league;
     }
 
-    public TeamDTO setLeagueId(Integer leagueId) {
-        _leagueId = leagueId;
+    @Deprecated // not supported yet
+    public TeamDTO setLeague(Integer league) {
+        _league = league;
         return this;
     }
 
@@ -64,10 +67,12 @@ public class TeamDTO implements IDTO {
         return this;
     }
 
+    @Deprecated // not supported yet
     public List<MemberDTO> getMemberList() {
         return _memberList;
     }
 
+    @Deprecated // not supported yet
     public TeamDTO setMemberList(List<MemberDTO> memberList) {
         _memberList = memberList;
         return this;
