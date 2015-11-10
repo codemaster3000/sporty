@@ -84,7 +84,7 @@ public class MainViewController extends JfxController {
         String searchQuery = GUIHelper.readNullOrEmpty(_searchField.getText());
         
         
-        //Verarbeite Checkboxen
+        //Verarbeite Checkboxen //FIXME: and what happens if I un-check them?
         if(_feeNotPaidCheckbox.isSelected()){
         	_checkboxNotPaid = true;
         }
@@ -149,7 +149,7 @@ public class MainViewController extends JfxController {
                 try {
 
                     IMemberController memberController = CommunicationFacade.lookupForMemberController();
-                    displaySearchResults(memberController.searchAllMembers());
+                    displaySearchResults(memberController.searchAllMembers( _checkboxNotPaid, _checkboxPaid));
 
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
                     LOGGER.error("Error occurs while searching.", e);

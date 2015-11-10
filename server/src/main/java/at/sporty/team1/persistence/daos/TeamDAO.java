@@ -43,5 +43,8 @@ public class TeamDAO extends HibernateGenericDAO<Team> implements ITeamDAO {
         return new LinkedList<>();
     }
 
-
+    @Override
+    public List<Team> findTeamsByMemberId(Integer memberId) {
+        return null;
+    }
 }

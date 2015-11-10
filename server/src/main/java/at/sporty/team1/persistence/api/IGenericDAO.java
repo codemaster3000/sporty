@@ -27,21 +27,29 @@ public interface IGenericDAO<T> {
     List<T> findByCriteria(Criterion... criterion) throws PersistenceException;
 
     /**
+     * Returns a list of objects that are matched by a given sql query.
+     * @param sql The sql query with named parameters.
+     * @return The found objects.
+     * @throws PersistenceException
+     */
+    List<T> findBySQLQuery(String sql) throws PersistenceException;
+
+    /**
      * Returns a list of objects that are matched by a given hql query.
      * @param hql The hibernate query with named parameters.
      * @return The found objects.
-     * @throws SQLException
+     * @throws PersistenceException
      */
-    List<T> findByHQL(String hql);
+    List<T> findByHQL(String hql) throws PersistenceException;
 
     /**
      * Returns a list of objects that are matched by a given hql query.
      * @param hql The hibernate query with named parameters.
      * @param map The map with the named parameters. Example: {@code HashMap<String,Object>}
      * @return The found objects.
-     * @throws SQLException
+     * @throws PersistenceException
      */
-    List<T> findByHQL(String hql, Map<?, ?> map);
+    List<T> findByHQL(String hql, Map<?, ?> map) throws PersistenceException;
 
     /**
      * Returns a specific object identified by its id from the data store.

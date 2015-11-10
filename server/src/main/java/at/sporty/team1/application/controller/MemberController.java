@@ -3,11 +3,13 @@ package at.sporty.team1.application.controller;
 
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IMember;
+import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.domain.readonly.IRMember;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.DataType;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
@@ -72,12 +74,15 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
     
     @Override
-    public List<MemberDTO> searchAllMembers()
+    public List<MemberDTO> searchAllMembers(boolean notPaidCheckbox, boolean paidCheckbox)
     throws RemoteException {
 
         try {
 
             List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findAll();
+
+            //filtering results for fee
+            rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
 
             //Converting results to MemberDTO
             return rawResults.stream()
@@ -133,6 +138,9 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
             List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByTeamName(teamName);
 
+            //filtering results for fee
+            rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
+
             //Converting results to MemberDTO
             return rawResults.stream()
                     .map(member -> MAPPER.map(member, MemberDTO.class))
@@ -157,6 +165,9 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         try {
 
             List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByDateOfBirth(dateOfBirth);
+
+            //filtering results for fee
+            rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
 
             //Converting results to MemberDTO
             return rawResults.stream()
@@ -186,6 +197,38 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
                 e
             );
         }
+    }
+
+    @Override
+    public List<TeamDTO> getTeams(Integer memberId)
+    throws RemoteException {
+
+        try {
+
+            List<? extends ITeam> rawResults = PersistenceFacade.getNewTeamDAO().findTeamsByMemberId(memberId);
+
+            //Converting results to TeamDTO
+            return rawResults.stream()
+                    .map(team -> MAPPER.map(team, TeamDTO.class))
+                    .collect(Collectors.toList());
+
+        } catch (PersistenceException e) {
+            LOGGER.error("An error occurs while searching for \"all Members\".", e);
+            return null;
+        }
+    }
+
+    @Override
+    public void assignMemberToTeam(Integer memberId, Integer teamId)
+    throws RemoteException {
+
+
+    }
+
+    @Override
+    public void removeMemberFromTeam(Integer memberId, Integer teamId)
+    throws RemoteException {
+
     }
 
     /**

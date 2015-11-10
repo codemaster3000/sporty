@@ -47,7 +47,7 @@ public class Team implements ITeam {
     }
 
 //    @Override
-//    @ManyToOne(fetch = FetchType.EAGER)
+//    @OneToOne(fetch = FetchType.LAZY)
 //    @JoinTable(name = "department_teams")
 //    public Department getDepartment() {
 //        return department;

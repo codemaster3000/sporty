@@ -69,7 +69,7 @@ public interface IMemberController extends Remote, Serializable {
      * @return List<MemberDTO> List of all members
      * @throws RemoteException
      */
-    List<MemberDTO> searchAllMembers()
+    List<MemberDTO> searchAllMembers(boolean notPaidCheckbox, boolean paidCheckbox)
     throws RemoteException;
 
     /**

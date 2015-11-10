@@ -1,6 +1,7 @@
 package at.sporty.team1.persistence.api;
 
 import at.sporty.team1.domain.Team;
+import at.sporty.team1.domain.interfaces.ITeam;
 
 import java.util.List;
 
@@ -26,4 +27,12 @@ public interface ITeamDAO extends IGenericDAO<Team> {
      * @return List<Team>
      */
     List<Team> findTeamsBySport(String sport) throws PersistenceException;
+
+    /**
+     * Find team(s) by member id.
+     *
+     * @param memberId memberId id of the member to be searched
+     * @return List<Team>
+     */
+    List<Team> findTeamsByMemberId(Integer memberId);
 }

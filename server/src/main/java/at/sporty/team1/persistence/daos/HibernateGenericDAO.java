@@ -5,6 +5,7 @@ import at.sporty.team1.persistence.api.IGenericDAO;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.criterion.Criterion;
 
 import javax.persistence.PersistenceException;
@@ -44,14 +45,23 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
         });
     }
 
+    @SuppressWarnings("unchecked") //NON Generic Hibernate method.
     @Override
-    public List<T> findByHQL(String hql) {
+    public List<T> findBySQLQuery(String sql) throws PersistenceException {
+        return (List<T>) HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
+            SQLQuery query = session.createSQLQuery(sql);
+            return query.list();
+        });
+    }
+
+    @Override
+    public List<T> findByHQL(String hql) throws PersistenceException {
         return findByHQL(hql, null);
     }
 
     @SuppressWarnings("unchecked") //NON Generic Hibernate method.
     @Override
-    public List<T> findByHQL(String hql, Map<?, ?> map) {
+    public List<T> findByHQL(String hql, Map<?, ?> map) throws PersistenceException {
         return (List<T>) HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
             Query query = session.createQuery(hql);
             if (map != null) {
