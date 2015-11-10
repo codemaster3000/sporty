@@ -21,6 +21,10 @@ public class SearchMemberTest {
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 	
+	//**********************************************************
+	// general tests
+	//**********************************************************
+	
 	/**
 	 * One Member found with fName Claudia
 	 */
@@ -70,6 +74,10 @@ public class SearchMemberTest {
 
 	}
 	
+	//**********************************************************
+	// searchMemberByNameString - Tests
+	//**********************************************************
+	
 	/**
 	 * Search for all Members with 'a'
 	 */
@@ -113,7 +121,7 @@ public class SearchMemberTest {
 	@Test
 	public void searchMemberTest_6() {
 
-		String searchString = " ";
+		String searchString = "";
 		List<MemberDTO> members = null;
 
 		try {
@@ -130,7 +138,7 @@ public class SearchMemberTest {
 	@Test
 	public void searchMemberTest_7() {
 
-		String searchString = " ";
+		String searchString = "";
 		List<MemberDTO> members = null;
 
 		try {
@@ -147,7 +155,7 @@ public class SearchMemberTest {
 	@Test
 	public void searchMemberTest_8() {
 
-		String searchString = " ";
+		String searchString = "";
 		List<MemberDTO> members = null;
 
 		try {
@@ -161,10 +169,6 @@ public class SearchMemberTest {
 		Assert.assertTrue(members.size() > 30);
 	}
 
-	
-	
-	
-	
 	private List<MemberDTO> testSearchMember(String searchString, boolean notPaidFee, boolean paidFee){
 
 		try {
@@ -176,4 +180,219 @@ public class SearchMemberTest {
 		}
 
 	}
+	
+	//**********************************************************
+	// searchMemberByTeamName - Tests
+	//**********************************************************
+	
+	@Test
+	public void searchMemberTest_9a() {
+
+		String searchString = "Soccer";
+		List<MemberDTO> members = null;
+
+		try {
+			MemberController mem = new MemberController();
+			members = mem.searchMembersByTeamName(searchString, false, false);
+		} catch (RemoteException | ValidationException e) {
+			e.printStackTrace();
+		}
+
+		Assert.assertNotNull(members);
+		Assert.assertTrue(members.size() > 0);
+	}
+	
+	@Test
+	public void searchMemberTest_9b() {
+
+		String searchString = "Soccer";
+		List<MemberDTO> members = null;
+
+		try {
+			MemberController mem = new MemberController();
+			members = mem.searchMembersByTeamName(searchString, true, false);
+		} catch (RemoteException | ValidationException e) {
+			e.printStackTrace();
+		}
+
+		Assert.assertNotNull(members);
+		Assert.assertTrue(members.size() > 0);
+	}
+	
+	@Test
+	public void searchMemberTest_9c() {
+
+		String searchString = "Soccer";
+		List<MemberDTO> members = null;
+
+		try {
+			MemberController mem = new MemberController();
+			members = mem.searchMembersByTeamName(searchString, false, true);
+		} catch (RemoteException | ValidationException e) {
+			e.printStackTrace();
+		}
+
+		Assert.assertNotNull(members);
+		Assert.assertTrue(members.size() > 0);
+	}
+	
+	@Test
+	public void searchMemberTest_10a() {
+
+		String searchString = "soccer";
+		List<MemberDTO> members = null;
+
+		try {
+			MemberController mem = new MemberController();
+			members = mem.searchMembersByTeamName(searchString, false, false);
+		} catch (RemoteException | ValidationException e) {
+			e.printStackTrace();
+		}
+
+		Assert.assertNotNull(members);
+		Assert.assertTrue(members.size() > 0);
+	}
+	
+	@Test
+	public void searchMemberTest_10b() {
+
+		String searchString = "soccer";
+		List<MemberDTO> members = null;
+
+		try {
+			MemberController mem = new MemberController();
+			members = mem.searchMembersByTeamName(searchString, true, false);
+		} catch (RemoteException | ValidationException e) {
+			e.printStackTrace();
+		}
+
+		Assert.assertNotNull(members);
+		Assert.assertTrue(members.size() > 0);
+	}
+	
+	@Test
+	public void searchMemberTest_10c() {
+
+		String searchString = "soccer";
+		List<MemberDTO> members = null;
+
+		try {
+			MemberController mem = new MemberController();
+			members = mem.searchMembersByTeamName(searchString, false, true);
+		} catch (RemoteException | ValidationException e) {
+			e.printStackTrace();
+		}
+
+		Assert.assertNotNull(members);
+		Assert.assertTrue(members.size() > 0);
+	}
+	
+	@Test
+	public void searchMemberTest_11a() {
+
+		String searchString = "";
+		List<MemberDTO> members = null;
+
+		try {
+			MemberController mem = new MemberController();
+			members = mem.searchMembersByTeamName(searchString, false, false);
+		} catch (RemoteException | ValidationException e) {
+			e.printStackTrace();
+		}
+
+		Assert.assertNotNull(members);
+		Assert.assertTrue(members.size() > 0);
+	}
+	
+	
+	@Test
+	public void searchMemberTest_11b() {
+
+		String searchString = "";
+		List<MemberDTO> members = null;
+
+		try {
+			MemberController mem = new MemberController();
+			members = mem.searchMembersByTeamName(searchString, true, false);
+		} catch (RemoteException | ValidationException e) {
+			e.printStackTrace();
+		}
+
+		Assert.assertNotNull(members);
+		Assert.assertTrue(members.size() > 0);
+	}
+	
+	@Test
+	public void searchMemberTest_11c() {
+
+		String searchString = "";
+		List<MemberDTO> members = null;
+
+		try {
+			MemberController mem = new MemberController();
+			members = mem.searchMembersByTeamName(searchString, false, true);
+		} catch (RemoteException | ValidationException e) {
+			e.printStackTrace();
+		}
+
+		Assert.assertNotNull(members);
+		Assert.assertTrue(members.size() > 0);
+	}
+	
+	@Test
+	public void searchMemberTest_12a() {
+
+		String searchString = "Football";
+		List<MemberDTO> members = null;
+
+		try {
+			MemberController mem = new MemberController();
+			members = mem.searchMembersByTeamName(searchString, false, false);
+		} catch (RemoteException | ValidationException e) {
+			e.printStackTrace();
+		}
+
+		Assert.assertNotNull(members);
+		Assert.assertTrue(members.size() > 0);
+	}
+	
+	@Test
+	public void searchMemberTest_12b() {
+
+		String searchString = "Football";
+		List<MemberDTO> members = null;
+
+		try {
+			MemberController mem = new MemberController();
+			members = mem.searchMembersByTeamName(searchString, true, false);
+		} catch (RemoteException | ValidationException e) {
+			e.printStackTrace();
+		}
+
+		Assert.assertNotNull(members);
+		Assert.assertTrue(members.size() > 0);
+	}
+	
+	@Test
+	public void searchMemberTest_12c() {
+
+		String searchString = "Football";
+		List<MemberDTO> members = null;
+
+		try {
+			MemberController mem = new MemberController();
+			members = mem.searchMembersByTeamName(searchString, false, true);
+		} catch (RemoteException | ValidationException e) {
+			e.printStackTrace();
+		}
+
+		Assert.assertNotNull(members);
+		Assert.assertTrue(members.size() > 0);
+	}
+	
+	//**********************************************************
+	// searchMembersByDateOfBirth - Tests
+	//**********************************************************
+	
+	
 }
