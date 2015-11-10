@@ -18,7 +18,6 @@ import org.dozer.Mapper;
 import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +31,20 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LogManager.getLogger();
     private static final Mapper MAPPER = new DozerBeanMapper();
+
+    //creating predicate basic predicate for filtering (Object != null)
+    private static final Predicate<IRMember> NON_NULL_PREDICATE = Objects::nonNull;
+
+    //creating predicate for members who paid their Fee
+    private static final Predicate<IRMember> PAID_PREDICATE = NON_NULL_PREDICATE.and(
+        member -> member.getIsFeePaid().equals(true)
+    );
+
+    //creating predicate for members who didn't pay their Fee
+    private static final Predicate<IRMember> NOT_PAID_PREDICATE = NON_NULL_PREDICATE.and(
+        member -> member.getIsFeePaid().equals(false)
+    );
+
 
     public MemberController() throws RemoteException {
         super();
@@ -94,9 +107,6 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     @Override
     public List<MemberDTO> searchMembersByNameString(String searchString, boolean notPaidCheckbox, boolean paidCheckbox)
     throws RemoteException, ValidationException {
-
-    	List<? extends IMember> rawResults = new LinkedList<>();
-    	List<? extends IMember> rawResultsByFee = null;
     	
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -107,59 +117,18 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         /* Is valid, moving forward */
         try {
 
-            List<? extends IMember> rawResultsByName = PersistenceFacade.getNewMemberDAO().findByNameString(searchString);
-
-//            if(notPaidCheckbox){
-//            	rawResultsByFee = PersistenceFacade.getNewMemberDAO().findByNotPayedFee();
-//            }else if(paidCheckbox){
-//            	rawResultsByFee = PersistenceFacade.getNewMemberDAO().findByPayedFee();
-//            }
-//
-//            //Compare the two lists
-//            if(rawResultsByFee != null){
-//
-//
-//
-//	            	for(int i = 0; i < rawResultsByFee.size(); i++){
-//	            		if(rawResultsByName.contains(rawResultsByFee.get(i))){
-//	                		rawResults.add(rawResultsByFee.get(i));
-//	                	}
-//	            	}
-//
-//
-//            }else{
-//            	rawResults.addAll(rawResultsByName);
-//            }
-
-            //creating predicate basic predicate for filtering (Object != null)
-            Predicate<IRMember> nonNullPredicate = Objects::nonNull;
-
+            List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByNameString(searchString);
 
             //filtering all rawResultsByName for isFeePaid
             if (paidCheckbox && !notPaidCheckbox) {
 
                 //filter for members who paid their Fee
-                Predicate<IRMember> paidPredicate = nonNullPredicate.and(
-                    member -> member.getIsFeePaid().equals(true)
-                );
-
-                rawResults = rawResultsByName.stream()
-                        .filter(paidPredicate).collect(Collectors.toList());
+                rawResults = rawResults.stream().filter(PAID_PREDICATE).collect(Collectors.toList());
 
             } else if (notPaidCheckbox && !paidCheckbox) {
 
                 //filter for members who didn't pay their Fee
-                Predicate<IRMember> notPaidPredicate = nonNullPredicate.and(
-                    member -> member.getIsFeePaid().equals(false)
-                );
-
-                rawResults = rawResultsByName.stream()
-                        .filter(notPaidPredicate).collect(Collectors.toList());
-
-            } else {
-
-                //both feePaid and notFeePaid are true or false -> return whole list;
-                rawResults = rawResultsByName;
+                rawResults = rawResults.stream().filter(NOT_PAID_PREDICATE).collect(Collectors.toList());
 
             }
 
