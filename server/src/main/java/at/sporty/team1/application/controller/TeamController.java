@@ -1,6 +1,8 @@
 package at.sporty.team1.application.controller;
 
 import at.sporty.team1.domain.Team;
+import at.sporty.team1.domain.interfaces.ITeam;
+import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.exceptions.DataType;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
@@ -15,6 +17,8 @@ import org.dozer.Mapper;
 import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by sereGkaluv on 27-Oct-15.
@@ -52,6 +56,28 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
 
         } catch (PersistenceException e) {
             LOGGER.error("Error occurs while communicating with DB.", e);
+        }
+    }
+
+    @Override
+    public List<TeamDTO> searchBySport(String sport)
+    throws RemoteException {
+
+        if (sport == null) return null;
+
+        /* Is valid, moving forward */
+        try {
+             /* pulling a TeamDAO and save the Team */
+            List<? extends ITeam> rawResults = PersistenceFacade.getNewTeamDAO().findTeamsBySport(sport);
+
+            //Converting results to MemberDTO
+            return rawResults.stream()
+                    .map(team -> MAPPER.map(team, TeamDTO.class))
+                    .collect(Collectors.toList());
+
+        } catch (PersistenceException e) {
+            LOGGER.error("An error occurs while searching for \"{}\".", sport, e);
+            return null;
         }
     }
 }

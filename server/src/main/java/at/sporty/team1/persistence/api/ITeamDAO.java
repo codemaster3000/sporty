@@ -15,7 +15,13 @@ public interface ITeamDAO extends IGenericDAO<Team> {
      * @param teamName name of the team to be searched
      * @return List<Team>
      */
-    List<Team> findTeamsByName(String teamName);
-    
-    
+    List<Team> findTeamsByName(String teamName) throws PersistenceException;
+
+    /**
+     * Find team(s) by sport.
+     *
+     * @param sport sport will be used to identify the department and return all teams
+     * @return List<Team>
+     */
+    List<Team> findTeamsBySport(String sport) throws PersistenceException;
 }
