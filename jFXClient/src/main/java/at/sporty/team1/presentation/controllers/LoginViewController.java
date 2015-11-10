@@ -65,6 +65,7 @@ public class LoginViewController extends JfxController {
 
 //        _mainController = MainController.getInstance();
 //        _loginController = LoginController.getInstance();
+
         tfPassword.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -86,7 +87,7 @@ public class LoginViewController extends JfxController {
     }
 
     /*
-     * login: checks if the login is correct. If it´s correct the receptionist view will be loaded
+     * login: checks if the login is correct. If it´s correct the users view(=Role) will be loaded
      */
     private void login() {
         // TODO set correct screens
