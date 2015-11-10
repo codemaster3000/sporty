@@ -18,7 +18,6 @@ import org.dozer.Mapper;
 import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -119,18 +118,8 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
             List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByNameString(searchString);
 
-            //filtering all rawResultsByName for isFeePaid
-            if (paidCheckbox && !notPaidCheckbox) {
-
-                //filter for members who paid their Fee
-                rawResults = rawResults.stream().filter(PAID_PREDICATE).collect(Collectors.toList());
-
-            } else if (notPaidCheckbox && !paidCheckbox) {
-
-                //filter for members who didn't pay their Fee
-                rawResults = rawResults.stream().filter(NOT_PAID_PREDICATE).collect(Collectors.toList());
-
-            }
+            //filtering results for fee
+            rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
 
             //Converting results to MemberDTO
             return rawResults.stream()
@@ -210,5 +199,33 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
                 e
             );
         }
+    }
+
+    /**
+     * Helping method which filters rawResults dependent on FeePaid state.
+     *
+     * @param rawResults List to be filtered.
+     * @param paid value of the feePaidCheckbox
+     * @param notPaid value of the notFeePaidCheckbox
+     * @return filtered rawResults list or null if rawResults were null or empty.
+     */
+    private List<? extends IMember> filterWithFee(List<? extends IMember> rawResults, boolean paid, boolean notPaid) {
+
+        //check if list is not null
+        if (rawResults == null || rawResults.isEmpty()) return null;
+
+        //filtering all rawResultsByName for isFeePaid
+        if (paid && !notPaid) {
+
+            //filter for members who paid their Fee
+            return rawResults.stream().filter(PAID_PREDICATE).collect(Collectors.toList());
+
+        } else if (notPaid && !paid) {
+
+            //filter for members who didn't pay their Fee
+            return rawResults.stream().filter(NOT_PAID_PREDICATE).collect(Collectors.toList());
+
+        }
+        return rawResults;
     }
 }
