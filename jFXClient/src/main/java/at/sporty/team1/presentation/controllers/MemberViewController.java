@@ -3,12 +3,16 @@ package at.sporty.team1.presentation.controllers;
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.IDTO;
+import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.api.IMemberController;
+import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,7 +28,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.ResourceBundle;
+
 
 public class MemberViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -44,7 +50,7 @@ public class MemberViewController extends JfxController {
     @FXML private CheckBox memberSportCheckboxVolleyball;
     @FXML private CheckBox memberSportCheckboxBaseball;
     @FXML private CheckBox memberSportCheckboxFootball;
-    @FXML private ComboBox<TeamDTO> memberTeamComboBoxSoccer;
+    @FXML private ComboBox<TeamDTO> memberTeamComboboxSoccer;
     @FXML private ComboBox<TeamDTO> memberTeamComboboxVolleyball;
     @FXML private ComboBox<TeamDTO> memberTeamComboboxBaseball;
     @FXML private ComboBox<TeamDTO> memberTeamComboboxFootball;
@@ -58,9 +64,91 @@ public class MemberViewController extends JfxController {
         radioGenderMale.setToggleGroup(_group);
         ObservableList<String> values = null;
         Platform.runLater(fNameTextField::requestFocus);
+        
+       doComboBoxAndCheckBoxInitialization();
     }
 
-    @Override
+    /**
+     * Init the Checkboxes and the Comboboxes in MemberView
+     */
+    private void doComboBoxAndCheckBoxInitialization() {
+			
+    	DepartmentDTO department = null;
+    	TeamDTO team = new TeamDTO();
+    	
+    	ObservableList<TeamDTO> soccerTeams = null;
+    	ObservableList<TeamDTO> volleyballTeams = null;
+    	ObservableList<TeamDTO> footballTeams = null;
+    	ObservableList<TeamDTO> baseballTeams = null;
+    	
+    	memberTeamComboboxBaseball.setDisable(true);
+    	memberTeamComboboxFootball.setDisable(true);
+    	memberTeamComboboxSoccer.setDisable(true);
+    	memberTeamComboboxVolleyball.setDisable(true);
+    	
+    	memberSportCheckboxBaseball.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				
+				if(memberSportCheckboxBaseball.isSelected()){
+					memberTeamComboboxBaseball.setDisable(false);
+				}else{
+					memberTeamComboboxBaseball.setDisable(true);
+				}
+				
+			}	
+    	});
+    	
+    	memberSportCheckboxSoccer.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				
+				if(memberSportCheckboxSoccer.isSelected()){
+					memberTeamComboboxSoccer.setDisable(false);
+				}else{
+					memberTeamComboboxSoccer.setDisable(true);
+				}
+				
+			}	
+    	});
+    	
+    	memberSportCheckboxVolleyball.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				
+				if(memberSportCheckboxVolleyball.isSelected()){
+					memberTeamComboboxVolleyball.setDisable(false);
+				}else{
+					memberTeamComboboxVolleyball.setDisable(true);
+				}
+				
+			}	
+    	});
+    	
+    	memberSportCheckboxFootball.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				
+				if(memberSportCheckboxFootball.isSelected()){
+					memberTeamComboboxFootball.setDisable(false);
+				}else{
+					memberTeamComboboxFootball.setDisable(true);
+				}
+				
+			}	
+    	});
+    	
+    	memberTeamComboboxBaseball.setItems(baseballTeams);
+		memberTeamComboboxFootball.setItems(footballTeams);
+		memberTeamComboboxSoccer.setItems(soccerTeams);
+		memberTeamComboboxVolleyball.setItems(volleyballTeams);
+	}
+
+	@Override
     public void displayDTO(IDTO idto){
         if (idto instanceof MemberDTO) {
             displayMemberDTO((MemberDTO) idto);
