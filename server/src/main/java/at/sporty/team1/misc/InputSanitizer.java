@@ -25,7 +25,7 @@ public class InputSanitizer {
      * @return Boolean true if matched, false if not
      */
     public boolean isNull(String value) {
-        return value == null;
+        return value == null || value.trim().isEmpty();
     }
 
     /**
