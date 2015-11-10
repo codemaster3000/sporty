@@ -84,6 +84,9 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             //filtering results for fee
             rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
 
+            //checking if there are an results
+            if (rawResults == null || rawResults.isEmpty()) return null;
+
             //Converting results to MemberDTO
             return rawResults.stream()
                     .map(member -> MAPPER.map(member, MemberDTO.class))
@@ -114,6 +117,9 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
             //filtering results for fee
             rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
+
+            //checking if there are an results
+            if (rawResults == null || rawResults.isEmpty()) return null;
 
             //Converting results to MemberDTO
             return rawResults.stream()
@@ -147,6 +153,9 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             //filtering results for fee
             rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
 
+            //checking if there are an results
+            if (rawResults == null || rawResults.isEmpty()) return null;
+
             //Converting results to MemberDTO
             return rawResults.stream()
                     .map(member -> MAPPER.map(member, MemberDTO.class))
@@ -174,6 +183,9 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
             //filtering results for fee
             rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
+
+            //checking if there are an results
+            if (rawResults == null || rawResults.isEmpty()) return null;
 
             //Converting results to MemberDTO
             return rawResults.stream()
@@ -227,14 +239,14 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     @Override
     public void assignMemberToTeam(Integer memberId, Integer teamId)
     throws RemoteException {
-
+        LOGGER.warn("Method assignMemberToTeam is not implemented yet. //TODO");
 
     }
 
     @Override
     public void removeMemberFromTeam(Integer memberId, Integer teamId)
     throws RemoteException {
-
+        LOGGER.warn("Method assignMemberToTeam is not implemented yet. //TODO");
     }
 
     /**
