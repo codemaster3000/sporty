@@ -41,25 +41,26 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
         Set<Member> results = new LinkedHashSet<>();
         String[] split = searchString.split(DELIMITER);
 
-        switch (split.length) {
-            case 1: {
-                //last or first name
-                results.addAll(findByFirstName(split[0]));
-                results.addAll(findByLastName(split[0]));
-
-                return new LinkedList<>(results);
-            }
-
-            case 2: {
-                //full name with first and last name
-                results.addAll(findByFullName(split[0], split[1]));
-                results.addAll(findByFullName(split[1], split[0]));
-
-                return new LinkedList<>(results);
-            }
-
-            default: return null;
-        }
+        
+	        switch (split.length) {
+	            case 1: {
+	                //last or first name
+	                results.addAll(findByFirstName(split[0]));
+	                results.addAll(findByLastName(split[0]));
+	
+	                return new LinkedList<>(results);
+	            }
+	
+	            case 2: {
+	                //full name with first and last name
+	                results.addAll(findByFullName(split[0], split[1]));
+	                results.addAll(findByFullName(split[1], split[0]));
+	
+	                return new LinkedList<>(results);
+	            }
+	
+	            default: return null;
+	        }
     }
 
     @Override

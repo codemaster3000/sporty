@@ -109,6 +109,57 @@ public class SearchMemberTest {
 		Assert.assertNotNull(members);
 		Assert.assertTrue(members.size() > 5);
 	}
+	
+	@Test
+	public void searchMemberTest_6() {
+
+		String searchString = " ";
+		List<MemberDTO> members = null;
+
+		try {
+			MemberController mem = new MemberController();
+			members = mem.searchMembersByNameString(searchString, false, false);
+		} catch (RemoteException | ValidationException e) {
+			e.printStackTrace();
+		}
+
+		Assert.assertNotNull(members);
+		Assert.assertTrue(members.size() > 6);
+	}
+	
+	@Test
+	public void searchMemberTest_7() {
+
+		String searchString = " ";
+		List<MemberDTO> members = null;
+
+		try {
+			MemberController mem = new MemberController();
+			members = mem.searchMembersByNameString(searchString, false, true);
+		} catch (RemoteException | ValidationException e) {
+			e.printStackTrace();
+		}
+
+		Assert.assertNotNull(members);
+		Assert.assertTrue(members.size() > 6);
+	}
+	
+	@Test
+	public void searchMemberTest_8() {
+
+		String searchString = " ";
+		List<MemberDTO> members = null;
+
+		try {
+			MemberController mem = new MemberController();
+			members = mem.searchMembersByNameString(searchString, true, false);
+		} catch (RemoteException | ValidationException e) {
+			e.printStackTrace();
+		}
+
+		Assert.assertNotNull(members);
+		Assert.assertTrue(members.size() > 30);
+	}
 
 	
 	
