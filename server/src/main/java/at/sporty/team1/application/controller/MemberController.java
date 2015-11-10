@@ -140,7 +140,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
                 //filter for members who paid their Fee
                 Predicate<IRMember> paidPredicate = nonNullPredicate.and(
-                    member -> member.getIsFeePaid().equals(paidCheckbox)
+                    member -> member.getIsFeePaid().equals(true)
                 );
 
                 rawResults = rawResultsByName.stream()
@@ -150,7 +150,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
                 //filter for members who didn't pay their Fee
                 Predicate<IRMember> notPaidPredicate = nonNullPredicate.and(
-                    member -> member.getIsFeePaid().equals(notPaidCheckbox)
+                    member -> member.getIsFeePaid().equals(false)
                 );
 
                 rawResults = rawResultsByName.stream()
