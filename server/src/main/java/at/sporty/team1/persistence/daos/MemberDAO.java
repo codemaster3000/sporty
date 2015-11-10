@@ -106,10 +106,14 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
 
         String sqlQuery = String.format(
 
-            "select member.* "+
-            "from team " +
-            "INNER JOIN teamMembers ON team.teamName LIKE '%s' " +
-            "LEFT JOIN member ON teamMembers.memberId = member.memberId;",
+            "SELECT member.* "+
+            "FROM teamMembers " +
+            "LEFT JOIN member ON teamMembers.memberId = member.memberId " +
+            "INNER JOIN team " +
+            "WHERE " +
+            "team.teamId = teamMembers.teamId " +
+            "AND " +
+            "team.teamName LIKE '%s';",
 
             searchString
         );

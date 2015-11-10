@@ -225,6 +225,9 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
             List<? extends ITeam> rawResults = PersistenceFacade.getNewTeamDAO().findTeamsByMemberId(memberId);
 
+            //checking if there are an results
+            if (rawResults == null || rawResults.isEmpty()) return null;
+
             //Converting results to TeamDTO
             return rawResults.stream()
                     .map(team -> MAPPER.map(team, TeamDTO.class))
@@ -240,7 +243,6 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     public void assignMemberToTeam(Integer memberId, Integer teamId)
     throws RemoteException {
         LOGGER.warn("Method assignMemberToTeam is not implemented yet. //TODO");
-
     }
 
     @Override
