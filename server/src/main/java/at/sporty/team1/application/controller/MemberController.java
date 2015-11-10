@@ -201,7 +201,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         //check if list is not null
         if (rawResults == null || rawResults.isEmpty()) return null;
 
-        //creating predicate basic predicate for filtering (Object != null)
+        //creating basic predicate for filtering with (Object != null)
         Predicate<IRMember> nonNullPredicate = Objects::nonNull;
 
         //filtering all rawResultsByName for isFeePaid
