@@ -5,6 +5,7 @@ import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.IDTO;
 import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.api.IMemberController;
+import at.sporty.team1.rmi.api.ITeamController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
@@ -72,14 +73,25 @@ public class MemberViewController extends JfxController {
      * Init the Checkboxes and the Comboboxes in MemberView
      */
     private void doComboBoxAndCheckBoxInitialization() {
-			
-    	DepartmentDTO department = null;
-    	TeamDTO team = new TeamDTO();
+    	
+//    	DepartmentDTO department = null;
+//    	TeamDTO team = new TeamDTO();
     	
     	ObservableList<TeamDTO> soccerTeams = null;
     	ObservableList<TeamDTO> volleyballTeams = null;
     	ObservableList<TeamDTO> footballTeams = null;
     	ObservableList<TeamDTO> baseballTeams = null;
+    	
+		try {
+			soccerTeams = (ObservableList<TeamDTO>) CommunicationFacade.lookupForTeamController().searchBySport("soccer");
+			volleyballTeams = (ObservableList<TeamDTO>) CommunicationFacade.lookupForTeamController().searchBySport("volleyball");
+			footballTeams = (ObservableList<TeamDTO>) CommunicationFacade.lookupForTeamController().searchBySport("football");
+			baseballTeams = (ObservableList<TeamDTO>) CommunicationFacade.lookupForTeamController().searchBySport("baseball");
+		} catch (RemoteException | MalformedURLException | NotBoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
+    	
     	
     	memberTeamComboboxBaseball.setDisable(true);
     	memberTeamComboboxFootball.setDisable(true);

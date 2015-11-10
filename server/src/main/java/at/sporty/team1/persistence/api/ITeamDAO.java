@@ -4,6 +4,8 @@ import at.sporty.team1.domain.Team;
 
 import java.util.List;
 
+import javax.persistence.PersistenceException;
+
 /**
  * Created by sereGkaluv on 06-Nov-15.
  */
