@@ -138,7 +138,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             //filtering all rawResultsByName for isFeePaid
             if (paidCheckbox && !notPaidCheckbox) {
 
-                //filter for members who pay their Fee
+                //filter for members who paid their Fee
                 Predicate<IRMember> paidPredicate = nonNullPredicate.and(
                     member -> member.getIsFeePaid().equals(paidCheckbox)
                 );
