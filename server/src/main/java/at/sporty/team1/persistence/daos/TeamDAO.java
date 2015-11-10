@@ -1,6 +1,7 @@
 package at.sporty.team1.persistence.daos;
 
 import at.sporty.team1.domain.Team;
+import at.sporty.team1.persistence.Util;
 import at.sporty.team1.persistence.api.ITeamDAO;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -26,4 +27,6 @@ public class TeamDAO extends HibernateGenericDAO<Team> implements ITeamDAO {
     public List<Team> findTeamsByName(String teamName) throws PersistenceException {
         return findByCriteria(Restrictions.or(Restrictions.like(PROP_TEAM_NAME, teamName, MatchMode.ANYWHERE)));
     }
+    
+   
 }

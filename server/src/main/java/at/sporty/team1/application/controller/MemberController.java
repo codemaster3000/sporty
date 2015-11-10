@@ -17,6 +17,7 @@ import org.dozer.Mapper;
 import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -113,12 +114,16 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             
             //Compare the two lists
             if(rawResultsByFee != null){
+   	
             	
-            	for(IMember member : rawResultsByFee){
-            		if(rawResultsByName.contains(member)){
-            			rawResults.add(member);
-            		}
-            	}
+            	
+	            	for(int i = 0; i < rawResultsByFee.size(); i++){
+	            		if(rawResultsByName.contains(rawResultsByFee.get(i))){
+	                		rawResults.add(rawResultsByFee.get(i));
+	                	}
+	            	}
+            	
+            	
             }else{
             	rawResults.addAll(rawResultsByName);
             }

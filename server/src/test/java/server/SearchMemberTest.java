@@ -91,12 +91,12 @@ public class SearchMemberTest {
 	}
 	
 	/**
-	 * Search for all Members with 'a' and fee paid
+	 * Search for all Members with 'Fred' and fee paid
 	 */
 	@Test
 	public void searchMemberTest_5() {
 
-		String searchString = "a";
+		String searchString = "f";
 		List<MemberDTO> members = null;
 
 		try {
