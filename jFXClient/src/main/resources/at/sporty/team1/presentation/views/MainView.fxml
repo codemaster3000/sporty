@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -11,9 +12,15 @@
    			<TextField fx:id="_searchField" prefWidth="200.0" promptText="SEARCH" />
    			<Label text="by" />
                <ComboBox fx:id="_searchType" GridPane.columnIndex="1" GridPane.rowIndex="7" HBox.hgrow="SOMETIMES" />
-   			<Button onAction="#startSearch" text="GO" HBox.hgrow="NEVER" />
             <CheckBox fx:id="_feePaidCheckbox" mnemonicParsing="false" text="Fee paid" />
-            <CheckBox fx:id="_feeNotPaidCheckbox" mnemonicParsing="false" text="Fee not paid" />
+            <CheckBox fx:id="_feeNotPaidCheckbox" mnemonicParsing="false" text="Fee not paid">
+               <padding>
+                  <Insets right="20.0" />
+               </padding></CheckBox>
+   			<Button onAction="#startSearch" prefHeight="31.0" prefWidth="94.0" text="GO" HBox.hgrow="NEVER">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets></Button>
    </items>
 		</ToolBar>
 	</top>

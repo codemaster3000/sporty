@@ -49,7 +49,7 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
     @Override
     public List<T> findBySQLQuery(String sql) throws PersistenceException {
         return (List<T>) HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
-            SQLQuery query = session.createSQLQuery(sql);
+            SQLQuery query = session.createSQLQuery(sql).addEntity(_domainClass);
             return query.list();
         });
     }

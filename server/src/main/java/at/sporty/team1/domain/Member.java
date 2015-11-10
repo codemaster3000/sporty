@@ -43,15 +43,15 @@ public class Member implements IMember {
         this.memberId = memberId;
     }
 
-//    @OneToMany(fetch = FetchType.EAGER)
-//    @JoinTable(name = "team_members")
-//    public List<Team> getTeams() {
-//        return teamList;
-//    }
-//
-//    public void setTeams(List<Team> teamList) {
-//        this.teamList = teamList;
-//    }
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "teamMembers")
+    public List<Team> getTeams() {
+        return teamList;
+    }
+
+    public void setTeams(List<Team> teamList) {
+        this.teamList = teamList;
+    }
 
     @Override
     @Basic

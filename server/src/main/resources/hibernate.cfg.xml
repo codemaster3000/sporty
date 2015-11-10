@@ -13,7 +13,7 @@
         <!--<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/sporty</property>-->
 
         <!--remote db-->
-        <property name="hibernate.connection.url">jdbc:mysql://5.35.247.12:3306/sporty</property>
+        <property name="hibernate.connection.url">jdbc:mysql://5.35.247.12:3306/sportytest</property>
 
         <property name="hibernate.connection.username">sporty</property>
         <property name="hibernate.connection.password">sporty123</property>
