@@ -3,17 +3,14 @@ package at.sporty.team1.presentation.controllers;
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.IDTO;
-import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.api.ITeamController;
-import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,7 +26,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -51,10 +47,10 @@ public class MemberViewController extends JfxController {
     @FXML private CheckBox memberSportCheckboxVolleyball;
     @FXML private CheckBox memberSportCheckboxBaseball;
     @FXML private CheckBox memberSportCheckboxFootball;
-    @FXML private ComboBox<TeamDTO> memberTeamComboboxSoccer;
-    @FXML private ComboBox<TeamDTO> memberTeamComboboxVolleyball;
-    @FXML private ComboBox<TeamDTO> memberTeamComboboxBaseball;
-    @FXML private ComboBox<TeamDTO> memberTeamComboboxFootball;
+    @FXML private ComboBox<TeamDTO> memberTeamComboBoxSoccer;
+    @FXML private ComboBox<TeamDTO> memberTeamComboBoxVolleyball;
+    @FXML private ComboBox<TeamDTO> memberTeamComboBoxBaseball;
+    @FXML private ComboBox<TeamDTO> memberTeamComboBoxFootball;
 
     private static MemberDTO _activeMemberDTO;
 
@@ -66,7 +62,7 @@ public class MemberViewController extends JfxController {
         ObservableList<String> values = null;
         Platform.runLater(fNameTextField::requestFocus);
         
-       doComboBoxAndCheckBoxInitialization();
+        doComboBoxAndCheckBoxInitialization();
     }
 
     /**
@@ -83,81 +79,67 @@ public class MemberViewController extends JfxController {
     	ObservableList<TeamDTO> baseballTeams = null;
     	
 		try {
-			soccerTeams = (ObservableList<TeamDTO>) CommunicationFacade.lookupForTeamController().searchBySport("soccer");
-			volleyballTeams = (ObservableList<TeamDTO>) CommunicationFacade.lookupForTeamController().searchBySport("volleyball");
-			footballTeams = (ObservableList<TeamDTO>) CommunicationFacade.lookupForTeamController().searchBySport("football");
-			baseballTeams = (ObservableList<TeamDTO>) CommunicationFacade.lookupForTeamController().searchBySport("baseball");
+            ITeamController teamController = CommunicationFacade.lookupForTeamController();
+
+			soccerTeams = FXCollections.observableList(teamController.searchBySport("soccer"));
+			volleyballTeams = FXCollections.observableList(teamController.searchBySport("volleyball"));
+			footballTeams = FXCollections.observableList(teamController.searchBySport("football"));
+			baseballTeams = FXCollections.observableList(teamController.searchBySport("baseball"));
 		} catch (RemoteException | MalformedURLException | NotBoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		};
+		}
     	
     	
-    	memberTeamComboboxBaseball.setDisable(true);
-    	memberTeamComboboxFootball.setDisable(true);
-    	memberTeamComboboxSoccer.setDisable(true);
-    	memberTeamComboboxVolleyball.setDisable(true);
+    	memberTeamComboBoxBaseball.setDisable(true);
+    	memberTeamComboBoxFootball.setDisable(true);
+    	memberTeamComboBoxSoccer.setDisable(true);
+    	memberTeamComboBoxVolleyball.setDisable(true);
     	
-    	memberSportCheckboxBaseball.selectedProperty().addListener(new ChangeListener<Boolean>() {
+    	memberSportCheckboxBaseball.selectedProperty().addListener((observable, oldValue, newValue) -> {
 
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				
-				if(memberSportCheckboxBaseball.isSelected()){
-					memberTeamComboboxBaseball.setDisable(false);
-				}else{
-					memberTeamComboboxBaseball.setDisable(true);
-				}
-				
-			}	
-    	});
-    	
-    	memberSportCheckboxSoccer.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            if(memberSportCheckboxBaseball.isSelected()){
+                memberTeamComboBoxBaseball.setDisable(false);
+            }else{
+                memberTeamComboBoxBaseball.setDisable(true);
+            }
 
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				
-				if(memberSportCheckboxSoccer.isSelected()){
-					memberTeamComboboxSoccer.setDisable(false);
-				}else{
-					memberTeamComboboxSoccer.setDisable(true);
-				}
-				
-			}	
-    	});
+        });
     	
-    	memberSportCheckboxVolleyball.selectedProperty().addListener(new ChangeListener<Boolean>() {
+    	memberSportCheckboxSoccer.selectedProperty().addListener((observable, oldValue, newValue) -> {
 
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				
-				if(memberSportCheckboxVolleyball.isSelected()){
-					memberTeamComboboxVolleyball.setDisable(false);
-				}else{
-					memberTeamComboboxVolleyball.setDisable(true);
-				}
-				
-			}	
-    	});
-    	
-    	memberSportCheckboxFootball.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            if(memberSportCheckboxSoccer.isSelected()){
+                memberTeamComboBoxSoccer.setDisable(false);
+            }else{
+                memberTeamComboBoxSoccer.setDisable(true);
+            }
 
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				
-				if(memberSportCheckboxFootball.isSelected()){
-					memberTeamComboboxFootball.setDisable(false);
-				}else{
-					memberTeamComboboxFootball.setDisable(true);
-				}
-				
-			}	
-    	});
+        });
     	
-    	memberTeamComboboxBaseball.setItems(baseballTeams);
-		memberTeamComboboxFootball.setItems(footballTeams);
-		memberTeamComboboxSoccer.setItems(soccerTeams);
-		memberTeamComboboxVolleyball.setItems(volleyballTeams);
+    	memberSportCheckboxVolleyball.selectedProperty().addListener((observable, oldValue, newValue) -> {
+
+            if(memberSportCheckboxVolleyball.isSelected()){
+                memberTeamComboBoxVolleyball.setDisable(false);
+            }else{
+                memberTeamComboBoxVolleyball.setDisable(true);
+            }
+
+        });
+    	
+    	memberSportCheckboxFootball.selectedProperty().addListener((observable, oldValue, newValue) -> {
+
+            if(memberSportCheckboxFootball.isSelected()){
+                memberTeamComboBoxFootball.setDisable(false);
+            }else{
+                memberTeamComboBoxFootball.setDisable(true);
+            }
+
+        });
+    	
+    	memberTeamComboBoxBaseball.setItems(baseballTeams);
+		memberTeamComboBoxFootball.setItems(footballTeams);
+		memberTeamComboBoxSoccer.setItems(soccerTeams);
+		memberTeamComboBoxVolleyball.setItems(volleyballTeams);
 	}
 
 	@Override
@@ -288,12 +270,6 @@ public class MemberViewController extends JfxController {
         if (address == null) {
             GUIHelper.highlightNotValidTextField(addressTextField);
             GUIHelper.showValidationAlert("Please fill in Address.");
-
-            return false;
-        }
-
-        if (address == null) {
-            GUIHelper.showValidationAlert("Please fill in Address field.");
 
             return false;
         }

@@ -9,7 +9,6 @@ import java.util.List;
  */
 public class MemberDTO implements IDTO {
     private Integer _memberId;
-    private List<TeamDTO> _teamList;
     private String _firstName;
     private String _lastName;
     private String _gender;
@@ -30,17 +29,6 @@ public class MemberDTO implements IDTO {
 
     public MemberDTO setMemberId(Integer memberId) {
         _memberId = memberId;
-        return this;
-    }
-
-    @Deprecated // not supported yet
-    public List<TeamDTO> getTeams() {
-        return _teamList;
-    }
-
-    @Deprecated // not supported yet
-    public MemberDTO setTeams(List<TeamDTO> teamList) {
-        _teamList = teamList;
         return this;
     }
 
