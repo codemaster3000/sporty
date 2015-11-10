@@ -90,16 +90,6 @@ public class MainViewController extends JfxController {
     private void startSearch() {
     	
         String searchQuery = GUIHelper.readNullOrEmpty(_searchField.getText());
-        
-        
-        //Verarbeite Checkboxen //FIXME: and what happens if I un-check them?
-        if(_feeNotPaidCheckbox.isSelected()){
-        	_checkboxNotPaid = true;
-        }
-        
-        if(_feePaidCheckbox.isSelected()){
-        	_checkboxPaid = true;
-        }
 
         if 	(searchQuery != null) {
         	
