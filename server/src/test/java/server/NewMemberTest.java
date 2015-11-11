@@ -3,7 +3,9 @@ package server;
 import at.sporty.team1.application.controller.MemberController;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.persistence.PersistenceFacade;
+import at.sporty.team1.rmi.api.ITeamController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.dozer.DozerBeanMapper;
 import org.junit.Assert;
@@ -35,6 +37,7 @@ public class NewMemberTest {
 		String address = "Street 1";
 		String sport = "Soccer";
         Boolean feePaid = true;
+        String team = "Soccer Damen 1";
 
 		executeTest(fName, lName, bday, email, gender, address, sport, feePaid);
 	}
@@ -52,6 +55,7 @@ public class NewMemberTest {
 		String gender = "F";
 		String address = "Street 1";
 		String sport = "Soccer";
+		String team = "Incredible Kickers";
         Boolean feePaid = true;
 
         MemberDTO activeMemberDTO = new MemberDTO();
@@ -63,6 +67,7 @@ public class NewMemberTest {
         activeMemberDTO.setAddress(address);
 //        _activeMemberDTO.setDepartmentId(sport);
         activeMemberDTO.setIsFeePaid(feePaid);
+        
 
         try {
             createNewMemberTest(activeMemberDTO);

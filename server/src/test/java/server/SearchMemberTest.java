@@ -188,7 +188,7 @@ public class SearchMemberTest {
 	@Test
 	public void searchMemberTest_9a() {
 
-		String searchString = "inc";
+		String searchString = "incredible kickers";
 		List<MemberDTO> members = null;
 
 		try {
@@ -205,7 +205,7 @@ public class SearchMemberTest {
 	@Test
 	public void searchMemberTest_9b() {
 
-		String searchString = "inc";
+		String searchString = "Team Rocket";
 		List<MemberDTO> members = null;
 
 		try {
@@ -222,7 +222,7 @@ public class SearchMemberTest {
 	@Test
 	public void searchMemberTest_9c() {
 
-		String searchString = "inc";
+		String searchString = "Soccer Damen";
 		List<MemberDTO> members = null;
 
 		try {

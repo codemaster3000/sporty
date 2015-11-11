@@ -181,6 +181,7 @@ public class MemberViewController extends JfxController {
         String email = GUIHelper.readNullOrEmpty(emailTextField.getText());
         String address = GUIHelper.readNullOrEmpty(addressTextField.getText());
         String phone = GUIHelper.readNullOrEmpty(phoneTextField.getText());
+        
 
 
         String gender = null;
@@ -209,11 +210,10 @@ public class MemberViewController extends JfxController {
                         .setEmail(email)
                         .setAddress(address);
     //TODO
-    //                .setDepartmentId(department)
-    //                .setTeamId(team)
-    //                .setSquad(squad)
-    //                .setRole(role)
-    //                .setUsername(username);
+//                    .setDepartmentId(department)
+//                    .setTeamId(team)
+//                    .setSquad(squad)
+//                    .setRole(role);
 
                 IMemberController imc = CommunicationFacade.lookupForMemberController();
                 imc.createOrSaveMember(_activeMemberDTO);
