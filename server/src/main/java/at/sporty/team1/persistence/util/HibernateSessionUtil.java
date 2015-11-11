@@ -1,4 +1,4 @@
-package at.sporty.team1.persistence;
+package at.sporty.team1.persistence.util;
 
 import at.sporty.team1.misc.functional.ThrowingConsumer;
 import at.sporty.team1.misc.functional.ThrowingFunction;

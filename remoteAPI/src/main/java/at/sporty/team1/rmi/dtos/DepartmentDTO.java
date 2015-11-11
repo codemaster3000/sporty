@@ -12,7 +12,6 @@ public class DepartmentDTO implements IDTO {
     private Integer _departmentId;
     private String _sport;
     private MemberDTO _head;
-    private List<TeamDTO> _teamList;
 
     public DepartmentDTO() {
     }
@@ -43,16 +42,4 @@ public class DepartmentDTO implements IDTO {
         _head = head;
         return this;
     }
-
-    @Deprecated // not supported yet
-    public List<TeamDTO> getTeams() {
-        return _teamList;
-    }
-
-    @Deprecated // not supported yet
-    public DepartmentDTO setTeams(List<TeamDTO> teamList) {
-        _teamList = teamList;
-        return this;
-    }
-
 }

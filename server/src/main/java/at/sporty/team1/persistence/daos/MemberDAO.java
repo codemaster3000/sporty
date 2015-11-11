@@ -1,19 +1,14 @@
 package at.sporty.team1.persistence.daos;
 
 import at.sporty.team1.domain.Member;
-import at.sporty.team1.misc.converters.SQLDateConverter;
-import at.sporty.team1.persistence.Util;
+import at.sporty.team1.persistence.util.PropertyPair;
+import at.sporty.team1.persistence.util.Util;
 import at.sporty.team1.persistence.api.IMemberDAO;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.PersistenceException;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Represents a concrete DAO for Members
@@ -26,7 +21,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
     private static final String PROP_EMAIL = "email";
     private static final String DELIMITER = " ";
     private static final String FEE_PAID = "isFeePaid";
-    private static final String PROP_TEAM_NAME = "team";
+    private static final String PROP_TEAM_NAME = "teamName";
 
     /**
      * Creates a new patient DAO.
@@ -102,10 +97,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
 
     @Override
     public List<Member> findByTeamName(String teamName) throws PersistenceException {
-        String searchString = Util.wrapInWildcard(teamName);
-
-        String sqlQuery = String.format(
-
+        String rawQuery =
             "SELECT member.* "+
             "FROM teamMembers " +
             "LEFT JOIN member ON teamMembers.memberId = member.memberId " +
@@ -113,24 +105,11 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
             "WHERE " +
             "team.teamId = teamMembers.teamId " +
             "AND " +
-            "team.teamName LIKE '%s';",
+            "team.teamName LIKE :" + PROP_TEAM_NAME;
 
-            searchString
+        return findBySQLQuery(
+            rawQuery,
+            new PropertyPair<>(PROP_TEAM_NAME, Util.wrapInWildcard(teamName))
         );
-
-        return findBySQLQuery(sqlQuery);
-    }
-    
-
-    @Deprecated
-    @Override
-    public List<Member> findByPayedFee() throws PersistenceException {
-        return findByCriteria(Restrictions.eq(FEE_PAID, true));
-    }
-
-    @Deprecated
-    @Override
-    public List<Member> findByNotPayedFee() throws PersistenceException {
-        return findByCriteria(Restrictions.eq(FEE_PAID, false));
     }
 }

@@ -1,10 +1,10 @@
 package at.sporty.team1.persistence.api;
 
+import at.sporty.team1.persistence.util.PropertyPair;
 import org.hibernate.criterion.Criterion;
 
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +14,8 @@ public interface IGenericDAO<T> {
      * @return a list of all objects of the type {@code T}.
      * @throws PersistenceException
      */
-    List<T> findAll() throws PersistenceException;
+    List<T> findAll()
+    throws PersistenceException;
 
     /**
      * Returns all existing objects of the given type in the data store that
@@ -24,15 +25,18 @@ public interface IGenericDAO<T> {
      * given criterion(s).
      * @throws PersistenceException
      */
-    List<T> findByCriteria(Criterion... criterion) throws PersistenceException;
+    List<T> findByCriteria(Criterion... criterion)
+    throws PersistenceException;
 
     /**
      * Returns a list of objects that are matched by a given sql query.
      * @param sql The sql query with named parameters.
+     * @param propertyPairs for sql query.
      * @return The found objects.
      * @throws PersistenceException
      */
-    List<T> findBySQLQuery(String sql) throws PersistenceException;
+    List<T> findBySQLQuery(String sql, PropertyPair<?>... propertyPairs)
+    throws PersistenceException;
 
     /**
      * Returns a list of objects that are matched by a given hql query.
@@ -40,7 +44,8 @@ public interface IGenericDAO<T> {
      * @return The found objects.
      * @throws PersistenceException
      */
-    List<T> findByHQL(String hql) throws PersistenceException;
+    List<T> findByHQL(String hql)
+    throws PersistenceException;
 
     /**
      * Returns a list of objects that are matched by a given hql query.
@@ -49,7 +54,8 @@ public interface IGenericDAO<T> {
      * @return The found objects.
      * @throws PersistenceException
      */
-    List<T> findByHQL(String hql, Map<?, ?> map) throws PersistenceException;
+    List<T> findByHQL(String hql, Map<?, ?> map)
+    throws PersistenceException;
 
     /**
      * Returns a specific object identified by its id from the data store.
@@ -58,7 +64,8 @@ public interface IGenericDAO<T> {
      * @return the entity with the matching id.
      * @throws PersistenceException
      */
-    T findById(Serializable id) throws PersistenceException;
+    T findById(Serializable id)
+    throws PersistenceException;
 
     /**
      * Refreshes the given object to the actual state from the data store.
@@ -66,7 +73,8 @@ public interface IGenericDAO<T> {
      * @param object the object to be refreshed.
      * @throws PersistenceException
      */
-    void refreshToActualState(T object) throws PersistenceException;
+    void refreshToActualState(T object)
+    throws PersistenceException;
 
     /**
      * Saves the given object to the data store or updates the entry, if it
@@ -74,12 +82,14 @@ public interface IGenericDAO<T> {
      * @param object the object to be saved or updated.
      * @throws PersistenceException
      */
-    void saveOrUpdate(T object) throws PersistenceException;
+    void saveOrUpdate(T object)
+    throws PersistenceException;
 
     /**
      * Deletes an existing object from the data store.
      * @param object the object to be deleted from the data store.
      * @throws PersistenceException
      */
-    void delete(T object) throws PersistenceException;
+    void delete(T object)
+    throws PersistenceException;
 }

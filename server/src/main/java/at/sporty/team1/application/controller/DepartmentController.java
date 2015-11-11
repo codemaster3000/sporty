@@ -1,6 +1,5 @@
 package at.sporty.team1.application.controller;
 
-import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IDepartment;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.IDepartmentController;
@@ -34,9 +33,13 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
 
         try {
 
+            /* pulling a DepartmentDAO and searching for all departments */
             List<? extends IDepartment> rawResults = PersistenceFacade.getNewDepartmentDAO().findAll();
 
-            //Converting results to MemberDTO
+            //checking if there are an results
+            if (rawResults == null || rawResults.isEmpty()) return null;
+
+            //Converting results to DepartmentDTO
             return rawResults.stream()
                     .map(department -> MAPPER.map(department, DepartmentDTO.class))
                     .collect(Collectors.toList());

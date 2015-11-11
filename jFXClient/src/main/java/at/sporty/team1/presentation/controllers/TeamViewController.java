@@ -88,11 +88,16 @@ public class TeamViewController extends JfxController {
         if (teamDTO != null) {
             _activeTeamDTO = teamDTO;
 
-            List<MemberDTO> memberList = _activeTeamDTO.getMemberList();
-            if (memberList != null && !memberList.isEmpty())  {
-                _membersListView.setItems(FXCollections.observableList(
-                        _activeTeamDTO.getMemberList()
-                ));
+            try {
+                //TODO test
+                ITeamController teamController = CommunicationFacade.lookupForTeamController();
+
+                List<MemberDTO> memberList = teamController.loadTeamMembers(_activeTeamDTO);
+                if (memberList != null && !memberList.isEmpty())  {
+                    _membersListView.setItems(FXCollections.observableList(memberList));
+                }
+            } catch (RemoteException | NotBoundException | MalformedURLException e) {
+                LOGGER.error("Error occurs while displaying team data.", e);
             }
         }
     }
@@ -107,20 +112,30 @@ public class TeamViewController extends JfxController {
     private void removeSelectedMember(ActionEvent event) {
         MemberDTO memberDTO = _membersListView.getSelectionModel().getSelectedItem();
 
-        if (_activeTeamDTO != null) {
+        try {
+            ITeamController teamController = CommunicationFacade.lookupForTeamController();
 
-            List<MemberDTO> storedList = _activeTeamDTO.getMemberList();
-            storedList.remove(memberDTO);
+            if (_activeTeamDTO != null) {
 
-            _activeTeamDTO.setMemberList(storedList);
-            displayTeamData(_activeTeamDTO);
+                //Instead of this:
+                //List<MemberDTO> storedList = _activeTeamDTO.getMemberList();
+                //storedList.remove(memberDTO);
 
-        } else if (memberDTO != null) {
+                //_activeTeamDTO.setMemberList(storedList);
+                //displayTeamData(_activeTeamDTO);
 
-            //Simply remove from list view, this part of the code
-            //will be executed only when new team will be created
-            _membersListView.getItems().remove(memberDTO);
+                //use this: TODO: (methods are not yet implemented on the server)
+                teamController.removeMemberFromTeam(memberDTO, _activeTeamDTO);
 
+            } else if (memberDTO != null) {
+
+                //Simply remove from list view, this part of the code
+                //will be executed only when new team will be created
+                _membersListView.getItems().remove(memberDTO);
+
+            }
+        } catch (RemoteException | NotBoundException | MalformedURLException e) {
+            LOGGER.error("Error occurs while removing member from the team.", e);
         }
     }
 
@@ -131,7 +146,8 @@ public class TeamViewController extends JfxController {
 
         if (memberList != null && !memberList.isEmpty()) {
 
-            _activeTeamDTO.setMemberList(memberList);
+            //TODO refactor with "for" and CommunicationFacade.lookupForTeamController().assignMemberToTeam()
+//            _activeTeamDTO.setMemberList(memberList);
 
             try {
 

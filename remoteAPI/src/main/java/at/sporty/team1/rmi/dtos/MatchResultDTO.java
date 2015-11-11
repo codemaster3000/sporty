@@ -7,16 +7,15 @@ import at.sporty.team1.rmi.api.IDTO;
  */
 public class MatchResultDTO implements IDTO {//TODO everything
 
+    private TeamDTO winner;
+    private TeamDTO teamA;
+    private TeamDTO teamB;
+    private String comment;
+    private Integer pointsA;
+    private Integer pointsB;
+
     public MatchResultDTO() {
     }
-
-    public TeamDTO winner;
-    public TeamDTO teamA;
-    public TeamDTO teamB;
-    public String comment;
-    public Integer pointsA;
-    public Integer pointsB;
-
 
     public String getComment() {
         return comment;

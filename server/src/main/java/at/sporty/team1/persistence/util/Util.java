@@ -1,4 +1,4 @@
-package at.sporty.team1.persistence;
+package at.sporty.team1.persistence.util;
 
 /**
  * Created by sereGkaluv on 06-Nov-15.

@@ -8,12 +8,11 @@ import java.util.List;
  * This IDTO Object implements Object Builder pattern.
  */
 public class TeamDTO implements IDTO {
-    public Integer _teamId;
-    public MemberDTO _trainer;
-    public DepartmentDTO _department;
-    public Integer _league; //TODO replace with league DTO
+    private Integer _teamId;
+    private MemberDTO _trainer;
+    private DepartmentDTO _department;
+    private Integer _league; //TODO replace with league DTO
     private String _teamName;
-    private List<MemberDTO> _memberList;
 
     public TeamDTO() {
     }
@@ -37,17 +36,6 @@ public class TeamDTO implements IDTO {
     }
 
     @Deprecated // not supported yet
-    public DepartmentDTO getDepartment() {
-        return _department;
-    }
-
-    @Deprecated // not supported yet
-    public TeamDTO setDepartment(DepartmentDTO department) {
-        _department = department;
-        return this;
-    }
-
-    @Deprecated // not supported yet
     public Integer getLeague() {
         return _league;
     }
@@ -64,17 +52,6 @@ public class TeamDTO implements IDTO {
 
     public TeamDTO setTeamName(String teamName) {
         _teamName = teamName;
-        return this;
-    }
-
-    @Deprecated // not supported yet
-    public List<MemberDTO> getMemberList() {
-        return _memberList;
-    }
-
-    @Deprecated // not supported yet
-    public TeamDTO setMemberList(List<MemberDTO> memberList) {
-        _memberList = memberList;
         return this;
     }
 }

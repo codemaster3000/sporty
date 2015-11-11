@@ -44,7 +44,11 @@ public class Member implements IMember {
     }
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "teamMembers")
+    @JoinTable(
+        name = "teamMembers",
+        joinColumns = @JoinColumn(name = "teamId"),
+        inverseJoinColumns = @JoinColumn(name = "memberId")
+    )
     public List<Team> getTeams() {
         return teamList;
     }

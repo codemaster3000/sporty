@@ -64,12 +64,6 @@ public interface IMemberDAO extends IGenericDAO<Member> {
      */
     List<Member> findByEmail(String email) throws PersistenceException;
 
-   
-
-    List<Member> findByPayedFee() throws PersistenceException;
-
-    List<Member> findByNotPayedFee() throws PersistenceException;
-
     /**
      * Find member(s) by team name.
      *
@@ -78,6 +72,4 @@ public interface IMemberDAO extends IGenericDAO<Member> {
      * @throws PersistenceException
      */
 	List<Member> findByTeamName(String teamName) throws PersistenceException;
-
-
 }

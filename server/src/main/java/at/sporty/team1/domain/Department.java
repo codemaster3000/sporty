@@ -45,7 +45,7 @@ public class Department implements IDepartment {
     }
 
     @Override
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "headId")
 	public Member getDepartmentHead() {
 		return head;
@@ -57,7 +57,11 @@ public class Department implements IDepartment {
 	}
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "departmentTeams")
+    @JoinTable(
+        name = "departmentTeams",
+        joinColumns = @JoinColumn(name = "departmentId"),
+        inverseJoinColumns = @JoinColumn(name = "teamId")
+    )
     public List<Team> getTeams() {
         return teamList;
     }

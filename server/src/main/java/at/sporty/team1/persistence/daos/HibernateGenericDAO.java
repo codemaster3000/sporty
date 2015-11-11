@@ -1,7 +1,8 @@
 package at.sporty.team1.persistence.daos;
 
-import at.sporty.team1.persistence.HibernateSessionUtil;
+import at.sporty.team1.persistence.util.HibernateSessionUtil;
 import at.sporty.team1.persistence.api.IGenericDAO;
+import at.sporty.team1.persistence.util.PropertyPair;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -23,7 +24,9 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
 
     @SuppressWarnings("unchecked") //NON Generic Hibernate method.
     @Override
-    public List<T> findAll() throws PersistenceException {
+    public List<T> findAll()
+    throws PersistenceException {
+
         try {
             return (List<T>) HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
                 return session.createCriteria(_domainClass).list();
@@ -35,7 +38,9 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
 
     @SuppressWarnings("unchecked") //NON Generic Hibernate method.
     @Override
-    public List<T> findByCriteria(Criterion... criterion) throws PersistenceException {
+    public List<T> findByCriteria(Criterion... criterion)
+    throws PersistenceException {
+
         return (List<T>) HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
             Criteria criteria = session.createCriteria(_domainClass);
             for (Criterion c : criterion) {
@@ -47,9 +52,15 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
 
     @SuppressWarnings("unchecked") //NON Generic Hibernate method.
     @Override
-    public List<T> findBySQLQuery(String sql) throws PersistenceException {
+    public List<T> findBySQLQuery(String sql, PropertyPair<?>... propertyPairs)
+    throws PersistenceException {
+
         return (List<T>) HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
             SQLQuery query = session.createSQLQuery(sql).addEntity(_domainClass);
+            for (PropertyPair<?> pair : propertyPairs) {
+                query.setParameter(pair.getProperty(), pair.getValue());
+            }
+
             return query.list();
         });
     }
@@ -61,7 +72,9 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
 
     @SuppressWarnings("unchecked") //NON Generic Hibernate method.
     @Override
-    public List<T> findByHQL(String hql, Map<?, ?> map) throws PersistenceException {
+    public List<T> findByHQL(String hql, Map<?, ?> map)
+    throws PersistenceException {
+
         return (List<T>) HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
             Query query = session.createQuery(hql);
             if (map != null) {
@@ -71,28 +84,24 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
         });
     }
 
-    @SuppressWarnings("unchecked") //NON Generic Hibernate method.
+
     @Override
-    public T findById(Serializable id) throws PersistenceException {
+    public T findById(Serializable id)
+    throws PersistenceException {
+
         try {
-            List<T> results = (List<T>) HibernateSessionUtil.getInstance().makeSimpleTransaction(session ->
+            return HibernateSessionUtil.getInstance().makeSimpleTransaction(session ->
                 (T) session.get(_domainClass, id)
             );
-
-            if (results != null) {
-                if (results.isEmpty()) return null;
-                if (results.size() == 1) return results.get(0);
-            }
-
-            throw new PersistenceException("Many results in find by id. (" + id + ")");
-
         } catch (HibernateException e) {
             throw new PersistenceException(e);
         }
     }
 
     @Override
-    public void refreshToActualState(T object) throws PersistenceException {
+    public void refreshToActualState(T object)
+    throws PersistenceException {
+
         try {
             HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
                 session.refresh(object);
@@ -103,7 +112,9 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
     }
 
     @Override
-    public void saveOrUpdate(T object) throws PersistenceException {
+    public void saveOrUpdate(T object)
+    throws PersistenceException {
+
         try {
             HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
                 session.saveOrUpdate(object);
@@ -114,7 +125,9 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
     }
 
     @Override
-    public void delete(T object) throws PersistenceException {
+    public void delete(T object)
+    throws PersistenceException {
+
         try {
             HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
                 session.delete(object);

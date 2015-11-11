@@ -1,6 +1,7 @@
 package at.sporty.team1.rmi.api;
 
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
+import at.sporty.team1.rmi.dtos.TeamDTO;
 
 import java.io.Serializable;
 import java.rmi.Remote;
@@ -13,9 +14,9 @@ import java.util.List;
 public interface IDepartmentController extends Remote, Serializable {
 
     /**
-     * Search for all Members.
+     * Search for all Departments.
      *
-     * @return List<MemberDTO> List of all members
+     * @return List<DepartmentDTO> List of all departments
      * @throws RemoteException
      */
     List<DepartmentDTO> searchAllDepartments() throws RemoteException;

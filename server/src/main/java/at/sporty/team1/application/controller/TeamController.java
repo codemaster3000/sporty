@@ -1,7 +1,11 @@
 package at.sporty.team1.application.controller;
 
+import at.sporty.team1.domain.Department;
+import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Team;
+import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.domain.interfaces.ITeam;
+import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.exceptions.DataType;
 import at.sporty.team1.misc.InputSanitizer;
@@ -60,15 +64,20 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
     }
 
     @Override
-    public List<TeamDTO> searchBySport(String sport)
+    public List<TeamDTO> searchByDepartment(DepartmentDTO departmentDTO)
     throws RemoteException {
 
-        if (sport == null) return null;
+        if (departmentDTO == null) return null;
 
-        /* Is valid, moving forward */
         try {
-             /* pulling a TeamDAO and save the Team */
-            List<? extends ITeam> rawResults = PersistenceFacade.getNewTeamDAO().findTeamsBySport(sport);
+
+            /* pulling a TeamDAO and searching for all teams assigned to given Department */
+            List<? extends ITeam> rawResults = PersistenceFacade.getNewTeamDAO().findTeamsByDepartment(
+                MAPPER.map(departmentDTO, Department.class)
+            );
+
+            //checking if there are an results
+            if (rawResults == null || rawResults.isEmpty()) return null;
 
             //Converting results to TeamDTO
             return rawResults.stream()
@@ -76,8 +85,86 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
                     .collect(Collectors.toList());
 
         } catch (PersistenceException e) {
-            LOGGER.error("An error occurs while searching for \"{}\".", sport, e);
+            LOGGER.error("An error occurs while searching for \"{}\".", departmentDTO.getSport(), e);
             return null;
         }
+    }
+
+    @Override
+    public List<TeamDTO> searchTeamsByMember(MemberDTO memberDTO)
+    throws RemoteException {
+
+        if (memberDTO == null) return null;
+
+        try {
+
+            /* pulling a TeamDAO and searching for all teams assigned to given Member */
+            List<? extends ITeam> rawResults = PersistenceFacade.getNewTeamDAO().findTeamsByMember(
+                MAPPER.map(memberDTO, Member.class)
+            );
+
+            //checking if there are an results
+            if (rawResults == null || rawResults.isEmpty()) return null;
+
+            //Converting results to TeamDTO
+            return rawResults.stream()
+                    .map(team -> MAPPER.map(team, TeamDTO.class))
+                    .collect(Collectors.toList());
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurs while searching for \"all Teams by Member: {} {}\".",
+                memberDTO.getLastName(),
+                memberDTO.getFirstName(),
+                e
+            );
+            return null;
+        }
+    }
+
+    @Override
+    public List<MemberDTO> loadTeamMembers(TeamDTO teamDTO)
+    throws RemoteException {
+
+        if (teamDTO == null) return null;
+
+        try {
+
+            //converting DTO to Entity
+            ITeam team = MAPPER.map(teamDTO, Team.class);
+
+            //getting all members for this entity
+            List<? extends IMember> rawResults = team.getMembers();
+
+            //checking if there are an results
+            if (rawResults == null || rawResults.isEmpty()) return null;
+
+            //Converting results to MemberDTO
+            return rawResults.stream()
+                    .map(member -> MAPPER.map(member, MemberDTO.class))
+                    .collect(Collectors.toList());
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurs while getting \"all Members for Team: {}\".",
+                teamDTO.getTeamName(),
+                e
+            );
+            return null;
+        }
+    }
+
+    @Override
+    public void assignMemberToTeam(MemberDTO memberDTO, TeamDTO teamDTO)
+    throws RemoteException {
+        //TODO assignMemberToTeam
+        LOGGER.warn("Method assignMemberToTeam is not implemented yet. //TODO");
+    }
+
+    @Override
+    public void removeMemberFromTeam(MemberDTO memberDTO, TeamDTO teamDTO)
+    throws RemoteException {
+        //TODO removeMemberFromTeam
+        LOGGER.warn("Method assignMemberToTeam is not implemented yet. //TODO");
     }
 }

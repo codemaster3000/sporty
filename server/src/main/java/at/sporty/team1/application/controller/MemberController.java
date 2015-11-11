@@ -135,20 +135,17 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     @Override
     public List<MemberDTO> searchMembersByTeamName(String teamName, boolean notPaidCheckbox, boolean paidCheckbox)
     throws RemoteException, ValidationException {
-    	
-    	List<? extends IMember> rawResults = null;
-    	
+
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
         if (!inputSanitizer.isValid(teamName, DataType.NAME)) {
             throw inputSanitizer.getPreparedValidationException();
         }
 
-       
         /* Is valid, moving forward */
         try {
 
-            rawResults = PersistenceFacade.getNewMemberDAO().findByTeamName(teamName);
+            List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByTeamName(teamName);
 
             //filtering results for fee
             rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
@@ -215,40 +212,6 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
                 e
             );
         }
-    }
-
-    @Override
-    public List<TeamDTO> getTeams(Integer memberId)
-    throws RemoteException {
-
-        try {
-
-            List<? extends ITeam> rawResults = PersistenceFacade.getNewTeamDAO().findTeamsByMemberId(memberId);
-
-            //checking if there are an results
-            if (rawResults == null || rawResults.isEmpty()) return null;
-
-            //Converting results to TeamDTO
-            return rawResults.stream()
-                    .map(team -> MAPPER.map(team, TeamDTO.class))
-                    .collect(Collectors.toList());
-
-        } catch (PersistenceException e) {
-            LOGGER.error("An error occurs while searching for \"all Members\".", e);
-            return null;
-        }
-    }
-
-    @Override
-    public void assignMemberToTeam(Integer memberId, Integer teamId)
-    throws RemoteException {
-        LOGGER.warn("Method assignMemberToTeam is not implemented yet. //TODO");
-    }
-
-    @Override
-    public void removeMemberFromTeam(Integer memberId, Integer teamId)
-    throws RemoteException {
-        LOGGER.warn("Method assignMemberToTeam is not implemented yet. //TODO");
     }
 
     /**

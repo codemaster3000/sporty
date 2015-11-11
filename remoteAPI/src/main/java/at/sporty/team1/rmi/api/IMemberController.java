@@ -71,34 +71,4 @@ public interface IMemberController extends Remote, Serializable {
      */
     List<MemberDTO> searchAllMembers(boolean notPaidCheckbox, boolean paidCheckbox)
     throws RemoteException;
-
-    /**
-     * Returns a list of all teams to which member with a given id is assigned.
-     *
-     * @param memberId id of a target member (will be used for search)
-     * @return List<TeamDTO> List of all teams
-     * @throws RemoteException
-     */
-    List<TeamDTO> getTeams(Integer memberId)
-    throws RemoteException;
-
-    /**
-     * Assigns member to selected team.
-     *
-     * @param memberId id of the target member (will be used to update teams list)
-     * @param teamId id of a team to which member with given id will be assigned.
-     * @throws RemoteException
-     */
-    void assignMemberToTeam(Integer memberId, Integer teamId)
-    throws RemoteException;
-
-    /**
-     * Removes member from selected team.
-     *
-     * @param memberId id of the target member (will be used to update teams list)
-     * @param teamId id of a team from which member with given id will be removed.
-     * @throws RemoteException
-     */
-    void removeMemberFromTeam(Integer memberId, Integer teamId)
-    throws RemoteException;
 }

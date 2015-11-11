@@ -1,10 +1,14 @@
 package at.sporty.team1.persistence.daos;
 
+import at.sporty.team1.domain.Department;
+import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Team;
-import at.sporty.team1.persistence.Util;
 import at.sporty.team1.persistence.api.ITeamDAO;
+import at.sporty.team1.persistence.util.PropertyPair;
+import at.sporty.team1.persistence.util.Util;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.IntegerType;
 
 import javax.persistence.PersistenceException;
 import java.util.LinkedList;
@@ -16,7 +20,9 @@ import java.util.List;
 public class TeamDAO extends HibernateGenericDAO<Team> implements ITeamDAO {
 
     private static final String PROP_TEAM_NAME = "teamName";
-    private static final String PROP_TEAMS_BY_SPORT = "teamName";
+    private static final String PROP_MEMBER_ID = "memberId";
+    private static final String PROP_DEPARTMENT_ID = "departmentId";
+
 
     /**
      * Creates a new team DAO.
@@ -31,20 +37,42 @@ public class TeamDAO extends HibernateGenericDAO<Team> implements ITeamDAO {
     }
 
     @Override
-    public List<Team> findTeamsBySport(String sport) throws PersistenceException {
-//        String sql = "SELECT ID as {c.id}, NAME as {c.name}, " +
-//                "BIRTHDATE as {c.birthDate}, MOTHER_ID as {c.mother}, {mother.*} " +
-//                "FROM CAT_LOG c, CAT_LOG m WHERE {c.mother} = c.ID";
-//
-//        List loggedCats = .createSQLQuery(sql)
-//                .addEntity("cat", Cat.class)
-//                .addEntity("mother", Cat.class).list()
-//        return findBySQLQuery();
-        return new LinkedList<>();
+    public List<Team> findTeamsByDepartment(Department department) throws PersistenceException {
+
+        if (department == null) return null;
+
+        String rawQuery =
+            "SELECT team.* " +
+            "FROM departmentTeams " +
+            "INNER JOIN team " +
+            "WHERE " +
+            "team.teamId = departmentTeams.teamId " +
+            "AND " +
+            "departmentTeams.departmentId = :" + PROP_DEPARTMENT_ID;
+
+        return findBySQLQuery(
+            rawQuery,
+            new PropertyPair<>(PROP_DEPARTMENT_ID, department.getDepartmentId())
+        );
     }
 
     @Override
-    public List<Team> findTeamsByMemberId(Integer memberId) {
-        return null;
+    public List<Team> findTeamsByMember(Member member) {
+
+        if (member == null) return null;
+
+        String rawQuery =
+            "SELECT team.* " +
+            "FROM teamMembers " +
+            "INNER JOIN team " +
+            "WHERE " +
+            "team.teamId = teamMembers.teamId " +
+            "AND " +
+            "teamMembers.memberId = :" + PROP_MEMBER_ID;
+
+        return findBySQLQuery(
+            rawQuery,
+            new PropertyPair<>(PROP_MEMBER_ID, member.getMemberId())
+        );
     }
 }

@@ -126,22 +126,14 @@
             <a>setTrainer</a>
             <b>setTrainer</b>
         </field>
-        <!--<field>-->
-            <!--<a>getDepartment</a>-->
-            <!--<b>getDepartment</b>-->
-        <!--</field>-->
-        <!--<field>-->
-            <!--<a>setDepartment</a>-->
-            <!--<b>setDepartment</b>-->
-        <!--</field>-->
-        <!--<field>-->
-            <!--<a>getMembers</a>-->
-            <!--<b>getMembers</b>-->
-        <!--</field>-->
-        <!--<field>-->
-            <!--<a>setMembers</a>-->
-            <!--<b>setMembers</b>-->
-        <!--</field>-->
+        <field>
+            <a>getDepartment</a>
+            <b>getDepartment</b>
+        </field>
+        <field>
+            <a>setDepartment</a>
+            <b>setDepartment</b>
+        </field>
         <field>
             <a>getTeamName</a>
             <b>getTeamName</b>
@@ -188,14 +180,6 @@
             <a>setDepartmentHead</a>
             <b>setDepartmentHead</b>
         </field>
-        <!--<field>-->
-            <!--<a>getTeams</a>-->
-            <!--<b>getTeams</b>-->
-        <!--</field>-->
-        <!--<field>-->
-            <!--<a>setTeams</a>-->
-            <!--<b>setTeams</b>-->
-        <!--</field>-->
     </mapping>
 
 </mappings>

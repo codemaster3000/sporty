@@ -6,15 +6,15 @@ import java.util.Date;
 
 public class MatchDTO implements IDTO {
 
+    private Date date; //TODO STRING
+    private TeamDTO homeTeam;
+    private TeamDTO guestTeam;
+    private MatchResultDTO matchResult;
+    private String location;
+    private String referee;
+
     public MatchDTO() {
     }
-
-    public Date date;
-    public TeamDTO homeTeam;
-    public TeamDTO guestTeam;
-    public MatchResultDTO matchResult;
-    public String location;
-    public String referee;
 
     public Date getDate() {
         return date;

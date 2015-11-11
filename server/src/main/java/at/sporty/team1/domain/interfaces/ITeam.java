@@ -15,11 +15,11 @@ public interface ITeam extends IRTeam {
 
     void setTrainer(Member trainer);
 
-//    void setDepartment(Department department);
+    void setDepartment(Department department);
 
 //    void setLeague(Integer leagueId);
 
     void setTeamName(String teamName);
 
-    void setMemberList(List<Member> memberList);
+    void setMembers(List<Member> memberList);
 }

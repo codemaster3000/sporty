@@ -46,8 +46,12 @@ public class Team implements ITeam {
         this.trainer = trainer;
     }
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "departmentTeams")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "departmentTeams",
+        joinColumns = @JoinColumn(name = "teamId"),
+        inverseJoinColumns = @JoinColumn(name = "departmentId")
+    )
     public Department getDepartment() {
         return department;
     }
@@ -56,8 +60,12 @@ public class Team implements ITeam {
         this.department = department;
     }
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "teamMembers")
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "teamMembers",
+        joinColumns = @JoinColumn(name = "teamId"),
+        inverseJoinColumns = @JoinColumn(name = "memberId")
+    )
     public List<Member> getMembers() {
         return memberList;
     }
@@ -89,16 +97,6 @@ public class Team implements ITeam {
     @Override
     public void setTeamName(String teamName) {
         this.teamname = teamName;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memberId")
-    public List<Member> getMemberList() {
-        return memberList;
-    }
-
-    public void setMemberList(List<Member> memberList) {
-        this.memberList = memberList;
     }
 
     @Override

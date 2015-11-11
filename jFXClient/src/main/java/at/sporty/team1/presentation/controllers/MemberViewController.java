@@ -77,11 +77,11 @@ public class MemberViewController extends JfxController {
     	
 		try {
             ITeamController teamController = CommunicationFacade.lookupForTeamController();
-
-			soccerTeams = FXCollections.observableList(teamController.searchBySport("soccer"));
-			volleyballTeams = FXCollections.observableList(teamController.searchBySport("volleyball"));
-			footballTeams = FXCollections.observableList(teamController.searchBySport("football"));
-			baseballTeams = FXCollections.observableList(teamController.searchBySport("baseball"));
+//TODO refactor
+//			soccerTeams = FXCollections.observableList(teamController.searchBySport("soccer"));
+//			volleyballTeams = FXCollections.observableList(teamController.searchBySport("volleyball"));
+//			footballTeams = FXCollections.observableList(teamController.searchBySport("football"));
+//			baseballTeams = FXCollections.observableList(teamController.searchBySport("baseball"));
 		} catch (RemoteException | MalformedURLException | NotBoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
