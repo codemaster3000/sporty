@@ -208,7 +208,8 @@ public class MemberViewController extends JfxController {
                         .setGender(gender)
                         .setDateOfBirth(bday)
                         .setEmail(email)
-                        .setAddress(address);
+                        .setAddress(address)
+                        .setIsFeePaid(false);
     //TODO
 //                    .setDepartmentId(department)
 //                    .setTeamId(team)
