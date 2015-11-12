@@ -1,6 +1,7 @@
 package at.sporty.team1.communication;
 
 import at.sporty.team1.rmi.RemoteObjectRegistry;
+import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.api.ILoginController;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.api.ITeamController;
@@ -30,9 +31,9 @@ public class CommunicationFacade {
         );
     }
 
-    public static ITeamController lookupForDepartmentController()
+    public static IDepartmentController lookupForDepartmentController()
     throws RemoteException, NotBoundException, MalformedURLException {
-        return (ITeamController) Naming.lookup(
+        return (IDepartmentController) Naming.lookup(
             String.format(DEFAULT_RMI, RemoteObjectRegistry.DEPARTMENT_CONTROLLER.getNaming())
         );
     }

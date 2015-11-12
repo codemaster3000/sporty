@@ -151,5 +151,7 @@
        </FlowPane>
    
        <Button mnemonicParsing="false" onAction="#saveForm" text="Save" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="11" />
+      <Label text="Role" GridPane.rowIndex="11" />
+      <ComboBox fx:id="roleCcombobox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
    </children>
 </GridPane>
