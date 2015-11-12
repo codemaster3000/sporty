@@ -46,7 +46,7 @@ public class Team implements ITeam {
         this.trainer = trainer;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(
         name = "departmentTeams",
         joinColumns = @JoinColumn(name = "teamId"),
@@ -60,7 +60,7 @@ public class Team implements ITeam {
         this.department = department;
     }
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "teamMembers",
         joinColumns = @JoinColumn(name = "teamId"),
