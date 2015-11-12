@@ -401,6 +401,25 @@ public class MemberViewController extends JfxController {
 
         return true;
     }
+	
+	@FXML
+    private void clearFields(ActionEvent actionEvent) {
+		
+		_activeMemberDTO = null;
+		
+		 fNameTextField.clear();
+		 lNameTextField.clear();
+		 
+		 if(radioGenderFemale.isSelected()){
+			 radioGenderFemale.setSelected(false);
+		 }else if(radioGenderMale.isSelected()){
+			 radioGenderMale.setSelected(false);
+		 }
+		 birthTextField.clear();
+         emailTextField.clear();
+         addressTextField.clear();
+		
+	}
 
     @Override
     public void dispose() {
