@@ -35,7 +35,7 @@ public class Team implements ITeam {
     }
 
     @Override
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "trainerId")
     public Member getTrainer() {
         return trainer;
@@ -47,11 +47,7 @@ public class Team implements ITeam {
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "departmentTeams",
-        joinColumns = @JoinColumn(name = "teamId"),
-        inverseJoinColumns = @JoinColumn(name = "departmentId")
-    )
+    @JoinColumn(name = "departmentId")
     public Department getDepartment() {
         return department;
     }

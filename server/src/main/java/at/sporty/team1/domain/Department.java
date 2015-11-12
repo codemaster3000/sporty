@@ -58,11 +58,7 @@ public class Department implements IDepartment {
 
     @Override
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "departmentTeams",
-        joinColumns = @JoinColumn(name = "departmentId"),
-        inverseJoinColumns = @JoinColumn(name = "teamId")
-    )
+    @JoinColumn(name = "departmentId")
     public List<Team> getTeams() {
         return teamList;
     }
