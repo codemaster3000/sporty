@@ -35,6 +35,15 @@ public class TeamDTO implements IDTO {
         return this;
     }
 
+    public DepartmentDTO getDepartment() {
+        return _department;
+    }
+
+    public TeamDTO setLeague(DepartmentDTO department) {
+        _department = department;
+        return this;
+    }
+
     @Deprecated // not supported yet
     public Integer getLeague() {
         return _league;
