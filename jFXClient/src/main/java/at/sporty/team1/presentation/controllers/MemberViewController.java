@@ -241,6 +241,9 @@ public class MemberViewController extends JfxController {
      * @param memberDTO MemberDTO that will be preloaded.
      */
     private void displayMemberDTO(MemberDTO memberDTO) {
+    	
+    	String role = null;
+    	
         if (memberDTO != null) {
             _activeMemberDTO = memberDTO;
 
@@ -256,6 +259,27 @@ public class MemberViewController extends JfxController {
             birthTextField.setText(_activeMemberDTO.getDateOfBirth());
             emailTextField.setText(_activeMemberDTO.getEmail());
             addressTextField.setText(_activeMemberDTO.getAddress());
+            
+            role = _activeMemberDTO.getRole();
+            
+            if(role != null){
+	            
+	            switch(role){
+	            case "Department Head": 
+	            	roleComboBox.getSelectionModel().select(RoleType.DEPARTMENT_HEAD);
+	            	break;
+	            case "Member":
+	            	roleComboBox.getSelectionModel().select(RoleType.MEMBER);
+	            	break;
+	            case "Trainer":
+	            	roleComboBox.getSelectionModel().select(RoleType.TRAINER);
+	            	break;
+	            case "Managing Comittee":
+	            	roleComboBox.getSelectionModel().select(RoleType.MANAGING_COMMITTEE);
+	            	break;
+	            default: break;	
+	            }
+            }
         }
     }
 
