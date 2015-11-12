@@ -9,6 +9,7 @@ import at.sporty.team1.rmi.api.ITeamController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
@@ -57,7 +58,7 @@ public class MemberViewController extends JfxController {
     @FXML private ComboBox<TeamDTO> memberTeamComboBoxVolleyball;
     @FXML private ComboBox<TeamDTO> memberTeamComboBoxBaseball;
     @FXML private ComboBox<TeamDTO> memberTeamComboBoxFootball;
-    @FXML private ComboBox<RoleType> roleCombobox;
+    @FXML private ComboBox<RoleType> roleComboBox;
 
     private static MemberDTO _activeMemberDTO;
 
@@ -194,70 +195,26 @@ public class MemberViewController extends JfxController {
     	
     	/**
     	 * Converters from TeamDTO to Teamname (String)
-    	 */  	
-    	memberTeamComboBoxBaseball.setConverter(new StringConverter<TeamDTO>() {			
-			@Override
-			public String toString(TeamDTO object) {
-				if(object != null){
-					return object.getTeamName();
-				}
-				return null;
-			}
-			
-			@Override
-			public TeamDTO fromString(String string) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		});
-    	
-    	memberTeamComboBoxFootball.setConverter(new StringConverter<TeamDTO>() {			
-			@Override
-			public String toString(TeamDTO object) {
-				if(object != null){
-					return object.getTeamName();
-				}
-				return null;
-			}
-			
-			@Override
-			public TeamDTO fromString(String string) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		});
-    	
-    	memberTeamComboBoxSoccer.setConverter(new StringConverter<TeamDTO>() {			
-			@Override
-			public String toString(TeamDTO object) {
-				if(object != null){
-					return object.getTeamName();
-				}
-				return null;
-			}
-			
-			@Override
-			public TeamDTO fromString(String string) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		});
-    	
-    	memberTeamComboBoxVolleyball.setConverter(new StringConverter<TeamDTO>() {			
-			@Override
-			public String toString(TeamDTO object) {
-				if(object != null){
-					return object.getTeamName();
-				}
-				return null;
-			}
-			
-			@Override
-			public TeamDTO fromString(String string) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		});
+    	 */
+        StringConverter<TeamDTO> teamDTOStringConverter = new StringConverter<TeamDTO>() {
+            @Override
+            public String toString(TeamDTO teamDTO) {
+                if(teamDTO != null){
+                    return teamDTO.getTeamName();
+                }
+                return null;
+            }
+
+            @Override
+            public TeamDTO fromString(String string) {
+                return null;
+            }
+        };
+
+    	memberTeamComboBoxBaseball.setConverter(teamDTOStringConverter);
+    	memberTeamComboBoxFootball.setConverter(teamDTOStringConverter);
+    	memberTeamComboBoxSoccer.setConverter(teamDTOStringConverter);
+    	memberTeamComboBoxVolleyball.setConverter(teamDTOStringConverter);
     	  	
     	if (baseballTeams != null) memberTeamComboBoxBaseball.setItems(baseballTeams);
         if (footballTeams != null) memberTeamComboBoxFootball.setItems(footballTeams);
@@ -268,8 +225,8 @@ public class MemberViewController extends JfxController {
 		/**
 		 * Role Combobox
 		 */
-        roleCombobox.setItems(FXCollections.observableList(Arrays.asList(RoleType.values())));
-        roleCombobox.getSelectionModel().select(RoleType.MEMBER);
+        roleComboBox.setItems(FXCollections.observableList(Arrays.asList(RoleType.values())));
+        roleComboBox.getSelectionModel().select(RoleType.MEMBER);
 	}
 
 	@Override
@@ -341,9 +298,9 @@ public class MemberViewController extends JfxController {
                         .setEmail(email)
                         .setAddress(address)
                         .setIsFeePaid(false)
-                        .setRole(roleCombobox.getSelectionModel().getSelectedItem()._stringValue);
+                        .setRole(roleComboBox.getSelectionModel().getSelectedItem()._stringValue);
                 
-                setDepartementAndTeam(_activeMemberDTO);
+                setDepartmentAndTeam(_activeMemberDTO);
     //TODO
 //                    .setDepartmentId(department)
 //                    .setTeamId(team)
@@ -370,59 +327,40 @@ public class MemberViewController extends JfxController {
         }
     }
 
-    private void setDepartementAndTeam(MemberDTO _memberDTO) {
-		
-    	ITeamController teamController = null;
-    	TeamDTO teamDTO = null;   
-    	 	
-    	try {
-			teamController = CommunicationFacade.lookupForTeamController();
-		} catch (RemoteException | MalformedURLException | NotBoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    private void setDepartmentAndTeam(MemberDTO _memberDTO) {
 
-    	if(memberSportCheckboxBaseball.isSelected()){
-    		//team holen
-    		teamDTO = memberTeamComboBoxBaseball.getSelectionModel().getSelectedItem();
-			try {
-				teamController.assignMemberToTeam(_memberDTO, teamDTO);
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-    	}
-    	if(memberSportCheckboxFootball.isSelected()){
-    		//team holen
-    		teamDTO = memberTeamComboBoxFootball.getSelectionModel().getSelectedItem();
-    		try {
-				teamController.assignMemberToTeam(_memberDTO, teamDTO);
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
-    	if(memberSportCheckboxSoccer.isSelected()){
-    		//team holen
-    		teamDTO = memberTeamComboBoxSoccer.getSelectionModel().getSelectedItem();
-    		try {
-				teamController.assignMemberToTeam(_memberDTO, teamDTO);
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
-    	if(memberSportCheckboxVolleyball.isSelected()){
-    		//team holen
-    		teamDTO = memberTeamComboBoxVolleyball.getSelectionModel().getSelectedItem();
-    		try {
-				teamController.assignMemberToTeam(_memberDTO, teamDTO);
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				
-			}
-    	}	
+    	try {
+            ITeamController teamController = CommunicationFacade.lookupForTeamController();
+
+            if(memberSportCheckboxBaseball.isSelected()){
+                //Baseball team holen
+                TeamDTO teamDTO = memberTeamComboBoxBaseball.getSelectionModel().getSelectedItem();
+                teamController.assignMemberToTeam(_memberDTO, teamDTO);
+            }
+
+            if(memberSportCheckboxFootball.isSelected()){
+                //Football team holen
+                TeamDTO teamDTO = memberTeamComboBoxFootball.getSelectionModel().getSelectedItem();
+                teamController.assignMemberToTeam(_memberDTO, teamDTO);
+            }
+
+            if(memberSportCheckboxSoccer.isSelected()){
+                //Soccer team holen
+                TeamDTO teamDTO = memberTeamComboBoxSoccer.getSelectionModel().getSelectedItem();
+                teamController.assignMemberToTeam(_memberDTO, teamDTO);
+            }
+
+            if(memberSportCheckboxVolleyball.isSelected()){
+                //Volleyball team holen
+                TeamDTO teamDTO = memberTeamComboBoxVolleyball.getSelectionModel().getSelectedItem();
+                teamController.assignMemberToTeam(_memberDTO, teamDTO);
+            }
+
+        } catch (RemoteException | MalformedURLException | NotBoundException e) {
+            LOGGER.error("Error occurs while assigning Member to Team.", e);
+        } catch (UnknownEntityException e) {
+            LOGGER.error("DTO was not saved in Data Storage before assigning Member to Team.", e);
+        }
 	}
 
 	private boolean isValidForm(String fName, String lName, String bday, String gender, String address) {

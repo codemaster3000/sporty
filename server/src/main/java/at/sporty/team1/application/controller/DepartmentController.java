@@ -2,13 +2,16 @@ package at.sporty.team1.application.controller;
 
 import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.Member;
+import at.sporty.team1.domain.Team;
 import at.sporty.team1.domain.interfaces.IDepartment;
 import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
+import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dozer.DozerBeanMapper;
@@ -83,6 +86,33 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
                 e
             );
             return null;
+        }
+    }
+
+    @Override
+    public void assignDepartmentToHead(DepartmentDTO deptDTO, MemberDTO memberDTO)
+            throws RemoteException, UnknownEntityException {
+
+        if (deptDTO == null || deptDTO.getDepartmentId() == null) throw new UnknownEntityException(IDepartment.class);
+        if (memberDTO == null || memberDTO.getMemberId() == null) throw new UnknownEntityException(IMember.class);
+
+        try {
+
+            IDepartment department = MAPPER.map(deptDTO, Department.class);
+            IMember trainer = MAPPER.map(memberDTO, Member.class);
+
+            if (department != null && trainer != null) {
+                department.setDepartmentHead((Member) trainer);
+            }
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurs while assigning \"Department {} to Head {} {}\".",
+                deptDTO.getSport(),
+                memberDTO.getLastName(),
+                memberDTO.getFirstName(),
+                e
+            );
         }
     }
 }

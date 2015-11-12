@@ -3,15 +3,17 @@ package at.sporty.team1.application.controller;
 import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Team;
+import at.sporty.team1.domain.interfaces.IDepartment;
 import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.domain.interfaces.ITeam;
-import at.sporty.team1.rmi.dtos.DepartmentDTO;
-import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.exceptions.DataType;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.ITeamController;
+import at.sporty.team1.rmi.dtos.DepartmentDTO;
+import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.exceptions.DataType;
+import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -155,16 +157,119 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
     }
 
     @Override
+    public void assignTeamToDepartment(TeamDTO teamDTO, DepartmentDTO deptDTO)
+    throws RemoteException, UnknownEntityException {
+
+        if (teamDTO == null || teamDTO.getTeamId() == null) throw new UnknownEntityException(ITeam.class);
+        if (deptDTO == null || deptDTO.getDepartmentId() == null) throw new UnknownEntityException(IDepartment.class);
+
+        try {
+
+            ITeam team = MAPPER.map(teamDTO, Team.class);
+            IDepartment department = MAPPER.map(deptDTO, Department.class);
+
+            if (team != null && department != null) {
+                team.setDepartment((Department) department);
+            }
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurs while assigning \"Department {} to Team {}\".",
+                deptDTO.getSport(),
+                teamDTO.getTeamName(),
+                e
+            );
+        }
+    }
+
+    @Override
+    public void assignTeamToTrainer(TeamDTO teamDTO, MemberDTO memberDTO)
+    throws RemoteException, UnknownEntityException {
+
+        if (teamDTO == null || teamDTO.getTeamId() == null) throw new UnknownEntityException(ITeam.class);
+        if (memberDTO == null || memberDTO.getMemberId() == null) throw new UnknownEntityException(IMember.class);
+
+        try {
+
+            IMember trainer = MAPPER.map(memberDTO, Member.class);
+            ITeam team = MAPPER.map(teamDTO, Team.class);
+
+            if (trainer != null && team != null) {
+                team.setTrainer((Member) trainer);
+            }
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurs while assigning \"Team {} to Trainer {} {}\".",
+                teamDTO.getTeamName(),
+                memberDTO.getLastName(),
+                memberDTO.getFirstName(),
+                e
+            );
+        }
+    }
+
+    @Override
     public void assignMemberToTeam(MemberDTO memberDTO, TeamDTO teamDTO)
-    throws RemoteException {
-        //TODO assignMemberToTeam
-        LOGGER.warn("Method assignMemberToTeam is not implemented yet. //TODO");
+    throws RemoteException, UnknownEntityException {
+
+        if (memberDTO == null || memberDTO.getMemberId() == null) throw new UnknownEntityException(IMember.class);
+        if (teamDTO == null || teamDTO.getTeamId() == null) throw new UnknownEntityException(ITeam.class);
+
+        try {
+
+            Member member = MAPPER.map(memberDTO, Member.class);
+
+            ITeam team = MAPPER.map(teamDTO, Team.class);
+            List<Member> memberList = team.getMembers();
+
+            if (member != null && memberList != null) {
+                //maybe also contains check???
+                memberList.add(member);
+            }
+
+            team.setMembers(memberList);
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurs while assigning \"Member {} {} to Team {}\".",
+                memberDTO.getLastName(),
+                memberDTO.getFirstName(),
+                teamDTO.getTeamName(),
+                e
+            );
+        }
     }
 
     @Override
     public void removeMemberFromTeam(MemberDTO memberDTO, TeamDTO teamDTO)
-    throws RemoteException {
-        //TODO removeMemberFromTeam
-        LOGGER.warn("Method assignMemberToTeam is not implemented yet. //TODO");
+    throws RemoteException, UnknownEntityException {
+
+        if (memberDTO == null || memberDTO.getMemberId() == null) throw new UnknownEntityException(IMember.class);
+        if (teamDTO == null || teamDTO.getTeamId() == null) throw new UnknownEntityException(ITeam.class);
+
+        try {
+
+            Member member = MAPPER.map(memberDTO, Member.class);
+
+            ITeam team = MAPPER.map(teamDTO, Team.class);
+            List<Member> memberList = team.getMembers();
+
+            if (member != null && memberList != null) {
+                //maybe also contains check???
+                memberList.remove(member);
+            }
+
+            team.setMembers(memberList);
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurs while removing \"Member {} {} from Team {}\".",
+                memberDTO.getLastName(),
+                memberDTO.getFirstName(),
+                teamDTO.getTeamName(),
+                e
+            );
+        }
     }
 }

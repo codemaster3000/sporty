@@ -32,12 +32,14 @@ public class TeamDAO extends HibernateGenericDAO<Team> implements ITeamDAO {
     }
 
     @Override
-    public List<Team> findTeamsByName(String teamName) throws PersistenceException {
+    public List<Team> findTeamsByName(String teamName)
+    throws PersistenceException {
         return findByCriteria(Restrictions.like(PROP_TEAM_NAME, teamName, MatchMode.ANYWHERE));
     }
 
     @Override
-    public List<Team> findTeamsByDepartment(Department department) throws PersistenceException {
+    public List<Team> findTeamsByDepartment(Department department)
+    throws PersistenceException {
 
         if (department == null) return null;
 
@@ -57,7 +59,8 @@ public class TeamDAO extends HibernateGenericDAO<Team> implements ITeamDAO {
     }
 
     @Override
-    public List<Team> findTeamsByMember(Member member) {
+    public List<Team> findTeamsByMember(Member member)
+    throws PersistenceException {
 
         if (member == null) return null;
 

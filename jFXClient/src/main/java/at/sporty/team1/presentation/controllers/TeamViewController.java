@@ -6,6 +6,7 @@ import at.sporty.team1.rmi.api.IDTO;
 import at.sporty.team1.rmi.api.ITeamController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.beans.binding.Bindings;
@@ -136,6 +137,8 @@ public class TeamViewController extends JfxController {
             }
         } catch (RemoteException | NotBoundException | MalformedURLException e) {
             LOGGER.error("Error occurs while removing member from the team.", e);
+        } catch (UnknownEntityException e) {
+            LOGGER.error("DTO was not saved in Data Storage before removing Member from Team.", e);
         }
     }
 

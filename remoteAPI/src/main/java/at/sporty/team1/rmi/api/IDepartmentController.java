@@ -3,6 +3,7 @@ package at.sporty.team1.rmi.api;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 
 import java.io.Serializable;
 import java.rmi.Remote;
@@ -32,4 +33,14 @@ public interface IDepartmentController extends Remote, Serializable {
      */
     List<TeamDTO> loadDepartmentTeams(DepartmentDTO departmentDTO)
     throws RemoteException;
+
+    /**
+     * Assigns department to selected head.
+     *
+     * @param deptDTO department that will be assigned to the given head.
+     * @param memberDTO target head to which department will be assigned.
+     * @throws RemoteException
+     */
+    void assignDepartmentToHead(DepartmentDTO deptDTO, MemberDTO memberDTO)
+    throws RemoteException, UnknownEntityException;
 }

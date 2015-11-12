@@ -3,6 +3,7 @@ package at.sporty.team1.rmi.api;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 
 import java.io.Serializable;
@@ -18,7 +19,7 @@ public interface ITeamController extends Remote, Serializable {
     /**
      * Creates new or saves old team in data storage with data from the DTO.
      *
-     * @param teamDTO DTO for team creation or save
+     * @param teamDTO DTO for team creation or save.
      * @throws RemoteException
      * @throws ValidationException
      */
@@ -38,8 +39,8 @@ public interface ITeamController extends Remote, Serializable {
     /**
      * Returns a list of all teams to which member with a given id is assigned.
      *
-     * @param memberDTO target member (will be used for search)
-     * @return List<TeamDTO> List of all teams
+     * @param memberDTO target member (will be used for search).
+     * @return List<TeamDTO> List of all teams.
      * @throws RemoteException
      */
     List<TeamDTO> searchTeamsByMember(MemberDTO memberDTO)
@@ -48,30 +49,50 @@ public interface ITeamController extends Remote, Serializable {
     /**
      * Returns a list of all members assigned to the given team.
      *
-     * @param teamDTO target team (will be used for search)
-     * @return List<MemberDTO> List of all members
+     * @param teamDTO target team (will be used for search).
+     * @return List<MemberDTO> List of all members.
      * @throws RemoteException
      */
     List<MemberDTO> loadTeamMembers(TeamDTO teamDTO)
     throws RemoteException;
 
     /**
+     * Assigns team to selected department.
+     *
+     * @param teamDTO team that will be assigned to the given department.
+     * @param deptDTO target department to which team will be assigned.
+     * @throws RemoteException
+     */
+    void assignTeamToDepartment(TeamDTO teamDTO, DepartmentDTO deptDTO)
+    throws RemoteException, UnknownEntityException;
+
+    /**
+     * Assigns team to selected trainer.
+     *
+     * @param teamDTO team that will be assigned to the given trainer.
+     * @param memberDTO target trainer to which team will be assigned.
+     * @throws RemoteException
+     */
+    void assignTeamToTrainer(TeamDTO teamDTO, MemberDTO memberDTO)
+    throws RemoteException, UnknownEntityException;
+
+    /**
      * Assigns member to selected team.
      *
-     * @param memberDTO target member (will be used to update teams list)
+     * @param memberDTO target member (will be used to update teams list).
      * @param teamDTO team to which member with given id will be assigned.
      * @throws RemoteException
      */
     void assignMemberToTeam(MemberDTO memberDTO, TeamDTO teamDTO)
-    throws RemoteException;
+    throws RemoteException, UnknownEntityException;
 
     /**
      * Removes member from selected team.
      *
-     * @param memberDTO target member (will be used to update teams list)
+     * @param memberDTO target member (will be used to update teams list).
      * @param teamDTO team from which member with given id will be removed.
      * @throws RemoteException
      */
     void removeMemberFromTeam(MemberDTO memberDTO, TeamDTO teamDTO)
-    throws RemoteException;
+    throws RemoteException, UnknownEntityException;
 }

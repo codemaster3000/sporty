@@ -31,7 +31,9 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
     }
 
     @Override
-    public List<Member> findByNameString(String searchString) throws PersistenceException {
+    public List<Member> findByNameString(String searchString)
+    throws PersistenceException {
+
         //Set is used to avoid duplication
         Set<Member> results = new LinkedHashSet<>();
         String[] split = searchString.split(DELIMITER);
@@ -59,7 +61,9 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
     }
 
     @Override
-    public List<Member> findByFullName(String firstName, String lastName) throws PersistenceException {
+    public List<Member> findByFullName(String firstName, String lastName)
+    throws PersistenceException {
+
         String searchFirst = Util.wrapInWildcard(firstName);
         String searchLast = Util.wrapInWildcard(lastName);
 
@@ -70,33 +74,42 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
     }
 
     @Override
-    public List<Member> findByFirstName(String firstName) throws PersistenceException {
+    public List<Member> findByFirstName(String firstName)
+    throws PersistenceException {
+
         String searchString = Util.wrapInWildcard(firstName);
 
         return findByCriteria(Restrictions.like(PROP_FIRST_NAME, searchString));
     }
 
     @Override
-    public List<Member> findByLastName(String lastName) throws PersistenceException {
+    public List<Member> findByLastName(String lastName)
+    throws PersistenceException {
+
         String searchString = Util.wrapInWildcard(lastName);
 
         return findByCriteria(Restrictions.like(PROP_LAST_NAME, searchString));
     }
 
     @Override
-    public List<Member> findByDateOfBirth(String dateOfBirth) throws PersistenceException {
+    public List<Member> findByDateOfBirth(String dateOfBirth)
+    throws PersistenceException {
         return findByCriteria(Restrictions.eq(PROP_DATE_OF_BIRTH, dateOfBirth));
     }
 
     @Override
-    public List<Member> findByEmail(String email) throws PersistenceException {
+    public List<Member> findByEmail(String email)
+    throws PersistenceException {
+
         String searchString = Util.wrapInWildcard(email);
 
         return findByCriteria(Restrictions.like(PROP_EMAIL, searchString));
     }
 
     @Override
-    public List<Member> findByTeamName(String teamName) throws PersistenceException {
+    public List<Member> findByTeamName(String teamName)
+    throws PersistenceException {
+
         String rawQuery =
             "SELECT member.* "+
             "FROM teamMembers " +

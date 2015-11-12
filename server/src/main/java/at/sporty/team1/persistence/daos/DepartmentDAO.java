@@ -23,7 +23,9 @@ public class DepartmentDAO extends HibernateGenericDAO<Department> implements ID
     }
 
     @Override
-    public Department findBySport(String sport) throws PersistenceException {
+    public Department findBySport(String sport)
+    throws PersistenceException {
+
         List<Department> dept = findByCriteria(Restrictions.like(PROP_SPORT, sport, MatchMode.ANYWHERE));
         if (dept != null && dept.size() == 1) {
             return dept.get(0);
