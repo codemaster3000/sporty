@@ -86,8 +86,6 @@ public class MemberViewController extends JfxController {
     	ITeamController teamController = null;
     	IDepartmentController departmentController = null;
     	
-    	ObservableList<String> roles = FXCollections.observableArrayList("Trainer", "Department Head", "Managing Committee");
-    	
     	/**
     	 * Sportdepartment and Teams
     	 */
@@ -112,7 +110,7 @@ public class MemberViewController extends JfxController {
                             soccerDTO = actualDepartment;
 
                             List<TeamDTO> resultList = teamController.searchByDepartment(soccerDTO);
-                            if (resultList != null) soccerTeams = FXCollections.observableList(resultList);
+                            if (resultList != null) soccerTeams = FXCollections.observableArrayList(resultList);
 
                             break;
                         }
@@ -121,7 +119,7 @@ public class MemberViewController extends JfxController {
                             volleyballDTO = actualDepartment;
 
                             List<TeamDTO> resultList = teamController.searchByDepartment(volleyballDTO);
-                            if (resultList != null) volleyballTeams = FXCollections.observableList(resultList);
+                            if (resultList != null) volleyballTeams = FXCollections.observableArrayList(resultList);
 
                             break;
                         }
@@ -130,7 +128,7 @@ public class MemberViewController extends JfxController {
                             baseballDTO = actualDepartment;
 
                             List<TeamDTO> resultList = teamController.searchByDepartment(baseballDTO);
-                            if (resultList != null) baseballTeams = FXCollections.observableList(resultList);
+                            if (resultList != null) baseballTeams = FXCollections.observableArrayList(resultList);
 
                             break;
                         }
@@ -139,7 +137,7 @@ public class MemberViewController extends JfxController {
                             footballDTO = actualDepartment;
 
                             List<TeamDTO> resultList = teamController.searchByDepartment(footballDTO);
-                            if (resultList != null) footballTeams = FXCollections.observableList(resultList);
+                            if (resultList != null) footballTeams = FXCollections.observableArrayList(resultList);
 
                             break;
                         }
