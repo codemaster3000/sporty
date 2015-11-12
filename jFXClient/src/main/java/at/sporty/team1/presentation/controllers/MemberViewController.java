@@ -21,6 +21,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.util.StringConverter;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -190,6 +192,73 @@ public class MemberViewController extends JfxController {
             }
         });
     	
+    	/**
+    	 * Converters from TeamDTO to Teamname (String)
+    	 */  	
+    	memberTeamComboBoxBaseball.setConverter(new StringConverter<TeamDTO>() {			
+			@Override
+			public String toString(TeamDTO object) {
+				if(object != null){
+					return object.getTeamName();
+				}
+				return null;
+			}
+			
+			@Override
+			public TeamDTO fromString(String string) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		});
+    	
+    	memberTeamComboBoxFootball.setConverter(new StringConverter<TeamDTO>() {			
+			@Override
+			public String toString(TeamDTO object) {
+				if(object != null){
+					return object.getTeamName();
+				}
+				return null;
+			}
+			
+			@Override
+			public TeamDTO fromString(String string) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		});
+    	
+    	memberTeamComboBoxSoccer.setConverter(new StringConverter<TeamDTO>() {			
+			@Override
+			public String toString(TeamDTO object) {
+				if(object != null){
+					return object.getTeamName();
+				}
+				return null;
+			}
+			
+			@Override
+			public TeamDTO fromString(String string) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		});
+    	
+    	memberTeamComboBoxVolleyball.setConverter(new StringConverter<TeamDTO>() {			
+			@Override
+			public String toString(TeamDTO object) {
+				if(object != null){
+					return object.getTeamName();
+				}
+				return null;
+			}
+			
+			@Override
+			public TeamDTO fromString(String string) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		});
+    	  	
     	if (baseballTeams != null) memberTeamComboBoxBaseball.setItems(baseballTeams);
         if (footballTeams != null) memberTeamComboBoxFootball.setItems(footballTeams);
         if (soccerTeams != null) memberTeamComboBoxSoccer.setItems(soccerTeams);
@@ -244,11 +313,9 @@ public class MemberViewController extends JfxController {
         String bday = GUIHelper.readNullOrEmpty(birthTextField.getText());
         String email = GUIHelper.readNullOrEmpty(emailTextField.getText());
         String address = GUIHelper.readNullOrEmpty(addressTextField.getText());
-        String phone = GUIHelper.readNullOrEmpty(phoneTextField.getText());
-       
-
-
+        String phone = GUIHelper.readNullOrEmpty(phoneTextField.getText());      
         String gender = null;
+        
         if (radioGenderFemale.isSelected()) {
             gender = FEMALE;
         } else if (radioGenderMale.isSelected()) {
@@ -275,11 +342,13 @@ public class MemberViewController extends JfxController {
                         .setAddress(address)
                         .setIsFeePaid(false)
                         .setRole(roleCombobox.getSelectionModel().getSelectedItem()._stringValue);
+                
+                setDepartementAndTeam(_activeMemberDTO);
     //TODO
 //                    .setDepartmentId(department)
 //                    .setTeamId(team)
 //                    .setSquad(squad)
-//                    .setRole(role);
+
 
                 IMemberController imc = CommunicationFacade.lookupForMemberController();
                 imc.createOrSaveMember(_activeMemberDTO);
@@ -301,7 +370,62 @@ public class MemberViewController extends JfxController {
         }
     }
 
-    private boolean isValidForm(String fName, String lName, String bday, String gender, String address) {
+    private void setDepartementAndTeam(MemberDTO _memberDTO) {
+		
+    	ITeamController teamController = null;
+    	TeamDTO teamDTO = null;   
+    	 	
+    	try {
+			teamController = CommunicationFacade.lookupForTeamController();
+		} catch (RemoteException | MalformedURLException | NotBoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+    	if(memberSportCheckboxBaseball.isSelected()){
+    		//team holen
+    		teamDTO = memberTeamComboBoxBaseball.getSelectionModel().getSelectedItem();
+			try {
+				teamController.assignMemberToTeam(_memberDTO, teamDTO);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+    	}
+    	if(memberSportCheckboxFootball.isSelected()){
+    		//team holen
+    		teamDTO = memberTeamComboBoxFootball.getSelectionModel().getSelectedItem();
+    		try {
+				teamController.assignMemberToTeam(_memberDTO, teamDTO);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	if(memberSportCheckboxSoccer.isSelected()){
+    		//team holen
+    		teamDTO = memberTeamComboBoxSoccer.getSelectionModel().getSelectedItem();
+    		try {
+				teamController.assignMemberToTeam(_memberDTO, teamDTO);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	if(memberSportCheckboxVolleyball.isSelected()){
+    		//team holen
+    		teamDTO = memberTeamComboBoxVolleyball.getSelectionModel().getSelectedItem();
+    		try {
+				teamController.assignMemberToTeam(_memberDTO, teamDTO);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				
+			}
+    	}	
+	}
+
+	private boolean isValidForm(String fName, String lName, String bday, String gender, String address) {
         //Alert Box if a mandatory field is not filled
         if (fName == null) {
             GUIHelper.highlightNotValidTextField(fNameTextField);
