@@ -55,7 +55,7 @@ public class MemberViewController extends JfxController {
     @FXML private ComboBox<TeamDTO> memberTeamComboBoxVolleyball;
     @FXML private ComboBox<TeamDTO> memberTeamComboBoxBaseball;
     @FXML private ComboBox<TeamDTO> memberTeamComboBoxFootball;
-    @FXML private ComboBox<RoleType> roleComboBox;
+    @FXML private ComboBox<RoleType> roleCombobox;
 
     private static MemberDTO _activeMemberDTO;
 
@@ -201,8 +201,7 @@ public class MemberViewController extends JfxController {
 		/**
 		 * Role Combobox
 		 */
-        //adding search types to ComboBox;
-//        roleComboBox.setItems(FXCollections.observableList(Arrays.asList(RoleType.values())));
+        roleCombobox.setItems(FXCollections.observableList(Arrays.asList(RoleType.values())));
 	}
 
 	@Override
