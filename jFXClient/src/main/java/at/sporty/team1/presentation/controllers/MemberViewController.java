@@ -202,6 +202,7 @@ public class MemberViewController extends JfxController {
 		 * Role Combobox
 		 */
         roleCombobox.setItems(FXCollections.observableList(Arrays.asList(RoleType.values())));
+        roleCombobox.getSelectionModel().select(RoleType.MEMBER);
 	}
 
 	@Override
@@ -246,7 +247,7 @@ public class MemberViewController extends JfxController {
         String email = GUIHelper.readNullOrEmpty(emailTextField.getText());
         String address = GUIHelper.readNullOrEmpty(addressTextField.getText());
         String phone = GUIHelper.readNullOrEmpty(phoneTextField.getText());
-        
+       
 
 
         String gender = null;
@@ -274,7 +275,8 @@ public class MemberViewController extends JfxController {
                         .setDateOfBirth(bday)
                         .setEmail(email)
                         .setAddress(address)
-                        .setIsFeePaid(false);
+                        .setIsFeePaid(false)
+                        .setRole(roleCombobox.getSelectionModel().getSelectedItem()._stringValue);
     //TODO
 //                    .setDepartmentId(department)
 //                    .setTeamId(team)
@@ -354,7 +356,8 @@ public class MemberViewController extends JfxController {
     }
     
     private enum RoleType {
-        TRAINER("Trainer"),
+        MEMBER("Member"),
+    	TRAINER("Trainer"),
         DEPARTMENT_HEAD("Department Head"),
         MANAGING_COMMITTEE("Managing Committee");
 
