@@ -56,6 +56,7 @@ public class Department implements IDepartment {
 		this.head = head;
 	}
 
+    @Override
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "departmentTeams",
@@ -66,6 +67,7 @@ public class Department implements IDepartment {
         return teamList;
     }
 
+    @Override
     public void setTeams(List<Team> teamList) {
         this.teamList = teamList;
     }
