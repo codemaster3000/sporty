@@ -180,12 +180,6 @@ public class MemberViewController extends JfxController {
 		memberTeamComboBoxSoccer.setItems(soccerTeams);
 		memberTeamComboBoxVolleyball.setItems(volleyballTeams);
 		
-		
-		/**
-		 * Role Combobox
-		 */
-		roleComboBox.setItems(roles);
-		
 	}
 
 	@Override
