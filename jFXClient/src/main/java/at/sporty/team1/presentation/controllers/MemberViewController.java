@@ -11,7 +11,6 @@ import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
-import at.sporty.team1.util.Roles;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,6 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -55,7 +55,7 @@ public class MemberViewController extends JfxController {
     @FXML private ComboBox<TeamDTO> memberTeamComboBoxVolleyball;
     @FXML private ComboBox<TeamDTO> memberTeamComboBoxBaseball;
     @FXML private ComboBox<TeamDTO> memberTeamComboBoxFootball;
-    @FXML private ComboBox<String> roleComboBox;
+    @FXML private ComboBox<RoleType> roleComboBox;
 
     private static MemberDTO _activeMemberDTO;
 
@@ -201,8 +201,8 @@ public class MemberViewController extends JfxController {
 		/**
 		 * Role Combobox
 		 */
-        //FIXME:
-//		roleComboBox.setItems(roles);
+        //adding search types to ComboBox;
+//        roleComboBox.setItems(FXCollections.observableList(Arrays.asList(RoleType.values())));
 	}
 
 	@Override
@@ -352,5 +352,22 @@ public class MemberViewController extends JfxController {
         addressTextField.clear();
         radioGenderFemale.setSelected(false);
         radioGenderMale.setSelected(false);
+    }
+    
+    private enum RoleType {
+        TRAINER("Trainer"),
+        DEPARTMENT_HEAD("Department Head"),
+        MANAGING_COMMITTEE("Managing Committee");
+
+        private final String _stringValue;
+
+        RoleType(String stringValue) {
+            _stringValue = stringValue;
+        }
+
+        @Override
+        public String toString() {
+            return _stringValue;
+        }
     }
 }
