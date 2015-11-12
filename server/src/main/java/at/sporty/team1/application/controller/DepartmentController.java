@@ -1,9 +1,14 @@
 package at.sporty.team1.application.controller;
 
+import at.sporty.team1.domain.Department;
+import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IDepartment;
+import at.sporty.team1.domain.interfaces.IMember;
+import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
+import at.sporty.team1.rmi.dtos.TeamDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dozer.DozerBeanMapper;
@@ -46,6 +51,37 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
 
         } catch (PersistenceException e) {
             LOGGER.error("An error occurs while searching for \"all Departments\".", e);
+            return null;
+        }
+    }
+
+    @Override
+    public List<TeamDTO> loadDepartmentTeams(DepartmentDTO departmentDTO) throws RemoteException {
+
+        if (departmentDTO == null) return null;
+
+        try {
+
+            //converting DTO to Entity
+            IDepartment department = MAPPER.map(departmentDTO, Department.class);
+
+            //getting all members for this entity
+            List<? extends ITeam> rawResults = department.getTeams();
+
+            //checking if there are an results
+            if (rawResults == null || rawResults.isEmpty()) return null;
+
+            //Converting results to MemberDTO
+            return rawResults.stream()
+                    .map(team -> MAPPER.map(team, TeamDTO.class))
+                    .collect(Collectors.toList());
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurs while getting \"all Teams for Department: {}\".",
+                departmentDTO.getSport(),
+                e
+            );
             return null;
         }
     }
