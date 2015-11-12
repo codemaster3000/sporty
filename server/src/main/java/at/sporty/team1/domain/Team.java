@@ -35,7 +35,7 @@ public class Team implements ITeam {
     }
 
     @Override
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "trainerId")
     public Member getTrainer() {
         return trainer;

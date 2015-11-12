@@ -13,6 +13,15 @@ import java.util.List;
 public interface IMemberController extends Remote, Serializable {
 
     /**
+     * Search for all Members.
+     *
+     * @return List<MemberDTO> List of all members
+     * @throws RemoteException
+     */
+    List<MemberDTO> searchAllMembers(boolean notPaidCheckbox, boolean paidCheckbox)
+    throws RemoteException;
+
+    /**
      * Creates new or saves old member in data storage with data from the DTO.
      *
      * @param memberDTO DTO for member creation or save
@@ -55,20 +64,21 @@ public interface IMemberController extends Remote, Serializable {
     throws RemoteException, ValidationException;
 
     /**
+     * Returns a list of all teams assigned to the given member.
+     *
+     * @param memberDTO target member (will be used for search)
+     * @return List<TeamDTO> List of all teams
+     * @throws RemoteException
+     */
+    List<TeamDTO> loadMemberTeams(MemberDTO memberDTO)
+    throws RemoteException;
+
+    /**
      * Deletes member form the data storage with data from the DTO.
      *
      * @param memberDTO DTO of a member who will be deleted
      * @throws RemoteException
      */
     void deleteMember(MemberDTO memberDTO)
-    throws RemoteException;
-
-    /**
-     * Search for all Members.
-     *
-     * @return List<MemberDTO> List of all members
-     * @throws RemoteException
-     */
-    List<MemberDTO> searchAllMembers(boolean notPaidCheckbox, boolean paidCheckbox)
     throws RemoteException;
 }

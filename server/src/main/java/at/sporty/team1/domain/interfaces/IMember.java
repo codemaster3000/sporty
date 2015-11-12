@@ -1,7 +1,10 @@
 package at.sporty.team1.domain.interfaces;
 
 import at.sporty.team1.domain.Gender;
+import at.sporty.team1.domain.Team;
 import at.sporty.team1.domain.readonly.IRMember;
+
+import java.util.List;
 
 /**
  * Created by sereGkaluv on 27-Oct-15.
@@ -9,6 +12,8 @@ import at.sporty.team1.domain.readonly.IRMember;
 public interface IMember extends IRMember {
 
     void setMemberId(Integer memberId);
+
+    void setTeams(List<Team> teamList);
 
     void setFirstName(String firstname);
 

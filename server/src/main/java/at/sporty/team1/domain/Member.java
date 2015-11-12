@@ -43,6 +43,7 @@ public class Member implements IMember {
         this.memberId = memberId;
     }
 
+    @Override
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "teamMembers",
@@ -53,6 +54,7 @@ public class Member implements IMember {
         return teamList;
     }
 
+    @Override
     public void setTeams(List<Team> teamList) {
         this.teamList = teamList;
     }

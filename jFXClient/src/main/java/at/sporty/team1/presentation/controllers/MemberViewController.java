@@ -103,29 +103,46 @@ public class MemberViewController extends JfxController {
             departmentController = CommunicationFacade.lookupForDepartmentController();         
             departments = departmentController.searchAllDepartments();
             
-            if(!departments.isEmpty()){
+            if(!departments.isEmpty() && teamController != null){
             	
-            	while(departments.iterator().hasNext()){
-            		DepartmentDTO actualDepartment = departments.iterator().next();
-            		
-            		switch(actualDepartment.getSport()){
-            			case "Soccer": 
-            					soccerDTO = actualDepartment;
-            					soccerTeams = FXCollections.observableList(teamController.searchByDepartment(soccerDTO));
-            					break;
-            			case "Volleyball": 
-            					volleyballDTO = actualDepartment;
-            					volleyballTeams = FXCollections.observableList(teamController.searchByDepartment(volleyballDTO));
-            					break;
-            			case "Baseball": 
-            					baseballDTO = actualDepartment;
-            					baseballTeams = FXCollections.observableList(teamController.searchByDepartment(baseballDTO));
-            					break;
-            			case "Football": 
-            					footballDTO = actualDepartment;
-            					footballTeams = FXCollections.observableList(teamController.searchByDepartment(footballDTO));
-            					break;
-            			default: break;
+            	for(DepartmentDTO actualDepartment : departments) {
+
+                    switch(actualDepartment.getSport()){
+                        case "Soccer": {
+                            soccerDTO = actualDepartment;
+
+                            List<TeamDTO> resultList = teamController.searchByDepartment(soccerDTO);
+                            if (resultList != null) soccerTeams = FXCollections.observableList(resultList);
+
+                            break;
+                        }
+
+            			case "Volleyball": {
+                            volleyballDTO = actualDepartment;
+
+                            List<TeamDTO> resultList = teamController.searchByDepartment(volleyballDTO);
+                            if (resultList != null) volleyballTeams = FXCollections.observableList(resultList);
+
+                            break;
+                        }
+
+                        case "Baseball": {
+                            baseballDTO = actualDepartment;
+
+                            List<TeamDTO> resultList = teamController.searchByDepartment(baseballDTO);
+                            if (resultList != null) baseballTeams = FXCollections.observableList(resultList);
+
+                            break;
+                        }
+
+            			case "Football": {
+                            footballDTO = actualDepartment;
+
+                            List<TeamDTO> resultList = teamController.searchByDepartment(footballDTO);
+                            if (resultList != null) footballTeams = FXCollections.observableList(resultList);
+
+                            break;
+                        }
             		}
             	}
             }
@@ -141,51 +158,51 @@ public class MemberViewController extends JfxController {
     	
     	memberSportCheckboxBaseball.selectedProperty().addListener((observable, oldValue, newValue) -> {
 
-            if(memberSportCheckboxBaseball.isSelected()){
+            if (memberSportCheckboxBaseball.isSelected()) {
                 memberTeamComboBoxBaseball.setDisable(false);
-            }else{
+            } else {
                 memberTeamComboBoxBaseball.setDisable(true);
             }
         });
     	
     	memberSportCheckboxSoccer.selectedProperty().addListener((observable, oldValue, newValue) -> {
 
-            if(memberSportCheckboxSoccer.isSelected()){
+            if (memberSportCheckboxSoccer.isSelected()) {
                 memberTeamComboBoxSoccer.setDisable(false);
-            }else{
+            } else {
                 memberTeamComboBoxSoccer.setDisable(true);
             }
         });
     	
     	memberSportCheckboxVolleyball.selectedProperty().addListener((observable, oldValue, newValue) -> {
 
-            if(memberSportCheckboxVolleyball.isSelected()){
+            if (memberSportCheckboxVolleyball.isSelected()) {
                 memberTeamComboBoxVolleyball.setDisable(false);
-            }else{
+            } else {
                 memberTeamComboBoxVolleyball.setDisable(true);
             }
         });
     	
     	memberSportCheckboxFootball.selectedProperty().addListener((observable, oldValue, newValue) -> {
 
-            if(memberSportCheckboxFootball.isSelected()){
+            if (memberSportCheckboxFootball.isSelected()) {
                 memberTeamComboBoxFootball.setDisable(false);
-            }else{
+            } else {
                 memberTeamComboBoxFootball.setDisable(true);
             }
         });
     	
-    	memberTeamComboBoxBaseball.setItems(baseballTeams);
-		memberTeamComboBoxFootball.setItems(footballTeams);
-		memberTeamComboBoxSoccer.setItems(soccerTeams);
-		memberTeamComboBoxVolleyball.setItems(volleyballTeams);
+    	if (baseballTeams != null) memberTeamComboBoxBaseball.setItems(baseballTeams);
+        if (footballTeams != null) memberTeamComboBoxFootball.setItems(footballTeams);
+        if (soccerTeams != null) memberTeamComboBoxSoccer.setItems(soccerTeams);
+        if (volleyballTeams != null) memberTeamComboBoxVolleyball.setItems(volleyballTeams);
 		
 		
 		/**
 		 * Role Combobox
 		 */
-		roleComboBox.setItems(roles);
-		
+        //FIXME:
+//		roleComboBox.setItems(roles);
 	}
 
 	@Override

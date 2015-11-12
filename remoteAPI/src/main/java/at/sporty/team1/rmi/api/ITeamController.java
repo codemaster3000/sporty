@@ -49,7 +49,7 @@ public interface ITeamController extends Remote, Serializable {
      * Returns a list of all members assigned to the given team.
      *
      * @param teamDTO target team (will be used for search)
-     * @return List<MemberDTO> List of all teams
+     * @return List<MemberDTO> List of all members
      * @throws RemoteException
      */
     List<MemberDTO> loadTeamMembers(TeamDTO teamDTO)

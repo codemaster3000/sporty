@@ -2,6 +2,7 @@ package at.sporty.team1.application.controller;
 
 
 import at.sporty.team1.domain.Member;
+import at.sporty.team1.domain.Team;
 import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.domain.readonly.IRMember;
@@ -39,20 +40,20 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public void createOrSaveMember(MemberDTO dto)
+    public void createOrSaveMember(MemberDTO memberDTO)
     throws RemoteException, ValidationException {
 
-        if (dto == null) return;
+        if (memberDTO == null) return;
 
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
         if (
-            !inputSanitizer.isValid(dto.getFirstName(), DataType.NAME) ||
-            !inputSanitizer.isValid(dto.getLastName(), DataType.NAME) ||
-            !inputSanitizer.isValid(dto.getDateOfBirth(), DataType.SQL_DATE) ||
-            !inputSanitizer.isValid(dto.getEmail(), DataType.EMAIL) ||
-            !inputSanitizer.isValid(dto.getAddress(), DataType.ADDRESS) ||
-            !inputSanitizer.isValid(dto.getGender(), DataType.GENDER)
+            !inputSanitizer.isValid(memberDTO.getFirstName(), DataType.NAME) ||
+            !inputSanitizer.isValid(memberDTO.getLastName(), DataType.NAME) ||
+            !inputSanitizer.isValid(memberDTO.getDateOfBirth(), DataType.SQL_DATE) ||
+            !inputSanitizer.isValid(memberDTO.getEmail(), DataType.EMAIL) ||
+            !inputSanitizer.isValid(memberDTO.getAddress(), DataType.ADDRESS) ||
+            !inputSanitizer.isValid(memberDTO.getGender(), DataType.GENDER)
         ) {
             // There has been bad input, throw the Exception
             throw inputSanitizer.getPreparedValidationException();
@@ -63,10 +64,10 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
             /* pulling a MemberDAO and save the Member */
             PersistenceFacade.getNewMemberDAO().saveOrUpdate(
-                MAPPER.map(dto, Member.class)
+                MAPPER.map(memberDTO, Member.class)
             );
 
-            LOGGER.info("Member \"{} {}\" was successfully saved.", dto.getFirstName(), dto.getLastName());
+            LOGGER.info("Member \"{} {}\" was successfully saved.", memberDTO.getFirstName(), memberDTO.getLastName());
 
         } catch (PersistenceException e) {
             LOGGER.error("Error occurs while communicating with DB.", e);
@@ -191,6 +192,39 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
         } catch (PersistenceException e) {
             LOGGER.error("An error occurs while searching for \"{}\".", dateOfBirth, e);
+            return null;
+        }
+    }
+
+    @Override
+    public List<TeamDTO> loadMemberTeams(MemberDTO memberDTO)
+    throws RemoteException {
+
+        if (memberDTO == null) return null;
+
+        try {
+
+            //converting DTO to Entity
+            IMember member = MAPPER.map(memberDTO, Member.class);
+
+            //getting all members for this entity
+            List<? extends ITeam> rawResults = member.getTeams();
+
+            //checking if there are an results
+            if (rawResults == null || rawResults.isEmpty()) return null;
+
+            //Converting results to MemberDTO
+            return rawResults.stream()
+                    .map(team -> MAPPER.map(team, TeamDTO.class))
+                    .collect(Collectors.toList());
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurs while getting \"all Teams for Member: {} {}\".",
+                memberDTO.getFirstName(),
+                memberDTO.getLastName(),
+                e
+            );
             return null;
         }
     }

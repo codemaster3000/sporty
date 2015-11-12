@@ -1,6 +1,9 @@
 package at.sporty.team1.domain.readonly;
 
 import at.sporty.team1.domain.Gender;
+import at.sporty.team1.domain.Team;
+
+import java.util.List;
 
 /**
  * Created by sereGkaluv on 27-Oct-15.
@@ -8,6 +11,8 @@ import at.sporty.team1.domain.Gender;
 public interface IRMember {
 
     Integer getMemberId();
+
+    List<Team> getTeams();
 
     String getFirstName();
 

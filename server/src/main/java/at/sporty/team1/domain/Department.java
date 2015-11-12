@@ -45,7 +45,7 @@ public class Department implements IDepartment {
     }
 
     @Override
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "headId")
 	public Member getDepartmentHead() {
 		return head;
