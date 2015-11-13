@@ -509,6 +509,11 @@ public class MemberViewController extends JfxController {
          memberSportCheckboxFootball.setSelected(false);
          memberSportCheckboxSoccer.setSelected(false);
          memberSportCheckboxVolleyball.setSelected(false);
+         
+         memberTeamComboBoxBaseball.valueProperty().set(null);
+         memberTeamComboBoxFootball.valueProperty().set(null);
+         memberTeamComboBoxSoccer.valueProperty().set(null);
+         memberTeamComboBoxVolleyball.valueProperty().set(null);
 	}
 
     @Override
