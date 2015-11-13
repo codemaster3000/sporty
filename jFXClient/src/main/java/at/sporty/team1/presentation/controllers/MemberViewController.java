@@ -126,7 +126,7 @@ public class MemberViewController extends JfxController {
         roleComboBox.getSelectionModel().select(RoleType.MEMBER);
 
         /**
-         * Sportdepartment and Teams
+         * Sportdepartment and Teams loading
          */
 
         //starting as a new thread for faster user feedback
