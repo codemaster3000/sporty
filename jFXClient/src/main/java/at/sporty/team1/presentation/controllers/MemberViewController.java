@@ -259,25 +259,33 @@ public class MemberViewController extends JfxController {
             birthTextField.setText(_activeMemberDTO.getDateOfBirth());
             emailTextField.setText(_activeMemberDTO.getEmail());
             addressTextField.setText(_activeMemberDTO.getAddress());
-            
+
+            //TODO TEAM LOADING
+
             role = _activeMemberDTO.getRole();
             
             if(role != null){
 	            
-	            switch(role){
-	            case "Department Head": 
-	            	roleComboBox.getSelectionModel().select(RoleType.DEPARTMENT_HEAD);
-	            	break;
-	            case "Member":
-	            	roleComboBox.getSelectionModel().select(RoleType.MEMBER);
-	            	break;
-	            case "Trainer":
-	            	roleComboBox.getSelectionModel().select(RoleType.TRAINER);
-	            	break;
-	            case "Managing Comittee":
-	            	roleComboBox.getSelectionModel().select(RoleType.MANAGING_COMMITTEE);
-	            	break;
-	            default: break;	
+	            switch(role) {
+                    case "Department Head": {
+                        roleComboBox.getSelectionModel().select(RoleType.DEPARTMENT_HEAD);
+                        break;
+                    }
+
+                    case "Member": {
+                        roleComboBox.getSelectionModel().select(RoleType.MEMBER);
+                        break;
+                    }
+
+                    case "Trainer": {
+                        roleComboBox.getSelectionModel().select(RoleType.TRAINER);
+                        break;
+                    }
+
+                    case "Managing Comittee": {
+                        roleComboBox.getSelectionModel().select(RoleType.MANAGING_COMMITTEE);
+                        break;
+                    }
 	            }
             }
         }

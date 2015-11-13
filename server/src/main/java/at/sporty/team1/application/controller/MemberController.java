@@ -102,9 +102,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     @Override
     public List<MemberDTO> searchMembersByNameString(String searchString, boolean notPaidCheckbox, boolean paidCheckbox)
     throws RemoteException, ValidationException {
-    	
-    	List<? extends IMember> rawResults = null;
-    	
+
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
         if (!inputSanitizer.isValid(searchString, DataType.NAME)) {
@@ -114,7 +112,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         /* Is valid, moving forward */
         try {
 
-            rawResults = PersistenceFacade.getNewMemberDAO().findByNameString(searchString);
+            List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByNameString(searchString);
 
             //filtering results for fee
             rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
