@@ -13,8 +13,6 @@ public interface IMember extends IRMember {
 
     void setMemberId(Integer memberId);
 
-    void setTeams(List<Team> teamList);
-
     void setFirstName(String firstname);
 
     void setLastName(String lastname);

@@ -76,130 +76,34 @@ public class MemberViewController extends JfxController {
      * Init the Checkboxes and the Comboboxes in MemberView
      */
     private void doComboBoxAndCheckBoxInitialization() {
-    	
-    	List<DepartmentDTO> departments = null;
-    	ObservableList<TeamDTO> soccerTeams = null;
-    	ObservableList<TeamDTO> volleyballTeams = null;
-    	ObservableList<TeamDTO> footballTeams = null;
-    	ObservableList<TeamDTO> baseballTeams = null;
-    	DepartmentDTO soccerDTO = null;
-    	DepartmentDTO volleyballDTO = null;
-    	DepartmentDTO footballDTO = null;
-    	DepartmentDTO baseballDTO = null;
-    	ITeamController teamController = null;
-    	IDepartmentController departmentController = null;
-    	
-    	/**
-    	 * Sportdepartment and Teams
-    	 */
-		try {
-			teamController = CommunicationFacade.lookupForTeamController();
-		} catch (RemoteException | MalformedURLException | NotBoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-    	
-		try {
-           
-            departmentController = CommunicationFacade.lookupForDepartmentController();         
-            departments = departmentController.searchAllDepartments();
-            
-            if(!departments.isEmpty() && teamController != null){
-            	
-            	for(DepartmentDTO actualDepartment : departments) {
 
-                    switch(actualDepartment.getSport()){
-                        case "Soccer": {
-                            soccerDTO = actualDepartment;
+        /**
+         * Setting checkbox listeners for comboBoxes
+         */
 
-                            List<TeamDTO> resultList = teamController.searchByDepartment(soccerDTO);
-                            if (resultList != null) soccerTeams = FXCollections.observableArrayList(resultList);
+        memberSportCheckboxBaseball.selectedProperty().addListener(
+            (observable, oldValue, newValue) -> memberTeamComboBoxBaseball.setDisable(oldValue)
+        );
 
-                            break;
-                        }
+        memberSportCheckboxSoccer.selectedProperty().addListener(
+            (observable, oldValue, newValue) -> memberTeamComboBoxSoccer.setDisable(oldValue)
+        );
 
-            			case "Volleyball": {
-                            volleyballDTO = actualDepartment;
+        memberSportCheckboxVolleyball.selectedProperty().addListener(
+            (observable, oldValue, newValue) -> memberTeamComboBoxVolleyball.setDisable(oldValue)
+        );
 
-                            List<TeamDTO> resultList = teamController.searchByDepartment(volleyballDTO);
-                            if (resultList != null) volleyballTeams = FXCollections.observableArrayList(resultList);
+        memberSportCheckboxFootball.selectedProperty().addListener(
+            (observable, oldValue, newValue) -> memberTeamComboBoxFootball.setDisable(oldValue)
+        );
 
-                            break;
-                        }
-
-                        case "Baseball": {
-                            baseballDTO = actualDepartment;
-
-                            List<TeamDTO> resultList = teamController.searchByDepartment(baseballDTO);
-                            if (resultList != null) baseballTeams = FXCollections.observableArrayList(resultList);
-
-                            break;
-                        }
-
-            			case "Football": {
-                            footballDTO = actualDepartment;
-
-                            List<TeamDTO> resultList = teamController.searchByDepartment(footballDTO);
-                            if (resultList != null) footballTeams = FXCollections.observableArrayList(resultList);
-
-                            break;
-                        }
-            		}
-            	}
-            }
-		} catch (RemoteException | MalformedURLException | NotBoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	  	
-    	memberTeamComboBoxBaseball.setDisable(true);
-    	memberTeamComboBoxFootball.setDisable(true);
-    	memberTeamComboBoxSoccer.setDisable(true);
-    	memberTeamComboBoxVolleyball.setDisable(true);
-    	
-    	memberSportCheckboxBaseball.selectedProperty().addListener((observable, oldValue, newValue) -> {
-
-            if (memberSportCheckboxBaseball.isSelected()) {
-                memberTeamComboBoxBaseball.setDisable(false);
-            } else {
-                memberTeamComboBoxBaseball.setDisable(true);
-            }
-        });
-    	
-    	memberSportCheckboxSoccer.selectedProperty().addListener((observable, oldValue, newValue) -> {
-
-            if (memberSportCheckboxSoccer.isSelected()) {
-                memberTeamComboBoxSoccer.setDisable(false);
-            } else {
-                memberTeamComboBoxSoccer.setDisable(true);
-            }
-        });
-    	
-    	memberSportCheckboxVolleyball.selectedProperty().addListener((observable, oldValue, newValue) -> {
-
-            if (memberSportCheckboxVolleyball.isSelected()) {
-                memberTeamComboBoxVolleyball.setDisable(false);
-            } else {
-                memberTeamComboBoxVolleyball.setDisable(true);
-            }
-        });
-    	
-    	memberSportCheckboxFootball.selectedProperty().addListener((observable, oldValue, newValue) -> {
-
-            if (memberSportCheckboxFootball.isSelected()) {
-                memberTeamComboBoxFootball.setDisable(false);
-            } else {
-                memberTeamComboBoxFootball.setDisable(true);
-            }
-        });
-    	
-    	/**
-    	 * Converters from TeamDTO to Teamname (String)
-    	 */
+        /**
+         * Converter from TeamDTO to Team name (String)
+         */
         StringConverter<TeamDTO> teamDTOStringConverter = new StringConverter<TeamDTO>() {
             @Override
             public String toString(TeamDTO teamDTO) {
-                if(teamDTO != null){
+                if (teamDTO != null) {
                     return teamDTO.getTeamName();
                 }
                 return null;
@@ -211,22 +115,94 @@ public class MemberViewController extends JfxController {
             }
         };
 
-    	memberTeamComboBoxBaseball.setConverter(teamDTOStringConverter);
-    	memberTeamComboBoxFootball.setConverter(teamDTOStringConverter);
-    	memberTeamComboBoxSoccer.setConverter(teamDTOStringConverter);
-    	memberTeamComboBoxVolleyball.setConverter(teamDTOStringConverter);
-    	  	
-    	if (baseballTeams != null) memberTeamComboBoxBaseball.setItems(baseballTeams);
-        if (footballTeams != null) memberTeamComboBoxFootball.setItems(footballTeams);
-        if (soccerTeams != null) memberTeamComboBoxSoccer.setItems(soccerTeams);
-        if (volleyballTeams != null) memberTeamComboBoxVolleyball.setItems(volleyballTeams);
-		
-		
-		/**
-		 * Role Combobox
-		 */
+        memberTeamComboBoxBaseball.setConverter(teamDTOStringConverter);
+        memberTeamComboBoxFootball.setConverter(teamDTOStringConverter);
+        memberTeamComboBoxSoccer.setConverter(teamDTOStringConverter);
+        memberTeamComboBoxVolleyball.setConverter(teamDTOStringConverter);
+
+        /**
+         * Role Combobox
+         */
         roleComboBox.setItems(FXCollections.observableList(Arrays.asList(RoleType.values())));
         roleComboBox.getSelectionModel().select(RoleType.MEMBER);
+
+        /**
+         * Sportdepartment and Teams
+         */
+
+        //starting as a new thread for faster user feedback
+        new Thread(() -> {
+
+            try {
+
+                IDepartmentController departmentController = CommunicationFacade.lookupForDepartmentController();
+                List<DepartmentDTO> departments = departmentController.searchAllDepartments();
+
+                if (!departments.isEmpty()) {
+
+                    ITeamController teamController = CommunicationFacade.lookupForTeamController();
+
+                    for (DepartmentDTO actualDepartment : departments) {
+
+                        switch (actualDepartment.getSport()) {
+                            case "Soccer": {
+                                List<TeamDTO> resultList = teamController.searchByDepartment(actualDepartment);
+                                if (resultList != null) {
+
+                                    //loading values to comboBox
+                                    Platform.runLater(() -> memberTeamComboBoxSoccer.setItems(
+                                        FXCollections.observableList(resultList)
+                                    ));
+                                }
+
+                                break;
+                            }
+
+                            case "Volleyball": {
+                                List<TeamDTO> resultList = teamController.searchByDepartment(actualDepartment);
+                                if (resultList != null) {
+
+                                    //loading values to comboBox
+                                    Platform.runLater(() -> memberTeamComboBoxVolleyball.setItems(
+                                        FXCollections.observableList(resultList)
+                                    ));
+                                }
+
+                                break;
+                            }
+
+                            case "Baseball": {
+                                List<TeamDTO> resultList = teamController.searchByDepartment(actualDepartment);
+                                if (resultList != null) {
+
+                                    //loading values to comboBox
+                                    Platform.runLater(() -> memberTeamComboBoxBaseball.setItems(
+                                        FXCollections.observableList(resultList)
+                                    ));
+                                }
+
+                                break;
+                            }
+
+                            case "Football": {
+                                List<TeamDTO> resultList = teamController.searchByDepartment(actualDepartment);
+                                if (resultList != null) {
+
+                                    //loading values to comboBox
+                                    Platform.runLater(() -> memberTeamComboBoxFootball.setItems(
+                                        FXCollections.observableList(resultList)
+                                    ));
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+                }
+            } catch (RemoteException | MalformedURLException | NotBoundException e) {
+                LOGGER.error("Error occurs while loading all Departments and their Teams.", e);
+            }
+        }).start();
 	}
 
 	@Override
@@ -242,17 +218,13 @@ public class MemberViewController extends JfxController {
      */
     private void displayMemberDTO(MemberDTO memberDTO) {
     	
-    	String role = null;
-    	ITeamController teamController = null;
-    	List<TeamDTO> teams = null;
+    	String role;
+    	ITeamController teamController;
+    	List<TeamDTO> teams;
     	DepartmentDTO dept;
-    	
-    	//deselect all Sportcheckboxes
-    	memberSportCheckboxBaseball.setSelected(false);
-    	memberSportCheckboxFootball.setSelected(false);
-    	memberSportCheckboxSoccer.setSelected(false);
-    	memberSportCheckboxVolleyball.setSelected(false);
-    	
+
+        //clear form
+        dispose();
     	
         if (memberDTO != null) {
             _activeMemberDTO = memberDTO;
@@ -270,7 +242,6 @@ public class MemberViewController extends JfxController {
             emailTextField.setText(_activeMemberDTO.getEmail());
             addressTextField.setText(_activeMemberDTO.getAddress());
 
-            //TODO TEAM LOADING
             try {
 				teamController = CommunicationFacade.lookupForTeamController();
 				teams = teamController.searchTeamsByMember(_activeMemberDTO);
@@ -281,36 +252,39 @@ public class MemberViewController extends JfxController {
 						
 						dept = team.getDepartment();
 						
-						switch(dept.getSport()){
-							case "Volleyball": 
-								if(!memberSportCheckboxVolleyball.isSelected()){
-									memberSportCheckboxVolleyball.setSelected(true);
-									memberTeamComboBoxVolleyball.getSelectionModel().select(team);
-								}
-								break;
-							case "Football":
-								if(!memberSportCheckboxFootball.isSelected()){
-									memberSportCheckboxFootball.setSelected(true);
-									memberTeamComboBoxFootball.getSelectionModel().select(team);
-								}
-								break;
-							case "Baseball":
-								if(!memberSportCheckboxBaseball.isSelected()){
-									memberSportCheckboxBaseball.setSelected(true);
-									memberTeamComboBoxBaseball.getSelectionModel().select(team);
-								}
-								break;
-							case "Soccer":
-								if(!memberSportCheckboxSoccer.isSelected()){
-									memberSportCheckboxSoccer.setSelected(true);
-									memberTeamComboBoxSoccer.getSelectionModel().select(team);
-								}
-								break;
+						switch (dept.getSport()) {
+							case "Volleyball": {
+                                memberSportCheckboxVolleyball.setSelected(true);
+                                memberTeamComboBoxVolleyball.getSelectionModel().select(team);
+
+                                break;
+                            }
+
+							case "Football": {
+                                memberSportCheckboxFootball.setSelected(true);
+                                memberTeamComboBoxFootball.getSelectionModel().select(team);
+
+                                break;
+                            }
+
+							case "Baseball": {
+                                memberSportCheckboxBaseball.setSelected(true);
+                                memberTeamComboBoxBaseball.getSelectionModel().select(team);
+
+                                break;
+                            }
+
+							case "Soccer": {
+                                memberSportCheckboxSoccer.setSelected(true);
+                                memberTeamComboBoxSoccer.getSelectionModel().select(team);
+
+                                break;
+                            }
 						}
 					}
 				}
 			} catch (RemoteException | MalformedURLException | NotBoundException e) {
-				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 			}
             
@@ -318,9 +292,9 @@ public class MemberViewController extends JfxController {
 
             role = _activeMemberDTO.getRole();
             
-            if(role != null){
+            if (role != null) {
 	            
-	            switch(role) {
+	            switch (role) {
                     case "Department Head": {
                         roleComboBox.getSelectionModel().select(RoleType.DEPARTMENT_HEAD);
                         break;
@@ -356,7 +330,8 @@ public class MemberViewController extends JfxController {
         String bday = GUIHelper.readNullOrEmpty(birthTextField.getText());
         String email = GUIHelper.readNullOrEmpty(emailTextField.getText());
         String address = GUIHelper.readNullOrEmpty(addressTextField.getText());
-        String phone = GUIHelper.readNullOrEmpty(phoneTextField.getText());      
+        //TODO refactor phone to squad
+        String phone = GUIHelper.readNullOrEmpty(phoneTextField.getText());
         String gender = null;
         
         if (radioGenderFemale.isSelected()) {
@@ -384,14 +359,11 @@ public class MemberViewController extends JfxController {
                         .setEmail(email)
                         .setAddress(address)
                         .setIsFeePaid(false)
-                        .setRole(roleComboBox.getSelectionModel().getSelectedItem()._stringValue);
-                
-                setDepartmentAndTeam(_activeMemberDTO);
-    //TODO
-//                    .setDepartmentId(department)
-//                    .setTeamId(team)
-//                    .setSquad(squad)
+                        .setRole(roleComboBox.getSelectionModel().getSelectedItem().toString());
+                        //TODO
+                        //.setSquad(squad)
 
+                setDepartmentAndTeam(_activeMemberDTO);
 
                 IMemberController imc = CommunicationFacade.lookupForMemberController();
                 imc.createOrSaveMember(_activeMemberDTO);
@@ -418,28 +390,44 @@ public class MemberViewController extends JfxController {
     	try {
             ITeamController teamController = CommunicationFacade.lookupForTeamController();
 
-            if(memberSportCheckboxBaseball.isSelected()){
+            if (memberSportCheckboxBaseball.isSelected()) {
                 //Baseball team holen
+
                 TeamDTO teamDTO = memberTeamComboBoxBaseball.getSelectionModel().getSelectedItem();
-                teamController.assignMemberToTeam(_memberDTO, teamDTO);
+                teamController.assignMemberToTeam(
+                    _memberDTO.getMemberId(),
+                    teamDTO.getTeamId()
+                );
             }
 
-            if(memberSportCheckboxFootball.isSelected()){
+            if (memberSportCheckboxFootball.isSelected()) {
                 //Football team holen
+
                 TeamDTO teamDTO = memberTeamComboBoxFootball.getSelectionModel().getSelectedItem();
-                teamController.assignMemberToTeam(_memberDTO, teamDTO);
+                teamController.assignMemberToTeam(
+                    _memberDTO.getMemberId(),
+                    teamDTO.getTeamId()
+                );
             }
 
-            if(memberSportCheckboxSoccer.isSelected()){
+            if (memberSportCheckboxSoccer.isSelected()) {
                 //Soccer team holen
+
                 TeamDTO teamDTO = memberTeamComboBoxSoccer.getSelectionModel().getSelectedItem();
-                teamController.assignMemberToTeam(_memberDTO, teamDTO);
+                teamController.assignMemberToTeam(
+                    _memberDTO.getMemberId(),
+                    teamDTO.getTeamId()
+                );
             }
 
-            if(memberSportCheckboxVolleyball.isSelected()){
+            if (memberSportCheckboxVolleyball.isSelected()) {
                 //Volleyball team holen
+
                 TeamDTO teamDTO = memberTeamComboBoxVolleyball.getSelectionModel().getSelectedItem();
-                teamController.assignMemberToTeam(_memberDTO, teamDTO);
+                teamController.assignMemberToTeam(
+                    _memberDTO.getMemberId(),
+                    teamDTO.getTeamId()
+                );
             }
 
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
@@ -490,29 +478,13 @@ public class MemberViewController extends JfxController {
 	
 	@FXML
     private void clearFields(ActionEvent actionEvent) {
-		
-		_activeMemberDTO = null;
-		
-		 fNameTextField.clear();
-		 lNameTextField.clear();
-		 
-		 if(radioGenderFemale.isSelected()){
-			 radioGenderFemale.setSelected(false);
-		 }else if(radioGenderMale.isSelected()){
-			 radioGenderMale.setSelected(false);
-		 }
-		 birthTextField.clear();
-         emailTextField.clear();
-         addressTextField.clear();
-		
-         memberSportCheckboxBaseball.setSelected(false);
-         memberSportCheckboxFootball.setSelected(false);
-         memberSportCheckboxSoccer.setSelected(false);
-         memberSportCheckboxVolleyball.setSelected(false);
+        dispose();
 	}
 
     @Override
     public void dispose() {
+        _activeMemberDTO = null;
+
         fNameTextField.clear();
         lNameTextField.clear();
         birthTextField.clear();
@@ -522,6 +494,21 @@ public class MemberViewController extends JfxController {
         addressTextField.clear();
         radioGenderFemale.setSelected(false);
         radioGenderMale.setSelected(false);
+
+        memberSportCheckboxBaseball.setSelected(false);
+        memberSportCheckboxFootball.setSelected(false);
+        memberSportCheckboxSoccer.setSelected(false);
+        memberSportCheckboxVolleyball.setSelected(false);
+
+        memberTeamComboBoxBaseball.setDisable(true);
+        memberTeamComboBoxFootball.setDisable(true);
+        memberTeamComboBoxSoccer.setDisable(true);
+        memberTeamComboBoxVolleyball.setDisable(true);
+
+        memberTeamComboBoxSoccer.getSelectionModel().clearSelection();
+        memberTeamComboBoxVolleyball.getSelectionModel().clearSelection();
+        memberTeamComboBoxBaseball.getSelectionModel().clearSelection();
+        memberTeamComboBoxFootball.getSelectionModel().clearSelection();
     }
     
     private enum RoleType {

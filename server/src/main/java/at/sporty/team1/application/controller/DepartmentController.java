@@ -59,16 +59,18 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
     }
 
     @Override
-    public List<TeamDTO> loadDepartmentTeams(DepartmentDTO departmentDTO) throws RemoteException {
+    public List<TeamDTO> loadDepartmentTeams(Integer departmentId)
+    throws RemoteException, UnknownEntityException {
 
-        if (departmentDTO == null) return null;
+        if (departmentId == null) throw new UnknownEntityException(IDepartment.class);
 
         try {
 
-            //converting DTO to Entity
-            IDepartment department = MAPPER.map(departmentDTO, Department.class);
+            Department department = PersistenceFacade.getNewDepartmentDAO().findById(departmentId);
+            if (department == null) throw new UnknownEntityException(IDepartment.class);
 
             //getting all members for this entity
+            PersistenceFacade.forceLoadLazyProperty(department, Department::getTeams);
             List<? extends ITeam> rawResults = department.getTeams();
 
             //checking if there are an results
@@ -81,8 +83,8 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
 
         } catch (PersistenceException e) {
             LOGGER.error(
-                "An error occurs while getting \"all Teams for Department: {}\".",
-                departmentDTO.getSport(),
+                "An error occurs while getting \"all Teams for Department #{}\".",
+                departmentId,
                 e
             );
             return null;

@@ -64,16 +64,6 @@ public interface IMemberController extends Remote, Serializable {
     throws RemoteException, ValidationException;
 
     /**
-     * Returns a list of all teams assigned to the given member.
-     *
-     * @param memberDTO target member (will be used for search)
-     * @return List<TeamDTO> List of all teams
-     * @throws RemoteException
-     */
-    List<TeamDTO> loadMemberTeams(MemberDTO memberDTO)
-    throws RemoteException;
-
-    /**
      * Deletes member form the data storage with data from the DTO.
      *
      * @param memberDTO DTO of a member who will be deleted

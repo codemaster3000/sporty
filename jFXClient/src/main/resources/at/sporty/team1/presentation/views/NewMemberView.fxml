@@ -32,16 +32,16 @@
         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
     </padding>
    <children>
-   
+
        <Label text="First Name" />
        <TextField fx:id="fNameTextField" promptText="Mandatory" GridPane.columnIndex="1" />
-   
+
        <Label text="Last Name" GridPane.rowIndex="1" />
        <TextField fx:id="lNameTextField" promptText="Mandatory" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-   
+
        <Label text="Date of Birth (yyyy-mm-dd)" GridPane.rowIndex="2" />
        <TextField fx:id="birthTextField" promptText="Mandatory" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-   
+
        <Label text="Gender" GridPane.rowIndex="3" />
        <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.valignment="BASELINE">
           <children>
@@ -49,20 +49,20 @@
               <RadioButton fx:id="radioGenderFemale" mnemonicParsing="false" text="Female" />
           </children>
        </HBox>
-   
+
        <Label text="Address" GridPane.rowIndex="4" />
        <TextField fx:id="addressTextField" promptText="Mandatory" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-   
+
        <Label text="E-mail" GridPane.rowIndex="5" />
        <TextField fx:id="emailTextField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-   
+
        <Label text="Phone" GridPane.rowIndex="6" />
        <TextField fx:id="phoneTextField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-   
+
        <Separator GridPane.columnSpan="2" GridPane.rowIndex="7" />
-   
+
        <Label text="Sport" GridPane.rowIndex="8" />
-   
+
        <FlowPane prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
       <children>
               <GridPane>
@@ -79,7 +79,8 @@
                              <Insets right="50.0" />
                          </padding>
                      </CheckBox>
-                     <ComboBox fx:id="memberTeamComboBoxSoccer" prefWidth="180.0" GridPane.columnIndex="1" />
+                     <ComboBox fx:id="memberTeamComboBoxSoccer" prefWidth="180.0" GridPane.columnIndex="1"
+                               disable="true"/>
                  </children>
               </GridPane>
       </children>
@@ -100,7 +101,8 @@
                              <Insets right="50.0" />
                          </padding>
                      </CheckBox>
-                     <ComboBox fx:id="memberTeamComboBoxVolleyball" prefWidth="180.0" GridPane.columnIndex="1" />
+                     <ComboBox fx:id="memberTeamComboBoxVolleyball" prefWidth="180.0" GridPane.columnIndex="1"
+                               disable="true"/>
                  </children>
               </GridPane>
           </children>
@@ -121,7 +123,8 @@
                              <Insets right="50.0" />
                          </padding>
                      </CheckBox>
-                     <ComboBox fx:id="memberTeamComboBoxBaseball" prefWidth="180.0" GridPane.columnIndex="1" />
+                     <ComboBox fx:id="memberTeamComboBoxBaseball" prefWidth="180.0" GridPane.columnIndex="1"
+                               disable="true"/>
                  </children>
               </GridPane>
           </children>
@@ -142,21 +145,22 @@
                              <Insets right="50.0" />
                          </padding>
                      </CheckBox>
-                     <ComboBox fx:id="memberTeamComboBoxFootball" prefWidth="180.0" GridPane.columnIndex="1" />
+                     <ComboBox fx:id="memberTeamComboBoxFootball" prefWidth="180.0" GridPane.columnIndex="1"
+                               disable="true"/>
                  </children>
               </GridPane>
           </children>
        </FlowPane>
-   
+
        <Separator GridPane.columnSpan="2" GridPane.rowIndex="12" />
-   
+
        <Label text="Role" GridPane.rowIndex="13" />
        <ComboBox fx:id="roleComboBox" GridPane.columnIndex="1" GridPane.rowIndex="13" />
-   
+
        <Separator GridPane.columnSpan="2" GridPane.rowIndex="14" />
-   
+
        <Button mnemonicParsing="false" onAction="#saveForm" prefHeight="31.0" prefWidth="94.0" text="Save" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="13" />
-      <Button mnemonicParsing="false" onAction="#clearFields" prefHeight="31.0" prefWidth="97.0" text="Clear Form" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="13">
+       <Button mnemonicParsing="false" onAction="#clearFields" prefHeight="31.0" prefWidth="97.0" text="Clear Form" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="13">
          <GridPane.margin>
             <Insets right="100.0" />
          </GridPane.margin>

@@ -126,17 +126,18 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
     }
 
     @Override
-    public List<MemberDTO> loadTeamMembers(TeamDTO teamDTO)
-    throws RemoteException {
+    public List<MemberDTO> loadTeamMembers(Integer teamId)
+    throws RemoteException, UnknownEntityException {
 
-        if (teamDTO == null) return null;
+        if (teamId == null) throw new UnknownEntityException(ITeam.class);
 
         try {
 
-            //converting DTO to Entity
-            ITeam team = MAPPER.map(teamDTO, Team.class);
+            Team team = PersistenceFacade.getNewTeamDAO().findById(teamId);
+            if (team == null) throw new UnknownEntityException(ITeam.class);
 
             //getting all members for this entity
+            PersistenceFacade.forceLoadLazyProperty(team, Team::getMembers);
             List<? extends IMember> rawResults = team.getMembers();
 
             //checking if there are an results
@@ -149,8 +150,8 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
 
         } catch (PersistenceException e) {
             LOGGER.error(
-                "An error occurs while getting \"all Members for Team: {}\".",
-                teamDTO.getTeamName(),
+                "An error occurs while getting \"all Members for Team #{}\".",
+                teamId,
                 e
             );
             return null;
@@ -158,67 +159,60 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
     }
 
     @Override
-    public void assignMemberToTeam(MemberDTO memberDTO, TeamDTO teamDTO)
+    public void assignMemberToTeam(Integer memberId, Integer teamId)
     throws RemoteException, UnknownEntityException {
 
-        if (memberDTO == null || memberDTO.getMemberId() == null) throw new UnknownEntityException(IMember.class);
-        if (teamDTO == null || teamDTO.getTeamId() == null) throw new UnknownEntityException(ITeam.class);
+        if (memberId == null) throw new UnknownEntityException(IMember.class);
+        if (teamId == null) throw new UnknownEntityException(ITeam.class);
 
         try {
 
-            Member member = MAPPER.map(memberDTO, Member.class);
+            Member member = PersistenceFacade.getNewMemberDAO().findById(memberId);
+            if (member == null) throw new UnknownEntityException(IMember.class);
 
-            ITeam team = MAPPER.map(teamDTO, Team.class);
-            List<Member> memberList = team.getMembers();
+            Team team = PersistenceFacade.getNewTeamDAO().findById(teamId);
+            if (team == null) throw new UnknownEntityException(ITeam.class);
 
-            if (member != null) {
-                //maybe also contains check???
+            PersistenceFacade.forceLoadLazyProperty(team, Team::getMembers);
+            team.addMember(member);
 
-                if (memberList == null) {
-                    memberList = new LinkedList<>();
-                }
-                memberList.add(member);
-                team.setMembers(memberList);
-            }
+            PersistenceFacade.getNewTeamDAO().saveOrUpdate(team);
 
         } catch (PersistenceException e) {
             LOGGER.error(
-                "An error occurs while assigning \"Member {} {} to Team {}\".",
-                memberDTO.getLastName(),
-                memberDTO.getFirstName(),
-                teamDTO.getTeamName(),
+                "An error occurs while assigning \"Member #{} to Team #{}\".",
+                memberId,
+                teamId,
                 e
             );
         }
     }
 
     @Override
-    public void removeMemberFromTeam(MemberDTO memberDTO, TeamDTO teamDTO)
+    public void removeMemberFromTeam(Integer memberId, Integer teamId)
     throws RemoteException, UnknownEntityException {
 
-        if (memberDTO == null || memberDTO.getMemberId() == null) throw new UnknownEntityException(IMember.class);
-        if (teamDTO == null || teamDTO.getTeamId() == null) throw new UnknownEntityException(ITeam.class);
+        if (memberId == null) throw new UnknownEntityException(IMember.class);
+        if (teamId == null) throw new UnknownEntityException(ITeam.class);
 
         try {
 
-            Member member = MAPPER.map(memberDTO, Member.class);
+            Member member = PersistenceFacade.getNewMemberDAO().findById(memberId);
+            if (member == null) throw new UnknownEntityException(IMember.class);
 
-            ITeam team = MAPPER.map(teamDTO, Team.class);
-            List<Member> memberList = team.getMembers();
+            Team team = PersistenceFacade.getNewTeamDAO().findById(teamId);
+            if (team == null) throw new UnknownEntityException(ITeam.class);
 
-            if (member != null && memberList != null) {
-                //maybe also contains check???
-                memberList.remove(member);
-            }
+            PersistenceFacade.forceLoadLazyProperty(team, Team::getMembers);
+            team.removeMember(member);
 
-            team.setMembers(memberList);
+            PersistenceFacade.getNewTeamDAO().saveOrUpdate(team);
 
         } catch (PersistenceException e) {
             LOGGER.error(
-                "An error occurs while removing \"Member {} {} from Team {}\".",
-                memberDTO.getLastName(),
-                memberDTO.getFirstName(),
-                teamDTO.getTeamName(),
+                "An error occurs while removing \"Member #{} from Team #{}\".",
+                memberId,
+                teamId,
                 e
             );
         }

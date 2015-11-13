@@ -27,10 +27,10 @@ public interface IDepartmentController extends Remote, Serializable {
     /**
      * Returns a list of all teams assigned to the given department.
      *
-     * @param departmentDTO target department (will be used for search)
+     * @param departmentId target department (will be used for search)
      * @return List<TeamDTO> List of all teams
      * @throws RemoteException
      */
-    List<TeamDTO> loadDepartmentTeams(DepartmentDTO departmentDTO)
-    throws RemoteException;
+    List<TeamDTO> loadDepartmentTeams(Integer departmentId)
+    throws RemoteException, UnknownEntityException;
 }

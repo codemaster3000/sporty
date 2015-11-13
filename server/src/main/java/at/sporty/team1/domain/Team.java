@@ -1,5 +1,6 @@
 package at.sporty.team1.domain;
 
+import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.domain.interfaces.ITeam;
 
 import javax.persistence.*;
@@ -56,7 +57,7 @@ public class Team implements ITeam {
         this.department = department;
     }
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
         name = "teamMembers",
         joinColumns = @JoinColumn(name = "teamId"),
@@ -67,9 +68,31 @@ public class Team implements ITeam {
     }
 
     public void setMembers(List<Member> memberList) {
-//        if (memberList != null)
-//        this.memberList.addAll(memberList);
         this.memberList = memberList;
+    }
+
+    @Override
+    public void addMember(IMember member) {
+
+        if (!(member instanceof Member)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (!memberList.contains(member)) {
+            memberList.add((Member) member);
+        }
+    }
+
+    @Override
+    public void removeMember(IMember member) {
+
+        if (!(member instanceof Member)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (memberList.isEmpty()) {
+            memberList.remove(member);
+        }
     }
 
     //TODO League table in db

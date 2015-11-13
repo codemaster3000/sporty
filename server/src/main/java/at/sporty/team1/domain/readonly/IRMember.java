@@ -12,8 +12,6 @@ public interface IRMember {
 
     Integer getMemberId();
 
-    List<Team> getTeams();
-
     String getFirstName();
 
     String getLastName();

@@ -15,7 +15,6 @@ import java.util.List;
 @Table(name = "member")
 public class Member implements IMember {
     private Integer memberId;
-    private List<Team> teamList;
     private String firstname;
     private String lastname;
     private Gender gender;
@@ -41,22 +40,6 @@ public class Member implements IMember {
     @Override
     public void setMemberId(Integer memberId) {
         this.memberId = memberId;
-    }
-
-    @Override
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "teamMembers",
-        joinColumns = @JoinColumn(name = "teamId"),
-        inverseJoinColumns = @JoinColumn(name = "memberId")
-    )
-    public List<Team> getTeams() {
-        return teamList;
-    }
-
-    @Override
-    public void setTeams(List<Team> teamList) {
-        this.teamList = teamList;
     }
 
     @Override

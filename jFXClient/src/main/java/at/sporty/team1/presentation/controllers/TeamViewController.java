@@ -90,15 +90,18 @@ public class TeamViewController extends JfxController {
             _activeTeamDTO = teamDTO;
 
             try {
-                //TODO test
+
                 ITeamController teamController = CommunicationFacade.lookupForTeamController();
 
-                List<MemberDTO> memberList = teamController.loadTeamMembers(_activeTeamDTO);
+                List<MemberDTO> memberList = teamController.loadTeamMembers(_activeTeamDTO.getTeamId());
                 if (memberList != null && !memberList.isEmpty())  {
                     _membersListView.setItems(FXCollections.observableList(memberList));
                 }
+
             } catch (RemoteException | NotBoundException | MalformedURLException e) {
                 LOGGER.error("Error occurs while displaying team data.", e);
+            } catch (UnknownEntityException e) {
+                LOGGER.error("DTO was not saved in Data Storage before loading all Members from Team.", e);
             }
         }
     }
@@ -118,15 +121,7 @@ public class TeamViewController extends JfxController {
 
             if (_activeTeamDTO != null) {
 
-                //Instead of this:
-                //List<MemberDTO> storedList = _activeTeamDTO.getMemberList();
-                //storedList.remove(memberDTO);
-
-                //_activeTeamDTO.setMemberList(storedList);
-                //displayTeamData(_activeTeamDTO);
-
-                //use this: TODO: (methods are not yet implemented on the server)
-                teamController.removeMemberFromTeam(memberDTO, _activeTeamDTO);
+                teamController.removeMemberFromTeam(memberDTO.getMemberId(), _activeTeamDTO.getTeamId());
 
             } else if (memberDTO != null) {
 
@@ -149,13 +144,13 @@ public class TeamViewController extends JfxController {
 
         if (memberList != null && !memberList.isEmpty()) {
 
-            //TODO refactor with "for" and CommunicationFacade.lookupForTeamController().assignMemberToTeam()
-//            _activeTeamDTO.setMemberList(memberList);
-
             try {
 
                 ITeamController teamController = CommunicationFacade.lookupForTeamController();
                 teamController.createOrSaveTeam(_activeTeamDTO);
+
+                //TODO refactor with "for" and CommunicationFacade.lookupForTeamController().assignMemberToTeam()
+                //_activeTeamDTO.setMemberList(memberList);
 
                 GUIHelper.showSuccessAlert(SUCCESSFUL_TEAM_SAVE);
 

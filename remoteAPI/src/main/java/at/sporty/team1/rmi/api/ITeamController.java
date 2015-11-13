@@ -49,30 +49,30 @@ public interface ITeamController extends Remote, Serializable {
     /**
      * Returns a list of all members assigned to the given team.
      *
-     * @param teamDTO target team (will be used for search).
+     * @param teamId target team (will be used for search).
      * @return List<MemberDTO> List of all members.
      * @throws RemoteException
      */
-    List<MemberDTO> loadTeamMembers(TeamDTO teamDTO)
-    throws RemoteException;
+    List<MemberDTO> loadTeamMembers(Integer teamId)
+    throws RemoteException, UnknownEntityException;
 
     /**
      * Assigns member to selected team.
      *
-     * @param memberDTO target member (will be used to update teams list).
-     * @param teamDTO team to which member with given id will be assigned.
+     * @param memberId target member (will be used to update teams list).
+     * @param teamId team to which member with given id will be assigned.
      * @throws RemoteException
      */
-    void assignMemberToTeam(MemberDTO memberDTO, TeamDTO teamDTO)
+    void assignMemberToTeam(Integer memberId, Integer teamId)
     throws RemoteException, UnknownEntityException;
 
     /**
      * Removes member from selected team.
      *
-     * @param memberDTO target member (will be used to update teams list).
-     * @param teamDTO team from which member with given id will be removed.
+     * @param memberId target member (will be used to update teams list).
+     * @param teamId team from which member with given id will be removed.
      * @throws RemoteException
      */
-    void removeMemberFromTeam(MemberDTO memberDTO, TeamDTO teamDTO)
+    void removeMemberFromTeam(Integer memberId, Integer teamId)
     throws RemoteException, UnknownEntityException;
 }

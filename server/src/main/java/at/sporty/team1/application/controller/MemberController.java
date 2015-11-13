@@ -195,39 +195,6 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public List<TeamDTO> loadMemberTeams(MemberDTO memberDTO)
-    throws RemoteException {
-
-        if (memberDTO == null) return null;
-
-        try {
-
-            //converting DTO to Entity
-            IMember member = MAPPER.map(memberDTO, Member.class);
-
-            //getting all members for this entity
-            List<? extends ITeam> rawResults = member.getTeams();
-
-            //checking if there are an results
-            if (rawResults == null || rawResults.isEmpty()) return null;
-
-            //Converting results to MemberDTO
-            return rawResults.stream()
-                    .map(team -> MAPPER.map(team, TeamDTO.class))
-                    .collect(Collectors.toList());
-
-        } catch (PersistenceException e) {
-            LOGGER.error(
-                "An error occurs while getting \"all Teams for Member: {} {}\".",
-                memberDTO.getFirstName(),
-                memberDTO.getLastName(),
-                e
-            );
-            return null;
-        }
-    }
-
-    @Override
     public void deleteMember(MemberDTO memberDTO)
     throws RemoteException {
         try {
