@@ -67,6 +67,8 @@ public class Team implements ITeam {
     }
 
     public void setMembers(List<Member> memberList) {
+//        if (memberList != null)
+//        this.memberList.addAll(memberList);
         this.memberList = memberList;
     }
 

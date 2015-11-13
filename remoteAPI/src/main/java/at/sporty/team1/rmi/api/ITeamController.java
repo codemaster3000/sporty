@@ -57,26 +57,6 @@ public interface ITeamController extends Remote, Serializable {
     throws RemoteException;
 
     /**
-     * Assigns team to selected department.
-     *
-     * @param teamDTO team that will be assigned to the given department.
-     * @param deptDTO target department to which team will be assigned.
-     * @throws RemoteException
-     */
-    void assignTeamToDepartment(TeamDTO teamDTO, DepartmentDTO deptDTO)
-    throws RemoteException, UnknownEntityException;
-
-    /**
-     * Assigns team to selected trainer.
-     *
-     * @param teamDTO team that will be assigned to the given trainer.
-     * @param memberDTO target trainer to which team will be assigned.
-     * @throws RemoteException
-     */
-    void assignTeamToTrainer(TeamDTO teamDTO, MemberDTO memberDTO)
-    throws RemoteException, UnknownEntityException;
-
-    /**
      * Assigns member to selected team.
      *
      * @param memberDTO target member (will be used to update teams list).

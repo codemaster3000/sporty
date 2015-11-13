@@ -23,6 +23,7 @@ import org.dozer.Mapper;
 import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -157,59 +158,6 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
     }
 
     @Override
-    public void assignTeamToDepartment(TeamDTO teamDTO, DepartmentDTO deptDTO)
-    throws RemoteException, UnknownEntityException {
-
-        if (teamDTO == null || teamDTO.getTeamId() == null) throw new UnknownEntityException(ITeam.class);
-        if (deptDTO == null || deptDTO.getDepartmentId() == null) throw new UnknownEntityException(IDepartment.class);
-
-        try {
-
-            ITeam team = MAPPER.map(teamDTO, Team.class);
-            IDepartment department = MAPPER.map(deptDTO, Department.class);
-
-            if (team != null && department != null) {
-                team.setDepartment((Department) department);
-            }
-
-        } catch (PersistenceException e) {
-            LOGGER.error(
-                "An error occurs while assigning \"Department {} to Team {}\".",
-                deptDTO.getSport(),
-                teamDTO.getTeamName(),
-                e
-            );
-        }
-    }
-
-    @Override
-    public void assignTeamToTrainer(TeamDTO teamDTO, MemberDTO memberDTO)
-    throws RemoteException, UnknownEntityException {
-
-        if (teamDTO == null || teamDTO.getTeamId() == null) throw new UnknownEntityException(ITeam.class);
-        if (memberDTO == null || memberDTO.getMemberId() == null) throw new UnknownEntityException(IMember.class);
-
-        try {
-
-            IMember trainer = MAPPER.map(memberDTO, Member.class);
-            ITeam team = MAPPER.map(teamDTO, Team.class);
-
-            if (trainer != null && team != null) {
-                team.setTrainer((Member) trainer);
-            }
-
-        } catch (PersistenceException e) {
-            LOGGER.error(
-                "An error occurs while assigning \"Team {} to Trainer {} {}\".",
-                teamDTO.getTeamName(),
-                memberDTO.getLastName(),
-                memberDTO.getFirstName(),
-                e
-            );
-        }
-    }
-
-    @Override
     public void assignMemberToTeam(MemberDTO memberDTO, TeamDTO teamDTO)
     throws RemoteException, UnknownEntityException {
 
@@ -223,12 +171,15 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
             ITeam team = MAPPER.map(teamDTO, Team.class);
             List<Member> memberList = team.getMembers();
 
-            if (member != null && memberList != null) {
+            if (member != null) {
                 //maybe also contains check???
-                memberList.add(member);
-            }
 
-            team.setMembers(memberList);
+                if (memberList == null) {
+                    memberList = new LinkedList<>();
+                }
+                memberList.add(member);
+                team.setMembers(memberList);
+            }
 
         } catch (PersistenceException e) {
             LOGGER.error(

@@ -8,7 +8,6 @@ import java.util.List;
  * This IDTO Object implements Object Builder pattern.
  */
 public class DepartmentDTO implements IDTO {
-	
     private Integer _departmentId;
     private String _sport;
     private MemberDTO _head;

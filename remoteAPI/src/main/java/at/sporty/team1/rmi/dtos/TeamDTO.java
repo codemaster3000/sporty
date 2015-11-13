@@ -2,8 +2,6 @@ package at.sporty.team1.rmi.dtos;
 
 import at.sporty.team1.rmi.api.IDTO;
 
-import java.util.List;
-
 /**
  * This IDTO Object implements Object Builder pattern.
  */
@@ -39,7 +37,7 @@ public class TeamDTO implements IDTO {
         return _department;
     }
 
-    public TeamDTO setLeague(DepartmentDTO department) {
+    public TeamDTO setDepartment(DepartmentDTO department) {
         _department = department;
         return this;
     }

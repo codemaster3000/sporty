@@ -88,31 +88,4 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
             return null;
         }
     }
-
-    @Override
-    public void assignDepartmentToHead(DepartmentDTO deptDTO, MemberDTO memberDTO)
-            throws RemoteException, UnknownEntityException {
-
-        if (deptDTO == null || deptDTO.getDepartmentId() == null) throw new UnknownEntityException(IDepartment.class);
-        if (memberDTO == null || memberDTO.getMemberId() == null) throw new UnknownEntityException(IMember.class);
-
-        try {
-
-            IDepartment department = MAPPER.map(deptDTO, Department.class);
-            IMember trainer = MAPPER.map(memberDTO, Member.class);
-
-            if (department != null && trainer != null) {
-                department.setDepartmentHead((Member) trainer);
-            }
-
-        } catch (PersistenceException e) {
-            LOGGER.error(
-                "An error occurs while assigning \"Department {} to Head {} {}\".",
-                deptDTO.getSport(),
-                memberDTO.getLastName(),
-                memberDTO.getFirstName(),
-                e
-            );
-        }
-    }
 }

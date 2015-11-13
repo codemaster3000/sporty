@@ -142,14 +142,6 @@
             <a>setTeamName</a>
             <b>setTeamName</b>
         </field>
-        <field>
-            <a>getMemberList</a>
-            <b>getMemberList</b>
-        </field>
-        <field>
-            <a>setMemberList</a>
-            <b>setMemberList</b>
-        </field>
     </mapping>
 
     <!--DEPARTMENT TO DTO MAPPING-->
