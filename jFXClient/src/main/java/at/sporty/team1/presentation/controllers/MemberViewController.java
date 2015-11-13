@@ -283,11 +283,9 @@ public class MemberViewController extends JfxController {
 					}
 				}
 			} catch (RemoteException | MalformedURLException | NotBoundException e) {
-
-				e.printStackTrace();
+                LOGGER.error("Error occurs while loading Member data (Teams).", e);
 			}
-            
-           
+
 
             role = _activeMemberDTO.getRole();
             
