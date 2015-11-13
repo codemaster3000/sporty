@@ -243,6 +243,16 @@ public class MemberViewController extends JfxController {
     private void displayMemberDTO(MemberDTO memberDTO) {
     	
     	String role = null;
+    	ITeamController teamController = null;
+    	List<TeamDTO> teams = null;
+    	DepartmentDTO dept;
+    	
+    	//deselect all Sportcheckboxes
+    	memberSportCheckboxBaseball.setSelected(false);
+    	memberSportCheckboxFootball.setSelected(false);
+    	memberSportCheckboxSoccer.setSelected(false);
+    	memberSportCheckboxVolleyball.setSelected(false);
+    	
     	
         if (memberDTO != null) {
             _activeMemberDTO = memberDTO;
@@ -261,6 +271,50 @@ public class MemberViewController extends JfxController {
             addressTextField.setText(_activeMemberDTO.getAddress());
 
             //TODO TEAM LOADING
+            try {
+				teamController = CommunicationFacade.lookupForTeamController();
+				teams = teamController.searchTeamsByMember(_activeMemberDTO);
+				
+				if(teams != null){
+					
+					for(TeamDTO team : teams){
+						
+						dept = team.getDepartment();
+						
+						switch(dept.getSport()){
+							case "Volleyball": 
+								if(!memberSportCheckboxVolleyball.isSelected()){
+									memberSportCheckboxVolleyball.setSelected(true);
+									memberTeamComboBoxVolleyball.getSelectionModel().select(team);
+								}
+								break;
+							case "Football":
+								if(!memberSportCheckboxFootball.isSelected()){
+									memberSportCheckboxFootball.setSelected(true);
+									memberTeamComboBoxFootball.getSelectionModel().select(team);
+								}
+								break;
+							case "Baseball":
+								if(!memberSportCheckboxBaseball.isSelected()){
+									memberSportCheckboxBaseball.setSelected(true);
+									memberTeamComboBoxBaseball.getSelectionModel().select(team);
+								}
+								break;
+							case "Soccer":
+								if(!memberSportCheckboxSoccer.isSelected()){
+									memberSportCheckboxSoccer.setSelected(true);
+									memberTeamComboBoxSoccer.getSelectionModel().select(team);
+								}
+								break;
+						}
+					}
+				}
+			} catch (RemoteException | MalformedURLException | NotBoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
+           
 
             role = _activeMemberDTO.getRole();
             
@@ -451,6 +505,10 @@ public class MemberViewController extends JfxController {
          emailTextField.clear();
          addressTextField.clear();
 		
+         memberSportCheckboxBaseball.setSelected(false);
+         memberSportCheckboxFootball.setSelected(false);
+         memberSportCheckboxSoccer.setSelected(false);
+         memberSportCheckboxVolleyball.setSelected(false);
 	}
 
     @Override
