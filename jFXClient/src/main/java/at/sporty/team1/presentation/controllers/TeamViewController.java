@@ -189,9 +189,10 @@ public class TeamViewController extends JfxController {
         try {
             ITeamController teamController = CommunicationFacade.lookupForTeamController();
 
-            if (_activeTeamDTO != null) {
+            if ((_activeTeamDTO != null)&&(memberDTO != null)) {
 
                 teamController.removeMemberFromTeam(memberDTO.getMemberId(), _activeTeamDTO.getTeamId());
+                _membersListView.getItems().remove(memberDTO);
 
             } else if (memberDTO != null) {
 
