@@ -220,8 +220,14 @@ public class TeamViewController extends JfxController {
                 ITeamController teamController = CommunicationFacade.lookupForTeamController();
                 teamController.createOrSaveTeam(_activeTeamDTO);
 
-                //TODO refactor with "for" and CommunicationFacade.lookupForTeamController().assignMemberToTeam()
-                //_activeTeamDTO.setMemberList(memberList);
+                for(MemberDTO member : memberList){
+                	try {
+						CommunicationFacade.lookupForTeamController().assignMemberToTeam(member.getMemberId(), _activeTeamDTO.getTeamId());
+					} catch (UnknownEntityException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                }
 
                 GUIHelper.showSuccessAlert(SUCCESSFUL_TEAM_SAVE);
 
