@@ -3,21 +3,27 @@ package at.sporty.team1.presentation.controllers;
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.IDTO;
+import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.api.ITeamController;
+import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
+import javafx.util.StringConverter;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,6 +31,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -36,9 +43,13 @@ public class TeamViewController extends JfxController {
     private static final String SUCCESSFUL_TEAM_SAVE = "Team was successfully saved.";
 
     @FXML private ListView<MemberDTO> _membersListView;
+    @FXML private ComboBox<TeamDTO> _chooseTeamCombobox_teamView;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+    	
+    	 List<TeamDTO> resultList = new LinkedList<TeamDTO>();
+    	
         _membersListView.setCellFactory(m -> new ListCell<MemberDTO>() {
             @Override
             protected void updateItem(MemberDTO m, boolean bln) {
@@ -68,6 +79,65 @@ public class TeamViewController extends JfxController {
                 }
             }
         });
+        
+        /**
+         * Load Teams
+         */
+        
+        /**
+         * Converter from TeamDTO to Team name (String)
+         */
+        StringConverter<TeamDTO> teamDTOStringConverter = new StringConverter<TeamDTO>() {
+            @Override
+            public String toString(TeamDTO teamDTO) {
+                if (teamDTO != null) {
+                    return teamDTO.getTeamName();
+                }
+                return null;
+            }
+
+            @Override
+            public TeamDTO fromString(String string) {
+                return null;
+            }
+        };
+        
+        _chooseTeamCombobox_teamView.setConverter(teamDTOStringConverter);
+        
+        new Thread(() -> {
+
+            try {
+
+                IDepartmentController departmentController = CommunicationFacade.lookupForDepartmentController();
+                List<DepartmentDTO> departments = departmentController.searchAllDepartments();
+
+                if (!departments.isEmpty()) {
+
+                    ITeamController teamController = CommunicationFacade.lookupForTeamController();
+
+                    for (DepartmentDTO actualDepartment : departments) {
+
+                    	resultList.addAll(teamController.searchByDepartment(actualDepartment));
+                    	
+                    	if (resultList != null) {
+
+                          //loading values to comboBox
+                          Platform.runLater(() -> _chooseTeamCombobox_teamView.setItems(
+                              FXCollections.observableList(resultList)
+                          ));
+                      }
+                    }
+                }
+            } catch (RemoteException | MalformedURLException | NotBoundException e) {
+                LOGGER.error("Error occurs while loading all Departments and their Teams.", e);
+            }
+        }).start();
+        
+        _chooseTeamCombobox_teamView.setOnAction((event) -> {
+        	
+        	_membersListView.getItems().clear();
+        	displayTeamData(_chooseTeamCombobox_teamView.getSelectionModel().getSelectedItem());
+        });   
     }
 
     private static TeamDTO _activeTeamDTO;
