@@ -192,7 +192,6 @@ public class MemberViewController extends JfxController {
                                         FXCollections.observableList(resultList)
                                     ));
                                 }
-
                                 break;
                             }
                         }

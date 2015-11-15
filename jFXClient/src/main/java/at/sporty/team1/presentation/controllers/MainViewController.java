@@ -32,6 +32,7 @@ public class MainViewController extends JfxController {
     private static final String NO_RESULTS_CONTEXT = "No results were found.";
     private static final String TEAM_TAB_CAPTION = "TEAM_NAME";
     private static final String MEMBER_TAB_CAPTION = "MEMBER";
+    private static final String COMPETITION_TAB_CAPTION = "NEW COMPETITION";
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Map<Tab, IJfxController> CONTROLLER_TO_TAB_MAP = new HashMap<>();
@@ -76,6 +77,7 @@ public class MainViewController extends JfxController {
         //Opening un-closable tabs
         openMemberView(false);
         openTeamView(false);
+        openCompetitonView(false);
         
         _feeNotPaidCheckbox.setOnAction((event) -> {
         	_checkboxNotPaid = _feeNotPaidCheckbox.isSelected();
@@ -183,6 +185,10 @@ public class MainViewController extends JfxController {
     private void openTeamView(boolean closable) {
         openNewTab(TEAM_TAB_CAPTION, closable, null, TeamViewController.class);
     }
+    
+    private void openCompetitonView(boolean closable) {
+        openNewTab(COMPETITION_TAB_CAPTION, closable, null, CompetitionViewController.class);
+    }
 
     private void delegateToMemberTarget(MemberDTO dto) {
         Tab activeTab = _tabPanel.getSelectionModel().getSelectedItem();
@@ -229,7 +235,6 @@ public class MainViewController extends JfxController {
                 _tabPanel.getTabs().add(t);
                 _tabPanel.getSelectionModel().select(t);
             });
-
         }).start();
     }
 
