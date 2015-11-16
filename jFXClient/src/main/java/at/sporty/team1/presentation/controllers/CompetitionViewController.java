@@ -71,7 +71,7 @@ public class CompetitionViewController extends JfxController {
         List<DepartmentDTO> departments = null;
         LinkedList<MatchDTO> tempList = new LinkedList<>();
         LinkedList<String> teams = new LinkedList<>();
-        List<TeamDTO> ownTournamentTeams = null;
+       
 
         setVisibleOfTournamentTeamView(false);
         setVisibleOfMatchesView(false);
@@ -111,16 +111,7 @@ public class CompetitionViewController extends JfxController {
 
         //TODO: LeagueCombobox
 
-        /**
-         * TeamView in Tournaments
-         */
-        try {
-            ownTournamentTeams = CommunicationFacade.lookupForTeamController().searchByDepartment(_tournamentDepartmentCombobox.getSelectionModel().getSelectedItem());
-            _teamToCompetitionComboBox.setItems(FXCollections.observableList(ownTournamentTeams));
-        } catch (RemoteException | MalformedURLException | NotBoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        
 
         //TODO:
         //load teams in listview
@@ -169,7 +160,23 @@ public class CompetitionViewController extends JfxController {
     }
 
     private void setVisibleOfTournamentTeamView(boolean b) {
-
+    	
+    	 List<TeamDTO> ownTournamentTeams = null;
+    	 
+    	 if(b){
+		 /**
+	         * TeamView in Tournaments
+	         */
+	        try {
+	            ownTournamentTeams = CommunicationFacade.lookupForTeamController().searchByDepartment(_tournamentDepartmentCombobox.getSelectionModel().getSelectedItem());
+	            ObservableList<TeamDTO> teamObservableList = FXCollections.observableList(ownTournamentTeams);
+	            _teamToCompetitionComboBox.setItems(teamObservableList);
+	        } catch (RemoteException | MalformedURLException | NotBoundException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	        }
+    	 }
+    	
         _competitionTeamsListView.setVisible(b);
         _teamToCompetitionComboBox.setVisible(b);
         _competitionExternalTeamTextField.setVisible(b);
@@ -177,6 +184,8 @@ public class CompetitionViewController extends JfxController {
         _labelTeams.setVisible(b);
         _buttonRemoveSelectedTeam.setVisible(b);
         _buttonSaveTeams.setVisible(b);
+        
+        
     }
 
     @FXML
