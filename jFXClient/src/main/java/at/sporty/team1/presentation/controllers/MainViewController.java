@@ -77,7 +77,7 @@ public class MainViewController extends JfxController {
         //Opening un-closable tabs
         openMemberView(false);
         openTeamView(false);
-//        openCompetitionView(false);
+        openCompetitionView(false);
         
         _feeNotPaidCheckbox.setOnAction(e -> _checkboxNotPaid = _feeNotPaidCheckbox.isSelected());
         
@@ -116,7 +116,7 @@ public class MainViewController extends JfxController {
                             break;
                         }
 
-                        case TEAM_NAME: {
+                        case COMMON_TEAM_NAME: {
                             displaySearchResults(
                                 memberController.searchMembersByTeamName(searchQuery, _checkboxNotPaid, _checkboxPaid)
                             );
@@ -237,7 +237,8 @@ public class MainViewController extends JfxController {
     private enum SearchType {
         MEMBER_NAME("member name"),
         DATE_OF_BIRTH("date of birth"),
-        TEAM_NAME("team name");
+        COMMON_TEAM_NAME("common team name"),
+        TOURNAMENT_TEAM_NAME("tournament team name");
 
         private final String _stringValue;
 
