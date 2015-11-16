@@ -69,10 +69,16 @@ public class CompetitionViewController extends JfxController{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
 		List<DepartmentDTO> departments = null;
+		LinkedList<MatchDTO> tempList = new LinkedList<>();
+		LinkedList<String> teams = new LinkedList<>();
+		List<TeamDTO> ownTournamentTeams = null;
 		
 		setVisibleOfTournamentTeamView(false);
 		setVisibleOfMatchesView(false);
 		
+		/**
+		 * TournamentView
+		 */
 		try {
 			departments = CommunicationFacade.lookupForDepartmentController().searchAllDepartments();
 		} catch (RemoteException | MalformedURLException | NotBoundException e) {
@@ -105,9 +111,28 @@ public class CompetitionViewController extends JfxController{
 		
 		//TODO: LeagueCombobox
 		
-		LinkedList<MatchDTO> tempList = new LinkedList<>();
-		LinkedList<String> teams = new LinkedList<>();
-				
+		/**
+		 * TeamView in Tournaments
+		 */
+		try {
+			ownTournamentTeams = CommunicationFacade.lookupForTeamController().searchByDepartment(_tournamentDepartmentCombobox.getSelectionModel().getSelectedItem());
+			_teamToCompetitionComboBox.setItems(FXCollections.observableList(ownTournamentTeams));
+		} catch (RemoteException | MalformedURLException | NotBoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//TODO:
+		//load teams in listview		
+		//teams = CommunicationFacade.lookupForTournamentController().getAllTournamentTeams();	
+		if(!teams.isEmpty()){
+			_tournamentTeams = FXCollections.observableList(teams);
+			_competitionTeamsListView.setItems(_tournamentTeams);
+				}
+		
+		/**
+		 * Matchesview in Tournament
+		 */
 		_team1Col.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
 		_team1Col.setCellValueFactory(
 				new PropertyValueFactory<MatchDTO, String>("team1"));
@@ -139,15 +164,7 @@ public class CompetitionViewController extends JfxController{
 		
 		matches = FXCollections.observableList(tempList);		
 		_matchTableView.setItems(matches);
-		
-		//TODO:
-		//load teams in listview
-		
-		//teams = CommunicationFacade.lookupForTournamentController().getAllTournamentTeams();	
-		if(!teams.isEmpty()){
-			_tournamentTeams = FXCollections.observableList(teams);
-			_competitionTeamsListView.setItems(_tournamentTeams);
-		}
+				
 	}
 	
 	private void setVisibleOfMatchesView(boolean b) {
@@ -229,8 +246,9 @@ public class CompetitionViewController extends JfxController{
 			setVisibleOfTournamentTeamView(true);
 		}*/
 		setVisibleOfTournamentTeamView(true);
+		
 	}
-	
+
 	@FXML
 	public void saveMatches(ActionEvent event){
 		
