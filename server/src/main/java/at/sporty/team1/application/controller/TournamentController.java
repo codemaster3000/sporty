@@ -44,7 +44,7 @@ public class TournamentController {
             Team team = PersistenceFacade.getNewTeamDAO().findById(teamId);
 
             //TODO why u no want method addTeam?!
-            //PersistenceFacade.forceLoadLazyProperty(tournament, Tournament::addTeam);
+            PersistenceFacade.forceLoadLazyProperty(tournament, Tournament::getTeams);
             tournament.addTeam(team);
 
             PersistenceFacade.getNewTournamentDAO().saveOrUpdate(tournament);
