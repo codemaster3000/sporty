@@ -17,6 +17,7 @@ public class Team implements ITeam {
     public Department department;
     public League league;
     public String teamname;
+    public Boolean isTournamentSquad;
     public List<Member> memberList;
 
     public Team() {
@@ -121,6 +122,18 @@ public class Team implements ITeam {
     }
 
     @Override
+    @Basic
+    @Column(name = "isTournamentSquad")
+    public Boolean getIsTournamentSquad() {
+        return isTournamentSquad;
+    }
+
+    @Override
+    public void setIsTournamentSquad(Boolean isTournamentSquad) {
+        this.isTournamentSquad = isTournamentSquad;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -132,6 +145,7 @@ public class Team implements ITeam {
         if (department != null ? !department.equals(team.department) : team.department != null) return false;
 //        if (league != null ? !league.equals(team.league) : team.league != null) return false;
         if (teamname != null ? !teamname.equals(team.teamname) : team.teamname != null) return false;
+        if (isTournamentSquad != null ? !isTournamentSquad.equals(team.isTournamentSquad) : team.isTournamentSquad != null) return false;
 
         return true;
     }
@@ -143,6 +157,7 @@ public class Team implements ITeam {
         result = 31 * result + (department != null ? department.hashCode() : 0);
 //        result = 31 * result + (league != null ? league.hashCode() : 0);
         result = 31 * result + (teamname != null ? teamname.hashCode() : 0);
+        result = 31 * result + (isTournamentSquad != null ? isTournamentSquad.hashCode() : 0);
         return result;
     }
 }

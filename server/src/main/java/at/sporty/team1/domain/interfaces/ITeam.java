@@ -26,4 +26,6 @@ public interface ITeam extends IRTeam {
     void addMember(IMember member);
 
     void removeMember(IMember member);
+
+    void setIsTournamentSquad(Boolean isTournamentSquad);
 }

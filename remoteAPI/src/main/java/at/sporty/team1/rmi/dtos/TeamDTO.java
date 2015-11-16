@@ -11,6 +11,7 @@ public class TeamDTO implements IDTO {
     private DepartmentDTO _department;
     private Integer _league; //TODO replace with league DTO
     private String _teamName;
+    private Boolean _isTournamentSquad;
 
     public TeamDTO() {
     }
@@ -59,6 +60,15 @@ public class TeamDTO implements IDTO {
 
     public TeamDTO setTeamName(String teamName) {
         _teamName = teamName;
+        return this;
+    }
+
+    public Boolean getIsTournamentSquad() {
+        return _isTournamentSquad;
+    }
+
+    public TeamDTO setIsTournamentSquad(Boolean isTournamentSquad) {
+        _isTournamentSquad = isTournamentSquad;
         return this;
     }
 }

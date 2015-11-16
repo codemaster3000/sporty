@@ -152,10 +152,12 @@ public class Member implements IMember {
         this.username = username;
     }
 
+    @Override
     @Basic
     @Column(name = "isFeePaid", columnDefinition = "false")
     public Boolean getIsFeePaid() { return isFeePaid;}
 
+    @Override
     public void setIsFeePaid(Boolean isFeePaid) {
         this.isFeePaid = isFeePaid;
     }
