@@ -6,47 +6,91 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="552.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.sporty.team1.presentation.controllers.CompetitionViewController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="569.0" prefWidth="685.0" vgap="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.sporty.team1.presentation.controllers.CompetitionViewController">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.0" minWidth="10.0" prefWidth="65.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="290.0" minWidth="10.0" prefWidth="290.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.0" minWidth="10.0" prefWidth="86.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="290.0" minWidth="10.0" prefWidth="208.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="219.0" minWidth="10.0" prefWidth="56.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="304.0" minWidth="10.0" prefWidth="304.0" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="81.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="173.0" minHeight="10.0" prefHeight="173.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="128.0" minHeight="10.0" prefHeight="128.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="173.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="173.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="183.0" minHeight="10.0" prefHeight="162.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>      
-      <Label text="Date:" />
-      <TextField fx:id="_competitionDateTextField" GridPane.columnIndex="1" />
-      <Label text="Place:" GridPane.rowIndex="1" />
-      <TextField fx:id="_competitionPlaceTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <Label text="Teams:" GridPane.rowIndex="2" />
-      <ListView fx:id="_competitionTeamsListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="3" />
-      <ComboBox fx:id="_teamToCompetitionComboBox" prefHeight="31.0" prefWidth="289.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+      <Label text="Date:" GridPane.columnIndex="2">
+         <GridPane.margin>
+            <Insets left="20.0" />
+         </GridPane.margin></Label>
+      <TextField fx:id="_competitionDateTextField" GridPane.columnIndex="3">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin></TextField>
+      <Label text="Place:" GridPane.columnIndex="2" GridPane.rowIndex="1">
+         <GridPane.margin>
+            <Insets left="20.0" />
+         </GridPane.margin></Label>
+      <TextField fx:id="_competitionPlaceTextField" prefHeight="25.0" prefWidth="315.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin></TextField>
+      <Pane prefHeight="31.0" prefWidth="307.0" GridPane.columnSpan="4" GridPane.rowIndex="2">
+         <children>
+          <Button layoutX="470.0" layoutY="3.0" mnemonicParsing="false" onAction="#clearForm" text="Clear Form" />
+            <Button layoutX="555.0" layoutY="3.0" mnemonicParsing="false" onAction="#saveCompetition" text="Save Competition" />
+         </children>
+      </Pane>
+      <ListView fx:id="_competitionTeamsListView" prefHeight="61.0" prefWidth="525.0" GridPane.columnSpan="4" GridPane.rowIndex="4" />
+      <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="6">
+         <children>
+            <Label fx:id="_labelMatches" text="Matches:" />
+         </children>
+      </FlowPane>
+      <ComboBox fx:id="_teamToCompetitionComboBox" prefWidth="212.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
-         <GridPane.margin>
-            <Insets right="10.0" />
-         </GridPane.margin>
       </ComboBox>
-      <Button onAction="#addTeamToCompetition" mnemonicParsing="false" prefHeight="31.0" prefWidth="139.0" text="Add Team" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-      <ToolBar GridPane.columnSpan="3" GridPane.rowIndex="5">
-        <items>
-            <Pane prefHeight="31.0" prefWidth="307.0">
-               <children>
-                  <Button layoutY="-1.0" mnemonicParsing="false" text="Create Matches" />
-               </children>
-            </Pane>
-          <Button onAction="#clearForm" mnemonicParsing="false" text="Clear" />
-            <Button mnemonicParsing="false" text="Save Competition" />
-        </items>
-      </ToolBar>
+      <Label fx:id="_labelTeams" text="Teams:" GridPane.rowIndex="3" />
+      <TableView fx:id="_matchTableView" editable="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="7">
+        <columns>
+          	<TableColumn fx:id="_team1Col" prefWidth="130.0" text="TEAM 1" />
+          	<TableColumn fx:id="_team2Col" prefWidth="130.0" text="TEAM 2" />
+            <TableColumn fx:id="_timeCol" prefWidth="75.0" text="TIME" />
+            <TableColumn fx:id="_courtCol" prefWidth="90.0" text="COURT" />
+            <TableColumn fx:id="_refereeCol" prefWidth="120.0" text="REFEREE" />
+            <TableColumn fx:id="_resultCol" prefWidth="120.0" text="RESULT" />
+        </columns>
+      </TableView>
+      <Label text="League:" GridPane.rowIndex="1" />
+      <ComboBox fx:id="_tournamentLeagueCombobox" prefWidth="215.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <Label text="Department:" />
+      <ComboBox fx:id="_tournamentDepartmentCombobox" prefWidth="216.0" GridPane.columnIndex="1" />
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+         <children>
+            <Button fx:id="_addTeamButton" layoutX="230.0" layoutY="1.0" mnemonicParsing="false"  prefWidth="74.0" text="Add Team" />
+            <TextField fx:id="_competitionExternalTeamTextField" layoutY="1.0" prefWidth="212.0" promptText="External Team" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="8">
+         <children>
+            <Button fx:id="_saveMatchesButton" layoutX="576.0" layoutY="2.0" mnemonicParsing="false" text="Save Matches" />
+            <Button fx:id="_removeSelectedMatch" layoutX="426.0" layoutY="1.0" mnemonicParsing="false" text="Remove selected Match" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="5">
+         <children>
+            <Button fx:id="_buttonSaveTeams" layoutX="590.0" layoutY="1.0" mnemonicParsing="false" text="SaveTeams" />
+            <Button fx:id="_buttonRemoveSelectedTeam" layoutX="444.0" layoutY="1.0" mnemonicParsing="false" text="Remove selected Team" />
+         </children>
+      </Pane>
    </children>
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

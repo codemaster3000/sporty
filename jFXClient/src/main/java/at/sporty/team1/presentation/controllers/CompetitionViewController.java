@@ -1,37 +1,174 @@
 package at.sporty.team1.presentation.controllers;
 
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.JfxController;
+import at.sporty.team1.rmi.api.IMemberController;
+import at.sporty.team1.rmi.dtos.DepartmentDTO;
+import at.sporty.team1.rmi.dtos.MatchDTO;
+import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.exceptions.ValidationException;
+import at.sporty.team1.util.GUIHelper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.StringConverter;
 
 public class CompetitionViewController extends JfxController{
-
+	
+	private static final Logger LOGGER = LogManager.getLogger();
+    private static final String SUCCESSFUL_TOURNAMENT_SAVE = "Tournament was successfully saved.";
+	private ObservableList<MatchDTO> matches;
+	private ObservableList<String> _tournamentTeams;
+//TODO:	private static TournamentDTO _activeCompetition;
+	
 	@FXML private TextField _competitionDateTextField;
 	@FXML private TextField _competitionPlaceTextField;
 	@FXML private ListView<String> _competitionTeamsListView;
 	@FXML private ComboBox<TeamDTO> _teamToCompetitionComboBox;
+	@FXML private ComboBox<DepartmentDTO> _tournamentDepartmentCombobox;
+	@FXML private ComboBox<DepartmentDTO> _tournamentLeagueCombobox;
+	@FXML private TableView<MatchDTO> _matchTableView;
+	@FXML private TableColumn<MatchDTO, String> _team1Col;
+	@FXML private TableColumn<MatchDTO, String> _team2Col;
+	@FXML private TableColumn<MatchDTO, String> _timeCol;
+	@FXML private TableColumn<MatchDTO, String> _refereeCol;
+	@FXML private TableColumn<MatchDTO, String> _courtCol;
+	@FXML private TableColumn<MatchDTO, String> _resultCol;
+	@FXML private TextField _competitionExternalTeamTextField;
+	@FXML private Button _addTeamButton;
+	@FXML private Label _labelTeams;
+	@FXML private Label _labelMatches;
+	@FXML private Button _buttonRemoveSelectedTeam;
+	@FXML private Button _buttonSaveTeams;
+	@FXML private Button _saveMatchesButton;
+	@FXML private Button _removeSelectedMatch;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
+		List<DepartmentDTO> departments = null;
+		
+		setVisibleOfTournamentTeamView(false);
+		setVisibleOfMatchesView(false);
+		
+		try {
+			departments = CommunicationFacade.lookupForDepartmentController().searchAllDepartments();
+		} catch (RemoteException | MalformedURLException | NotBoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(departments != null){
+			_tournamentDepartmentCombobox.setItems(FXCollections.observableList(departments));
+		}
+		
+		/**
+         * Converter from TeamDTO to Team name (String)
+         */
+        StringConverter<DepartmentDTO> departmentDTOStringConverter = new StringConverter<DepartmentDTO>() {
+            @Override
+            public String toString(DepartmentDTO departmentDTO) {
+                if (departmentDTO != null) {
+                    return departmentDTO.getSport();
+                }
+                return null;
+            }
+
+            @Override
+            public DepartmentDTO fromString(String string) {
+                return null;
+            }
+        };		
+		_tournamentDepartmentCombobox.setConverter(departmentDTOStringConverter);
+		
+		//TODO: LeagueCombobox
+		
+		LinkedList<MatchDTO> tempList = new LinkedList<>();
+		LinkedList<String> teams = new LinkedList<>();
+				
+		_team1Col.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
+		_team1Col.setCellValueFactory(
+				new PropertyValueFactory<MatchDTO, String>("team1"));
+		
+		_team2Col.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
+		_team2Col.setCellValueFactory(
+				new PropertyValueFactory<MatchDTO, String>("team2"));
+		
+		_timeCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
+		_timeCol.setCellValueFactory(
+				new PropertyValueFactory<MatchDTO, String>("time"));
+		
+		_refereeCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
+		_refereeCol.setCellValueFactory(
+				new PropertyValueFactory<MatchDTO, String>("referee"));
+		
+		_courtCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
+		_courtCol.setCellValueFactory(
+				new PropertyValueFactory<MatchDTO, String>("court"));
+		
+		_resultCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
+		_resultCol.setCellValueFactory(
+				new PropertyValueFactory<MatchDTO, String>("result"));
+		
+		for(int i = 0; i < 20; i++){
+			
+			tempList.add(new MatchDTO());
+		}
+		
+		matches = FXCollections.observableList(tempList);		
+		_matchTableView.setItems(matches);
+		
 		//TODO:
 		//load teams in listview
 		
+		//teams = CommunicationFacade.lookupForTournamentController().getAllTournamentTeams();	
+		if(!teams.isEmpty()){
+			_tournamentTeams = FXCollections.observableList(teams);
+			_competitionTeamsListView.setItems(_tournamentTeams);
+		}
 	}
 	
-	@FXML
-	private void addTeamToCompetition(ActionEvent event){
+	private void setVisibleOfMatchesView(boolean b) {
 		
-		_competitionTeamsListView.getSelectionModel().getSelectedItems().add(_teamToCompetitionComboBox.getSelectionModel().getSelectedItem().getTeamName());
+		_saveMatchesButton.setVisible(b);
+		_removeSelectedMatch.setVisible(b);
+		_labelMatches.setVisible(b);
+		_matchTableView.setVisible(b);
 	}
-	
+
+	private void setVisibleOfTournamentTeamView(boolean b) {
+				
+		_competitionTeamsListView.setVisible(b);
+		_teamToCompetitionComboBox.setVisible(b);
+		_competitionExternalTeamTextField.setVisible(b);
+		_addTeamButton.setVisible(b);
+		_labelTeams.setVisible(b);
+		_buttonRemoveSelectedTeam.setVisible(b);
+		_buttonSaveTeams.setVisible(b);
+	}
+
 	@FXML 
 	private void clearForm(ActionEvent event){
 		
@@ -43,5 +180,55 @@ public class CompetitionViewController extends JfxController{
 
         _competitionDateTextField.clear();
         _competitionPlaceTextField.clear();
+        _tournamentDepartmentCombobox.getSelectionModel().clearSelection();
+        _tournamentLeagueCombobox.getSelectionModel().clearSelection();
     }
+	
+	@FXML 
+	private void saveCompetition(ActionEvent event){
+		
+		String date = _competitionDateTextField.getText();
+		String dept = _tournamentDepartmentCombobox.getSelectionModel().getSelectedItem().getSport();
+		//TODO: String league = _tournamentLeagueCombobox.getSelectionModel().getSelectedItem().toString();
+		String location = _competitionPlaceTextField.getText();
+		
+		/*if((date != null) && (dept != null) && (location != null)){
+			
+			try {
+
+                //check if we are creating a new or editing an existing Competition
+                if (_activeCompetition == null) {
+                    //this is a new Competition
+                	_activeCompetition = new TournamentDTO();
+                }
+
+                //if it is an already existing member, changed member data will be simply updated.
+                _activeCompetition.setDate(date)
+                        .setDept(dept)
+                        .setLeague(league)
+                        .setLocation(location);
+
+                ITournamentController imc = CommunicationFacade.lookupForTournamentController();
+                imc.createOrSaveTournament(_activeCompetition);
+
+                GUIHelper.showSuccessAlert(SUCCESSFUL_TOURNAMENT_SAVE);
+
+                //Logging and cleaning the tab
+                LOGGER.info("Tournament \"{} {}\" was successfully saved.", dept, date);
+                dispose();
+
+            } catch (RemoteException | MalformedURLException | NotBoundException e) {
+                LOGGER.error("Error occurs while saving the tournament.", e);
+            } catch (ValidationException e) {
+            	String context = String.format("Validation exception %s while saving tournament.", e.getCause());
+            	
+            	GUIHelper.showValidationAlert(context);
+				LOGGER.error(context, e);
+			}
+			
+			setVisibleOfTournamentTeamView(true);
+		}*/
+		setVisibleOfTournamentTeamView(true);
+	}
+	
 }

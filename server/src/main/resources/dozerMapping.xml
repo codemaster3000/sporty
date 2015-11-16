@@ -181,5 +181,58 @@
             <b>setDepartmentHead</b>
         </field>
     </mapping>
-
+    
+    <!--MATCH TO DTO MAPPING-->
+    <mapping>
+        <class-a>at.sporty.team1.domain.Match</class-a>
+        <class-b>at.sporty.team1.rmi.dtos.MatchDTO</class-b>
+        <field>
+            <a>getLocation</a>
+            <b>getCourt</b>
+        </field>
+        <field>
+            <a>setLocation</a>
+            <b>setCourt</b>
+        </field>
+        <field>
+            <a>getDate</a>
+            <b>getTime</b>
+        </field>
+        <field>
+            <a>setDate</a>
+            <b>setTime</b>
+        </field>
+        <field>
+            <a>getTeam2</a>
+            <b>getTeam2</b>
+        </field>
+        <field>
+            <a>setTeam2</a>
+            <b>setTeam2</b>
+        </field>
+        <field>
+            <a>getTeam1</a>
+            <b>getTeam1</b>
+        </field>
+        <field>
+            <a>setTeam1</a>
+            <b>setTeam1</b>
+        </field>
+        <field>
+            <a>getMatchResult</a>
+            <b>getResult</b>
+        </field>
+        <field>
+            <a>getMatchResult</a>
+            <b>setResult</b>
+        </field>
+        <field>
+            <a>getReferee</a>
+            <b>getReferee</b>
+        </field>
+        <field>
+            <a>setReferee</a>
+            <b>setReferee</b>
+        </field>
+    </mapping>
 </mappings>

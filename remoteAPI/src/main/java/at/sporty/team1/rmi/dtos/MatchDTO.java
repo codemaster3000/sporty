@@ -2,65 +2,63 @@ package at.sporty.team1.rmi.dtos;
 
 import at.sporty.team1.rmi.api.IDTO;
 
-import java.util.Date;
-
 public class MatchDTO implements IDTO {
 
-    private Date date; //TODO STRING
-    private TeamDTO homeTeam;
-    private TeamDTO guestTeam;
-    private MatchResultDTO matchResult;
-    private String location;
-    private String referee;
-
-    public MatchDTO() {
+    private String _team1;
+    private String _team2;
+    private String _referee;
+    private String _court;
+	private String _time;
+	private String _result;
+   
+    public MatchDTO() {   	
     }
 
-    public Date getDate() {
-        return date;
+    public String getCourt() {
+		return _court;
+	}
+
+	public void setCourt(String court) {
+		this._court = court;
+	}
+    
+    public String getTime() {
+        return _time;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setTime(String time) {
+        this._time = time;
     }
 
-    public TeamDTO getGuestTeam() {
-        return guestTeam;
+    public String getTeam2() {
+        return _team2;
     }
 
-    public void setGuestTeam(TeamDTO guestTeam) {
-        this.guestTeam = guestTeam;
+    public void setTeam2(String team2) {
+        this._team2 = team2;
+    }
+    
+    public String getTeam1(){
+    	return _team1;
     }
 
-    public TeamDTO getHomeTeam() {
-        return homeTeam;
-    }
-
-    public void setHomeTeam(TeamDTO homeTeam) {
-        this.homeTeam = homeTeam;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public MatchResultDTO getMatchResult() {
-        return matchResult;
-    }
-
-    public void setMatchResult(MatchResultDTO matchResult) {
-        this.matchResult = matchResult;
+    public void setTeam1(String team1) {
+        this._team1 = team1;
     }
 
     public String getReferee() {
-        return referee;
+        return _referee;
     }
 
     public void setReferee(String referee) {
-        this.referee = referee;
+        this._referee = referee;
     }
+
+	public String getResult() {
+		return _result;
+	}
+
+	public void setResult(String _result) {
+		this._result = _result;
+	}
 }

@@ -1,8 +1,12 @@
 package at.sporty.team1.domain;
 
 import at.sporty.team1.domain.interfaces.IMatch;
+import at.sporty.team1.misc.converters.SQLDateConverter;
 
 import java.util.Date;
+
+import javax.persistence.Basic;
+import javax.persistence.Convert;
 
 /**
  * Created by f00 on 03.11.15.
@@ -10,38 +14,40 @@ import java.util.Date;
  */
 public class Match implements IMatch {
 
-    public Date date;
-    public Team homeTeam;
-    public Team guestTeam;
-    public MatchResult matchResult;
+    public String date;
+    public String team1;
+    public String team2;
+    public String matchResult;
     public String location;
     public String referee;
 
     @Override
-    public Date getDate() {
+    @Basic
+    @Convert(converter = SQLDateConverter.class)
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
     @Override
-    public Team getGuestTeam() {
-        return guestTeam;
+    public String getTeam2() {
+        return team2;
     }
 
-    public void setGuestTeam(Team guestTeam) {
-        this.guestTeam = guestTeam;
+    public void setTeam2(String team2) {
+        this.team2 = team2;
     }
 
     @Override
-    public Team getHomeTeam() {
-        return homeTeam;
+    public String getTeam1() {
+        return team1;
     }
 
-    public void setHomeTeam(Team homeTeam) {
-        this.homeTeam = homeTeam;
+    public void setTeam1(String team1) {
+        this.team1 = team1;
     }
 
     @Override
@@ -54,11 +60,11 @@ public class Match implements IMatch {
     }
 
     @Override
-    public MatchResult getMatchResult() {
+    public String getResult() {
         return matchResult;
     }
 
-    public void setMatchResult(MatchResult matchResult) {
+    public void setResult(String matchResult) {
         this.matchResult = matchResult;
     }
 

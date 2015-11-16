@@ -23,8 +23,8 @@ public class MainApp extends Application {
     private static final String PATH_TO_DEFAULT_CSS_FILE = "/at/sporty/team1/presentation/css/main.css";
 
     private static final String DEFAULT_TITLE = "SPORTY";
-    private static final int DEFAULT_WIDTH = 960;
-    private static final int DEFAULT_HEIGHT = 540;
+    private static final int DEFAULT_WIDTH = 1024;
+    private static final int DEFAULT_HEIGHT = 700;
 
     /**
      * Default (empty) constructor for this utility class.
