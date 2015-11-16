@@ -231,4 +231,39 @@ public class CompetitionViewController extends JfxController{
 		setVisibleOfTournamentTeamView(true);
 	}
 	
+	@FXML
+	public void saveMatches(ActionEvent event){
+		
+		//TODO: save Matches to _activeTournament
+		
+	}
+	
+	@FXML
+	public void removeSelectedMatch(ActionEvent event){
+		
+		//TODO: 
+		
+	}
+	
+	@FXML
+	public void addTeamToTeamList(ActionEvent event){
+		
+		//TODO: Team from textfield or Combobox
+		
+	}
+	
+	@FXML
+	public void saveTeamsToTournament(ActionEvent event){
+		
+		//TODO: save Teams to _activeTournament
+		
+	}
+	
+	@FXML
+	public void removeTeamFromTournament(ActionEvent event){
+		
+		//TODO: save Matches to _activeTournament
+		
+	}
+	
 }
