@@ -132,7 +132,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public List<MemberDTO> searchMembersByTeamName(String teamName, boolean notPaidCheckbox, boolean paidCheckbox)
+    public List<MemberDTO> searchMembersByCommonTeamName(String teamName, boolean notPaidCheckbox, boolean paidCheckbox)
     throws RemoteException, ValidationException {
 
         /* Validating Input */
@@ -144,7 +144,39 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         /* Is valid, moving forward */
         try {
 
-            List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByTeamName(teamName);
+            List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByCommonTeamName(teamName);
+
+            //filtering results for fee
+            rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
+
+            //checking if there are an results
+            if (rawResults == null || rawResults.isEmpty()) return null;
+
+            //Converting results to MemberDTO
+            return rawResults.stream()
+                    .map(member -> MAPPER.map(member, MemberDTO.class))
+                    .collect(Collectors.toList());
+
+        } catch (PersistenceException e) {
+            LOGGER.error("An error occurs while searching for \"{}\".", teamName, e);
+            return null;
+        }
+    }
+
+    @Override
+    public List<MemberDTO> searchMembersByTournamentTeamName(String teamName, boolean notPaidCheckbox, boolean paidCheckbox)
+    throws RemoteException, ValidationException {
+
+        /* Validating Input */
+        InputSanitizer inputSanitizer = new InputSanitizer();
+        if (!inputSanitizer.isValid(teamName, DataType.NAME)) {
+            throw inputSanitizer.getPreparedValidationException();
+        }
+
+        /* Is valid, moving forward */
+        try {
+
+            List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByTournamentTeamName(teamName);
 
             //filtering results for fee
             rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);

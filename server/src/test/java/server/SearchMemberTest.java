@@ -4,9 +4,7 @@ import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.junit.Assert;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -193,7 +191,7 @@ public class SearchMemberTest {
 
 		try {
 			MemberController mem = new MemberController();
-			members = mem.searchMembersByTeamName(searchString, false, false);
+			members = mem.searchMembersByCommonTeamName(searchString, false, false);
 		} catch (RemoteException | ValidationException e) {
 			e.printStackTrace();
 		}
@@ -210,7 +208,7 @@ public class SearchMemberTest {
 
 		try {
 			MemberController mem = new MemberController();
-			members = mem.searchMembersByTeamName(searchString, true, false);
+			members = mem.searchMembersByCommonTeamName(searchString, true, false);
 		} catch (RemoteException | ValidationException e) {
 			e.printStackTrace();
 		}
@@ -227,7 +225,7 @@ public class SearchMemberTest {
 
 		try {
 			MemberController mem = new MemberController();
-			members = mem.searchMembersByTeamName(searchString, false, true);
+			members = mem.searchMembersByCommonTeamName(searchString, false, true);
 		} catch (RemoteException | ValidationException e) {
 			e.printStackTrace();
 		}
@@ -244,7 +242,7 @@ public class SearchMemberTest {
 //
 //		try {
 //			MemberController mem = new MemberController();
-//			members = mem.searchMembersByTeamName(searchString, false, false);
+//			members = mem.searchMembersByCommonTeamName(searchString, false, false);
 //		} catch (RemoteException | ValidationException e) {
 //			e.printStackTrace();
 //		}
@@ -261,7 +259,7 @@ public class SearchMemberTest {
 //
 //		try {
 //			MemberController mem = new MemberController();
-//			members = mem.searchMembersByTeamName(searchString, true, false);
+//			members = mem.searchMembersByCommonTeamName(searchString, true, false);
 //		} catch (RemoteException | ValidationException e) {
 //			e.printStackTrace();
 //		}
@@ -278,7 +276,7 @@ public class SearchMemberTest {
 //
 //		try {
 //			MemberController mem = new MemberController();
-//			members = mem.searchMembersByTeamName(searchString, false, true);
+//			members = mem.searchMembersByCommonTeamName(searchString, false, true);
 //		} catch (RemoteException | ValidationException e) {
 //			e.printStackTrace();
 //		}
@@ -295,7 +293,7 @@ public class SearchMemberTest {
 //
 //		try {
 //			MemberController mem = new MemberController();
-//			members = mem.searchMembersByTeamName(searchString, false, false);
+//			members = mem.searchMembersByCommonTeamName(searchString, false, false);
 //		} catch (RemoteException | ValidationException e) {
 //			e.printStackTrace();
 //		}
@@ -313,7 +311,7 @@ public class SearchMemberTest {
 //
 //		try {
 //			MemberController mem = new MemberController();
-//			members = mem.searchMembersByTeamName(searchString, true, false);
+//			members = mem.searchMembersByCommonTeamName(searchString, true, false);
 //		} catch (RemoteException | ValidationException e) {
 //			e.printStackTrace();
 //		}
@@ -330,7 +328,7 @@ public class SearchMemberTest {
 //
 //		try {
 //			MemberController mem = new MemberController();
-//			members = mem.searchMembersByTeamName(searchString, false, true);
+//			members = mem.searchMembersByCommonTeamName(searchString, false, true);
 //		} catch (RemoteException | ValidationException e) {
 //			e.printStackTrace();
 //		}
@@ -347,7 +345,7 @@ public class SearchMemberTest {
 //
 //		try {
 //			MemberController mem = new MemberController();
-//			members = mem.searchMembersByTeamName(searchString, false, false);
+//			members = mem.searchMembersByCommonTeamName(searchString, false, false);
 //		} catch (RemoteException | ValidationException e) {
 //			e.printStackTrace();
 //		}
@@ -364,7 +362,7 @@ public class SearchMemberTest {
 //
 //		try {
 //			MemberController mem = new MemberController();
-//			members = mem.searchMembersByTeamName(searchString, true, false);
+//			members = mem.searchMembersByCommonTeamName(searchString, true, false);
 //		} catch (RemoteException | ValidationException e) {
 //			e.printStackTrace();
 //		}
@@ -381,7 +379,7 @@ public class SearchMemberTest {
 //
 //		try {
 //			MemberController mem = new MemberController();
-//			members = mem.searchMembersByTeamName(searchString, false, true);
+//			members = mem.searchMembersByCommonTeamName(searchString, false, true);
 //		} catch (RemoteException | ValidationException e) {
 //			e.printStackTrace();
 //		}
@@ -398,7 +396,7 @@ public class SearchMemberTest {
 //
 //		try {
 //			MemberController mem = new MemberController();
-//			members = mem.searchMembersByTeamName(searchString, false, false);
+//			members = mem.searchMembersByCommonTeamName(searchString, false, false);
 //		} catch (RemoteException | ValidationException e) {
 //			e.printStackTrace();
 //		}
@@ -415,7 +413,7 @@ public class SearchMemberTest {
 //
 //		try {
 //			MemberController mem = new MemberController();
-//			members = mem.searchMembersByTeamName(searchString, true, false);
+//			members = mem.searchMembersByCommonTeamName(searchString, true, false);
 //		} catch (RemoteException | ValidationException e) {
 //			e.printStackTrace();
 //		}
@@ -432,7 +430,7 @@ public class SearchMemberTest {
 //
 //		try {
 //			MemberController mem = new MemberController();
-//			members = mem.searchMembersByTeamName(searchString, false, true);
+//			members = mem.searchMembersByCommonTeamName(searchString, false, true);
 //		} catch (RemoteException | ValidationException e) {
 //			e.printStackTrace();
 //		}
@@ -449,7 +447,7 @@ public class SearchMemberTest {
 //
 //		try {
 //			MemberController mem = new MemberController();
-//			members = mem.searchMembersByTeamName(searchString, false, false);
+//			members = mem.searchMembersByCommonTeamName(searchString, false, false);
 //		} catch (RemoteException | ValidationException e) {
 //			e.printStackTrace();
 //		}
@@ -466,7 +464,7 @@ public class SearchMemberTest {
 //
 //		try {
 //			MemberController mem = new MemberController();
-//			members = mem.searchMembersByTeamName(searchString, true, false);
+//			members = mem.searchMembersByCommonTeamName(searchString, true, false);
 //		} catch (RemoteException | ValidationException e) {
 //			e.printStackTrace();
 //		}
@@ -483,7 +481,7 @@ public class SearchMemberTest {
 //
 //		try {
 //			MemberController mem = new MemberController();
-//			members = mem.searchMembersByTeamName(searchString, false, true);
+//			members = mem.searchMembersByCommonTeamName(searchString, false, true);
 //		} catch (RemoteException | ValidationException e) {
 //			e.printStackTrace();
 //		}

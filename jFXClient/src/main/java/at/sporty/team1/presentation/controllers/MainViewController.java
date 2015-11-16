@@ -102,7 +102,11 @@ public class MainViewController extends JfxController {
                     switch(_searchType.getValue()) {
                         case MEMBER_NAME: {
                             displaySearchResults(
-                                memberController.searchMembersByNameString(searchQuery, _checkboxNotPaid, _checkboxPaid)
+                                memberController.searchMembersByNameString(
+                                    searchQuery,
+                                    _checkboxNotPaid,
+                                    _checkboxPaid
+                                )
                             );
 
                             break;
@@ -110,7 +114,11 @@ public class MainViewController extends JfxController {
 
                         case DATE_OF_BIRTH: {
                             displaySearchResults(
-                                memberController.searchMembersByDateOfBirth(searchQuery, _checkboxNotPaid, _checkboxPaid)
+                                memberController.searchMembersByDateOfBirth(
+                                    searchQuery,
+                                    _checkboxNotPaid,
+                                    _checkboxPaid
+                                )
                             );
 
                             break;
@@ -118,7 +126,23 @@ public class MainViewController extends JfxController {
 
                         case COMMON_TEAM_NAME: {
                             displaySearchResults(
-                                memberController.searchMembersByTeamName(searchQuery, _checkboxNotPaid, _checkboxPaid)
+                                memberController.searchMembersByCommonTeamName(
+                                    searchQuery,
+                                    _checkboxNotPaid,
+                                    _checkboxPaid
+                                )
+                            );
+
+                            break;
+                        }
+
+                        case TOURNAMENT_TEAM_NAME: {
+                            displaySearchResults(
+                                memberController.searchMembersByTournamentTeamName(
+                                    searchQuery,
+                                    _checkboxNotPaid,
+                                    _checkboxPaid
+                                )
                             );
 
                             break;
@@ -138,7 +162,7 @@ public class MainViewController extends JfxController {
 
             }).start();
             
-        }else{
+        } else {
         	_searchResultViewController.showProgressAnimation();
         	
         	new Thread(() -> {

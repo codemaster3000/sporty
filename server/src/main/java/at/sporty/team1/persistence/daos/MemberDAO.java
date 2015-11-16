@@ -20,7 +20,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
     private static final String PROP_DATE_OF_BIRTH = "dateOfBirth";
     private static final String PROP_EMAIL = "email";
     private static final String DELIMITER = " ";
-    private static final String FEE_PAID = "isFeePaid";
+    private static final String IS_TOURNAMENT_SQUAD = "isTournamentSquad";
     private static final String PROP_TEAM_NAME = "teamName";
 
     /**
@@ -107,7 +107,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
     }
 
     @Override
-    public List<Member> findByTeamName(String teamName)
+    public List<Member> findByCommonTeamName(String teamName)
     throws PersistenceException {
 
         String rawQuery =
@@ -117,6 +117,30 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
             "INNER JOIN team " +
             "WHERE " +
             "team.teamId = teamMembers.teamId " +
+            "AND " +
+            "team.isTournamentSquad = FALSE " +
+            "AND " +
+            "team.teamName LIKE :" + PROP_TEAM_NAME;
+
+        return findBySQLQuery(
+            rawQuery,
+            new PropertyPair<>(PROP_TEAM_NAME, Util.wrapInWildcard(teamName))
+        );
+    }
+
+    @Override
+    public List<Member> findByTournamentTeamName(String teamName)
+    throws PersistenceException {
+
+        String rawQuery =
+            "SELECT member.* "+
+            "FROM teamMembers " +
+            "LEFT JOIN member ON teamMembers.memberId = member.memberId " +
+            "INNER JOIN team " +
+            "WHERE " +
+            "team.teamId = teamMembers.teamId " +
+            "AND " +
+            "team.isTournamentSquad = TRUE " +
             "AND " +
             "team.teamName LIKE :" + PROP_TEAM_NAME;
 

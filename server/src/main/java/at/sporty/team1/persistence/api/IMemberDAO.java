@@ -67,9 +67,18 @@ public interface IMemberDAO extends IGenericDAO<Member> {
     /**
      * Find member(s) by team name.
      *
-     * @param teamName name of the given team
+     * @param teamName name of the given team (common)
      * @return List<Member> List of all Members who are assigned to given team.
      * @throws PersistenceException
      */
-	List<Member> findByTeamName(String teamName) throws PersistenceException;
+	List<Member> findByCommonTeamName(String teamName) throws PersistenceException;
+
+    /**
+     * Find member(s) by team name.
+     *
+     * @param teamName name of the given team (tournament)
+     * @return List<Member> List of all Members who are assigned to given team.
+     * @throws PersistenceException
+     */
+    List<Member> findByTournamentTeamName(String teamName) throws PersistenceException;
 }
