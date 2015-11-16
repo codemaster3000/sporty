@@ -43,13 +43,23 @@ public interface IMemberController extends Remote, Serializable {
 
 
     /**
-     * Search for memberList by team name.
+     * Search for memberList by common team name.
      *
      * @param teamName Team name to be searched.
      * @return List<MemberDTO> List of all members who are assigned to the given team, or null.
      * @throws RemoteException
      */
-    List<MemberDTO> searchMembersByTeamName(String teamName, boolean notPaidCheckbox, boolean paidCheckbox)
+    List<MemberDTO> searchMembersByCommonTeamName(String teamName, boolean notPaidCheckbox, boolean paidCheckbox)
+    throws RemoteException, ValidationException;
+
+    /**
+     * Search for memberList by tournament team name.
+     *
+     * @param teamName Team name to be searched.
+     * @return List<MemberDTO> List of all members who are assigned to the given team, or null.
+     * @throws RemoteException
+     */
+    List<MemberDTO> searchMembersByTournamentTeamName(String teamName, boolean notPaidCheckbox, boolean paidCheckbox)
     throws RemoteException, ValidationException;
 
 
