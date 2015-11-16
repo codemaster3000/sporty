@@ -37,18 +37,17 @@ public class TournamentController {
      * @param tournamentId
      */
     public void addTeamToTournament(String teamId, String tournamentId) {
-        TournamentDTO tournamentDTO = new TournamentDTO();
 
         try {
 
             Tournament tournament = PersistenceFacade.getNewTournamentDAO().findById(tournamentId);
             Team team = PersistenceFacade.getNewTeamDAO().findById(teamId);
 
+            //TODO why u no want method addTeam?!
+            //PersistenceFacade.forceLoadLazyProperty(tournament, Tournament::addTeam);
             tournament.addTeam(team);
 
-            PersistenceFacade.getNewTournamentDAO().saveOrUpdate(
-                    MAPPER.map(tournamentDTO, Tournament.class)
-            );
+            PersistenceFacade.getNewTournamentDAO().saveOrUpdate(tournament);
         } catch (PersistenceException e) {
             LOGGER.error("An error occured while adding a team to a Tournament: ", e);
         }
@@ -100,7 +99,7 @@ public class TournamentController {
             //checking if there are an results
             if (tournaments == null || tournaments.isEmpty()) return null;
 
-            //Converting results to MemberDTO
+            //Converting all Tournaments to TournamentDTO
             return tournaments.stream()
                     .map(tournament -> MAPPER.map(tournament, TournamentDTO.class))
                     .collect(Collectors.toList());
