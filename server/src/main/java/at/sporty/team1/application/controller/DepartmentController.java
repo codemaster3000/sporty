@@ -1,15 +1,11 @@
 package at.sporty.team1.application.controller;
 
 import at.sporty.team1.domain.Department;
-import at.sporty.team1.domain.Member;
-import at.sporty.team1.domain.Team;
 import at.sporty.team1.domain.interfaces.IDepartment;
-import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
-import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import org.apache.logging.log4j.LogManager;
@@ -90,4 +86,8 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
             return null;
         }
     }
+
+
+
+
 }

@@ -235,4 +235,58 @@
             <b>setReferee</b>
         </field>
     </mapping>
+
+    <!--Tournament to DTO mapping -->
+    <mapping>
+        <class-a>at.sporty.team1.domain.Tournament</class-a>
+        <class-b>at.sporty.team1.rmi.dtos.TournamentDTO</class-b>
+        <field>
+            <a>getId</a>
+            <b>getId</b>
+        </field>
+        <field>
+            <a>setId</a>
+            <b>setId</b>
+        </field>
+        <field>
+            <a>setMatches</a>
+            <b>setMatches</b>
+        </field>
+        <field>
+            <a>getMatches</a>
+            <b>getMatches</b>
+        </field>
+        <field>
+            <a>setTeams</a>
+            <b>setTeams</b>
+        </field>
+        <field>
+            <a>getTeams</a>
+            <b>getTeams</b>
+        </field>
+        <field>
+            <a>getDate</a>
+            <b>getDate</b>
+        </field>
+        <field>
+            <a>setDate</a>
+            <b>setDate</b>
+        </field>
+        <field>
+            <a>getLeague</a>
+            <b>getLeague</b>
+        </field>
+        <field>
+            <a>setLeague</a>
+            <b>setLeague</b>
+        </field>
+        <field>
+            <a>getDepartment</a>
+            <b>getDepartment</b>
+        </field>
+        <field>
+            <a>setDepartment</a>
+            <b>setDepartment</b>
+        </field>
+    </mapping>
 </mappings>

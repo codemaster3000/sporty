@@ -6,8 +6,14 @@ import at.sporty.team1.rmi.api.ILoginController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.naming.Context;
+import javax.naming.NamingException;
+import javax.naming.directory.Attributes;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.InitialDirContext;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Hashtable;
 import java.util.List;
 
 
@@ -43,6 +49,24 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
     @Override
     public int authorize(String username, String password)
     throws RemoteException {
+
+        try {
+            //TODO LDAP!!
+            Hashtable<String, String> env = new Hashtable<>();
+            env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+            env.put(Context.PROVIDER_URL, "ldaps://ldap.fhv.at:636/dc=uclv,dc=net");
+            env.put(Context.SECURITY_AUTHENTICATION, "simple");
+            env.put(Context.SECURITY_PRINCIPAL, "uid=" + username + ", ou=fhv, ou=People, dc=uclv, dc=net");
+            env.put(Context.SECURITY_CREDENTIALS, password);
+
+            DirContext ctx = new InitialDirContext(env);
+            Attributes attrs = ctx.getAttributes("userid=007,ou=staff,o=mi6");
+
+        } catch (NamingException ne) {
+            ne.printStackTrace();
+        }
+
+
 //        InputSanitizer sanitizer = new InputSanitizer();
 //
 //        if (!username.equals("") && !password.equals("") &&

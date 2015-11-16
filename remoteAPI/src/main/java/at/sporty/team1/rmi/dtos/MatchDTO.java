@@ -8,7 +8,7 @@ public class MatchDTO implements IDTO {
     private String _team2;
     private String _referee;
     private String _court;
-	private String _time;
+	private String _time; //TODO why 'time'? isn't this rather 'date'
 	private String _result;
    
     public MatchDTO() {   	

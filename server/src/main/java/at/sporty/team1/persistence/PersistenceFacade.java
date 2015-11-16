@@ -1,24 +1,14 @@
 package at.sporty.team1.persistence;
 
-import at.sporty.team1.persistence.api.IDepartmentDAO;
-import at.sporty.team1.persistence.api.IGenericDAO;
-import at.sporty.team1.persistence.api.IMemberDAO;
-import at.sporty.team1.persistence.api.ITeamDAO;
-import at.sporty.team1.persistence.daos.DepartmentDAO;
-import at.sporty.team1.persistence.daos.HibernateGenericDAO;
-import at.sporty.team1.persistence.daos.MemberDAO;
-import at.sporty.team1.persistence.daos.TeamDAO;
+import at.sporty.team1.persistence.api.*;
+import at.sporty.team1.persistence.daos.*;
 import at.sporty.team1.persistence.util.HibernateSessionUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.util.Supplier;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.hibernate.annotations.LazyCollection;
 
 import javax.persistence.PersistenceException;
-import java.lang.reflect.Field;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -66,10 +56,13 @@ public class PersistenceFacade {
     }
 
     /**
-     * Returns an implementation of the IDepartmentDAO interface providing
-     * further operations with teams.
-     * @return an instance of IDepartmentDAO
+     * Returns an implementation of the ITournamentDAO interface providing
+     * further operations with teams (remove, add..)
+     * @return an instance of ITournamentDAO
      */
+    public static ITournamentDAO getNewTournamentDAO() {
+        return new TournamentDAO();
+    }
 
     /**
      * Initializes lazy-loaded collections.
