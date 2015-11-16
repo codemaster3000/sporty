@@ -30,7 +30,7 @@ public class MainViewController extends JfxController {
     private static final String NOT_VALID_SEARCH_INPUT = "Not valid search input";
     private static final String NO_RESULTS_TITLE = "No results";
     private static final String NO_RESULTS_CONTEXT = "No results were found.";
-    private static final String TEAM_TAB_CAPTION = "TEAM_NAME";
+    private static final String TEAM_TAB_CAPTION = "TEAM";
     private static final String MEMBER_TAB_CAPTION = "MEMBER";
     private static final String COMPETITION_TAB_CAPTION = "NEW COMPETITION";
 
@@ -77,15 +77,11 @@ public class MainViewController extends JfxController {
         //Opening un-closable tabs
         openMemberView(false);
         openTeamView(false);
-        openCompetitonView(false);
+//        openCompetitionView(false);
         
-        _feeNotPaidCheckbox.setOnAction((event) -> {
-        	_checkboxNotPaid = _feeNotPaidCheckbox.isSelected();
-        });
+        _feeNotPaidCheckbox.setOnAction(e -> _checkboxNotPaid = _feeNotPaidCheckbox.isSelected());
         
-        _feePaidCheckbox.setOnAction((event) ->{
-        	_checkboxPaid = _feePaidCheckbox.isSelected();
-        });
+        _feePaidCheckbox.setOnAction(e -> _checkboxPaid = _feePaidCheckbox.isSelected());
     }
 
     @FXML
@@ -186,7 +182,7 @@ public class MainViewController extends JfxController {
         openNewTab(TEAM_TAB_CAPTION, closable, null, TeamViewController.class);
     }
     
-    private void openCompetitonView(boolean closable) {
+    private void openCompetitionView(boolean closable) {
         openNewTab(COMPETITION_TAB_CAPTION, closable, null, CompetitionViewController.class);
     }
 

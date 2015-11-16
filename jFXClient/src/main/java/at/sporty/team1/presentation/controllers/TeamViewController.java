@@ -42,14 +42,16 @@ public class TeamViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SUCCESSFUL_TEAM_SAVE = "Team was successfully saved.";
 
-    @FXML private ListView<MemberDTO> _membersListView;
-    @FXML private ComboBox<TeamDTO> _chooseTeamCombobox_teamView;
+    @FXML
+    private ListView<MemberDTO> _membersListView;
+    @FXML
+    private ComboBox<TeamDTO> _chooseTeamComboBox;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-    	
-    	 List<TeamDTO> resultList = new LinkedList<TeamDTO>();
-    	
+
+        List<TeamDTO> resultList = new LinkedList<>();
+
         _membersListView.setCellFactory(m -> new ListCell<MemberDTO>() {
             @Override
             protected void updateItem(MemberDTO m, boolean bln) {
@@ -79,11 +81,11 @@ public class TeamViewController extends JfxController {
                 }
             }
         });
-        
+
         /**
          * Load Teams
          */
-        
+
         /**
          * Converter from TeamDTO to Team name (String)
          */
@@ -101,9 +103,9 @@ public class TeamViewController extends JfxController {
                 return null;
             }
         };
-        
-        _chooseTeamCombobox_teamView.setConverter(teamDTOStringConverter);
-        
+
+        _chooseTeamComboBox.setConverter(teamDTOStringConverter);
+
         new Thread(() -> {
 
             try {
@@ -117,27 +119,27 @@ public class TeamViewController extends JfxController {
 
                     for (DepartmentDTO actualDepartment : departments) {
 
-                    	resultList.addAll(teamController.searchByDepartment(actualDepartment));
-                    	
-                    	if (resultList != null) {
+                        resultList.addAll(teamController.searchByDepartment(actualDepartment));
 
-                          //loading values to comboBox
-                          Platform.runLater(() -> _chooseTeamCombobox_teamView.setItems(
-                              FXCollections.observableList(resultList)
-                          ));
-                      }
+                        if (!resultList.isEmpty()) {
+
+                            //loading values to comboBox
+                            Platform.runLater(() -> _chooseTeamComboBox.setItems(
+                                FXCollections.observableList(resultList)
+                            ));
+                        }
                     }
                 }
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
                 LOGGER.error("Error occurs while loading all Departments and their Teams.", e);
             }
         }).start();
-        
-        _chooseTeamCombobox_teamView.setOnAction((event) -> {
-        	
-        	_membersListView.getItems().clear();
-        	displayTeamData(_chooseTeamCombobox_teamView.getSelectionModel().getSelectedItem());
-        });   
+
+        _chooseTeamComboBox.setOnAction((event) -> {
+
+            _membersListView.getItems().clear();
+            displayTeamData(_chooseTeamComboBox.getSelectionModel().getSelectedItem());
+        });
     }
 
     private static TeamDTO _activeTeamDTO;
@@ -153,9 +155,10 @@ public class TeamViewController extends JfxController {
 
     /**
      * Pre-loads data into all view fields.
+     *
      * @param teamDTO TeamDTO that will be preloaded.
      */
-    private void displayTeamData(TeamDTO teamDTO)  {
+    private void displayTeamData(TeamDTO teamDTO) {
         if (teamDTO != null) {
             _activeTeamDTO = teamDTO;
 
@@ -164,7 +167,7 @@ public class TeamViewController extends JfxController {
                 ITeamController teamController = CommunicationFacade.lookupForTeamController();
 
                 List<MemberDTO> memberList = teamController.loadTeamMembers(_activeTeamDTO.getTeamId());
-                if (memberList != null && !memberList.isEmpty())  {
+                if (memberList != null && !memberList.isEmpty()) {
                     _membersListView.setItems(FXCollections.observableList(memberList));
                 }
 
@@ -189,7 +192,7 @@ public class TeamViewController extends JfxController {
         try {
             ITeamController teamController = CommunicationFacade.lookupForTeamController();
 
-            if ((_activeTeamDTO != null)&&(memberDTO != null)) {
+            if ((_activeTeamDTO != null) && (memberDTO != null)) {
 
                 teamController.removeMemberFromTeam(memberDTO.getMemberId(), _activeTeamDTO.getTeamId());
                 _membersListView.getItems().remove(memberDTO);
@@ -220,13 +223,13 @@ public class TeamViewController extends JfxController {
                 ITeamController teamController = CommunicationFacade.lookupForTeamController();
                 teamController.createOrSaveTeam(_activeTeamDTO);
 
-                for(MemberDTO member : memberList){
-                	try {
-						CommunicationFacade.lookupForTeamController().assignMemberToTeam(member.getMemberId(), _activeTeamDTO.getTeamId());
-					} catch (UnknownEntityException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+                for (MemberDTO member : memberList) {
+                    try {
+                        CommunicationFacade.lookupForTeamController().assignMemberToTeam(member.getMemberId(), _activeTeamDTO.getTeamId());
+                    } catch (UnknownEntityException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 }
 
                 GUIHelper.showSuccessAlert(SUCCESSFUL_TEAM_SAVE);

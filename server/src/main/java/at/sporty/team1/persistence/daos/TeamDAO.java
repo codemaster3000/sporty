@@ -21,7 +21,7 @@ public class TeamDAO extends HibernateGenericDAO<Team> implements ITeamDAO {
 
     private static final String PROP_TEAM_NAME = "teamName";
     private static final String PROP_MEMBER_ID = "memberId";
-    private static final String PROP_DEPARTMENT_ID = "departmentId";
+    private static final String PROP_DEPARTMENT = "department";
 
 
     /**
@@ -40,22 +40,8 @@ public class TeamDAO extends HibernateGenericDAO<Team> implements ITeamDAO {
     @Override
     public List<Team> findTeamsByDepartment(Department department)
     throws PersistenceException {
-
         if (department == null) return null;
-
-        String rawQuery =
-            "SELECT team.* " +
-            "FROM departmentTeams " +
-            "INNER JOIN team " +
-            "WHERE " +
-            "team.teamId = departmentTeams.teamId " +
-            "AND " +
-            "departmentTeams.departmentId = :" + PROP_DEPARTMENT_ID;
-
-        return findBySQLQuery(
-            rawQuery,
-            new PropertyPair<>(PROP_DEPARTMENT_ID, department.getDepartmentId())
-        );
+        return findByCriteria(Restrictions.eq(PROP_DEPARTMENT, department));
     }
 
     @Override

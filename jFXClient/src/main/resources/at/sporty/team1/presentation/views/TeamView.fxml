@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.sporty.team1.presentation.controllers.TeamViewController">
-   <children>
-       <ToolBar AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-          <items>
-              <Pane HBox.hgrow="ALWAYS" />
-              <Button mnemonicParsing="false" onAction="#saveTeam" text="Save" HBox.hgrow="NEVER" />
-            <Separator orientation="VERTICAL" />
-              <Button mnemonicParsing="false" onAction="#removeSelectedMember" text="Remove selected member" />
-          </items>
-       </ToolBar>
-       <ListView fx:id="_membersListView" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0" />
-      <ToolBar prefHeight="45.0" prefWidth="534.0">
-         <items>
-            <Label text="Choose Team:" />
-            <ComboBox fx:id="_chooseTeamCombobox_teamView" prefWidth="150.0" />
-         </items>
-      </ToolBar>
-   </children>
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="at.sporty.team1.presentation.controllers.TeamViewController">
+    <ToolBar AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <Label text="Choose Team:"/>
+        <ComboBox fx:id="_chooseTeamComboBox"/>
+    </ToolBar>
+    <ListView fx:id="_membersListView" AnchorPane.topAnchor="35.0" AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="35.0"/>
+    <ToolBar AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button mnemonicParsing="false" onAction="#saveTeam" text="Save" HBox.hgrow="NEVER"/>
+        <Separator orientation="VERTICAL"/>
+        <Button mnemonicParsing="false" onAction="#removeSelectedMember" text="Remove selected member"/>
+    </ToolBar>
 </AnchorPane>
