@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<GridPane xmlns="http://javafx.com/javafx/8"
-          xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="at.sporty.team1.presentation.controllers.CompetitionViewController"
-          vgap="10.0">
+
+<GridPane vgap="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.sporty.team1.presentation.controllers.CompetitionViewController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.0" minWidth="10.0" prefWidth="86.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="290.0" minWidth="10.0" prefWidth="208.0" />
@@ -43,8 +42,8 @@
          </GridPane.margin></TextField>
       <Pane prefHeight="31.0" prefWidth="307.0" GridPane.columnSpan="4" GridPane.rowIndex="2">
          <children>
-          <Button layoutX="470.0" layoutY="3.0" mnemonicParsing="false" onAction="#clearForm" text="Clear Form" />
-            <Button layoutX="555.0" layoutY="3.0" mnemonicParsing="false" onAction="#saveCompetition" text="Save Competition" />
+          <Button layoutX="461.0" layoutY="3.0" mnemonicParsing="false" onAction="#clearForm" text="Clear Form" />
+            <Button layoutX="546.0" layoutY="3.0" mnemonicParsing="false" onAction="#saveCompetition" text="Save Competition" />
          </children>
       </Pane>
       <ListView fx:id="_competitionTeamsListView" prefHeight="61.0" prefWidth="525.0" GridPane.columnSpan="4" GridPane.rowIndex="4" />
@@ -75,20 +74,21 @@
       <ComboBox fx:id="_tournamentDepartmentCombobox" prefWidth="216.0" GridPane.columnIndex="1" />
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
          <children>
-            <Button fx:id="_addTeamButton" onAction="#addTeamToTeamList" layoutX="230.0" layoutY="1.0" mnemonicParsing="false"  prefWidth="74.0" text="Add Team" />
+            <Button fx:id="_addTeamButton" layoutX="230.0" layoutY="1.0" mnemonicParsing="false" onAction="#addTeamToTeamList" prefWidth="74.0" text="Add Team" />
             <TextField fx:id="_competitionExternalTeamTextField" layoutY="1.0" prefWidth="212.0" promptText="External Team" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="8">
          <children>
-            <Button fx:id="_saveMatchesButton" onAction="#saveMatches" layoutX="576.0" layoutY="2.0" mnemonicParsing="false" text="Save Matches" />
-            <Button fx:id="_removeSelectedMatch" onAction="#removeSelectedMatch" layoutX="426.0" layoutY="1.0" mnemonicParsing="false" text="Remove selected Match" />
+            <Button fx:id="_saveMatchesButton" layoutX="567.0" layoutY="2.0" mnemonicParsing="false" onAction="#saveMatches" text="Save Matches" />
+            <Button fx:id="_removeSelectedMatch" layoutX="420.0" layoutY="1.0" mnemonicParsing="false" onAction="#removeSelectedMatch" text="Remove selected Match" />
+            <Button fx:id="_openTournamentResults" layoutY="2.0" mnemonicParsing="false" text="Open Tournament Results" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="5">
          <children>
-            <Button fx:id="_buttonSaveTeams" onAction="#saveTeamsToTournament" layoutX="590.0" layoutY="1.0" mnemonicParsing="false" text="SaveTeams" />
-            <Button fx:id="_buttonRemoveSelectedTeam" onAction="#removeTeamFromTournament" layoutX="444.0" layoutY="1.0" mnemonicParsing="false" text="Remove selected Team" />
+            <Button fx:id="_buttonSaveTeams" layoutX="581.0" layoutY="1.0" mnemonicParsing="false" onAction="#saveTeamsToTournament" text="SaveTeams" />
+            <Button fx:id="_buttonRemoveSelectedTeam" layoutX="436.0" layoutY="1.0" mnemonicParsing="false" onAction="#removeTeamFromTournament" text="Remove selected Team" />
          </children>
       </Pane>
    </children>
