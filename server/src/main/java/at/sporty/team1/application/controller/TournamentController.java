@@ -1,26 +1,26 @@
 package at.sporty.team1.application.controller;
 
-import at.sporty.team1.domain.Team;
-import at.sporty.team1.domain.Tournament;
-import at.sporty.team1.domain.interfaces.ITournament;
-import at.sporty.team1.persistence.PersistenceFacade;
-import at.sporty.team1.rmi.api.IMemberController;
-import at.sporty.team1.rmi.api.ITournamentController;
-import at.sporty.team1.rmi.dtos.MatchDTO;
-import at.sporty.team1.rmi.dtos.TournamentDTO;
-import at.sporty.team1.rmi.exceptions.UnknownEntityException;
-import at.sporty.team1.rmi.exceptions.ValidationException;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.persistence.PersistenceException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
-import javax.persistence.PersistenceException;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.List;
-import java.util.stream.Collectors;
+import at.sporty.team1.domain.Team;
+import at.sporty.team1.domain.Tournament;
+import at.sporty.team1.domain.interfaces.ITournament;
+import at.sporty.team1.persistence.PersistenceFacade;
+import at.sporty.team1.rmi.api.ITournamentController;
+import at.sporty.team1.rmi.dtos.MatchDTO;
+import at.sporty.team1.rmi.dtos.TournamentDTO;
+import at.sporty.team1.rmi.exceptions.UnknownEntityException;
+import at.sporty.team1.rmi.exceptions.ValidationException;
 
 /**
  * TournamentController represents the logic controller for a tournament
@@ -48,7 +48,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     @Override
     public void addTeamToTournament(String teamId, String tournamentId) {
 
-        try {
+        /*try {
 
             Tournament tournament = PersistenceFacade.getNewTournamentDAO().findById(tournamentId);
             Team team = PersistenceFacade.getNewTeamDAO().findById(teamId);
@@ -60,7 +60,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
             PersistenceFacade.getNewTournamentDAO().saveOrUpdate(tournament);
         } catch (PersistenceException e) {
             LOGGER.error("An error occured while adding a team to a Tournament: ", e);
-        }
+        }*/
     }
 
     /**
@@ -73,7 +73,8 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
      */
     @Override
     public void createNewMatch(String team1, String team2, String date, TournamentDTO tournamentDTO) {
-        //TODO this is not yet finished + not reviewed!
+        
+    	/*//TODO this is not yet finished + not reviewed!
         List<MatchDTO> matches = tournamentDTO.getMatches();
 
         MatchDTO newMatch = new MatchDTO();
@@ -91,7 +92,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
             PersistenceFacade.getNewTournamentDAO().saveOrUpdate(tournament);
         } catch (PersistenceException e) {
             LOGGER.error("An Error occured during adding a new Match to the Tournament: ", e);
-        }
+        }*/
     }
 
     /**
@@ -102,7 +103,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     @Override
     public List<TournamentDTO> getAllTournaments() throws RemoteException, UnknownEntityException {
 
-        try {
+       /* try {
 
             List<Tournament> tournaments = PersistenceFacade.getNewGenericDAO(Tournament.class).findAll();
             if (tournaments == null) throw new UnknownEntityException(ITournament.class);
@@ -122,7 +123,8 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
                     e
             );
             return null;
-        }
+        }*/
+    	return null;
 
     }
 
