@@ -3,12 +3,14 @@ package at.sporty.team1.rmi.dtos;
 import at.sporty.team1.rmi.api.IDTO;
 
 public class MatchDTO implements IDTO {
-
-    private String _team1;
+    
+	private static final long serialVersionUID = 1L;
+	
+	private String _team1;
     private String _team2;
     private String _referee;
     private String _court;
-	private String _time; //TODO why 'time'? isn't this rather 'date'
+	private String _time; //TODO why 'time'? isn't this rather 'date' -> in Matches it is only 'time'. Tournament have a date.
 	private String _result;
    
     public MatchDTO() {   	

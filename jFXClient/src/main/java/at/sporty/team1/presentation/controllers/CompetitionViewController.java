@@ -72,8 +72,6 @@ public class CompetitionViewController extends JfxController {
 
         List<DepartmentDTO> departments = null;
         LinkedList<MatchDTO> tempList = new LinkedList<>();
-        
-       
 
         setVisibleOfTournamentTeamView(false);
         setVisibleOfMatchesView(false);
@@ -170,7 +168,7 @@ public class CompetitionViewController extends JfxController {
 	        }
 	        
 	        //load teams in listview
-	        //teams = CommunicationFacade.lookupForTournamentController().getAllTournamentTeams();
+	        teams = CommunicationFacade.lookupForTournamentController().getAllTournamentTeams();
 	        if (teams != null) {
 	            _tournamentTeams = FXCollections.observableList(teams);
 	            _competitionTeamsListView.setItems(_tournamentTeams);
