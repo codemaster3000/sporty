@@ -36,13 +36,13 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
     /**
      * ***************************************************************************************************
      *
-     * @return Enum to distinguish which default screen to load; FALSE_LOGIN if not authorized
+     * @return Enum to distinguish which default screen to load; UNSUCCESSFUL_LOGIN if not authorized
      * **************************************************************************************************
      * @brief checks if a login is valid bye comparing the login information to the database
      * if the login is valid it prompts the default screen associated with the employees class
      * if the login is invalid it logs the failed login attempt and prompts the loginscreen again
      *
-     * FALSE_LOGIN false
+     * UNSUCCESSFUL_LOGIN false
      * ADMIN
      * MEMBER
      * TRAINER
@@ -78,14 +78,14 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
                 } catch (AuthenticationException ae) {
                     /* login unsuccessful */
                     LOGGER.error("Invalid login attempt by " + username + " with password " + password);
-                    return UserRole.FALSE_LOGIN;
+                    return UserRole.UNSUCCESSFUL_LOGIN;
                 }
 
                 /* IF no AuthenticationException is thrown, login was successfull */
 
             } catch (NamingException ne) {
                 ne.printStackTrace();
-                return UserRole.FALSE_LOGIN;
+                return UserRole.UNSUCCESSFUL_LOGIN;
             }
 
             List<Member> members;
@@ -116,7 +116,7 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
 
             } catch (PersistenceException pe) {
                 pe.printStackTrace();
-                return UserRole.FALSE_LOGIN;
+                return UserRole.UNSUCCESSFUL_LOGIN;
             }
 
         } /* pw or username do not match InputSanitizers check.. */
@@ -126,7 +126,7 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
         // password "testpw" as sha512 hex-string:
         // F4A92ED38B74B373E60B16176A8E19CA0220CD21BF73E46E68C74C0CA77A8CBA3F6738B264000D894F7EFF5CA17F8CDD01C7BEB2CCC2BA2553987C01DF152729
 
-        return UserRole.FALSE_LOGIN;
+        return UserRole.UNSUCCESSFUL_LOGIN;
 
     }
 }

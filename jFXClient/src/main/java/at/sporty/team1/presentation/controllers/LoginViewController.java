@@ -96,8 +96,8 @@ public class LoginViewController extends JfxController {
         } catch (RemoteException re) {
             re.printStackTrace();
         }
-         /* else: not authorized, return FALSE_LOGIN */
-        return UserRole.FALSE_LOGIN;
+         /* else: not authorized, return UNSUCCESSFUL_LOGIN */
+        return UserRole.UNSUCCESSFUL_LOGIN;
 //         /* user */
 //        if (loginController.authorize(tfUserName.getText(), tfPassword.getText()) == 0)
 //

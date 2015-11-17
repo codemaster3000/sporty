@@ -55,7 +55,7 @@ public class MainApp extends Application {
 //            LoginViewController loginViewController = new LoginViewController();
 //            UserRole role = loginViewController.login();
 
-//            if (role != UserRole.FALSE_LOGIN) {
+//            if (role != UserRole.UNSUCCESSFUL_LOGIN) {
                 showMainStage(new Stage());
 //            } else {
 //                showLoginStage();
