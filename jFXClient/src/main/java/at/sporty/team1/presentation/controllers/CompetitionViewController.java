@@ -169,7 +169,12 @@ public class CompetitionViewController extends JfxController {
 	        }
 	        
 	        //load teams in listview
-	        teams = CommunicationFacade.lookupForTournamentController().getAllTournamentTeams();
+	        try {
+				teams = CommunicationFacade.lookupForTournamentController().getAllTournamentteams();
+			} catch (RemoteException | MalformedURLException | NotBoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	        if (teams != null) {
 	            _tournamentTeams = FXCollections.observableList(teams);
 	            _competitionTeamsListView.setItems(_tournamentTeams);
