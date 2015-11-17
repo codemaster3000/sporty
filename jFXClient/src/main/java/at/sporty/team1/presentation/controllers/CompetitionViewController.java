@@ -18,18 +18,23 @@ import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.ITournamentController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MatchDTO;
+import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -143,6 +148,38 @@ public class CompetitionViewController extends JfxController {
         _tournamentDepartmentCombobox.setConverter(departmentDTOStringConverter);
 
         //TODO: LeagueCombobox
+        
+        /**
+         * addTeamsView
+         */
+        _competitionTeamsListView.setCellFactory(m -> new ListCell<String>() {
+            @Override
+            protected void updateItem(String teamname, boolean bln) {
+                super.updateItem(teamname, bln);
+
+                if (teamname != null) {
+                    setText(teamname);
+
+                    MenuItem deleteItem = new MenuItem();
+                    deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", teamname));
+                    deleteItem.setOnAction(event -> _competitionTeamsListView.getItems().removeAll(getItem()));
+
+                    ContextMenu contextMenu = new ContextMenu();
+                    contextMenu.getItems().add(deleteItem);
+
+                    emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+                        if (isNowEmpty) {
+                            setContextMenu(null);
+                        } else {
+                            setContextMenu(contextMenu);
+                        }
+                    });
+                } else {
+                    //remove caption from list
+                    setText("");
+                }
+            }
+        });
 
         /**
          * Matchesview in Tournament
@@ -312,15 +349,21 @@ public class CompetitionViewController extends JfxController {
 
     	String teamFromTextField = GUIHelper.readNullOrEmpty(_competitionExternalTeamTextField.getText());
     	
+    	
         if (teamFromTextField != null) {
-        	_teams.add(_competitionExternalTeamTextField.getText());
-            _competitionTeamsListView.setItems(_tournamentTeams);
+        	_competitionTeamsListView.getItems().add(_competitionExternalTeamTextField.getText());
+            
         }else if (_teamToCompetitionComboBox.getSelectionModel().getSelectedItem() != null) {
-        	_teams.add(_teamToCompetitionComboBox.getSelectionModel().getSelectedItem().getTeamName());
-            _competitionTeamsListView.setItems(_tournamentTeams);
+        	_competitionTeamsListView.getItems().add(_teamToCompetitionComboBox.getSelectionModel().getSelectedItem().getTeamName());
+            
         }
+        
+       // _competitionTeamsListView.setItems(_tournamentTeams);
+        
         _competitionExternalTeamTextField.clear();
         _teamToCompetitionComboBox.getSelectionModel().clearSelection();
+    	
+    	
     }
 
     @FXML
