@@ -3,8 +3,7 @@ package at.sporty.team1.domain;
 import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.domain.interfaces.ITournament;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -13,167 +12,106 @@ import java.util.List;
  */
 @Entity
 @Table(name = "tournament")
-public class Tournament implements ITournament{
+public class Tournament implements ITournament {
     private String id;
-    private List<Match> matches;
+    private List<Match> matches; //TODO: SQL column
     private String date;
-    private List<String> teams;
+    private List<String> teams; //TODO: SQL column
     private League league;
     private Department department;
     private String location;
 
-    /**
-     *********************************************************************
-     * Getter for property 'date'.
-     *
-     * @return Value for property 'date'.
-     *********************************************************************/
+
     @Override
+    @Basic
+    @Column(name = "date")
     public String getDate() {
         return date;
     }
 
-    /**
-     *********************************************************************
-     * Setter for property 'date'.
-     *
-     * @param date Value to set for property 'date'.
-     *********************************************************************/
     @Override
     public void setDate(String date) {
         this.date = date;
     }
-    
-    /**
-     *********************************************************************
-     * Getter for property 'location'.
-     *
-     * @return Value for property 'location'.
-     *********************************************************************/
+
     @Override
+    @Basic
+    @Column(name = "location")
     public String getLocation() {
         return location;
     }
 
-    /**
-     *********************************************************************
-     * Setter for property 'date'.
-     *
-     * @param date Value to set for property 'date'.
-     *********************************************************************/
     @Override
     public void setLocation(String location) {
         this.location = location;
     }
 
-    /**
-     *********************************************************************
-     * Getter for property 'department'.
-     *
-     * @return Value for property 'department'.
-     *********************************************************************/
     @Override
+    @OneToOne
+    @Column(name = "departmentId" )
     public Department getDepartment() {
         return department;
     }
 
-    /**
-     *********************************************************************
-     * Setter for property 'department'.
-     *
-     * @param department Value to set for property 'department'.
-     *********************************************************************/
     @Override
     public void setDepartment(Department department) {
         this.department = department;
     }
 
-    /**
-     *********************************************************************
-     * Getter for property 'league'.
-     *
-     * @return Value for property 'league'.
-     *********************************************************************/
     @Override
+    @OneToOne
+    @Column(name = "leagueId")
     public League getLeague() {
         return league;
     }
 
-    /**
-     *********************************************************************
-     * Setter for property 'league'.
-     *
-     * @param league Value to set for property 'league'.
-     *********************************************************************/
     @Override
     public void setLeague(League league) {
         this.league = league;
     }
 
-    /**
-     *********************************************************************
-     * Getter for property 'matches'.
-     *
-     * @return Value for property 'matches'.
-     *********************************************************************/
+
     @Override
+    @OneToMany
+    @Column(name = "matches") //TODO is this right?
     public List<Match> getMatches() {
         return matches;
     }
 
-    /**
-     *********************************************************************
-     * Setter for property 'matches'.
-     *
-     * @param matches Value to set for property 'matches'.
-     *********************************************************************/
+
     @Override
     public void setMatches(List<Match> matches) {
         this.matches = matches;
     }
 
-    /**
-     *********************************************************************
-     * Getter for property 'teams'.
-     *
-     * @return Value for property 'teams'.
-     *********************************************************************/
+
     @Override
+    @OneToMany
+    @Column(name = "teams") //TODO --//--
     public List<String> getTeams() {
         return teams;
     }
 
-    /**
-     *********************************************************************
-     * Setter for property 'teams'.
-     *
-     * @param teams Value to set for property 'teams'.
-     *********************************************************************/
+
     @Override
     public void setTeams(List<String> teams) {
         this.teams = teams;
     }
 
-    /**
-     *********************************************************************
-     * Getter for property 'id'.
-     *
-     * @return Value for property 'id'.
-     *********************************************************************/
+    @Override
+    @Id
+    @Column(name = "id")
     public String getId() {
         return id;
     }
 
-    /**
-     *********************************************************************
-     * Setter for property 'id'.
-     *
-     * @param id Value to set for property 'id'.
-     *********************************************************************/
+    @Override
     public void setId(String id) {
         this.id = id;
     }
 
+
+    /* helping methods */
     @Override
     public void addTeam(ITeam team) {
 
