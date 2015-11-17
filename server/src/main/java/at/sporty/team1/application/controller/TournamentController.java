@@ -142,8 +142,8 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
             if (tournament == null) throw new UnknownEntityException(ITournament.class);
 
             //TODO uncomment when Teams will be handled in Tournament
-//            PersistenceFacade.forceLoadLazyProperty(tournament, Tournament::getTeams);
-//            tournament.addTeam(teamName);
+            PersistenceFacade.forceLoadLazyProperty(tournament, Tournament::getTeams);
+            tournament.addTeam(teamName);
 
             PersistenceFacade.getNewTournamentDAO().saveOrUpdate(tournament);
         } catch (PersistenceException e) {

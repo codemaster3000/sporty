@@ -357,13 +357,8 @@ public class CompetitionViewController extends JfxController {
         	_competitionTeamsListView.getItems().add(_teamToCompetitionComboBox.getSelectionModel().getSelectedItem().getTeamName());
             
         }
-        
-       // _competitionTeamsListView.setItems(_tournamentTeams);
-        
         _competitionExternalTeamTextField.clear();
         _teamToCompetitionComboBox.getSelectionModel().clearSelection();
-    	
-    	
     }
 
     @FXML
@@ -379,7 +374,9 @@ public class CompetitionViewController extends JfxController {
 
                 for (String team : teams) {
                     tournamentController.assignTeamToTournament(team, _activeCompetition.getId());
+                    
                 }
+                GUIHelper.showSuccessAlert("Teams saved");
             }
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
         	LOGGER.error("", e);

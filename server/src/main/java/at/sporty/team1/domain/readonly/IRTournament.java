@@ -18,6 +18,8 @@ public interface IRTournament {
 
     Department getDepartment();
 
+	List<String> getTeams();
+
 //    League getLeague();
 //
 //    List<Match> getMatches();

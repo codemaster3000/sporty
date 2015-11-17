@@ -33,4 +33,6 @@ public interface ITournament extends IRTournament {
     void addMatch(IMatch match);
 
     void removeMatch(IMatch match);
+
+	void setTeams(List<String> teams);
 }

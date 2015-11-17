@@ -100,18 +100,18 @@ public class Tournament implements ITournament {
 //    }
 //
 //
-//    @Override
-//    @OneToMany
-//    @Column(name = "teams") //TODO --//--
-//    public List<String> getTeams() {
-//        return teams;
-//    }
-//
-//
-//    @Override
-//    public void setTeams(List<String> teams) {
-//        this.teams = teams;
-//    }
+    @Override
+    @OneToMany
+    @Column(name = "teams") //TODO --//--
+    public List<String> getTeams() {
+        return teams;
+    }
+
+
+    @Override
+    public void setTeams(List<String> teams) {
+        this.teams = teams;
+    }
 
     /* helping methods */
     @Override
