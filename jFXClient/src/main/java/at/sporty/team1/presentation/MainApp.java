@@ -52,15 +52,14 @@ public class MainApp extends Application {
 
             /* handle the login */
 
-//            LoginViewController loginViewController = new LoginViewController();
-//            UserRole role = loginViewController.login();
-
-//            if (role != UserRole.UNSUCCESSFUL_LOGIN) {
+////            LoginViewController loginViewController = new LoginViewController();
+////            UserRole role = loginViewController.login();
+//
+////            if (role != UserRole.UNSUCCESSFUL_LOGIN) {
                 showMainStage(new Stage());
 //            } else {
 //                showLoginStage();
 //            }
-
 
         } else {
             LOGGER.error("Error occurs while starting a client. Security policies were not found.");

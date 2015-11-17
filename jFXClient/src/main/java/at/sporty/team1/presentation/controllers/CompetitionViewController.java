@@ -113,7 +113,7 @@ public class CompetitionViewController extends JfxController {
         try {
             departments = CommunicationFacade.lookupForDepartmentController().searchAllDepartments();
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
-            // TODO Auto-generated catch block
+           
             e.printStackTrace();
         }
 
@@ -172,20 +172,20 @@ public class CompetitionViewController extends JfxController {
 
     }
 
-    private void setVisibleOfMatchesView(boolean b) {
+    private void setVisibleOfMatchesView(boolean view) {
 
-        _saveMatchesButton.setVisible(b);
-        _removeSelectedMatch.setVisible(b);
-        _labelMatches.setVisible(b);
-        _matchTableView.setVisible(b);
-        _openTournamentResults.setVisible(b);
+        _saveMatchesButton.setVisible(view);
+        _removeSelectedMatch.setVisible(view);
+        _labelMatches.setVisible(view);
+        _matchTableView.setVisible(view);
+        _openTournamentResults.setVisible(view);
     }
 
-    private void setVisibleOfTournamentTeamView(boolean b) {
+    private void setVisibleOfTournamentTeamView(boolean view) {
 
         List<String> teams = null;
 
-        if (b) {
+        if (view) {
             /**
              * Fill TeamCombobox in Tournaments
              */
@@ -201,8 +201,7 @@ public class CompetitionViewController extends JfxController {
                 _teamToCompetitionComboBox.setItems(teamObservableList);
 
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            	LOGGER.error("", e);           
             }
 
             //load teams in listview
@@ -211,11 +210,9 @@ public class CompetitionViewController extends JfxController {
                 ITournamentController tournamentController = CommunicationFacade.lookupForTournamentController();
                 teams = tournamentController.searchAllTournamentTeams(_activeCompetition.getId());
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            	LOGGER.error("", e);
             } catch (UnknownEntityException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            	LOGGER.error("", e);
             }
 
             if (teams != null) {
@@ -224,13 +221,13 @@ public class CompetitionViewController extends JfxController {
             }
         }
 
-        _competitionTeamsListView.setVisible(b);
-        _teamToCompetitionComboBox.setVisible(b);
-        _competitionExternalTeamTextField.setVisible(b);
-        _addTeamButton.setVisible(b);
-        _labelTeams.setVisible(b);
-        _buttonRemoveSelectedTeam.setVisible(b);
-        _buttonSaveTeams.setVisible(b);
+        _competitionTeamsListView.setVisible(view);
+        _teamToCompetitionComboBox.setVisible(view);
+        _competitionExternalTeamTextField.setVisible(view);
+        _addTeamButton.setVisible(view);
+        _labelTeams.setVisible(view);
+        _buttonRemoveSelectedTeam.setVisible(view);
+        _buttonSaveTeams.setVisible(view);
     }
 
     @FXML
@@ -301,7 +298,7 @@ public class CompetitionViewController extends JfxController {
     @FXML
     public void removeSelectedMatch(ActionEvent event) {
 
-        //TODO:
+    	_matchTableView.getSelectionModel().clearSelection();
 
     }
 
@@ -330,18 +327,13 @@ public class CompetitionViewController extends JfxController {
             if ((_activeCompetition != null) && (teams != null)) {
 
                 for (String team : teams) {
-                    tournamentController.assignTeamToTournament(team, _activeCompetition.getId()); // TODO
+                    tournamentController.assignTeamToTournament(team, _activeCompetition.getId());
                 }
-
-
             }
-
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        	LOGGER.error("", e);
         } catch (UnknownEntityException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        	LOGGER.error("", e);
         }
 
     }
@@ -353,5 +345,4 @@ public class CompetitionViewController extends JfxController {
         _competitionTeamsListView.getItems().remove(_competitionTeamsListView.getSelectionModel().getSelectedItem());
 
     }
-
 }
