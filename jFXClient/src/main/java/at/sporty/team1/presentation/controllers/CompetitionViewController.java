@@ -194,8 +194,6 @@ public class CompetitionViewController extends JfxController {
         _labelTeams.setVisible(b);
         _buttonRemoveSelectedTeam.setVisible(b);
         _buttonSaveTeams.setVisible(b);
-        
-        
     }
 
     @FXML
@@ -274,13 +272,38 @@ public class CompetitionViewController extends JfxController {
     public void addTeamToTeamList(ActionEvent event) {
 
         //TODO: Team from textfield or Combobox
-
+    	if(_competitionExternalTeamTextField != null){
+    		_tournamentTeams.add(_competitionExternalTeamTextField.getText());
+    	}
+    	
+    	if(!_teamToCompetitionComboBox.getSelectionModel().isEmpty()){
+    		_tournamentTeams.add(_teamToCompetitionComboBox.getSelectionModel().getSelectedItem().getTeamName());
+    	}
     }
 
     @FXML
     public void saveTeamsToTournament(ActionEvent event) {
 
         //TODO: save Teams to _activeTournament
+    	List<String> teams = _tournamentTeams;
+    	
+    	try {
+			ITournamentController ITournamentController = CommunicationFacade.lookupForTournamentController();
+			
+			if ((_activeCompetition != null) && (teams != null)) {
+
+				for(String team : teams){
+					
+					ITournamentController.addTeamToTournament(teamId, tournamentId);
+				}
+                
+
+            } 
+			
+		} catch (RemoteException | MalformedURLException | NotBoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
     }
 
@@ -288,6 +311,7 @@ public class CompetitionViewController extends JfxController {
     public void removeTeamFromTournament(ActionEvent event) {
 
         //TODO: save Matches to _activeTournament
+    	_competitionTeamsListView.getItems().remove(_competitionTeamsListView.getSelectionModel().getSelectedItem());
 
     }
 

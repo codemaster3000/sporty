@@ -87,8 +87,6 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
         matches.add(newMatch);
 
         try {
-
-
             Tournament tournament = PersistenceFacade.getNewTournamentDAO().findById(tournamentDTO.getId());
             PersistenceFacade.getNewTournamentDAO().saveOrUpdate(tournament);
         } catch (PersistenceException e) {

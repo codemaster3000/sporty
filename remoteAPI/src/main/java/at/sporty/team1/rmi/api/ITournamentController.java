@@ -54,11 +54,9 @@ public interface ITournamentController extends Remote, Serializable{
 	/**
      * addTeamToTournament()
      *
-     * @param teamId
+     * @param teamName
      * @param tournamentId
      */
-	void addTeamToTournament(String teamId, String tournamentId);
+	void addTeamToTournament(String teamName, Integer tournamentId);
 
-	
-	
 }
