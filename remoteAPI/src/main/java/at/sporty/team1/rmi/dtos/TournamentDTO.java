@@ -8,12 +8,13 @@ import java.util.List;
  * Created by f00 on 16.11.15.
  */
 public class TournamentDTO implements IDTO {
-    public String id;
-    public List<MatchDTO> matches;
-    public String date;
-    public List<String> teams;
-    public LeagueDTO league;
-    public DepartmentDTO department;
+    private String _id;
+    private List<MatchDTO> _matches;
+    private String _date;
+    private List<String> _teams;
+    private LeagueDTO _league;
+    private DepartmentDTO _department;
+    private String _location;
 
     /**
      *********************************************************************
@@ -22,7 +23,7 @@ public class TournamentDTO implements IDTO {
      * @return Value for property 'date'.
      *********************************************************************/
     public String getDate() {
-        return date;
+        return _date;
     }
 
     /**
@@ -31,8 +32,9 @@ public class TournamentDTO implements IDTO {
      *
      * @param date Value to set for property 'date'.
      *********************************************************************/
-    public void setDate(String date) {
-        this.date = date;
+    public TournamentDTO setDate(String date) {
+        this._date = date;
+        return this;
     }
 
     /**
@@ -42,7 +44,7 @@ public class TournamentDTO implements IDTO {
      * @return Value for property 'department'.
      *********************************************************************/
     public DepartmentDTO getDepartment() {
-        return department;
+        return _department;
     }
 
     /**
@@ -51,8 +53,9 @@ public class TournamentDTO implements IDTO {
      *
      * @param department Value to set for property 'department'.
      *********************************************************************/
-    public void setDepartment(DepartmentDTO department) {
-        this.department = department;
+    public TournamentDTO setDepartment(DepartmentDTO department) {
+        this._department = department;
+        return this;
     }
 
     /**
@@ -62,7 +65,7 @@ public class TournamentDTO implements IDTO {
      * @return Value for property 'league'.
      *********************************************************************/
     public LeagueDTO getLeague() {
-        return league;
+        return _league;
     }
 
     /**
@@ -71,8 +74,9 @@ public class TournamentDTO implements IDTO {
      *
      * @param league Value to set for property 'league'.
      *********************************************************************/
-    public void setLeague(LeagueDTO league) {
-        this.league = league;
+    public TournamentDTO setLeague(LeagueDTO league) {
+        this._league = league;
+        return this;
     }
 
     /**
@@ -82,7 +86,7 @@ public class TournamentDTO implements IDTO {
      * @return Value for property 'matches'.
      *********************************************************************/
     public List<MatchDTO> getMatches() {
-        return matches;
+        return _matches;
     }
 
     /**
@@ -91,8 +95,9 @@ public class TournamentDTO implements IDTO {
      *
      * @param matches Value to set for property 'matches'.
      *********************************************************************/
-    public void setMatches(List<MatchDTO> matches) {
-        this.matches = matches;
+    public TournamentDTO setMatches(List<MatchDTO> matches) {
+        this._matches = matches;
+        return this;
     }
 
     /**
@@ -102,7 +107,7 @@ public class TournamentDTO implements IDTO {
      * @return Value for property 'teams'.
      *********************************************************************/
     public List<String> getTeams() {
-        return teams;
+        return _teams;
     }
 
     /**
@@ -111,8 +116,9 @@ public class TournamentDTO implements IDTO {
      *
      * @param teams Value to set for property 'teams'.
      *********************************************************************/
-    public void setTeams(List<String> teams) {
-        this.teams = teams;
+    public TournamentDTO setTeams(List<String> teams) {
+        this._teams = teams;
+        return this;
     }
 
     /**
@@ -122,7 +128,7 @@ public class TournamentDTO implements IDTO {
      * @return Value for property 'id'.
      *********************************************************************/
     public String getId() {
-        return id;
+        return _id;
     }
 
     /**
@@ -131,7 +137,31 @@ public class TournamentDTO implements IDTO {
      *
      * @param id Value to set for property 'id'.
      *********************************************************************/
-    public void setId(String id) {
-        this.id = id;
+    public TournamentDTO setId(String id) {
+        this._id = id;
+        return this;
     }
+    
+    /**
+     *********************************************************************
+     * Getter for property 'location'.
+     *
+     * @return Value for property 'location'.
+     *********************************************************************/
+    public String getLocation() {
+        return _location;
+    }
+
+    /**
+     *********************************************************************
+     * Setter for property 'location'.
+     *
+     * @param id Value to set for property 'location'.
+     *********************************************************************/
+	public TournamentDTO setLocation(String location) {
+		this._location = location;
+		return this;
+	}
+	
+	
 }

@@ -18,6 +18,7 @@ import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MatchDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.dtos.TournamentDTO;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.collections.FXCollections;
@@ -41,7 +42,7 @@ public class CompetitionViewController extends JfxController {
 
     private ObservableList<MatchDTO> matches;
     private ObservableList<String> _tournamentTeams;
-//TODO:	private static TournamentDTO _activeCompetition;
+    private static TournamentDTO _activeCompetition;
 
     @FXML private TextField _competitionDateTextField;
     @FXML private TextField _competitionPlaceTextField;
@@ -205,11 +206,11 @@ public class CompetitionViewController extends JfxController {
     private void saveCompetition(ActionEvent event) {
 
         String date = _competitionDateTextField.getText();
-        String dept = _tournamentDepartmentCombobox.getSelectionModel().getSelectedItem().getSport();
+        DepartmentDTO dept = _tournamentDepartmentCombobox.getSelectionModel().getSelectedItem();
         //TODO: String league = _tournamentLeagueCombobox.getSelectionModel().getSelectedItem().toString();
         String location = _competitionPlaceTextField.getText();
 
-		/*if((date != null) && (dept != null) && (location != null)){
+		if((date != null) && (dept != null) && (location != null)){
 			
 			try {
 
@@ -221,8 +222,7 @@ public class CompetitionViewController extends JfxController {
 
                 //if it is an already existing member, changed member data will be simply updated.
                 _activeCompetition.setDate(date)
-                        .setDept(dept)
-                        .setLeague(league)
+                        .setDepartment(dept)
                         .setLocation(location);
 
                 ITournamentController imc = CommunicationFacade.lookupForTournamentController();
@@ -244,7 +244,7 @@ public class CompetitionViewController extends JfxController {
 			}
 			
 			setVisibleOfTournamentTeamView(true);
-		}*/
+		}
         setVisibleOfTournamentTeamView(true);
 
     }

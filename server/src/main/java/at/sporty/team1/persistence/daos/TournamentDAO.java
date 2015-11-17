@@ -34,7 +34,7 @@ public class TournamentDAO extends HibernateGenericDAO<Tournament> implements IT
     @Override
     public void addTeam(Team team, Tournament tournament)throws PersistenceException {
         tournament.addTeam(team);
-        super.saveOrUpdate(tournament);
+        saveOrUpdate(tournament);
     }
 
     /**
@@ -48,11 +48,8 @@ public class TournamentDAO extends HibernateGenericDAO<Tournament> implements IT
     @Override
     public void removeTeam(Team team, Tournament tournament) throws PersistenceException {
         tournament.removeTeam(team);
-        super.saveOrUpdate(tournament);
+        saveOrUpdate(tournament);
     }
 
-    @Override
-    public Tournament findById(String tournamentId) {
-        return super.findById(tournamentId);
-    }
+    
 }

@@ -1,5 +1,6 @@
 package at.sporty.team1.communication;
 
+import at.sporty.team1.presentation.controllers.ITournamentController;
 import at.sporty.team1.rmi.RemoteObjectRegistry;
 import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.api.ILoginController;
@@ -44,4 +45,9 @@ public class CommunicationFacade {
             String.format(DEFAULT_RMI, RemoteObjectRegistry.LOGIN_CONTROLLER.getNaming())
         );
     }
+
+	public static ITournamentController lookupForTournamentController() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

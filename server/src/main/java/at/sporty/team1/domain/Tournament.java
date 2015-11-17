@@ -14,12 +14,13 @@ import java.util.List;
 @Entity
 @Table(name = "tournament")
 public class Tournament implements ITournament{
-    public String id;
-    public List<Match> matches;
-    public String date;
-    public List<String> teams;
-    public League league;
-    public Department department;
+    private String id;
+    private List<Match> matches;
+    private String date;
+    private List<String> teams;
+    private League league;
+    private Department department;
+    private String location;
 
     /**
      *********************************************************************
@@ -41,6 +42,28 @@ public class Tournament implements ITournament{
     @Override
     public void setDate(String date) {
         this.date = date;
+    }
+    
+    /**
+     *********************************************************************
+     * Getter for property 'location'.
+     *
+     * @return Value for property 'location'.
+     *********************************************************************/
+    @Override
+    public String getLocation() {
+        return location;
+    }
+
+    /**
+     *********************************************************************
+     * Setter for property 'date'.
+     *
+     * @param date Value to set for property 'date'.
+     *********************************************************************/
+    @Override
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     /**
