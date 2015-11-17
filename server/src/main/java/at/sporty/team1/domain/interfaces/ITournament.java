@@ -11,22 +11,26 @@ import java.util.List;
  * Created by f00 on 16.11.15.
  */
 public interface ITournament extends IRTournament {
+
+    void setTournamentId(Integer id);
+
     void setDate(String date);
+
+    void setLocation(String location);
 
     void setDepartment(Department department);
 
-    void setLeague(League league);
+//    void setLeague(League league);
+//
+//    void setMatches(List<Match> matches);
+//
+//    void setTeams(List<String> teams);
 
-    void setMatches(List<Match> matches);
+    void addTeam(String team);
 
-    void setTeams(List<String> teams);
+    void removeTeam(String team);
 
-    void setId(String id);
+    void addMatch(IMatch match);
 
-    void addTeam(ITeam team);
-
-    void removeTeam(ITeam team);
-
-	void setLocation(String location);
-
+    void removeMatch(IMatch match);
 }

@@ -9,19 +9,19 @@ public class MatchDTO implements IDTO {
 	private String _team1;
     private String _team2;
     private String _referee;
-    private String _court;
+    private String _location;
 	private String _time; //TODO why 'time'? isn't this rather 'date' -> in Matches it is only 'time'. Tournament have a date.
 	private String _result;
    
     public MatchDTO() {   	
     }
 
-    public String getCourt() {
-		return _court;
+    public String getLocation() {
+		return _location;
 	}
 
-	public void setCourt(String court) {
-		this._court = court;
+	public void setLocation(String location) {
+		_location = location;
 	}
     
     public String getTime() {
@@ -29,7 +29,7 @@ public class MatchDTO implements IDTO {
     }
 
     public void setTime(String time) {
-        this._time = time;
+        _time = time;
     }
 
     public String getTeam2() {
@@ -37,7 +37,7 @@ public class MatchDTO implements IDTO {
     }
 
     public void setTeam2(String team2) {
-        this._team2 = team2;
+        _team2 = team2;
     }
     
     public String getTeam1(){
@@ -45,7 +45,7 @@ public class MatchDTO implements IDTO {
     }
 
     public void setTeam1(String team1) {
-        this._team1 = team1;
+        _team1 = team1;
     }
 
     public String getReferee() {
@@ -53,14 +53,14 @@ public class MatchDTO implements IDTO {
     }
 
     public void setReferee(String referee) {
-        this._referee = referee;
+        _referee = referee;
     }
 
 	public String getResult() {
 		return _result;
 	}
 
-	public void setResult(String _result) {
-		this._result = _result;
+	public void setResult(String result) {
+		_result = result;
 	}
 }

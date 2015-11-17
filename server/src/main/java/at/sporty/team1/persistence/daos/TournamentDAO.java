@@ -22,36 +22,38 @@ public class TournamentDAO extends HibernateGenericDAO<Tournament> implements IT
     public TournamentDAO() {
         super(Tournament.class);
     }
+//
+//    /**
+//     * add team to Tournament
+//     *
+//     * @param team ...team to add to the tournament
+//     * @param tournament
+//     *
+//     * @throws PersistenceException
+//     */
+//    @Deprecated
+//    @Override
+//    public void addTeam(Team team, Tournament tournament)throws PersistenceException {
+//        tournament.addTeam(team);
+//        saveOrUpdate(tournament);
+//    }
+//
+//    /**
+//     * remove Team from tournament
+//     *
+//     * @param team
+//     * @param tournament
+//     *
+//     * @throws PersistenceException
+//     */
+//    @Deprecated
+//    @Override
+//    public void removeTeam(Team team, Tournament tournament) throws PersistenceException {
+//        tournament.removeTeam(team);
+//        saveOrUpdate(tournament);
+//    }
 
-    /**
-     * add team to Tournament
-     *
-     * @param team ...team to add to the tournament
-     * @param tournament
-     *
-     * @throws PersistenceException
-     */
-    @Deprecated
-    @Override
-    public void addTeam(Team team, Tournament tournament)throws PersistenceException {
-        tournament.addTeam(team);
-        saveOrUpdate(tournament);
-    }
 
-    /**
-     * remove Team from tournament
-     *
-     * @param team
-     * @param tournament
-     *
-     * @throws PersistenceException
-     */
-    @Deprecated
-    @Override
-    public void removeTeam(Team team, Tournament tournament) throws PersistenceException {
-        tournament.removeTeam(team);
-        saveOrUpdate(tournament);
-    }
 
     
 }

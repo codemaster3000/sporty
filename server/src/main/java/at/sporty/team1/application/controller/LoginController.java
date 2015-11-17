@@ -25,7 +25,6 @@ import java.util.List;
  */
 public class LoginController extends UnicastRemoteObject implements ILoginController {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static LoginController _loginController;
 
     public LoginController() throws RemoteException {
         super();

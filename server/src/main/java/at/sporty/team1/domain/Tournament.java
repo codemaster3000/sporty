@@ -1,30 +1,45 @@
 package at.sporty.team1.domain;
 
-import at.sporty.team1.domain.interfaces.ITeam;
+import at.sporty.team1.domain.interfaces.IMatch;
 import at.sporty.team1.domain.interfaces.ITournament;
+import at.sporty.team1.misc.converters.SQLDateConverter;
 
 import javax.persistence.*;
 import java.util.List;
 
 /**
  * Represents a Tournament-Entity
- * TODO: Annotations, Table in DB
  */
 @Entity
 @Table(name = "tournament")
 public class Tournament implements ITournament {
-    private String id;
-    private List<Match> matches; //TODO: SQL column
+    private Integer id;
     private String date;
-    private List<String> teams; //TODO: SQL column
-    private League league;
-    private Department department;
     private String location;
+    private Department department;
+    private List<String> teams;
+    private League league; //TODO Entity
+    private List<Match> matches; //TODO Entity
+
+
+    @Override
+    @Id
+    @GeneratedValue
+    @Column(name = "tournamentId")
+    public Integer getTournamentId() {
+        return id;
+    }
+
+    @Override
+    public void setTournamentId(Integer id) {
+        this.id = id;
+    }
 
 
     @Override
     @Basic
-    @Column(name = "date")
+    @Convert(converter = SQLDateConverter.class)
+    @Column(name = "tournamentDate")
     public String getDate() {
         return date;
     }
@@ -36,7 +51,7 @@ public class Tournament implements ITournament {
 
     @Override
     @Basic
-    @Column(name = "location")
+    @Column(name = "tournamentLocation")
     public String getLocation() {
         return location;
     }
@@ -47,8 +62,8 @@ public class Tournament implements ITournament {
     }
 
     @Override
-    @OneToOne
-    @Column(name = "departmentId" )
+    @ManyToOne
+    @JoinColumn(name = "departmentId")
     public Department getDepartment() {
         return department;
     }
@@ -58,81 +73,82 @@ public class Tournament implements ITournament {
         this.department = department;
     }
 
-    @Override
-    @OneToOne
-    @Column(name = "leagueId")
-    public League getLeague() {
-        return league;
-    }
-
-    @Override
-    public void setLeague(League league) {
-        this.league = league;
-    }
-
-
-    @Override
-    @OneToMany
-    @Column(name = "matches") //TODO is this right?
-    public List<Match> getMatches() {
-        return matches;
-    }
-
-
-    @Override
-    public void setMatches(List<Match> matches) {
-        this.matches = matches;
-    }
-
-
-    @Override
-    @OneToMany
-    @Column(name = "teams") //TODO --//--
-    public List<String> getTeams() {
-        return teams;
-    }
-
-
-    @Override
-    public void setTeams(List<String> teams) {
-        this.teams = teams;
-    }
-
-    @Override
-    @Id
-    @Column(name = "id")
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(String id) {
-        this.id = id;
-    }
-
+//    @Override
+//    @OneToOne
+//    @Column(name = "leagueId")
+//    public League getLeague() {
+//        return league;
+//    }
+//
+//    @Override
+//    public void setLeague(League league) {
+//        this.league = league;
+//    }
+//
+//
+//    @Override
+//    @OneToMany
+//    @Column(name = "matches") //TODO is this right?
+//    public List<Match> getMatches() {
+//        return matches;
+//    }
+//
+//
+//    @Override
+//    public void setMatches(List<Match> matches) {
+//        this.matches = matches;
+//    }
+//
+//
+//    @Override
+//    @OneToMany
+//    @Column(name = "teams") //TODO --//--
+//    public List<String> getTeams() {
+//        return teams;
+//    }
+//
+//
+//    @Override
+//    public void setTeams(List<String> teams) {
+//        this.teams = teams;
+//    }
 
     /* helping methods */
     @Override
-    public void addTeam(ITeam team) {
-
-        if (!(team instanceof Team)) {
-            throw new IllegalArgumentException();
-        }
-
-        if (!teams.contains(team)) {
-            teams.add(team.getTeamName());
+    public void addTeam(String teamName) {
+        if (!teams.contains(teamName)) {
+            teams.add(teamName);
         }
     }
 
     @Override
-    public void removeTeam(ITeam team) {
+    public void removeTeam(String teamName) {
+        if (teams.isEmpty()) {
+            teams.remove(teamName);
+        }
+    }
 
-        if (!(team instanceof Team)) {
+    @Override
+    public void addMatch(IMatch match) {
+
+        if (!(match instanceof Match)) {
             throw new IllegalArgumentException();
         }
 
-        if (teams.isEmpty()) {
-            teams.remove(team);
+        if (!matches.contains(match)) {
+            matches.add((Match) match);
+        }
+    }
+
+    @Override
+    public void removeMatch(IMatch match) {
+
+        if (!(match instanceof Match)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (matches.isEmpty()) {
+            matches.remove(match);
         }
     }
 }

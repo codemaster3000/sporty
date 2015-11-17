@@ -87,6 +87,10 @@ public class MainViewController extends JfxController {
         _feePaidCheckbox.setOnAction(e -> _checkboxPaid = _feePaidCheckbox.isSelected());
     }
 
+    public void setUserRole(UserRole userRole){
+        _userRole = userRole;
+    }
+
     @FXML
     private void startSearch() {
     	
@@ -277,9 +281,5 @@ public class MainViewController extends JfxController {
         public String toString() {
             return _stringValue;
         }
-    }
-    
-    public void setUserRole(UserRole userRole){
-    	_userRole = userRole;
     }
 }

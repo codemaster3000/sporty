@@ -56,8 +56,9 @@ public class MainApp extends Application {
 			System.setSecurityManager(new RMISecurityManager());
 
 			/* handle the login */
-			showLoginStage();
-		
+//			showLoginStage();
+            showMainStage(UserRole.MEMBER);
+
 		} else {
 			LOGGER.error("Error occurs while starting a client. Security policies were not found.");
 		}
@@ -68,14 +69,14 @@ public class MainApp extends Application {
 		Parent loginStage = (Parent) viewLoader.loadNode();
 		viewLoader.getController().registerLoginListener(this::showMainStage);
 		
-		_loginStage = prepareNewStage(loginStage);
-		_loginStage.show();
+		prepareNewStage(loginStage).show();
+//		_loginStage.show();
 	}
 
 
 	private void showMainStage(UserRole userRole) {	
 		// should close login stage when main stage is opened
-		_loginStage.close();
+		if (_loginStage != null) _loginStage.close();
 		
 		ViewLoader<MainViewController> viewLoader = ViewLoader.loadView(MainViewController.class);
 		Parent mainStage = (Parent) viewLoader.loadNode();
@@ -87,12 +88,10 @@ public class MainApp extends Application {
 	/**
 	 * Displays the new stage for the application.
 	 *
-	 * @param Parent node to be shown.
+	 * @param pane node to be shown.
 	 * @return returns instance of the stage
 	 */
 	private Stage prepareNewStage(Parent pane) {
-		
-		
 		Scene scene = new Scene(pane, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		scene.getStylesheets().add(PATH_TO_DEFAULT_CSS_FILE);
 

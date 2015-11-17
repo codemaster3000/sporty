@@ -8,12 +8,10 @@ import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.enums.UserRole;
 import at.sporty.team1.util.GUIHelper;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,116 +21,80 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 /**
  * Represents the login view controller.
  */
 public class LoginViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static MemberDTO loginUser;
-
-    /**
-     * FXML
-     */
 
     @FXML
     private TextField tfUserName;
     @FXML
     private TextField tfPassword;
 
-    /**
-     * Controller
-     */
-//    private MainController _mainController;
-    private ViewLoader viewLoader;
-    private ILoginController loginController;
-    private MainViewController mainViewController;
+    private Consumer<UserRole> _roleConsumer;
 
     /*
      * initialize Controller and add function to hit enter to login
      */
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        try {
-
-            ILoginController loginController = CommunicationFacade.lookupForLoginController();
-
-        } catch (RemoteException | MalformedURLException | NotBoundException e) {
-            e.printStackTrace();
-        }
-
-//        _mainController = MainController.getInstance();
-//        _loginController = LoginController.getInstance();
-
-        tfPassword.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    login();
-                }
+    public void initialize(URL arg0, ResourceBundle arg1) {
+        tfPassword.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                login();
             }
         });
     }
 
+    public void registerLoginListener(Consumer<UserRole> proxyFunction) {
+        if (proxyFunction != null) _roleConsumer = proxyFunction;
+    }
 
     /**
      * login credential check and set screen according to userrole
      *
      * @param event ..Button "Login" is pressed
      */
-    public void btnLogIn(ActionEvent event) {
-    	
-        UserRole role = login();
-        
-        if(role != UserRole.UNSUCCESSFUL_LOGIN){
-        	mainViewController.setUserRole(role);
+    @FXML
+    private void btnLogIn(ActionEvent event) {
+        UserRole loginResult = login();
+
+        if (loginResult != UserRole.UNSUCCESSFUL_LOGIN && _roleConsumer != null) {
+            GUIHelper.showSuccessAlert("Login was successful. :)");
+            _roleConsumer.accept(login());
+        } else {
+            GUIHelper.showAlert(AlertType.ERROR, "Login error", null, "Invalid Username or Password.");
         }
-        
     }
+
 
     /**
      * login: checks if the login is correct. If it´s correct the users view(=Role) will be loaded
      */
-    public UserRole login() {
+    private UserRole login() {
         try {
-            return loginController.authorize(tfUserName.toString(), tfPassword.toString());
+
+            ILoginController controller = CommunicationFacade.lookupForLoginController();
+
+            UserRole userRole = controller.authorize(
+                    tfUserName.toString(),
+                    tfPassword.toString()
+            );
+
+            return userRole;
+
         } catch (RemoteException re) {
             re.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (NotBoundException e) {
+            e.printStackTrace();
         }
+
          /* else: not authorized, return UNSUCCESSFUL_LOGIN */
         return UserRole.UNSUCCESSFUL_LOGIN;
-//         /* user */
-//        if (loginController.authorize(tfUserName.getText(), tfPassword.getText()) == 0)
-//
-//        /* abteilungsleiter */
-//            if (_loginController.authorize(tfUserName.getText(), tfPassword.getText()) == 1)
-//                _screenController.setScreen(ScreensFramework.screen3ID); // TODO set correct screen
-//
-//        /* trainer */
-//        if (_loginController.authorize(tfUserName.getText(), tfPassword.getText()) == 2)
-//            _screenController.setScreen(ScreensFramework.screen2ID);
-//
-//        // login unsucessfull
-//        if (loginController.authorize(tfUserName.getText(), tfPassword.getText()) == -1)
-//            mainViewController.setScreen(ScreensFramework.screen1ID);
-//
-//        /* manager */
-//
     }
-
-	public void registerLoginListener(Consumer<UserRole> proxyFunction) {
-		
-		UserRole loginResult = login();
-		
-		if(loginResult != UserRole.UNSUCCESSFUL_LOGIN){
-			GUIHelper.showSuccessAlert("Login was successful. :)");
-			proxyFunction.accept(login());
-		}else{
-			GUIHelper.showAlert(AlertType.ERROR, "Login error", null, "Invalid Username or Password.");
-		}			
-		
-	}
 }
 
 

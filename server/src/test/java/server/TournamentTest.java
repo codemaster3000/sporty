@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import at.sporty.team1.rmi.dtos.MatchDTO;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -92,7 +93,7 @@ public class TournamentTest {
 		try {
 			tournamentController = new TournamentController();
 			tournaments = tournamentController.searchAllTournaments();
-		} catch (RemoteException | UnknownEntityException e) {
+		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -103,18 +104,19 @@ public class TournamentTest {
 	public void createNewMatchTest_1() {
 
 		Integer tournamentId = 1000; //TODO change to real one
-		String team1 = "Hobbits";
-		String team2 = "Rabbits";
-		String time = "13.00";
-		String location = "court 1";
-		TournamentController tournamentController = null;
+
+        MatchDTO matchDTO = new MatchDTO();
+		matchDTO.setTeam1("Hobbits");
+        matchDTO.setTeam2("Rabbits");
+        matchDTO.setTime("13.00");
+		matchDTO.setLocation("court 1");
 
 		try {
-			tournamentController = new TournamentController();
-			tournamentController.createNewMatch(tournamentId, team1, team2, time, location);
-		} catch (RemoteException | UnknownEntityException e) {
+            TournamentController tournamentController = new TournamentController();
+			tournamentController.createNewMatch(tournamentId, matchDTO);
+		} catch (RemoteException | UnknownEntityException | ValidationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+    }
 }

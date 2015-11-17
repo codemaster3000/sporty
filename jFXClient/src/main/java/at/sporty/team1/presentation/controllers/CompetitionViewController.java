@@ -334,6 +334,8 @@ public class CompetitionViewController extends JfxController {
         	LOGGER.error("", e);
         } catch (UnknownEntityException e) {
         	LOGGER.error("", e);
+        } catch (ValidationException e) {
+            LOGGER.error("", e);
         }
 
     }

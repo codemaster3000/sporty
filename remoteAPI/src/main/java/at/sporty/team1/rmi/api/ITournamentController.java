@@ -5,6 +5,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import at.sporty.team1.rmi.dtos.MatchDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
@@ -17,10 +18,9 @@ public interface ITournamentController extends Remote, Serializable {
      *
      * @return List<TournamentDTO> List of all Tournaments
      * @throws RemoteException
-	 * @throws UnknownEntityException 
      */
     List<TournamentDTO> searchAllTournaments()
-    throws RemoteException, UnknownEntityException;
+    throws RemoteException;
     
     /**
      * Search for all Tournaments.
@@ -31,7 +31,17 @@ public interface ITournamentController extends Remote, Serializable {
      */
     List<String> searchAllTournamentTeams(Integer tournamentId)
     throws RemoteException, UnknownEntityException;
-	
+
+    /**
+     * Search for all Matches.
+     *
+     * @return List<MatchDTO> List of all Matches
+     * @throws RemoteException
+     * @throws UnknownEntityException
+     */
+    List<MatchDTO> searchAllTournamentMatches(Integer tournamentId)
+    throws RemoteException, UnknownEntityException;
+
 	/**
      * Creates new or saves old tournament in data storage with data from the DTO.
      *
@@ -46,15 +56,12 @@ public interface ITournamentController extends Remote, Serializable {
      * create a new match in a Tournament
      *
      * @param tournamentId
-     * @param team1
-     * @param team2
-     * @param time
-     * @param location
+     * @param matchDTO
      * @throws RemoteException
      * @throws UnknownEntityException
      */
-    void createNewMatch(Integer tournamentId, String team1, String team2, String time, String location)
-    throws RemoteException, UnknownEntityException;
+    void createNewMatch(Integer tournamentId, MatchDTO matchDTO)
+    throws RemoteException, ValidationException, UnknownEntityException;
 
 	/**
      * assignTeamToTournament()
@@ -65,5 +72,5 @@ public interface ITournamentController extends Remote, Serializable {
      * @throws UnknownEntityException
      */
 	void assignTeamToTournament(String teamName, Integer tournamentId)
-    throws RemoteException, UnknownEntityException;
+    throws RemoteException, UnknownEntityException, ValidationException;
 }

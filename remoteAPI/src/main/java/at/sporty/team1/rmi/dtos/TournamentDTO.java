@@ -15,8 +15,6 @@ public class TournamentDTO implements IDTO {
     private String _location;
     private LeagueDTO _league;
     private DepartmentDTO _department;
-    private List<String> _teams;
-    private List<MatchDTO> _matches;
 
     public TournamentDTO() {
     }
@@ -81,48 +79,6 @@ public class TournamentDTO implements IDTO {
      *********************************************************************/
     public TournamentDTO setLeague(LeagueDTO league) {
         _league = league;
-        return this;
-    }
-
-    /**
-     *********************************************************************
-     * Getter for property 'matches'.
-     *
-     * @return Value for property 'matches'.
-     *********************************************************************/
-    public List<MatchDTO> getMatches() {
-        return _matches;
-    }
-
-    /**
-     *********************************************************************
-     * Setter for property 'matches'.
-     *
-     * @param matches Value to set for property 'matches'.
-     *********************************************************************/
-    public TournamentDTO setMatches(List<MatchDTO> matches) {
-        _matches = matches;
-        return this;
-    }
-
-    /**
-     *********************************************************************
-     * Getter for property 'teams'.
-     *
-     * @return Value for property 'teams'.
-     *********************************************************************/
-    public List<String> getTeams() {
-        return _teams;
-    }
-
-    /**
-     *********************************************************************
-     * Setter for property 'teams'.
-     *
-     * @param teams Value to set for property 'teams'.
-     *********************************************************************/
-    public TournamentDTO setTeams(List<String> teams) {
-        _teams = teams;
         return this;
     }
 
