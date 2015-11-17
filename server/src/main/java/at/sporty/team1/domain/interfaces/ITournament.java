@@ -26,4 +26,7 @@ public interface ITournament extends IRTournament {
     void addTeam(ITeam team);
 
     void removeTeam(ITeam team);
+
+	void setLocation(String location);
+
 }

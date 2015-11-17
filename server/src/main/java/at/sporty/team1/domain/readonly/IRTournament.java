@@ -21,4 +21,6 @@ public interface IRTournament {
     List<String> getTeams();
 
     String getId();
+
+	String getLocation();
 }
