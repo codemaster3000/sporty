@@ -1,6 +1,7 @@
 package at.sporty.team1.application.controller;
 
 import at.sporty.team1.domain.Match;
+import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Tournament;
 import at.sporty.team1.domain.interfaces.IMatch;
 import at.sporty.team1.domain.interfaces.ITournament;
@@ -153,10 +154,10 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     }
 
 	@Override
-	public void createOrSaveTournament(TournamentDTO tournamentDTO)
+	public Integer createOrSaveTournament(TournamentDTO tournamentDTO)
     throws RemoteException, ValidationException {
 
-        if (tournamentDTO == null) return;
+        if (tournamentDTO == null) return null;
 
 		 /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -170,15 +171,17 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
         /* Is valid, moving forward */
         try {
 
-            /* pulling a MemberDAO and save the Member */
-            PersistenceFacade.getNewTournamentDAO().saveOrUpdate(
-                MAPPER.map(tournamentDTO, Tournament.class)
-            );
+            Tournament tournament = MAPPER.map(tournamentDTO, Tournament.class);
+
+            /* pulling a TournamentDAO and save the Tournament */
+            PersistenceFacade.getNewTournamentDAO().saveOrUpdate(tournament);
 
             LOGGER.info("Tournament for \"{}\" was successfully saved.", tournamentDTO.getDate());
+            return tournament.getTournamentId();
 
         } catch (PersistenceException e) {
             LOGGER.error("Error occurs while communicating with DB.", e);
+            return null;
         }
 	}
 
@@ -204,11 +207,11 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
         /* Is valid, moving forward */
         try {
 
+            /* pulling a TournamentDAO and save the Tournament */
             Tournament tournament = PersistenceFacade.getNewTournamentDAO().findById(tournamentId);
             if (tournament == null) throw new UnknownEntityException(ITournament.class);
 
-            /* pulling a MemberDAO and save the Member */
-            IMatch match = MAPPER.map(matchDTO, Match.class);
+//            IMatch match = MAPPER.map(matchDTO, Match.class);
 
             //TODO uncomment when Matches will be bind in Tournament
 //            PersistenceFacade.forceLoadLazyProperty(tournament, Tournament::getMatches);

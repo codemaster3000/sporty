@@ -18,7 +18,6 @@ import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.ITournamentController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MatchDTO;
-import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
 import at.sporty.team1.rmi.exceptions.ValidationException;
@@ -51,9 +50,7 @@ public class CompetitionViewController extends JfxController {
     private static final Label NO_CONTENT_PLACEHOLDER = new Label("No Content");
 
     private ObservableList<MatchDTO> _matches;
-    private List<String> _teams = new LinkedList<>();
-    private ObservableList<String> _tournamentTeams = FXCollections.observableList(_teams);
-    private static TournamentDTO _activeCompetition;
+    private TournamentDTO _activeCompetition;
 
     @FXML
     private TextField _competitionDateTextField;
@@ -64,9 +61,9 @@ public class CompetitionViewController extends JfxController {
     @FXML
     private ComboBox<TeamDTO> _teamToCompetitionComboBox;
     @FXML
-    private ComboBox<DepartmentDTO> _tournamentDepartmentCombobox;
+    private ComboBox<DepartmentDTO> _tournamentDepartmentComboBox;
     @FXML
-    private ComboBox<DepartmentDTO> _tournamentLeagueCombobox;
+    private ComboBox<DepartmentDTO> _tournamentLeagueComboBox;
     @FXML
     private TableView<MatchDTO> _matchTableView;
     @FXML
@@ -114,7 +111,7 @@ public class CompetitionViewController extends JfxController {
         /**
          * League is not implemented yet
          */
-        _tournamentLeagueCombobox.setVisible(false);
+        _tournamentLeagueComboBox.setVisible(false);
         _leagueLabel.setVisible(false);
 
         /**
@@ -128,7 +125,7 @@ public class CompetitionViewController extends JfxController {
         }
 
         if (departments != null) {
-            _tournamentDepartmentCombobox.setItems(FXCollections.observableList(departments));
+            _tournamentDepartmentComboBox.setItems(FXCollections.observableList(departments));
         }
 
         /**
@@ -148,7 +145,7 @@ public class CompetitionViewController extends JfxController {
                 return null;
             }
         };
-        _tournamentDepartmentCombobox.setConverter(departmentDTOStringConverter);
+        _tournamentDepartmentComboBox.setConverter(departmentDTOStringConverter);
 
         //TODO: LeagueCombobox
         
@@ -236,7 +233,7 @@ public class CompetitionViewController extends JfxController {
                 ITeamController teamController = CommunicationFacade.lookupForTeamController();
 
                 List<TeamDTO> ownTournamentTeams = teamController.searchByDepartment(
-                        _tournamentDepartmentCombobox.getSelectionModel().getSelectedItem()
+                        _tournamentDepartmentComboBox.getSelectionModel().getSelectedItem()
                 );
 
                 ObservableList<TeamDTO> teamObservableList = FXCollections.observableList(ownTournamentTeams);
@@ -285,16 +282,16 @@ public class CompetitionViewController extends JfxController {
 
         _competitionDateTextField.clear();
         _competitionPlaceTextField.clear();
-        _tournamentDepartmentCombobox.getSelectionModel().clearSelection();
-        _tournamentLeagueCombobox.getSelectionModel().clearSelection();
+        _tournamentDepartmentComboBox.getSelectionModel().clearSelection();
+        _tournamentLeagueComboBox.getSelectionModel().clearSelection();
     }
 
     @FXML
     private void saveCompetition(ActionEvent event) {
 
         String date = _competitionDateTextField.getText();
-        DepartmentDTO dept = _tournamentDepartmentCombobox.getSelectionModel().getSelectedItem();
-        //TODO: String league = _tournamentLeagueCombobox.getSelectionModel().getSelectedItem().toString();
+        DepartmentDTO dept = _tournamentDepartmentComboBox.getSelectionModel().getSelectedItem();
+        //TODO: String league = _tournamentLeagueComboBox.getSelectionModel().getSelectedItem().toString();
         String location = _competitionPlaceTextField.getText();
 
         if ((date != null) && (dept != null) && (location != null)) {
@@ -313,7 +310,8 @@ public class CompetitionViewController extends JfxController {
                         .setLocation(location);
 
                 ITournamentController imc = CommunicationFacade.lookupForTournamentController();
-                imc.createOrSaveTournament(_activeCompetition);
+                Integer competitionId = imc.createOrSaveTournament(_activeCompetition);
+                _activeCompetition.setId(competitionId); //FIXME (Sergii) avoid DTO better own property
 
                 GUIHelper.showSuccessAlert(SUCCESSFUL_TOURNAMENT_SAVE);
                 setVisibleOfTournamentTeamView(true);
@@ -367,13 +365,13 @@ public class CompetitionViewController extends JfxController {
     @FXML
     public void saveTeamsToTournament(ActionEvent event) {
 
-        List<String> teams = _tournamentTeams;
+        List<String> teams = _competitionTeamsListView.getItems();
         int counter = 0;
 
         try {
             ITournamentController tournamentController = CommunicationFacade.lookupForTournamentController();
 
-            if ((_activeCompetition != null) && (teams != null)) {
+            if ((_activeCompetition != null) && (teams != null) && (!teams.isEmpty())) {
 
                 for (String team : teams) {
                     tournamentController.assignTeamToTournament(team, _activeCompetition.getId());
@@ -383,10 +381,10 @@ public class CompetitionViewController extends JfxController {
             }
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
         	LOGGER.error("", e);
-        	GUIHelper.showAlert(AlertType.ERROR, "ERROR", UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE, "Error occured while save Teams to Tournament");
+        	GUIHelper.showAlert(AlertType.ERROR, "ERROR", UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE, "Error occurs while save Teams to Tournament");
         } catch (UnknownEntityException e) {
         	LOGGER.error("", e);
-        	GUIHelper.showAlert(AlertType.ERROR, "ERROR", UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE, "Error occured while save Teams to Tournament");
+        	GUIHelper.showAlert(AlertType.ERROR, "ERROR", UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE, "Error occurs while save Teams to Tournament");
         } catch (ValidationException e) {
             LOGGER.error("", e);
             GUIHelper.showAlert(AlertType.ERROR, "ERROR", UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE, "Error occured while save Teams to Tournament");

@@ -63,9 +63,9 @@
         </columns>
       </TableView>
       <Label fx:id="_leagueLabel" text="League:" GridPane.rowIndex="1" />
-      <ComboBox fx:id="_tournamentLeagueCombobox" prefWidth="215.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <ComboBox fx:id="_tournamentLeagueComboBox" prefWidth="215.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <Label text="Department:" />
-      <ComboBox fx:id="_tournamentDepartmentCombobox" prefWidth="216.0" GridPane.columnIndex="1" />
+      <ComboBox fx:id="_tournamentDepartmentComboBox" prefWidth="216.0" GridPane.columnIndex="1" />
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
          <children>
             <Button fx:id="_addTeamButton" layoutX="230.0" layoutY="1.0" mnemonicParsing="false" onAction="#addTeamToTeamList" prefWidth="74.0" text="Add Team" />

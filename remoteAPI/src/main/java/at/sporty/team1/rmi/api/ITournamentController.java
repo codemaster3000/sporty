@@ -46,10 +46,11 @@ public interface ITournamentController extends Remote, Serializable {
      * Creates new or saves old tournament in data storage with data from the DTO.
      *
      * @param tournamentDTO DTO for tournament creation or save
+     * @return Integer Id of the updated or saved entity.
      * @throws RemoteException
      * @throws ValidationException
      */
-    void createOrSaveTournament(TournamentDTO tournamentDTO)
+    Integer createOrSaveTournament(TournamentDTO tournamentDTO)
     throws RemoteException, ValidationException;
 
     /**
