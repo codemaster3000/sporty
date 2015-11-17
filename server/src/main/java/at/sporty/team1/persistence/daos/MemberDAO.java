@@ -60,6 +60,26 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
 	        }
     }
 
+    /**
+     * Search member by Username
+     * @param username
+     * @return
+     * @throws PersistenceException
+     */
+    @Override
+    public List<Member> findByUsername(String username) throws PersistenceException {
+        String search = Util.wrapInWildcard(username);
+
+        return findByCriteria(Restrictions.like("username",search, MatchMode.EXACT))
+    }
+
+    /**
+     *
+     * @param firstName member's first name
+     * @param lastName  member's last name
+     * @return
+     * @throws PersistenceException
+     */
     @Override
     public List<Member> findByFullName(String firstName, String lastName)
     throws PersistenceException {

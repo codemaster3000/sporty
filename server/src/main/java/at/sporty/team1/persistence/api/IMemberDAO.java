@@ -11,6 +11,15 @@ import java.util.List;
 public interface IMemberDAO extends IGenericDAO<Member> {
 
     /**
+     * Find by username
+     *
+     * @param username
+     * @return
+     * @throws PersistenceException
+     */
+    List<Member> findByUsername(String username) throws PersistenceException
+
+    /**
      * Find by name String.
      *
      * @param searchString first name and last name, first name or last Name
@@ -23,7 +32,7 @@ public interface IMemberDAO extends IGenericDAO<Member> {
      * Find member by full name.
      *
      * @param firstName member's first name
-     * @param lastName member's last name
+     * @param lastName  member's last name
      * @return List<Member> List of all Members who's full name matched given data.
      */
     List<Member> findByFullName(String firstName, String lastName) throws PersistenceException;
@@ -49,7 +58,7 @@ public interface IMemberDAO extends IGenericDAO<Member> {
     /**
      * Find member(s) by date of birth.
      *
-     * @param dateOfBirth  member's date of birth (SQL_DATE format: yyyy-mm-dd)
+     * @param dateOfBirth member's date of birth (SQL_DATE format: yyyy-mm-dd)
      * @return List<Member> List of all Members who were born at the given date.
      * @throws PersistenceException
      */
@@ -58,7 +67,7 @@ public interface IMemberDAO extends IGenericDAO<Member> {
     /**
      * Find member(s) by email.
      *
-     * @param email  member's email
+     * @param email member's email
      * @return List<Member> List of all Members who's email matched given data.
      * @throws PersistenceException
      */
@@ -71,7 +80,7 @@ public interface IMemberDAO extends IGenericDAO<Member> {
      * @return List<Member> List of all Members who are assigned to given team.
      * @throws PersistenceException
      */
-	List<Member> findByCommonTeamName(String teamName) throws PersistenceException;
+    List<Member> findByCommonTeamName(String teamName) throws PersistenceException;
 
     /**
      * Find member(s) by team name.
