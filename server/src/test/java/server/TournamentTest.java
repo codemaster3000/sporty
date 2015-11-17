@@ -70,10 +70,12 @@ public class TournamentTest {
 		List<String> tournamentTeams = null;
 		TournamentController tournamentController = null;
 
+        Integer tournamentId = 1000; //TODO change to real one
+
 		try {
 			tournamentController = new TournamentController();
-			tournamentTeams = tournamentController.getAllTournamentTeams();
-		} catch (RemoteException e) {
+			tournamentTeams = tournamentController.searchAllTournamentTeams(tournamentId);
+		} catch (RemoteException | UnknownEntityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -89,7 +91,7 @@ public class TournamentTest {
 
 		try {
 			tournamentController = new TournamentController();
-			tournaments = tournamentController.getAllTournaments();
+			tournaments = tournamentController.searchAllTournaments();
 		} catch (RemoteException | UnknownEntityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -99,18 +101,18 @@ public class TournamentTest {
 	
 	@Test
 	public void createNewMatchTest_1() {
-		
+
+		Integer tournamentId = 1000; //TODO change to real one
 		String team1 = "Hobbits";
 		String team2 = "Rabbits";
 		String time = "13.00";
-		String place = "court 1";
-		TournamentDTO tournamentDTO = new TournamentDTO();
+		String location = "court 1";
 		TournamentController tournamentController = null;
 
 		try {
 			tournamentController = new TournamentController();
-			tournamentController.createNewMatch(team1, team2, time, place, tournamentDTO);
-		} catch (RemoteException e) {
+			tournamentController.createNewMatch(tournamentId, team1, team2, time, location);
+		} catch (RemoteException | UnknownEntityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

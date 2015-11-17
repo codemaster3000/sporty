@@ -31,6 +31,7 @@ public class TournamentDAO extends HibernateGenericDAO<Tournament> implements IT
      *
      * @throws PersistenceException
      */
+    @Deprecated
     @Override
     public void addTeam(Team team, Tournament tournament)throws PersistenceException {
         tournament.addTeam(team);
@@ -45,6 +46,7 @@ public class TournamentDAO extends HibernateGenericDAO<Tournament> implements IT
      *
      * @throws PersistenceException
      */
+    @Deprecated
     @Override
     public void removeTeam(Team team, Tournament tournament) throws PersistenceException {
         tournament.removeTeam(team);

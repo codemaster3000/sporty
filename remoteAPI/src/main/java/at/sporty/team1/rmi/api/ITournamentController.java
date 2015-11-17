@@ -19,7 +19,7 @@ public interface ITournamentController extends Remote, Serializable {
      * @throws RemoteException
 	 * @throws UnknownEntityException 
      */
-    List<TournamentDTO> getAllTournaments()
+    List<TournamentDTO> searchAllTournaments()
     throws RemoteException, UnknownEntityException;
     
     /**
@@ -27,9 +27,10 @@ public interface ITournamentController extends Remote, Serializable {
      *
      * @return List<TournamentDTO> List of all Tournaments
      * @throws RemoteException
+     * @throws UnknownEntityException
      */
-    List<String> getAllTournamentteams()
-    throws RemoteException;
+    List<String> searchAllTournamentTeams(Integer tournamentId)
+    throws RemoteException, UnknownEntityException;
 	
 	/**
      * Creates new or saves old tournament in data storage with data from the DTO.
@@ -44,27 +45,25 @@ public interface ITournamentController extends Remote, Serializable {
     /**
      * create a new match in a Tournament
      *
+     * @param tournamentId
      * @param team1
      * @param team2
-     * @param date
-     * @param tournamentDTO
+     * @param time
+     * @param location
+     * @throws RemoteException
+     * @throws UnknownEntityException
      */
-    void createNewMatch(String team1, String team2, String time, String place, TournamentDTO tournamentDTO);
+    void createNewMatch(Integer tournamentId, String team1, String team2, String time, String location)
+    throws RemoteException, UnknownEntityException;
 
 	/**
-     * addTeamToTournament()
+     * assignTeamToTournament()
      *
      * @param teamName
      * @param tournamentId
+     * @throws RemoteException
+     * @throws UnknownEntityException
      */
-	void addTeamToTournament(String teamId, String tournamentId)
-    throws RemoteException;
-}
-	void addTeamToTournament(String teamId, String tournamentId)
-    throws RemoteException;
-}
-	void addTeamToTournament(String teamId, String tournamentId)
-    throws RemoteException;
-}
-}
+	void assignTeamToTournament(String teamName, Integer tournamentId)
+    throws RemoteException, UnknownEntityException;
 }
