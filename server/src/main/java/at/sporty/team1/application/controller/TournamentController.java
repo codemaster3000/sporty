@@ -32,22 +32,13 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
 	private static final Logger LOGGER = LogManager.getLogger();
     private static final Mapper MAPPER = new DozerBeanMapper();
 
-    /**
-     * constructor
-     */
     public TournamentController() throws RemoteException{
     	super();
     }
 
-    /**
-     * addTeamToTournament()
-     *
-     * @param teamId
-     * @param tournamentId
-     */
     @Override
-    public void addTeamToTournament(String teamId, String tournamentId) {
-
+    public void addTeamToTournament(String teamId, String tournamentId)
+    throws RemoteException {
         try {
 
             Tournament tournament = PersistenceFacade.getNewTournamentDAO().findById(tournamentId);
@@ -63,16 +54,9 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
         }
     }
 
-    /**
-     * create a new match in a Tournament
-     *
-     * @param team1
-     * @param team2
-     * @param date
-     * @param tournamentDTO
-     */
     @Override
-    public void createNewMatch(String team1, String team2, String time, String place, TournamentDTO tournamentDTO) {
+    public void createNewMatch(String team1, String team2, String time, String place, TournamentDTO tournamentDTO)
+    throws RemoteException {
         
     	//TODO this is not yet finished + not reviewed!
         List<MatchDTO> matches = tournamentDTO.getMatches();
@@ -94,13 +78,9 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
         }
     }
 
-    /**
-     * @return
-     * @throws RemoteException
-     * @throws UnknownEntityException 
-     */
     @Override
-    public List<TournamentDTO> getAllTournaments() throws RemoteException, UnknownEntityException {
+    public List<TournamentDTO> getAllTournaments()
+    throws RemoteException, UnknownEntityException {
 
         try {
 
@@ -109,7 +89,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
 
 
             //checking if there are an results
-            if (tournaments == null || tournaments.isEmpty()) return null;
+            if (tournaments.isEmpty()) return null;
 
             //Converting all Tournaments to TournamentDTO
             return tournaments.stream()
@@ -117,22 +97,21 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
                     .collect(Collectors.toList());
 
         } catch (PersistenceException e) {
-            LOGGER.error(
-                    "An error occurs while getting all Tournaments ",
-                    e
-            );
+            LOGGER.error("An error occurs while getting all Tournaments ", e);
             return null;
         }
     }
 
 	@Override
-	public List<String> getAllTournamentteams() throws RemoteException {
+	public List<String> getAllTournamentTeams()
+    throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void createOrSaveTournament(TournamentDTO tournamentDTO) throws RemoteException, ValidationException {
+	public void createOrSaveTournament(TournamentDTO tournamentDTO)
+    throws RemoteException, ValidationException {
 		// TODO Auto-generated method stub
 		
 	}

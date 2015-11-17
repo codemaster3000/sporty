@@ -72,7 +72,7 @@ public class TournamentTest {
 
 		try {
 			tournamentController = new TournamentController();
-			tournamentTeams = tournamentController.getAllTournamentteams();
+			tournamentTeams = tournamentController.getAllTournamentTeams();
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
