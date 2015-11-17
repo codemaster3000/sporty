@@ -28,6 +28,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
@@ -45,6 +46,8 @@ import javafx.util.StringConverter;
 public class CompetitionViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SUCCESSFUL_TOURNAMENT_SAVE = "Tournament was successfully saved.";
+    private static final String SUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = "Tournamentteams were successfully saved.";
+    private static final String UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = "Tournamentteams were not successfully saved.";
     private static final Label NO_CONTENT_PLACEHOLDER = new Label("No Content");
 
     private ObservableList<MatchDTO> _matches;
@@ -340,7 +343,7 @@ public class CompetitionViewController extends JfxController {
     @FXML
     public void removeSelectedMatch(ActionEvent event) {
 
-    	_matchTableView.getSelectionModel().clearSelection();
+    	_matchTableView.getSelectionModel().clearSelection();;
 
     }
 
@@ -364,8 +367,8 @@ public class CompetitionViewController extends JfxController {
     @FXML
     public void saveTeamsToTournament(ActionEvent event) {
 
-        //TODO: save Teams to _activeTournament
         List<String> teams = _tournamentTeams;
+        int counter = 0;
 
         try {
             ITournamentController tournamentController = CommunicationFacade.lookupForTournamentController();
@@ -374,24 +377,25 @@ public class CompetitionViewController extends JfxController {
 
                 for (String team : teams) {
                     tournamentController.assignTeamToTournament(team, _activeCompetition.getId());
-                    
+                    counter++;
                 }
-                GUIHelper.showSuccessAlert("Teams saved");
+                GUIHelper.showSuccessAlert(counter + SUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE);
             }
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
         	LOGGER.error("", e);
+        	GUIHelper.showAlert(AlertType.ERROR, "ERROR", UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE, "Error occured while save Teams to Tournament");
         } catch (UnknownEntityException e) {
         	LOGGER.error("", e);
+        	GUIHelper.showAlert(AlertType.ERROR, "ERROR", UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE, "Error occured while save Teams to Tournament");
         } catch (ValidationException e) {
             LOGGER.error("", e);
+            GUIHelper.showAlert(AlertType.ERROR, "ERROR", UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE, "Error occured while save Teams to Tournament");
         }
-
     }
 
     @FXML
     public void removeTeamFromTournament(ActionEvent event) {
 
-        //TODO: save Matches to _activeTournament
         _competitionTeamsListView.getItems().remove(_competitionTeamsListView.getSelectionModel().getSelectedItem());
 
     }
