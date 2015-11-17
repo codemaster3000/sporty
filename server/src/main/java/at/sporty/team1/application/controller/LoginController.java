@@ -79,7 +79,7 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
                     
                 } catch (AuthenticationException ae) {
                     /* login unsuccessful */
-                    LOGGER.error("Invalid login attempt by {} with password {}.", username, password);
+                    LOGGER.error("Invalid login attempt by {}.", username);
                     return UserRole.UNSUCCESSFUL_LOGIN;
                 }
 
@@ -102,10 +102,7 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
         } /* pw or username do not match InputSanitizers check.. */
 
         LOGGER.warn("Login attempt failed: Inputsanitizercheck went bad");
-        // user "testuser"
-        // password "testpw" as sha512 hex-string:
-        // F4A92ED38B74B373E60B16176A8E19CA0220CD21BF73E46E68C74C0CA77A8CBA3F6738B264000D894F7EFF5CA17F8CDD01C7BEB2CCC2BA2553987C01DF152729
-
+        
         return UserRole.UNSUCCESSFUL_LOGIN;
 
     }
@@ -118,6 +115,9 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
         /* get the role of this user from our db */
         try {
             members = PersistenceFacade.getNewMemberDAO().findByUsername(username);
+            
+            if(members == null || members.isEmpty()) return UserRole.UNSUCCESSFUL_LOGIN;
+            
             role = members.get(0).getRole();
 
             /* return according to userrole */
@@ -141,6 +141,6 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
             return UserRole.UNSUCCESSFUL_LOGIN;
         }
         
-        return null;
+        return UserRole.UNSUCCESSFUL_LOGIN;
     }
 }

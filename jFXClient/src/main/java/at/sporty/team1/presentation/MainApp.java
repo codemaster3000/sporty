@@ -2,7 +2,9 @@ package at.sporty.team1.presentation;
 
 import at.sporty.team1.presentation.controllers.LoginViewController;
 import at.sporty.team1.presentation.controllers.MainViewController;
+import at.sporty.team1.rmi.enums.UserRole;
 import javafx.application.Application;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -17,86 +19,98 @@ import java.rmi.RMISecurityManager;
  */
 public class MainApp extends Application {
 
-    private static final Logger LOGGER = LogManager.getLogger();
-    private static final String SECURITY_PROPERTY = "java.security.policy";
+	private static final Logger LOGGER = LogManager.getLogger();
+	private static final String SECURITY_PROPERTY = "java.security.policy";
 
-    private static final String PATH_TO_SECURITY_POLICIES_FILE = "security.policy";
-    private static final String PATH_TO_DEFAULT_CSS_FILE = "/at/sporty/team1/presentation/css/main.css";
+	private static final String PATH_TO_SECURITY_POLICIES_FILE = "security.policy";
+	private static final String PATH_TO_DEFAULT_CSS_FILE = "/at/sporty/team1/presentation/css/main.css";
 
-    private static final String DEFAULT_TITLE = "SPORTY";
-    private static final int DEFAULT_WIDTH = 1024;
-    private static final int DEFAULT_HEIGHT = 700;
+	private static final String DEFAULT_TITLE = "SPORTY";
+	private static final int DEFAULT_WIDTH = 1024;
+	private static final int DEFAULT_HEIGHT = 700;
+	
+	private Stage _loginStage;
 
-    /**
-     * Default (empty) constructor for this utility class.
-     */
-    public MainApp() {
-    }
+	/**
+	 * Default (empty) constructor for this utility class.
+	 */
+	public MainApp() {
+	}
 
-    @Override
-    public void stop() throws Exception {
-    }
+	@Override
+	public void stop() throws Exception {
+	}
 
-    /**
-     * TODO comment
-     *
-     * @param initStage ...the FX-initial-Stage
-     */
-    @Override
-    public void start(Stage initStage) {
-        URL securityPoliciesURL = getClass().getClassLoader().getResource(PATH_TO_SECURITY_POLICIES_FILE);
-        if (securityPoliciesURL != null) {
+	/**
+	 * TODO comment
+	 *
+	 * @param initStage
+	 *            ...the FX-initial-Stage
+	 */
+	@Override
+	public void start(Stage initStage) {
+		URL securityPoliciesURL = getClass().getClassLoader().getResource(PATH_TO_SECURITY_POLICIES_FILE);
+		if (securityPoliciesURL != null) {
 
-            System.setProperty(SECURITY_PROPERTY, securityPoliciesURL.toString());
-            System.setSecurityManager(new RMISecurityManager());
+			System.setProperty(SECURITY_PROPERTY, securityPoliciesURL.toString());
+			System.setSecurityManager(new RMISecurityManager());
 
-            /* handle the login */
+			/* handle the login */
+			showLoginStage();
+		
+		} else {
+			LOGGER.error("Error occurs while starting a client. Security policies were not found.");
+		}
+	}
+	
+	private void showLoginStage() {
+		ViewLoader<LoginViewController> viewLoader = ViewLoader.loadView(LoginViewController.class);
+		Parent loginStage = (Parent) viewLoader.loadNode();
+		viewLoader.getController().registerLoginListener(this::showMainStage);
+		
+		_loginStage = prepareNewStage(loginStage);
+		_loginStage.show();
+	}
 
-////            LoginViewController loginViewController = new LoginViewController();
-////            UserRole role = loginViewController.login();
-//
-////            if (role != UserRole.UNSUCCESSFUL_LOGIN) {
-                showMainStage(new Stage());
-//            } else {
-//                showLoginStage();
-//            }
 
-        } else {
-            LOGGER.error("Error occurs while starting a client. Security policies were not found.");
-        }
-    }
+	private void showMainStage(UserRole userRole) {	
+		// should close login stage when main stage is opened
+		_loginStage.close();
+		
+		ViewLoader<MainViewController> viewLoader = ViewLoader.loadView(MainViewController.class);
+		Parent mainStage = (Parent) viewLoader.loadNode();
+		viewLoader.getController().setUserRole(userRole);
+		
+		prepareNewStage(mainStage).show();
+	}
 
-    /**
-     * Displays the main stage of the application.
-     *
-     * @param primaryStage stage to be shown.
-     */
-    private void showMainStage(Stage primaryStage) {
-        ViewLoader<MainViewController> viewLoader = ViewLoader.loadView(MainViewController.class);
-        Parent pane = (Parent) viewLoader.loadNode();
+	/**
+	 * Displays the new stage for the application.
+	 *
+	 * @param Parent node to be shown.
+	 * @return returns instance of the stage
+	 */
+	private Stage prepareNewStage(Parent pane) {
+		
+		
+		Scene scene = new Scene(pane, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		scene.getStylesheets().add(PATH_TO_DEFAULT_CSS_FILE);
 
-        Scene scene = new Scene(pane, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-        scene.getStylesheets().add(PATH_TO_DEFAULT_CSS_FILE);
+		Stage primaryStage = new Stage();
+		primaryStage.setScene(scene);
+		primaryStage.setTitle(DEFAULT_TITLE);
 
-        primaryStage.setScene(scene);
-        primaryStage.setTitle(DEFAULT_TITLE);
+		return primaryStage;
+	}
+	
+	/**
+	 * Default main method. Starts "this" application.
+	 *
+	 * @param args
+	 *            the command line arguments passed to the application.
+	 */
+	public static void main(String[] args) {
+		launch(args);
+	}
 
-        primaryStage.show();
-    }
-
-    /**
-     * Default main method. Starts "this" application.
-     *
-     * @param args the command line arguments passed to the application.
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    /**
-     * Show the Login Screen
-     */
-    private void showLoginStage() {
-        ViewLoader.loadView(LoginViewController.class);
-    }
 }

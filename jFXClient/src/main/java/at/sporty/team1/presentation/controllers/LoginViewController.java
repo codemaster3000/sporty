@@ -6,9 +6,11 @@ import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.ILoginController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.enums.UserRole;
+import at.sporty.team1.util.GUIHelper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -20,6 +22,8 @@ import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Represents the login view controller.
@@ -117,13 +121,18 @@ public class LoginViewController extends JfxController {
 //
     }
 
-    public void minimize(ActionEvent actionEvent) {
-        //mainViewController.getPrimaryStage().setIconified(true);
-    }
-
-    public void closeApp(ActionEvent actionEvent) {
-      //  mainViewController.getPrimaryStage().close();
-    }
+	public void registerLoginListener(Consumer<UserRole> proxyFunction) {
+		
+		UserRole loginResult = login();
+		
+		if(loginResult != UserRole.UNSUCCESSFUL_LOGIN){
+			GUIHelper.showSuccessAlert("Login was successful. :)");
+			proxyFunction.accept(login());
+		}else{
+			GUIHelper.showAlert(AlertType.ERROR, "Login error", null, "Invalid Username or Password.");
+		}			
+		
+	}
 }
 
 
