@@ -7,7 +7,9 @@ import at.sporty.team1.rmi.api.IDTO;
  */
 public class MatchResultDTO implements IDTO {//TODO everything
 
-    private TeamDTO winner;
+	private static final long serialVersionUID = 1L;
+	
+	private TeamDTO _winner;
     private TeamDTO teamA;
     private TeamDTO teamB;
     private String comment;
@@ -55,12 +57,12 @@ public class MatchResultDTO implements IDTO {//TODO everything
     }
 
     public TeamDTO getWinner() {
-        return winner;
+        return _winner;
     }
 
 
     public void setWinner(TeamDTO winner) {
-        this.winner = winner;
+        this._winner = winner;
     }
 
 
