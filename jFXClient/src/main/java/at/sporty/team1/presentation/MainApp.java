@@ -1,6 +1,8 @@
 package at.sporty.team1.presentation;
 
+import at.sporty.team1.presentation.controllers.LoginViewController;
 import at.sporty.team1.presentation.controllers.MainViewController;
+import at.sporty.team1.rmi.enums.UserRole;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -48,7 +50,17 @@ public class MainApp extends Application {
 
             System.setProperty(SECURITY_PROPERTY, securityPoliciesURL.toString());
             System.setSecurityManager(new RMISecurityManager());
-            showMainStage(new Stage());
+
+            /* handle the login */
+            LoginViewController loginViewController = new LoginViewController();
+            UserRole role = loginViewController.login();
+
+            if (role != UserRole.FALSE_LOGIN) {
+                showMainStage(new Stage());
+            } else {
+                showLoginStage();
+            }
+
 
         } else {
             LOGGER.error("Error occurs while starting a client. Security policies were not found.");
@@ -75,9 +87,17 @@ public class MainApp extends Application {
 
     /**
      * Default main method. Starts "this" application.
+     *
      * @param args the command line arguments passed to the application.
      */
     public static void main(String[] args) {
         launch(args);
-	}
+    }
+
+    /**
+     * Show the Login Screen
+     */
+    private void showLoginStage() {
+        ViewLoader.loadView(LoginViewController.class);
+    }
 }

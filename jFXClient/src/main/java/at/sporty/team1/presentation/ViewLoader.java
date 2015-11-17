@@ -31,6 +31,7 @@ public class ViewLoader<T extends IJfxController> {
 		_viewPaths.put(SearchResultViewController.class, "/at/sporty/team1/presentation/views/SearchResultView.fxml");
 		_viewPaths.put(TestViewController.class, "/at/sporty/team1/presentation/views/TestView.fxml");
 		_viewPaths.put(CompetitionViewController.class, "/at/sporty/team1/presentation/views/CompetitionView.fxml");
+		_viewPaths.put(LoginViewController.class, "at/sporty/team1/presentation/views/LoginView.fxml");
 	}
 
 	private FXMLLoader _loader;
