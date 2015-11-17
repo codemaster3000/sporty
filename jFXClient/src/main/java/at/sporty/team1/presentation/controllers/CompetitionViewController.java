@@ -310,15 +310,17 @@ public class CompetitionViewController extends JfxController {
     @FXML
     public void addTeamToTeamList(ActionEvent event) {
 
-        if (_competitionExternalTeamTextField != null) {
+    	String teamFromTextField = GUIHelper.readNullOrEmpty(_competitionExternalTeamTextField.getText());
+    	
+        if (teamFromTextField != null) {
         	_teams.add(_competitionExternalTeamTextField.getText());
             _competitionTeamsListView.setItems(_tournamentTeams);
-        }
-
-        if (_teamToCompetitionComboBox.getSelectionModel().getSelectedItem() != null) {
+        }else if (_teamToCompetitionComboBox.getSelectionModel().getSelectedItem() != null) {
         	_teams.add(_teamToCompetitionComboBox.getSelectionModel().getSelectedItem().getTeamName());
             _competitionTeamsListView.setItems(_tournamentTeams);
         }
+        _competitionExternalTeamTextField.clear();
+        _teamToCompetitionComboBox.getSelectionModel().clearSelection();
     }
 
     @FXML
