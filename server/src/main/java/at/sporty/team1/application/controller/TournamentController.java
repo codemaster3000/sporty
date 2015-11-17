@@ -48,7 +48,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     @Override
     public void addTeamToTournament(String teamId, String tournamentId) {
 
-        /*try {
+        try {
 
             Tournament tournament = PersistenceFacade.getNewTournamentDAO().findById(tournamentId);
             Team team = PersistenceFacade.getNewTeamDAO().findById(teamId);
@@ -60,7 +60,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
             PersistenceFacade.getNewTournamentDAO().saveOrUpdate(tournament);
         } catch (PersistenceException e) {
             LOGGER.error("An error occured while adding a team to a Tournament: ", e);
-        }*/
+        }
     }
 
     /**
@@ -74,7 +74,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     @Override
     public void createNewMatch(String team1, String team2, String date, TournamentDTO tournamentDTO) {
         
-    	/*//TODO this is not yet finished + not reviewed!
+    	//TODO this is not yet finished + not reviewed!
         List<MatchDTO> matches = tournamentDTO.getMatches();
 
         MatchDTO newMatch = new MatchDTO();
@@ -92,7 +92,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
             PersistenceFacade.getNewTournamentDAO().saveOrUpdate(tournament);
         } catch (PersistenceException e) {
             LOGGER.error("An Error occured during adding a new Match to the Tournament: ", e);
-        }*/
+        }
     }
 
     /**
@@ -103,7 +103,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     @Override
     public List<TournamentDTO> getAllTournaments() throws RemoteException, UnknownEntityException {
 
-       /* try {
+        try {
 
             List<Tournament> tournaments = PersistenceFacade.getNewGenericDAO(Tournament.class).findAll();
             if (tournaments == null) throw new UnknownEntityException(ITournament.class);
@@ -123,9 +123,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
                     e
             );
             return null;
-        }*/
-    	return null;
-
+        }
     }
 
 	@Override
