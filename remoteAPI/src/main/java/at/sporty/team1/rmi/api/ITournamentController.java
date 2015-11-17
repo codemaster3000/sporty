@@ -40,5 +40,23 @@ public interface ITournamentController extends Remote, Serializable{
      */
     void createOrSaveTournament(TournamentDTO tournamentDTO)
     throws RemoteException, ValidationException;
+
+    /**
+     * create a new match in a Tournament
+     *
+     * @param team1
+     * @param team2
+     * @param date
+     * @param tournamentDTO
+     */
+	void createNewMatch(String team1, String team2, String date, TournamentDTO tournamentDTO);
+
+	/**
+     * addTeamToTournament()
+     *
+     * @param teamId
+     * @param tournamentId
+     */
+	void addTeamToTournament(String teamId, String tournamentId);
 	
 }

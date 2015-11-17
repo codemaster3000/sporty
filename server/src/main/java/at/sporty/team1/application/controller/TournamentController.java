@@ -45,6 +45,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
      * @param teamId
      * @param tournamentId
      */
+    @Override
     public void addTeamToTournament(String teamId, String tournamentId) {
 
         try {
@@ -70,6 +71,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
      * @param date
      * @param tournamentDTO
      */
+    @Override
     public void createNewMatch(String team1, String team2, String date, TournamentDTO tournamentDTO) {
         //TODO this is not yet finished + not reviewed!
         List<MatchDTO> matches = tournamentDTO.getMatches();
@@ -97,6 +99,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
      * @throws RemoteException
      * @throws UnknownEntityException 
      */
+    @Override
     public List<TournamentDTO> getAllTournaments() throws RemoteException, UnknownEntityException {
 
         try {
