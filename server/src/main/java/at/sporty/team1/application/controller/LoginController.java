@@ -53,7 +53,6 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
      */
     @Override
     public int authorize(String username, String password) throws RemoteException {
-        boolean loggedIn = false;
 
         InputSanitizer sanitizer = new InputSanitizer();
         /* check if username and password are given and the format of this strings is OK */
@@ -81,7 +80,6 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
                 }
 
                 /* IF no AuthenticationException is thrown, login was successfull */
-                loggedIn = true;
 
             } catch (NamingException ne) {
                 ne.printStackTrace();
@@ -118,7 +116,6 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
                 pe.printStackTrace();
                 return -1;
             }
-
 
         } /* pw or username do not match InputSanitizers check.. */
 
