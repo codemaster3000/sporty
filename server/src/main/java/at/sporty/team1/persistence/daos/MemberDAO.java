@@ -70,7 +70,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
     public List<Member> findByUsername(String username) throws PersistenceException {
         String search = Util.wrapInWildcard(username);
 
-        return findByCriteria(Restrictions.like("username",search, MatchMode.EXACT))
+        return findByCriteria(Restrictions.like("username",search, MatchMode.EXACT));
     }
 
     /**

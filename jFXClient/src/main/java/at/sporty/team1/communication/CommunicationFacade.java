@@ -47,7 +47,9 @@ public class CommunicationFacade {
     }
 
 	public static ITournamentController lookupForTournamentController() {
-		// TODO Auto-generated method stub
-		return null;
+	throws  RemoteException, NotBoundException, MalformedURLException {
+        return (ITournamentController) Naming.lookup(
+            String.format(DEFAULT_RMI, RemoteObjectRegistry.TOURNAMENT_CONTROLLER.getNaming())
+        );
 	}
 }
