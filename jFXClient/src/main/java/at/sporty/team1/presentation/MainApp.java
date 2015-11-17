@@ -51,6 +51,7 @@ public class MainApp extends Application {
             System.setSecurityManager(new RMISecurityManager());
 
             /* handle the login */
+
 //            LoginViewController loginViewController = new LoginViewController();
 //            UserRole role = loginViewController.login();
 
