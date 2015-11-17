@@ -40,12 +40,6 @@
          <GridPane.margin>
             <Insets />
          </GridPane.margin></TextField>
-      <Pane prefHeight="31.0" prefWidth="307.0" GridPane.columnSpan="4" GridPane.rowIndex="2">
-         <children>
-          <Button layoutX="461.0" layoutY="3.0" mnemonicParsing="false" onAction="#clearForm" text="Clear Form" />
-            <Button layoutX="546.0" layoutY="3.0" mnemonicParsing="false" onAction="#saveCompetition" text="Save Competition" />
-         </children>
-      </Pane>
       <ListView fx:id="_competitionTeamsListView" prefHeight="61.0" prefWidth="525.0" GridPane.columnSpan="4" GridPane.rowIndex="4" />
       <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="6">
          <children>
@@ -68,7 +62,7 @@
             <TableColumn fx:id="_resultCol" prefWidth="120.0" text="RESULT" />
         </columns>
       </TableView>
-      <Label text="League:" GridPane.rowIndex="1" />
+      <Label fx:id="_leagueLabel" text="League:" GridPane.rowIndex="1" />
       <ComboBox fx:id="_tournamentLeagueCombobox" prefWidth="215.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <Label text="Department:" />
       <ComboBox fx:id="_tournamentDepartmentCombobox" prefWidth="216.0" GridPane.columnIndex="1" />
@@ -78,19 +72,37 @@
             <TextField fx:id="_competitionExternalTeamTextField" layoutY="1.0" prefWidth="212.0" promptText="External Team" />
          </children>
       </Pane>
-      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="8">
+      <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="2">
          <children>
-            <Button fx:id="_saveMatchesButton" layoutX="567.0" layoutY="2.0" mnemonicParsing="false" onAction="#saveMatches" text="Save Matches" />
-            <Button fx:id="_removeSelectedMatch" layoutX="420.0" layoutY="1.0" mnemonicParsing="false" onAction="#removeSelectedMatch" text="Remove selected Match" />
-            <Button fx:id="_openTournamentResults" layoutY="2.0" mnemonicParsing="false" text="Open Tournament Results" />
+          <Button mnemonicParsing="false" onAction="#clearForm" text="Clear Form" />
+            <Button mnemonicParsing="false" onAction="#saveCompetition" text="Save Competition">
+               <FlowPane.margin>
+                  <Insets left="10.0" />
+               </FlowPane.margin></Button>
          </children>
-      </Pane>
-      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="5">
+      </FlowPane>
+      <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="5">
          <children>
-            <Button fx:id="_buttonSaveTeams" layoutX="581.0" layoutY="1.0" mnemonicParsing="false" onAction="#saveTeamsToTournament" text="SaveTeams" />
-            <Button fx:id="_buttonRemoveSelectedTeam" layoutX="436.0" layoutY="1.0" mnemonicParsing="false" onAction="#removeTeamFromTournament" text="Remove selected Team" />
+            <Button fx:id="_buttonRemoveSelectedTeam" mnemonicParsing="false" onAction="#removeTeamFromTournament" text="Remove selected Team" />
+            <Button fx:id="_buttonSaveTeams" mnemonicParsing="false" onAction="#saveTeamsToTournament" text="SaveTeams">
+               <FlowPane.margin>
+                  <Insets left="10.0" />
+               </FlowPane.margin></Button>
          </children>
-      </Pane>
+      </FlowPane>
+      <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="8">
+         <children>
+            <Button fx:id="_openTournamentResults" mnemonicParsing="false" text="Open Tournament Results" />
+            <Button fx:id="_removeSelectedMatch" mnemonicParsing="false" onAction="#removeSelectedMatch" text="Remove selected Match">
+               <FlowPane.margin>
+                  <Insets left="10.0" />
+               </FlowPane.margin></Button>
+            <Button fx:id="_saveMatchesButton" mnemonicParsing="false" onAction="#saveMatches" text="Save Matches">
+               <FlowPane.margin>
+                  <Insets left="10.0" />
+               </FlowPane.margin></Button>
+         </children>
+      </FlowPane>
    </children>
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

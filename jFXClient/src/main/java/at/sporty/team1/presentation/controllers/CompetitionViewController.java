@@ -62,6 +62,7 @@ public class CompetitionViewController extends JfxController {
     @FXML private Button _addTeamButton;
     @FXML private Label _labelTeams;
     @FXML private Label _labelMatches;
+    @FXML private Label _leagueLabel;
     @FXML private Button _buttonRemoveSelectedTeam;
     @FXML private Button _buttonSaveTeams;
     @FXML private Button _saveMatchesButton;
@@ -76,6 +77,12 @@ public class CompetitionViewController extends JfxController {
 
         setVisibleOfTournamentTeamView(false);
         setVisibleOfMatchesView(false);
+        
+        /**
+         * League is not implemented yet
+         */
+        _tournamentLeagueCombobox.setVisible(false);
+        _leagueLabel.setVisible(false);
 
         /**
          * TournamentView
@@ -148,6 +155,7 @@ public class CompetitionViewController extends JfxController {
         _removeSelectedMatch.setVisible(b);
         _labelMatches.setVisible(b);
         _matchTableView.setVisible(b);
+        _openTournamentResults.setVisible(b);
     }
 
     private void setVisibleOfTournamentTeamView(boolean b) {
@@ -233,6 +241,7 @@ public class CompetitionViewController extends JfxController {
                 imc.createOrSaveTournament(_activeCompetition);
 
                 GUIHelper.showSuccessAlert(SUCCESSFUL_TOURNAMENT_SAVE);
+                setVisibleOfTournamentTeamView(true);
 
                 //Logging and cleaning the tab
                 LOGGER.info("Tournament \"{} {}\" was successfully saved.", dept, date);
@@ -245,12 +254,8 @@ public class CompetitionViewController extends JfxController {
             	
             	GUIHelper.showValidationAlert(context);
 				LOGGER.error(context, e);
-			}
-			
-			setVisibleOfTournamentTeamView(true);
+			}	
 		}
-        setVisibleOfTournamentTeamView(true);
-
     }
 
     @FXML

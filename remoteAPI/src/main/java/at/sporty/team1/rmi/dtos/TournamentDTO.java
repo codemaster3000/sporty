@@ -8,7 +8,10 @@ import java.util.List;
  * Created by f00 on 16.11.15.
  */
 public class TournamentDTO implements IDTO {
-    private String _id;
+    
+	private static final long serialVersionUID = 1L;
+	
+	private String _id;
     private List<MatchDTO> _matches;
     private String _date;
     private List<String> _teams;

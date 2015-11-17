@@ -51,7 +51,6 @@ public class CommunicationFacade {
         return (ITournamentController) Naming.lookup(
             String.format(DEFAULT_RMI, RemoteObjectRegistry.TOURNAMENT_CONTROLLER.getNaming())
         );
-		
 	}
 }
 

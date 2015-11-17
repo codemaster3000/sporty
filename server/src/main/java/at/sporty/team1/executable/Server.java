@@ -4,6 +4,7 @@ import at.sporty.team1.application.controller.DepartmentController;
 import at.sporty.team1.application.controller.LoginController;
 import at.sporty.team1.application.controller.MemberController;
 import at.sporty.team1.application.controller.TeamController;
+import at.sporty.team1.application.controller.TournamentController;
 import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Team;
@@ -63,6 +64,7 @@ public class Server {
         bindName(RemoteObjectRegistry.TEAM_CONTROLLER, new TeamController());
         bindName(RemoteObjectRegistry.DEPARTMENT_CONTROLLER, new DepartmentController());
         bindName(RemoteObjectRegistry.LOGIN_CONTROLLER, new LoginController());
+        bindName(RemoteObjectRegistry.TOURNAMENT_CONTROLLER, new TournamentController());
     }
 
     /**
