@@ -5,6 +5,7 @@ import at.sporty.team1.presentation.ViewLoader;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.ILoginController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.enums.UserRole;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -42,8 +43,8 @@ public class LoginViewController extends JfxController {
 //    private MainController _mainController;
     private ViewLoader viewLoader;
     private ILoginController loginController;
-    private MainViewController mainViewController;
-
+//    private MainViewController mainViewController;
+//
 //    //TODO
 //    @Override
 //    public void setScreenParent(ViewLoader screenPage) {
@@ -86,41 +87,44 @@ public class LoginViewController extends JfxController {
         login();
     }
 
-    /*
+    /**
      * login: checks if the login is correct. If it´s correct the users view(=Role) will be loaded
      */
-    private void login() {
-        // TODO set correct screens
-
-        //workaround for empty login --- fuuuuu, autorize requires this to be NOT "" ...... :<
-//        if (tfPassword.getText().equals("")&&tfUserName.getText().equals(""))
-//            _screenController.setScreen(ScreensFramework.screen2ID);
-
-        // user
+    public UserRole login() {
+        try {
+            return loginController.authorize(tfUserName.toString(), tfPassword.toString());
+        } catch (RemoteException re) {
+            re.printStackTrace();
+        }
+         /* else: return -1 */
+        return UserRole.FALSE_LOGIN;
+//         /* user */
 //        if (loginController.authorize(tfUserName.getText(), tfPassword.getText()) == 0)
-//            mainViewController.setScreen(viewLoade.screen2ID);
 //
-////        // abteilungsleiter
-////        if (_loginController.authorize(tfUserName.getText(), tfPassword.getText()) == 1)
-////            _screenController.setScreen(ScreensFramework.screen3ID); // TODO set correct screen
+//        /* abteilungsleiter */
+//            if (_loginController.authorize(tfUserName.getText(), tfPassword.getText()) == 1)
+//                _screenController.setScreen(ScreensFramework.screen3ID); // TODO set correct screen
 //
-////        // trainer
-////        if(_loginController.authorize(tfUserName.getText(), tfPassword.getText()) == 2)
-////             _screenController.setScreen(ScreensFramework.screen2ID); // TODO set correct screen
-////
+//        /* trainer */
+//        if (_loginController.authorize(tfUserName.getText(), tfPassword.getText()) == 2)
+//            _screenController.setScreen(ScreensFramework.screen2ID);
+//
 //        // login unsucessfull
 //        if (loginController.authorize(tfUserName.getText(), tfPassword.getText()) == -1)
 //            mainViewController.setScreen(ScreensFramework.screen1ID);
-//    }
 //
-//    public void minimize(ActionEvent actionEvent) {
-//        mainViewController.getPrimaryStage().setIconified(true);
-//    }
+//        /* manager */
 //
-//    public void closeApp(ActionEvent actionEvent) {
-//        mainViewController.getPrimaryStage().close();
-//    }
     }
 
+    public void minimize(ActionEvent actionEvent) {
+        //mainViewController.getPrimaryStage().setIconified(true);
+    }
+
+    public void closeApp(ActionEvent actionEvent) {
+      //  mainViewController.getPrimaryStage().close();
+    }
 }
+
+
 
