@@ -101,12 +101,15 @@ public class Tournament implements ITournament {
 //
 //
     @Override
-    @OneToMany
-    @Column(name = "teams") //TODO --//--
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+        name = "tournamentTeams",
+        joinColumns=@JoinColumn(name="tournamentId")
+    )
+    @Column(name="teamName")
     public List<String> getTeams() {
         return teams;
     }
-
 
     @Override
     public void setTeams(List<String> teams) {

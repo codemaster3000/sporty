@@ -71,11 +71,8 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
             Tournament tournament = PersistenceFacade.getNewTournamentDAO().findById(tournamentId);
             if (tournament == null) throw new UnknownEntityException(ITournament.class);
 
-            //TODO uncomment when Matches will be bind in Tournament
-//            PersistenceFacade.forceLoadLazyProperty(tournament, Tournament::getMatches);
-//            return tournament.getTeams();
-
-            return null; //TODO remove when first todo in this method will be handled.
+            PersistenceFacade.forceLoadLazyProperty(tournament, Tournament::getTeams);
+            return tournament.getTeams();
 
         } catch (PersistenceException e) {
             LOGGER.error(
@@ -141,7 +138,6 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
             Tournament tournament = PersistenceFacade.getNewTournamentDAO().findById(tournamentId);
             if (tournament == null) throw new UnknownEntityException(ITournament.class);
 
-            //TODO uncomment when Teams will be handled in Tournament
             PersistenceFacade.forceLoadLazyProperty(tournament, Tournament::getTeams);
             tournament.addTeam(teamName);
 

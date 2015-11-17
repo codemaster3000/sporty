@@ -16,11 +16,7 @@
                     <Insets right="20.0"/>
                 </padding>
             </CheckBox>
-            <Button onAction="#startSearch" prefHeight="31.0" prefWidth="94.0" text="GO" HBox.hgrow="NEVER">
-                <opaqueInsets>
-                    <Insets/>
-                </opaqueInsets>
-            </Button>
+            <Button onAction="#startSearch" prefHeight="31.0" prefWidth="94.0" text="GO" HBox.hgrow="NEVER"/>
         </ToolBar>
 	</top>
 	<center>
