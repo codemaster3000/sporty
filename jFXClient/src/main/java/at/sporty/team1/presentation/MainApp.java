@@ -2,7 +2,6 @@ package at.sporty.team1.presentation;
 
 import at.sporty.team1.presentation.controllers.LoginViewController;
 import at.sporty.team1.presentation.controllers.MainViewController;
-import at.sporty.team1.rmi.enums.UserRole;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -52,14 +51,14 @@ public class MainApp extends Application {
             System.setSecurityManager(new RMISecurityManager());
 
             /* handle the login */
-            LoginViewController loginViewController = new LoginViewController();
-            UserRole role = loginViewController.login();
+//            LoginViewController loginViewController = new LoginViewController();
+//            UserRole role = loginViewController.login();
 
-            if (role != UserRole.FALSE_LOGIN) {
+//            if (role != UserRole.FALSE_LOGIN) {
                 showMainStage(new Stage());
-            } else {
-                showLoginStage();
-            }
+//            } else {
+//                showLoginStage();
+//            }
 
 
         } else {
