@@ -40,9 +40,11 @@ import javafx.util.StringConverter;
 public class CompetitionViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SUCCESSFUL_TOURNAMENT_SAVE = "Tournament was successfully saved.";
+    private static final Label NO_CONTENT_PLACEHOLDER = new Label("No Content");
 
-    private ObservableList<MatchDTO> matches;
-    private ObservableList<String> _tournamentTeams;
+    private ObservableList<MatchDTO> _matches;
+    private List<String> _teams = new LinkedList<>();
+    private ObservableList<String> _tournamentTeams = FXCollections.observableList(_teams);
     private static TournamentDTO _activeCompetition;
 
     @FXML
@@ -167,8 +169,8 @@ public class CompetitionViewController extends JfxController {
             tempList.add(new MatchDTO());
         }
 
-        matches = FXCollections.observableList(tempList);
-        _matchTableView.setItems(matches);
+        _matches = FXCollections.observableList(tempList);
+        _matchTableView.setItems(_matches);
 
     }
 
@@ -183,9 +185,9 @@ public class CompetitionViewController extends JfxController {
 
     private void setVisibleOfTournamentTeamView(boolean view) {
 
-        List<String> teams = null;
-
         if (view) {
+        	_competitionTeamsListView.setPlaceholder(NO_CONTENT_PLACEHOLDER);
+
             /**
              * Fill TeamCombobox in Tournaments
              */
@@ -203,22 +205,25 @@ public class CompetitionViewController extends JfxController {
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
             	LOGGER.error("", e);           
             }
+            
+            /**
+             * Converter from TeamDTO to Team name (String)
+             */
+            StringConverter<TeamDTO> departmentDTOStringConverter = new StringConverter<TeamDTO>() {
+                @Override
+                public String toString(TeamDTO teamDTO) {
+                    if (teamDTO != null) {
+                        return teamDTO.getTeamName();
+                    }
+                    return null;
+                }
 
-            //load teams in listview
-            try {
-
-                ITournamentController tournamentController = CommunicationFacade.lookupForTournamentController();
-                teams = tournamentController.searchAllTournamentTeams(_activeCompetition.getId());
-            } catch (RemoteException | MalformedURLException | NotBoundException e) {
-            	LOGGER.error("", e);
-            } catch (UnknownEntityException e) {
-            	LOGGER.error("", e);
-            }
-
-            if (teams != null) {
-                _tournamentTeams = FXCollections.observableList(teams);
-                _competitionTeamsListView.setItems(_tournamentTeams);
-            }
+                @Override
+                public TeamDTO fromString(String string) {
+                    return null;
+                }
+            };
+            _teamToCompetitionComboBox.setConverter(departmentDTOStringConverter);
         }
 
         _competitionTeamsListView.setVisible(view);
@@ -305,13 +310,14 @@ public class CompetitionViewController extends JfxController {
     @FXML
     public void addTeamToTeamList(ActionEvent event) {
 
-        //TODO: Team from textfield or Combobox
         if (_competitionExternalTeamTextField != null) {
-            _tournamentTeams.add(_competitionExternalTeamTextField.getText());
+        	_teams.add(_competitionExternalTeamTextField.getText());
+            _competitionTeamsListView.setItems(_tournamentTeams);
         }
 
-        if (!_teamToCompetitionComboBox.getSelectionModel().isEmpty()) {
-            _tournamentTeams.add(_teamToCompetitionComboBox.getSelectionModel().getSelectedItem().getTeamName());
+        if (_teamToCompetitionComboBox.getSelectionModel().getSelectedItem() != null) {
+        	_teams.add(_teamToCompetitionComboBox.getSelectionModel().getSelectedItem().getTeamName());
+            _competitionTeamsListView.setItems(_tournamentTeams);
         }
     }
 
