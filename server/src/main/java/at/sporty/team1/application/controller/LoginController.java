@@ -40,7 +40,7 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
      * @brief checks if a login is valid bye comparing the login information to the database
      * if the login is valid it prompts the default screen associated with the employees class
      * if the login is invalid it logs the failed login attempt and prompts the loginscreen again
-     *
+     * <p>
      * -1 false
      * 0 admin
      * 1 member
@@ -61,8 +61,6 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
                 sanitizer.isValid(username, DataType.USERNAME)
                 && sanitizer.isValid(password, DataType.PASSWORD)) {
 
-            LOGGER.info("Login by: " + username);
-
             try {
 
                 Hashtable<String, String> env = new Hashtable<>();
@@ -78,12 +76,12 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
                     Attributes attrs = ctx.getAttributes("userid=007,ou=staff,o=mi6");
                 } catch (AuthenticationException ae) {
                     /* login unsuccessful */
-                    LOGGER.error("Invalid login attempt by "+ username+ " with password "+password);
+                    LOGGER.error("Invalid login attempt by " + username + " with password " + password);
                     return -1;
                 }
 
                 /* IF no AuthenticationException is thrown, login was successfull */
-                    loggedIn = true;
+                loggedIn = true;
 
             } catch (NamingException ne) {
                 ne.printStackTrace();
@@ -98,20 +96,22 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
                 members = PersistenceFacade.getNewMemberDAO().findByUsername(username);
                 role = members.get(0).getRole();
 
+                LOGGER.info("Login by: " + username);
+
                 /* return according to userrole */
-                if(role.equals("admin"))
+                if (role.equals("admin"))
                     return 0;
 
-                if(role.equals("member"))
+                if (role.equals("member"))
                     return 1;
 
-                if(role.equals("trainer"))
+                if (role.equals("trainer"))
                     return 2;
 
                 if (role.equals("departmentHead"))
                     return 3;
 
-                if(role.equals("manager"))
+                if (role.equals("manager"))
                     return 4;
 
             } catch (PersistenceException pe) {
@@ -120,8 +120,9 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
             }
 
 
-        }
+        } /* pw or username do not match InputSanitizers check.. */
 
+        LOGGER.warn("Login attempt failed: Inputsanitizercheck went bad");
         // user "testuser"
         // password "testpw" as sha512 hex-string:
         // F4A92ED38B74B373E60B16176A8E19CA0220CD21BF73E46E68C74C0CA77A8CBA3F6738B264000D894F7EFF5CA17F8CDD01C7BEB2CCC2BA2553987C01DF152729
