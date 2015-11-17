@@ -4,9 +4,13 @@ import at.sporty.team1.domain.Team;
 import at.sporty.team1.domain.Tournament;
 import at.sporty.team1.domain.interfaces.ITournament;
 import at.sporty.team1.persistence.PersistenceFacade;
+import at.sporty.team1.rmi.api.IMemberController;
+import at.sporty.team1.rmi.api.ITournamentController;
 import at.sporty.team1.rmi.dtos.MatchDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
+import at.sporty.team1.rmi.exceptions.ValidationException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dozer.DozerBeanMapper;
@@ -14,20 +18,25 @@ import org.dozer.Mapper;
 
 import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * TournamentController represents the logic controller for a tournament
  */
-public class TournamentController {
-    private static final Logger LOGGER = LogManager.getLogger();
+public class TournamentController extends UnicastRemoteObject implements ITournamentController{
+    
+	private static final long serialVersionUID = 1L;
+	
+	private static final Logger LOGGER = LogManager.getLogger();
     private static final Mapper MAPPER = new DozerBeanMapper();
 
     /**
      * constructor
      */
-    public TournamentController() {
+    public TournamentController() throws RemoteException{
+    	super();
     }
 
     /**
@@ -86,7 +95,7 @@ public class TournamentController {
     /**
      * @return
      * @throws RemoteException
-     * @throws UnknownEntityException
+     * @throws UnknownEntityException 
      */
     public List<TournamentDTO> getAllTournaments() throws RemoteException, UnknownEntityException {
 
@@ -113,4 +122,16 @@ public class TournamentController {
         }
 
     }
+
+	@Override
+	public List<String> getAllTournamentteams() throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void createOrSaveTournament(TournamentDTO tournamentDTO) throws RemoteException, ValidationException {
+		// TODO Auto-generated method stub
+		
+	}
 }

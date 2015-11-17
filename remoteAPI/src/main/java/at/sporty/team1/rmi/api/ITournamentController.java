@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 import at.sporty.team1.rmi.dtos.TournamentDTO;
+import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 
 
@@ -16,9 +17,10 @@ public interface ITournamentController extends Remote, Serializable{
      *
      * @return List<TournamentDTO> List of all Tournaments
      * @throws RemoteException
+	 * @throws UnknownEntityException 
      */
     List<TournamentDTO> getAllTournaments()
-    throws RemoteException;
+    throws RemoteException, UnknownEntityException;
     
     /**
      * Search for all Tournaments.
