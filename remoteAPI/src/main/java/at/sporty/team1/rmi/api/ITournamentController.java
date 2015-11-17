@@ -10,7 +10,7 @@ import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 
 
-public interface ITournamentController extends Remote, Serializable{
+public interface ITournamentController extends Remote, Serializable {
 
 	/**
      * Search for all Tournaments.
@@ -28,7 +28,7 @@ public interface ITournamentController extends Remote, Serializable{
      * @return List<TournamentDTO> List of all Tournaments
      * @throws RemoteException
      */
-    List<String> getAllTournamentteams()
+    List<String> getAllTournamentTeams()
     throws RemoteException;
 	
 	/**
@@ -46,19 +46,19 @@ public interface ITournamentController extends Remote, Serializable{
      *
      * @param team1
      * @param team2
-     * @param date
      * @param tournamentDTO
+     * @throws RemoteException
      */
-    void createNewMatch(String team1, String team2, String time, String place, TournamentDTO tournamentDTO);
+    void createNewMatch(String team1, String team2, String time, String place, TournamentDTO tournamentDTO)
+    throws RemoteException;
 
 	/**
      * addTeamToTournament()
      *
      * @param teamId
      * @param tournamentId
+     * @throws RemoteException
      */
-	void addTeamToTournament(String teamId, String tournamentId);
-
-	
-	
+	void addTeamToTournament(String teamId, String tournamentId)
+    throws RemoteException;
 }

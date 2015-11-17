@@ -176,7 +176,7 @@ public class CompetitionViewController extends JfxController {
 	        
 	        //load teams in listview
 	        try {
-				teams = CommunicationFacade.lookupForTournamentController().getAllTournamentteams();
+				teams = CommunicationFacade.lookupForTournamentController().getAllTournamentTeams();
 			} catch (RemoteException | MalformedURLException | NotBoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
