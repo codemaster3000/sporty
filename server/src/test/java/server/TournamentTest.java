@@ -1,6 +1,6 @@
 package server;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import java.rmi.RemoteException;
 import java.util.List;
@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import at.sporty.team1.application.controller.TournamentController;
-import at.sporty.team1.rmi.api.ITournamentController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
@@ -96,5 +95,24 @@ public class TournamentTest {
 			e.printStackTrace();
 		}
 		assertNotNull(tournaments);
+	}
+	
+	@Test
+	public void createNewMatchTest_1() {
+		
+		String team1 = "Hobbits";
+		String team2 = "Rabbits";
+		String time = "13.00";
+		String place = "court 1";
+		TournamentDTO tournamentDTO = new TournamentDTO();
+		TournamentController tournamentController = null;
+
+		try {
+			tournamentController = new TournamentController();
+			tournamentController.createNewMatch(team1, team2, time, place, tournamentDTO);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
