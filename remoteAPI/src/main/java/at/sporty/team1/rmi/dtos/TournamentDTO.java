@@ -165,6 +165,4 @@ public class TournamentDTO implements IDTO {
 		this._location = location;
 		return this;
 	}
-	
-	
 }
