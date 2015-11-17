@@ -17,7 +17,7 @@ public interface IMemberDAO extends IGenericDAO<Member> {
      * @return
      * @throws PersistenceException
      */
-    List<Member> findByUsername(String username) throws PersistenceException
+    List<Member> findByUsername(String username) throws PersistenceException;
 
     /**
      * Find by name String.
