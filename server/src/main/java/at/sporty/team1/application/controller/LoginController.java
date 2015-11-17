@@ -12,8 +12,6 @@ import org.apache.logging.log4j.Logger;
 import javax.naming.AuthenticationException;
 import javax.naming.Context;
 import javax.naming.NamingException;
-import javax.naming.directory.Attributes;
-import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;
@@ -38,7 +36,7 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
      *
      * @return Enum to distinguish which default screen to load; UNSUCCESSFUL_LOGIN if not authorized
      * **************************************************************************************************
-     * @brief checks if a login is valid bye comparing the login information to the database
+     * @brief checks if a login is valid by comparing the login information to the database
      * if the login is valid it prompts the default screen associated with the employees class
      * if the login is invalid it logs the failed login attempt and prompts the loginscreen again
      *
@@ -56,6 +54,7 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
     public UserRole authorize(String username, String password) throws RemoteException {
 
         InputSanitizer sanitizer = new InputSanitizer();
+        
         /* check if username and password are given and the format of this strings is OK */
         if (!username.equals("") && !password.equals("") &&
                 sanitizer.isValid(username, DataType.USERNAME)
@@ -73,50 +72,31 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
 
                 try {
                     /* the next line tries to login to LDAP */
-                    DirContext ctx = new InitialDirContext(env);
-                    Attributes attrs = ctx.getAttributes("userid=007,ou=staff,o=mi6");
+                    InitialDirContext ctx = new InitialDirContext(env);    
+                    LOGGER.info("Successful login of {}.", username);            
+                    // close context
+                    ctx.close();
+                    
                 } catch (AuthenticationException ae) {
                     /* login unsuccessful */
-                    LOGGER.error("Invalid login attempt by " + username + " with password " + password);
+                    LOGGER.error("Invalid login attempt by {} with password {}.", username, password);
                     return UserRole.UNSUCCESSFUL_LOGIN;
                 }
 
-                /* IF no AuthenticationException is thrown, login was successfull */
+                /* IF no AuthenticationException is thrown, login was successful */
 
             } catch (NamingException ne) {
                 ne.printStackTrace();
                 return UserRole.UNSUCCESSFUL_LOGIN;
             }
 
-            List<Member> members;
-            String role;
-
-            /* get the role of this user from our db */
-            try {
-                members = PersistenceFacade.getNewMemberDAO().findByUsername(username);
-                role = members.get(0).getRole();
-
-                LOGGER.info("Login by: " + username);
-
-                /* return according to userrole */
-                if (role.equals("admin"))
-                    return UserRole.ADMIN;
-
-                if (role.equals("member"))
-                    return UserRole.MEMBER;
-
-                if (role.equals("trainer"))
-                    return UserRole.TRAINER;
-
-                if (role.equals("departmentHead"))
-                    return UserRole.DEPARTMENT_HEAD;
-
-                if (role.equals("manager"))
-                    return UserRole.MANAGER;
-
-            } catch (PersistenceException pe) {
-                pe.printStackTrace();
-                return UserRole.UNSUCCESSFUL_LOGIN;
+            // get role of current user from database
+            UserRole currentRole = getUserRole(username);
+            
+            if(currentRole == null){
+            	return UserRole.UNSUCCESSFUL_LOGIN;
+            } else {
+            	return currentRole;
             }
 
         } /* pw or username do not match InputSanitizers check.. */
@@ -128,5 +108,39 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
 
         return UserRole.UNSUCCESSFUL_LOGIN;
 
+    }
+    
+    private UserRole getUserRole(String username){
+    	
+        List<Member> members;
+        String role;
+
+        /* get the role of this user from our db */
+        try {
+            members = PersistenceFacade.getNewMemberDAO().findByUsername(username);
+            role = members.get(0).getRole();
+
+            /* return according to userrole */
+            if (role.equals("admin"))
+                return UserRole.ADMIN;
+
+            if (role.equals("member"))
+                return UserRole.MEMBER;
+
+            if (role.equals("trainer"))
+                return UserRole.TRAINER;
+
+            if (role.equals("departmentHead"))
+                return UserRole.DEPARTMENT_HEAD;
+
+            if (role.equals("manager"))
+                return UserRole.MANAGER;
+
+        } catch (PersistenceException pe) {
+            pe.printStackTrace();
+            return UserRole.UNSUCCESSFUL_LOGIN;
+        }
+        
+        return null;
     }
 }

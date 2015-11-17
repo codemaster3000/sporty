@@ -43,13 +43,7 @@ public class LoginViewController extends JfxController {
 //    private MainController _mainController;
     private ViewLoader viewLoader;
     private ILoginController loginController;
-//    private MainViewController mainViewController;
-//
-//    //TODO
-//    @Override
-//    public void setScreenParent(ViewLoader screenPage) {
-//        viewLoader = screenPage;
-//    }
+    private MainViewController mainViewController;
 
     /*
      * initialize Controller and add function to hit enter to login
@@ -84,7 +78,13 @@ public class LoginViewController extends JfxController {
      * @param event ..Button "Login" is pressed
      */
     public void btnLogIn(ActionEvent event) {
-        login();
+    	
+        UserRole role = login();
+        
+        if(role != UserRole.UNSUCCESSFUL_LOGIN){
+        	mainViewController.setUserRole(role);
+        }
+        
     }
 
     /**

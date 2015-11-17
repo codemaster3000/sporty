@@ -7,6 +7,7 @@ import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.IDTO;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.enums.UserRole;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
@@ -47,6 +48,8 @@ public class MainViewController extends JfxController {
     @FXML private CheckBox _feeNotPaidCheckbox;
 
     private SearchResultViewController _searchResultViewController;
+    
+    private UserRole _userRole;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -274,5 +277,9 @@ public class MainViewController extends JfxController {
         public String toString() {
             return _stringValue;
         }
+    }
+    
+    public void setUserRole(UserRole userRole){
+    	_userRole = userRole;
     }
 }
