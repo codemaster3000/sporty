@@ -66,9 +66,10 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
                 Hashtable<String, String> env = new Hashtable<>();
                 env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
                 env.put(Context.PROVIDER_URL, "ldaps://ldap.fhv.at:636/dc=uclv,dc=net");
-                env.put(Context.SECURITY_AUTHENTICATION, "simple");
+                env.put(Context.SECURITY_AUTHENTICATION, "simple"); //
                 env.put(Context.SECURITY_PRINCIPAL, "uid=" + username + ", ou=fhv, ou=People, dc=uclv, dc=net");
                 env.put(Context.SECURITY_CREDENTIALS, password);
+                env.put(Context.SECURITY_PROTOCOL, "ssl"); //use SSL
 
                 try {
                     /* the next line tries to login to LDAP */
