@@ -72,16 +72,17 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
      * @param tournamentDTO
      */
     @Override
-    public void createNewMatch(String team1, String team2, String date, TournamentDTO tournamentDTO) {
+    public void createNewMatch(String team1, String team2, String time, String place, TournamentDTO tournamentDTO) {
         
     	//TODO this is not yet finished + not reviewed!
         List<MatchDTO> matches = tournamentDTO.getMatches();
 
         MatchDTO newMatch = new MatchDTO();
 
-        newMatch.setTime(date);
+        newMatch.setTime(time);
         newMatch.setTeam1(team1);
         newMatch.setTeam2(team2);
+        newMatch.setCourt(place);
 
         matches.add(newMatch);
 

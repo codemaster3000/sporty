@@ -49,7 +49,7 @@ public interface ITournamentController extends Remote, Serializable{
      * @param date
      * @param tournamentDTO
      */
-	void createNewMatch(String team1, String team2, String date, TournamentDTO tournamentDTO);
+    void createNewMatch(String team1, String team2, String time, String place, TournamentDTO tournamentDTO);
 
 	/**
      * addTeamToTournament()
@@ -58,5 +58,7 @@ public interface ITournamentController extends Remote, Serializable{
      * @param tournamentId
      */
 	void addTeamToTournament(String teamId, String tournamentId);
+
+	
 	
 }
