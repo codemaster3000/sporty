@@ -2,16 +2,14 @@ package at.sporty.team1.application.controller;
 
 
 import at.sporty.team1.domain.Member;
-import at.sporty.team1.domain.Team;
 import at.sporty.team1.domain.interfaces.IMember;
-import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.domain.readonly.IRMember;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.DataType;
+import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -228,19 +226,21 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public void deleteMember(MemberDTO memberDTO)
-    throws RemoteException {
+    public void deleteMember(Integer memberId)
+    throws RemoteException, UnknownEntityException {
         try {
 
-            PersistenceFacade.getNewMemberDAO().delete(
-                MAPPER.map(memberDTO, Member.class)
-            );
+            if (memberId == null) throw new UnknownEntityException(IMember.class);
+
+            Member member = PersistenceFacade.getNewMemberDAO().findById(memberId);
+            if (member == null) throw new UnknownEntityException(IMember.class);
+
+            PersistenceFacade.getNewMemberDAO().delete(member);
 
         } catch (PersistenceException e) {
             LOGGER.error(
-                "An error occurs while deleting member \"{}\".",
-                memberDTO.getFirstName(),
-                memberDTO.getLastName(),
+                "An error occurs while deleting Member #{}.",
+                memberId,
                 e
             );
         }

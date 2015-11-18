@@ -3,6 +3,7 @@ package at.sporty.team1.rmi.api;
 
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 
 import java.io.Serializable;
@@ -77,9 +78,9 @@ public interface IMemberController extends Remote, Serializable {
     /**
      * Deletes member form the data storage with data from the DTO.
      *
-     * @param memberDTO DTO of a member who will be deleted
+     * @param memberId DTO of a member who will be deleted
      * @throws RemoteException
      */
-    void deleteMember(MemberDTO memberDTO)
-    throws RemoteException;
+    void deleteMember(Integer memberId)
+    throws RemoteException, UnknownEntityException;
 }

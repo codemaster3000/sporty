@@ -6,6 +6,7 @@ import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.ITeamController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.dozer.DozerBeanMapper;
 import org.junit.Assert;
@@ -142,12 +143,12 @@ public class NewMemberTest {
 
 		//removing and checking if removed
         try {
-            removeFromDB(receivedMemberDTO);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            Assert.fail("NOT REMOVED FROM DB");
-        }
-        Assert.assertNull(findMemberByEmail(receivedMemberDTO));
+            removeFromDB(receivedMemberDTO.getMemberId());
+        } catch (RemoteException | UnknownEntityException e) {
+			e.printStackTrace();
+			Assert.fail("NOT REMOVED FROM DB");
+		}
+		Assert.assertNull(findMemberByEmail(receivedMemberDTO));
 	}
 
 	private void createNewMemberTest(MemberDTO memberDTO) throws RemoteException, ValidationException {
@@ -160,7 +161,6 @@ public class NewMemberTest {
         return members != null && members.size() == 1 ? members.get(0) : null;
 	}
 
-	private void removeFromDB(MemberDTO memberDTO) throws RemoteException {
-        new MemberController().deleteMember(memberDTO);
+	private void removeFromDB(Integer memberId) throws RemoteException, UnknownEntityException {
 	}
 }
