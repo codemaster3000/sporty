@@ -61,12 +61,6 @@ public class MainApp extends Application {
 	public void stop() throws Exception {
 	}
 
-	/**
-	 * TODO comment
-	 *
-	 * @param initStage
-	 *            ...the FX-initial-Stage
-	 */
 	@Override
 	public void start(Stage initStage) {
 		URL securityPoliciesURL = getClass().getClassLoader().getResource(PATH_TO_SECURITY_POLICIES_FILE);
