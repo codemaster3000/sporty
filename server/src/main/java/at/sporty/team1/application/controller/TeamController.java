@@ -58,7 +58,7 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
             LOGGER.info("Team \"{}\" was successfully saved.", teamDTO.getTeamName());
 
         } catch (PersistenceException e) {
-            LOGGER.error("Error occurs while communicating with DB.", e);
+            LOGGER.error("Error occurred while communicating with DB.", e);
         }
     }
 
@@ -83,7 +83,7 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
 
         } catch (PersistenceException e) {
             LOGGER.error(
-                "An error occurs while searching for \"all Teams by Member #{}\".",
+                "An error occurred while searching for \"all Teams by Member #{}\".",
                 memberId,
                 e
             );
@@ -116,7 +116,7 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
 
         } catch (PersistenceException e) {
             LOGGER.error(
-                "An error occurs while getting \"all Members for Team #{}\".",
+                "An error occurred while getting \"all Members for Team #{}\".",
                 teamId,
                 e
             );
@@ -146,7 +146,7 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
 
         } catch (PersistenceException e) {
             LOGGER.error(
-                "An error occurs while assigning \"Member #{} to Team #{}\".",
+                "An error occurred while assigning \"Member #{} to Team #{}\".",
                 memberId,
                 teamId,
                 e
@@ -176,7 +176,7 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
 
         } catch (PersistenceException e) {
             LOGGER.error(
-                "An error occurs while removing \"Member #{} from Team #{}\".",
+                "An error occurred while removing \"Member #{} from Team #{}\".",
                 memberId,
                 teamId,
                 e

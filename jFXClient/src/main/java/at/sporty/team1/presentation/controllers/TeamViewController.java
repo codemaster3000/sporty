@@ -129,7 +129,7 @@ public class TeamViewController extends JfxController {
                     }
                 }
             } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
-                LOGGER.error("Error occurs while loading all Departments and their Teams.", e);
+                LOGGER.error("Error occurred while loading all Departments and their Teams.", e);
             }
         }).start();
 
@@ -170,7 +170,7 @@ public class TeamViewController extends JfxController {
                 }
 
             } catch (RemoteException | NotBoundException | MalformedURLException e) {
-                LOGGER.error("Error occurs while displaying team data.", e);
+                LOGGER.error("Error occurred while displaying team data.", e);
             } catch (UnknownEntityException e) {
                 LOGGER.error("DTO was not saved in Data Storage before loading all Members from Team.", e);
             }
@@ -203,7 +203,7 @@ public class TeamViewController extends JfxController {
 
             }
         } catch (RemoteException | NotBoundException | MalformedURLException e) {
-            LOGGER.error("Error occurs while removing member from the team.", e);
+            LOGGER.error("Error occurred while removing member from the team.", e);
         } catch (UnknownEntityException e) {
             LOGGER.error("DTO was not saved in Data Storage before removing Member from Team.", e);
         }
@@ -237,7 +237,7 @@ public class TeamViewController extends JfxController {
                 dispose();
 
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
-                LOGGER.error("Error occurs while saving the team.", e);
+                LOGGER.error("Error occurred while saving the team.", e);
             } catch (ValidationException e) {
                 String context = String.format("Validation exception %s while saving team.", e.getCause());
 

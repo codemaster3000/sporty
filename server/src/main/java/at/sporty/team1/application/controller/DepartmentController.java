@@ -49,7 +49,7 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
                     .collect(Collectors.toList());
 
         } catch (PersistenceException e) {
-            LOGGER.error("An error occurs while searching for \"all Departments\".", e);
+            LOGGER.error("An error occurred while searching for \"all Departments\".", e);
             return null;
         }
     }
@@ -79,7 +79,7 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
 
         } catch (PersistenceException e) {
             LOGGER.error(
-                "An error occurs while getting \"all Teams for Department #{}\".",
+                "An error occurred while getting \"all Teams for Department #{}\".",
                 departmentId,
                 e
             );

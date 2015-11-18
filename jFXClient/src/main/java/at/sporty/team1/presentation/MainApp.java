@@ -1,15 +1,12 @@
 package at.sporty.team1.presentation;
 
 import at.sporty.team1.communication.CommunicationFacade;
-import at.sporty.team1.presentation.controllers.LoginViewController;
 import at.sporty.team1.presentation.controllers.MainViewController;
 import at.sporty.team1.rmi.enums.UserRole;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Application;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -66,14 +63,14 @@ public class MainApp extends Application {
 			performLogin();
 
 		} else {
-			LOGGER.error("Error occurs while starting a client. Security policies were not found.");
+			LOGGER.error("Error occurred while starting a client. Security policies were not found.");
 		}
 	}
 	
 	private void performLogin() {
 		try {
 			
-			Optional<Pair<String, String>> result = GUIHelper.showLoginForm();
+			Optional<Pair<String, String>> result = GUIHelper.showLoginDialog();
 			if (result.isPresent()) {
 				Pair<String, String> loginData = result.get();
 				

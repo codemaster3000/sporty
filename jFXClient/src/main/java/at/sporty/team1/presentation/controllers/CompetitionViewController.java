@@ -47,7 +47,7 @@ public class CompetitionViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SUCCESSFUL_TOURNAMENT_SAVE = "Tournament was saved successfully.";
     private static final String SUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = " Tournament Teams were saved successfully.";
-    private static final String UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = "Error occurs while saving Teams to Tournament.";
+    private static final String UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = "Error occurred while saving Teams to Tournament.";
     private static final Label NO_CONTENT_PLACEHOLDER = new Label("No Content");
 
     private TournamentDTO _activeCompetition;
@@ -238,7 +238,7 @@ public class CompetitionViewController extends JfxController {
                 _teamToCompetitionComboBox.setItems(teamObservableList);
 
             } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
-            	LOGGER.error("Error occurs while searching all Teams by Department.", e);
+            	LOGGER.error("Error occurred while searching all Teams by Department.", e);
             }
             
             /**
@@ -319,7 +319,7 @@ public class CompetitionViewController extends JfxController {
                 dispose();
 
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
-                LOGGER.error("Error occurs while saving the tournament.", e);
+                LOGGER.error("Error occurred while saving the tournament.", e);
             } catch (ValidationException e) {
                 String context = String.format("Validation exception \"%s\" while saving tournament.", e.getCause());
 

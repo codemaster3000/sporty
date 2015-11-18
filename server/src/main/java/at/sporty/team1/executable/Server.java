@@ -55,7 +55,7 @@ public class Server {
             listenForCommands();
 
         } catch (Exception e) {
-            LOGGER.error("Error occurs on server initialisation stage.", e);
+            LOGGER.error("Error occurred on server initialisation stage.", e);
         }
     }
 
@@ -102,7 +102,7 @@ public class Server {
                 }
             }
         } catch (Exception e) {
-            LOGGER.error("Problem occurs while handling command.", e);
+            LOGGER.error("Problem occurred while handling command.", e);
         }
     }
 

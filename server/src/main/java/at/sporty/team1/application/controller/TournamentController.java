@@ -54,7 +54,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
                     .collect(Collectors.toList());
 
         } catch (PersistenceException e) {
-            LOGGER.error("An error occurs while getting all Tournaments ", e);
+            LOGGER.error("An error occurred while getting all Tournaments ", e);
             return null;
         }
     }
@@ -77,7 +77,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
 
         } catch (PersistenceException e) {
             LOGGER.error(
-                "An Error occurs while getting all teams by Tournament #{}.",
+                "An Error occurred while getting all teams by Tournament #{}.",
                 tournamentId,
                 e
             );
@@ -112,7 +112,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
 
         } catch (PersistenceException e) {
             LOGGER.error(
-                "An Error occurs while getting all matches for Tournament #{}.",
+                "An Error occurred while getting all matches for Tournament #{}.",
                 tournamentId,
                 e
             );
@@ -145,7 +145,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
             PersistenceFacade.getNewTournamentDAO().saveOrUpdate(tournament);
         } catch (PersistenceException e) {
             LOGGER.error(
-                "An error occurs while adding a Team \"{}\" to a Tournament #{}",
+                "An error occurred while adding a Team \"{}\" to a Tournament #{}",
                 teamName,
                 tournamentId,
                 e
@@ -180,7 +180,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
             return tournament.getTournamentId();
 
         } catch (PersistenceException e) {
-            LOGGER.error("Error occurs while communicating with DB.", e);
+            LOGGER.error("Error occurred while communicating with DB.", e);
             return null;
         }
 	}
@@ -220,7 +220,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
             PersistenceFacade.getNewTournamentDAO().saveOrUpdate(tournament);
 
         } catch (PersistenceException e) {
-            LOGGER.error("An Error occurs during adding a new Match to the Tournament: ", e);
+            LOGGER.error("An Error occurred during adding a new Match to the Tournament: ", e);
         }
     }
 }

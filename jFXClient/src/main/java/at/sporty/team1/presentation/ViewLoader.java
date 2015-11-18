@@ -2,6 +2,7 @@ package at.sporty.team1.presentation;
 
 import at.sporty.team1.presentation.controllers.*;
 import at.sporty.team1.presentation.controllers.core.IJfxController;
+import at.sporty.team1.presentation.dialogs.LoginDialog;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 
@@ -31,7 +32,7 @@ public class ViewLoader<T extends IJfxController> {
 		_viewPaths.put(SearchResultViewController.class, "/at/sporty/team1/presentation/views/SearchResultView.fxml");
 		_viewPaths.put(TestViewController.class, "/at/sporty/team1/presentation/views/TestView.fxml");
 		_viewPaths.put(CompetitionViewController.class, "/at/sporty/team1/presentation/views/CompetitionView.fxml");
-		_viewPaths.put(LoginViewController.class, "/at/sporty/team1/presentation/views/LoginView.fxml");
+		_viewPaths.put(LoginMaskViewController.class, "/at/sporty/team1/presentation/views/LoginMaskView.fxml");
 	}
 
 	private FXMLLoader _loader;

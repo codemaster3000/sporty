@@ -22,7 +22,7 @@ public class SQLDateConverter implements AttributeConverter<String, Date> {
         try {
             return attribute != null ? Date.valueOf(attribute) : null;
         } catch (IllegalArgumentException e) {
-            LOGGER.warn("Error occurs while parsing date \"{}\".", attribute);
+            LOGGER.warn("Error occurred while parsing date \"{}\".", attribute);
             return null;
         }
     }

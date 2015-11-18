@@ -157,9 +157,9 @@ public class MainViewController extends JfxController {
                     }
 
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
-                    LOGGER.error("Error occurs while searching.", e);
+                    LOGGER.error("Error occurred while searching.", e);
                 } catch (ValidationException e) {
-                    LOGGER.error("Error occurs while searching.", e);
+                    LOGGER.error("Error occurred while searching.", e);
 
                     Platform.runLater(() -> {
                         GUIHelper.showValidationAlert(NOT_VALID_SEARCH_INPUT);
@@ -179,7 +179,7 @@ public class MainViewController extends JfxController {
                     displaySearchResults(memberController.searchAllMembers( _checkboxNotPaid, _checkboxPaid));
 
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
-                    LOGGER.error("Error occurs while searching.", e);
+                    LOGGER.error("Error occurred while searching.", e);
                 }
 
             }).start();

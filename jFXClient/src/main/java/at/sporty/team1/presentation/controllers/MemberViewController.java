@@ -200,7 +200,7 @@ public class MemberViewController extends JfxController {
                     }
                 }
             } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
-                LOGGER.error("Error occurs while loading all Departments and their Teams.", e);
+                LOGGER.error("Error occurred while loading all Departments and their Teams.", e);
             }
         }).start();
 	}
@@ -288,7 +288,7 @@ public class MemberViewController extends JfxController {
 					}
 				}
 			} catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
-                LOGGER.error("Error occurs while loading Member data (Teams).", e);
+                LOGGER.error("Error occurred while loading Member data (Teams).", e);
 			}
 
             role = _activeMemberDTO.getRole();
@@ -376,7 +376,7 @@ public class MemberViewController extends JfxController {
                 dispose();
 
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
-                LOGGER.error("Error occurs while saving the member.", e);
+                LOGGER.error("Error occurred while saving the member.", e);
             } catch (ValidationException e) {
             	String context = String.format("Validation exception %s while saving member.", e.getCause());
             	
@@ -432,7 +432,7 @@ public class MemberViewController extends JfxController {
             }
 
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
-            LOGGER.error("Error occurs while assigning Member to Team.", e);
+            LOGGER.error("Error occurred while assigning Member to Team.", e);
         } catch (UnknownEntityException e) {
             LOGGER.error("DTO was not saved in Data Storage before assigning Member to Team.", e);
         }

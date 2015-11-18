@@ -68,7 +68,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             LOGGER.info("Member \"{} {}\" was successfully saved.", memberDTO.getFirstName(), memberDTO.getLastName());
             return member.getMemberId();
         } catch (PersistenceException e) {
-            LOGGER.error("Error occurs while communicating with DB.", e);
+            LOGGER.error("Error occurred while communicating with DB.", e);
             return null;
         }
     }
@@ -93,7 +93,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
                     .collect(Collectors.toList());
 
         } catch (PersistenceException e) {
-            LOGGER.error("An error occurs while searching for \"all Members\".", e);
+            LOGGER.error("An error occurred while searching for \"all Members\".", e);
             return null;
         }
     }
@@ -125,7 +125,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
                     .collect(Collectors.toList());
 
         } catch (PersistenceException e) {
-            LOGGER.error("An error occurs while searching for \"{}\".", searchString, e);
+            LOGGER.error("An error occurred while searching for \"{}\".", searchString, e);
             return null;
         }
     }
@@ -157,7 +157,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
                     .collect(Collectors.toList());
 
         } catch (PersistenceException e) {
-            LOGGER.error("An error occurs while searching for \"{}\".", teamName, e);
+            LOGGER.error("An error occurred while searching for \"{}\".", teamName, e);
             return null;
         }
     }
@@ -189,7 +189,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
                     .collect(Collectors.toList());
 
         } catch (PersistenceException e) {
-            LOGGER.error("An error occurs while searching for \"{}\".", teamName, e);
+            LOGGER.error("An error occurred while searching for \"{}\".", teamName, e);
             return null;
         }
     }
@@ -220,7 +220,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
                     .collect(Collectors.toList());
 
         } catch (PersistenceException e) {
-            LOGGER.error("An error occurs while searching for \"{}\".", dateOfBirth, e);
+            LOGGER.error("An error occurred while searching for \"{}\".", dateOfBirth, e);
             return null;
         }
     }
@@ -239,7 +239,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
         } catch (PersistenceException e) {
             LOGGER.error(
-                "An error occurs while deleting Member #{}.",
+                "An error occurred while deleting Member #{}.",
                 memberId,
                 e
             );
