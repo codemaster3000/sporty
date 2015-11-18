@@ -38,7 +38,7 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
      * @brief checks if a login is valid by comparing the login information to the database
      * if the login is valid it prompts the default screen associated with the employees class
      * if the login is invalid it logs the failed login attempt and prompts the loginscreen again
-     *
+     * <p>
      * UNSUCCESSFUL_LOGIN false
      * ADMIN
      * MEMBER
@@ -69,13 +69,25 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
                 env.put(Context.SECURITY_CREDENTIALS, password);
                 env.put(Context.SECURITY_PROTOCOL, "ssl"); //use SSL
 
+                /*
+                env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+
+        env.put(Context.PROVIDER_URL, "ldaps://ldap.fhv.at:636/dc=uclv,dc=net");
+
+        env.put(Context.SECURITY_AUTHENTICATION, "simple");
+
+        env.put(Context.SECURITY_PRINCIPAL, "uid=" + username + ", ou=fhv, ou=People, dc=uclv, dc=net");
+
+        env.put(Context.SECURITY_CREDENTIALS, password);
+                 */
+
                 try {
                     /* the next line tries to login to LDAP */
-                    InitialDirContext ctx = new InitialDirContext(env);    
-                    LOGGER.info("Successful login of {}.", username);            
+                    InitialDirContext ctx = new InitialDirContext(env);
+                    LOGGER.info("Successful login of {}.", username);
                     // close context
                     ctx.close();
-                    
+
                 } catch (AuthenticationException ae) {
                     /* login unsuccessful */
                     LOGGER.error("Invalid login attempt by {}.", username);
@@ -91,32 +103,32 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
 
             // get role of current user from database
             UserRole currentRole = getUserRole(username);
-            
-            if(currentRole == null){
-            	return UserRole.UNSUCCESSFUL_LOGIN;
+
+            if (currentRole == null) {
+                return UserRole.UNSUCCESSFUL_LOGIN;
             } else {
-            	return currentRole;
+                return currentRole;
             }
 
         } /* pw or username do not match InputSanitizers check.. */
 
         LOGGER.warn("Login attempt failed: Inputsanitizercheck went bad");
-        
+
         return UserRole.UNSUCCESSFUL_LOGIN;
 
     }
-    
-    private UserRole getUserRole(String username){
-    	
+
+    private UserRole getUserRole(String username) {
+
         List<Member> members;
         String role;
 
         /* get the role of this user from our db */
         try {
             members = PersistenceFacade.getNewMemberDAO().findByUsername(username);
-            
-            if(members == null || members.isEmpty()) return UserRole.UNSUCCESSFUL_LOGIN;
-            
+
+            if (members == null || members.isEmpty()) return UserRole.UNSUCCESSFUL_LOGIN;
+
             role = members.get(0).getRole();
 
             /* return according to userrole */
@@ -139,7 +151,7 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
             pe.printStackTrace();
             return UserRole.UNSUCCESSFUL_LOGIN;
         }
-        
+
         return UserRole.UNSUCCESSFUL_LOGIN;
     }
 }
