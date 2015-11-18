@@ -380,14 +380,29 @@ public class CompetitionViewController extends JfxController {
                 GUIHelper.showSuccessAlert(counter + SUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE);
             }
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
-        	LOGGER.error("", e);
-        	GUIHelper.showAlert(AlertType.ERROR, "ERROR", UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE, "Error occurs while save Teams to Tournament");
-        } catch (UnknownEntityException e) {
-        	LOGGER.error("", e);
-        	GUIHelper.showAlert(AlertType.ERROR, "ERROR", UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE, "Error occurs while save Teams to Tournament");
-        } catch (ValidationException e) {
+        	GUIHelper.showAlert(
+                AlertType.ERROR,
+                "ERROR",
+                UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE,
+                "Error occurs while save Teams to Tournament"
+            );
             LOGGER.error("", e);
-            GUIHelper.showAlert(AlertType.ERROR, "ERROR", UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE, "Error occured while save Teams to Tournament");
+        } catch (UnknownEntityException e) {
+        	GUIHelper.showAlert(
+                AlertType.ERROR,
+                "ERROR",
+                UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE,
+                "Error occurs while save Teams to Tournament"
+            );
+            LOGGER.error("", e);
+        } catch (ValidationException e) {
+            GUIHelper.showAlert(
+                AlertType.ERROR,
+                "ERROR",
+                UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE,
+                "Error occured while save Teams to Tournament"
+            );
+            LOGGER.error("", e);
         }
     }
 
