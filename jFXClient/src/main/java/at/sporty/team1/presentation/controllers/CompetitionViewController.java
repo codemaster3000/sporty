@@ -44,12 +44,11 @@ import javafx.util.StringConverter;
 
 public class CompetitionViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String SUCCESSFUL_TOURNAMENT_SAVE = "Tournament was successfully saved.";
-    private static final String SUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = "Tournamentteams were successfully saved.";
-    private static final String UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = "Tournamentteams were not successfully saved.";
+    private static final String SUCCESSFUL_TOURNAMENT_SAVE = "Tournament was saved successfully.";
+    private static final String SUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = " Tournament Teams were saved successfully.";
+    private static final String UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = "Error occurs while saving Teams to Tournament.";
     private static final Label NO_CONTENT_PLACEHOLDER = new Label("No Content");
 
-    private ObservableList<MatchDTO> _matches;
     private TournamentDTO _activeCompetition;
 
     @FXML
@@ -206,9 +205,7 @@ public class CompetitionViewController extends JfxController {
             tempList.add(new MatchDTO());
         }
 
-        _matches = FXCollections.observableList(tempList);
-        _matchTableView.setItems(_matches);
-
+        _matchTableView.setItems(FXCollections.observableList(tempList));
     }
 
     private void setVisibleOfMatchesView(boolean view) {
@@ -233,14 +230,14 @@ public class CompetitionViewController extends JfxController {
                 ITeamController teamController = CommunicationFacade.lookupForTeamController();
 
                 List<TeamDTO> ownTournamentTeams = teamController.searchByDepartment(
-                        _tournamentDepartmentComboBox.getSelectionModel().getSelectedItem()
+                    _tournamentDepartmentComboBox.getSelectionModel().getSelectedItem()
                 );
 
                 ObservableList<TeamDTO> teamObservableList = FXCollections.observableList(ownTournamentTeams);
                 _teamToCompetitionComboBox.setItems(teamObservableList);
 
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
-            	LOGGER.error("", e);           
+            	LOGGER.error("Error occurs while searching all Teams by Department.", e);
             }
             
             /**
@@ -317,13 +314,13 @@ public class CompetitionViewController extends JfxController {
                 setVisibleOfTournamentTeamView(true);
 
                 //Logging and cleaning the tab
-                LOGGER.info("Tournament \"{} {}\" was successfully saved.", dept, date);
+                LOGGER.info("Tournament \"{} {}\" was successfully saved.", dept.getSport(), date);
                 dispose();
 
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
                 LOGGER.error("Error occurs while saving the tournament.", e);
             } catch (ValidationException e) {
-                String context = String.format("Validation exception %s while saving tournament.", e.getCause());
+                String context = String.format("Validation exception \"%s\" while saving tournament.", e.getCause());
 
                 GUIHelper.showValidationAlert(context);
                 LOGGER.error(context, e);
@@ -335,14 +332,12 @@ public class CompetitionViewController extends JfxController {
     public void saveMatches(ActionEvent event) {
 
         //TODO: save Matches to _activeTournament
-
     }
 
     @FXML
     public void removeSelectedMatch(ActionEvent event) {
 
-    	_matchTableView.getSelectionModel().clearSelection();;
-
+    	_matchTableView.getSelectionModel().clearSelection();
     }
 
     @FXML
@@ -366,43 +361,41 @@ public class CompetitionViewController extends JfxController {
     public void saveTeamsToTournament(ActionEvent event) {
 
         List<String> teams = _competitionTeamsListView.getItems();
-        int counter = 0;
+
 
         try {
             ITournamentController tournamentController = CommunicationFacade.lookupForTournamentController();
 
             if ((_activeCompetition != null) && (teams != null) && (!teams.isEmpty())) {
 
+                int savedTeamsCounter = 0;
+
                 for (String team : teams) {
                     tournamentController.assignTeamToTournament(team, _activeCompetition.getId());
-                    counter++;
+                    ++savedTeamsCounter;
                 }
-                GUIHelper.showSuccessAlert(counter + SUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE);
+
+                GUIHelper.showSuccessAlert(savedTeamsCounter + SUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE);
             }
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
-        	GUIHelper.showAlert(
-                AlertType.ERROR,
-                "ERROR",
-                UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE,
-                "Error occurs while save Teams to Tournament"
-            );
-            LOGGER.error("", e);
+
+        	GUIHelper.showErrorAlert(UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE);
+            LOGGER.error(UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE + "[Communication problem]", e);
+
         } catch (UnknownEntityException e) {
-        	GUIHelper.showAlert(
-                AlertType.ERROR,
-                "ERROR",
-                UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE,
-                "Error occurs while save Teams to Tournament"
-            );
-            LOGGER.error("", e);
+
+        	GUIHelper.showErrorAlert(UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE);
+            LOGGER.error(UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE + "[Unknown entity in request]", e);
+
         } catch (ValidationException e) {
-            GUIHelper.showAlert(
-                AlertType.ERROR,
-                "ERROR",
-                UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE,
-                "Error occured while save Teams to Tournament"
+
+            GUIHelper.showErrorAlert(UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE);
+            LOGGER.error(
+                UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE + "[Validation problem \"{}\"]",
+                e.getReason(),
+                e
             );
-            LOGGER.error("", e);
+
         }
     }
 
@@ -410,6 +403,5 @@ public class CompetitionViewController extends JfxController {
     public void removeTeamFromTournament(ActionEvent event) {
 
         _competitionTeamsListView.getItems().remove(_competitionTeamsListView.getSelectionModel().getSelectedItem());
-
     }
 }

@@ -25,10 +25,11 @@ public interface IMemberController extends Remote, Serializable {
      * Creates new or saves old member in data storage with data from the DTO.
      *
      * @param memberDTO DTO for member creation or save
+     * @return Integer Id of the updated or saved entity.
      * @throws RemoteException
      * @throws ValidationException
      */
-    void createOrSaveMember(MemberDTO memberDTO)
+    Integer createOrSaveMember(MemberDTO memberDTO)
     throws RemoteException, ValidationException;
 
     /**

@@ -193,7 +193,7 @@ public class MainViewController extends JfxController {
 
         }else{
             Platform.runLater(() -> {
-                GUIHelper.showAlert(
+                GUIHelper.showCustomAlert(
                     Alert.AlertType.INFORMATION,
                     NO_RESULTS_TITLE,
                     null,

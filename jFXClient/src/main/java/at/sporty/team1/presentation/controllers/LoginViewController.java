@@ -1,10 +1,8 @@
 package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
-import at.sporty.team1.presentation.ViewLoader;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.ILoginController;
-import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.enums.UserRole;
 import at.sporty.team1.util.GUIHelper;
 import javafx.event.ActionEvent;
@@ -64,7 +62,7 @@ public class LoginViewController extends JfxController {
             GUIHelper.showSuccessAlert("Login was successful. :)");
             _roleConsumer.accept(login());
         } else {
-            GUIHelper.showAlert(AlertType.ERROR, "Login error", null, "Invalid Username or Password.");
+            GUIHelper.showCustomAlert(AlertType.ERROR, "Login error", null, "Invalid Username or Password.");
         }
     }
 

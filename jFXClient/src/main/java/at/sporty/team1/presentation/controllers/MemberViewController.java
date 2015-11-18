@@ -253,6 +253,7 @@ public class MemberViewController extends JfxController {
 						switch (dept.getSport()) {
 							case "Volleyball": {
                                 memberSportCheckboxVolleyball.setSelected(true);
+                                memberTeamComboBoxSoccer.setDisable(false);
                                 memberTeamComboBoxVolleyball.getSelectionModel().select(team);
 
                                 break;
@@ -260,6 +261,7 @@ public class MemberViewController extends JfxController {
 
 							case "Football": {
                                 memberSportCheckboxFootball.setSelected(true);
+                                memberTeamComboBoxSoccer.setDisable(false);
                                 memberTeamComboBoxFootball.getSelectionModel().select(team);
 
                                 break;
@@ -267,6 +269,7 @@ public class MemberViewController extends JfxController {
 
 							case "Baseball": {
                                 memberSportCheckboxBaseball.setSelected(true);
+                                memberTeamComboBoxSoccer.setDisable(false);
                                 memberTeamComboBoxBaseball.getSelectionModel().select(team);
 
                                 break;
@@ -274,6 +277,7 @@ public class MemberViewController extends JfxController {
 
 							case "Soccer": {
                                 memberSportCheckboxSoccer.setSelected(true);
+                                memberTeamComboBoxSoccer.setDisable(false);
                                 memberTeamComboBoxSoccer.getSelectionModel().select(team);
 
                                 break;
@@ -359,10 +363,10 @@ public class MemberViewController extends JfxController {
                         //TODO
                         //.setSquad(squad)
 
-                setDepartmentAndTeam(_activeMemberDTO);
-
                 IMemberController imc = CommunicationFacade.lookupForMemberController();
-                imc.createOrSaveMember(_activeMemberDTO);
+                Integer memberId = imc.createOrSaveMember(_activeMemberDTO);
+
+                setDepartmentAndTeam(memberId);
 
                 GUIHelper.showSuccessAlert(SUCCESSFUL_MEMBER_SAVE);
 
@@ -381,7 +385,7 @@ public class MemberViewController extends JfxController {
         }
     }
 
-    private void setDepartmentAndTeam(MemberDTO _memberDTO) {
+    private void setDepartmentAndTeam(Integer memberId) {
 
     	try {
             ITeamController teamController = CommunicationFacade.lookupForTeamController();
@@ -391,7 +395,7 @@ public class MemberViewController extends JfxController {
 
                 TeamDTO teamDTO = memberTeamComboBoxBaseball.getSelectionModel().getSelectedItem();
                 teamController.assignMemberToTeam(
-                    _memberDTO.getMemberId(),
+                    memberId,
                     teamDTO.getTeamId()
                 );
             }
@@ -401,7 +405,7 @@ public class MemberViewController extends JfxController {
 
                 TeamDTO teamDTO = memberTeamComboBoxFootball.getSelectionModel().getSelectedItem();
                 teamController.assignMemberToTeam(
-                    _memberDTO.getMemberId(),
+                    memberId,
                     teamDTO.getTeamId()
                 );
             }
@@ -411,7 +415,7 @@ public class MemberViewController extends JfxController {
 
                 TeamDTO teamDTO = memberTeamComboBoxSoccer.getSelectionModel().getSelectedItem();
                 teamController.assignMemberToTeam(
-                    _memberDTO.getMemberId(),
+                    memberId,
                     teamDTO.getTeamId()
                 );
             }
@@ -421,7 +425,7 @@ public class MemberViewController extends JfxController {
 
                 TeamDTO teamDTO = memberTeamComboBoxVolleyball.getSelectionModel().getSelectedItem();
                 teamController.assignMemberToTeam(
-                    _memberDTO.getMemberId(),
+                    memberId,
                     teamDTO.getTeamId()
                 );
             }
@@ -486,8 +490,8 @@ public class MemberViewController extends JfxController {
         birthTextField.clear();
         emailTextField.clear();
         phoneTextField.clear();
-
         addressTextField.clear();
+
         radioGenderFemale.setSelected(false);
         radioGenderMale.setSelected(false);
 
@@ -501,10 +505,19 @@ public class MemberViewController extends JfxController {
         memberTeamComboBoxSoccer.setDisable(true);
         memberTeamComboBoxVolleyball.setDisable(true);
 
-        memberTeamComboBoxSoccer.getSelectionModel().clearSelection();
-        memberTeamComboBoxVolleyball.getSelectionModel().clearSelection();
-        memberTeamComboBoxBaseball.getSelectionModel().clearSelection();
-        memberTeamComboBoxFootball.getSelectionModel().clearSelection();
+        memberTeamComboBoxSoccer.getSelectionModel().select(null);
+        memberTeamComboBoxSoccer.setValue(null);
+
+        memberTeamComboBoxVolleyball.getSelectionModel().select(null);
+        memberTeamComboBoxSoccer.setValue(null);
+
+        memberTeamComboBoxBaseball.getSelectionModel().select(null);
+        memberTeamComboBoxSoccer.setValue(null);
+
+        memberTeamComboBoxFootball.getSelectionModel().select(null);
+        memberTeamComboBoxSoccer.setValue(null);
+
+        roleComboBox.getSelectionModel().select(RoleType.MEMBER);
     }
     
     private enum RoleType {

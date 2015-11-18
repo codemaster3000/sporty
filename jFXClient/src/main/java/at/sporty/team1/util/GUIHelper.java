@@ -18,24 +18,45 @@ public class GUIHelper {
     }
 
     public static Optional<ButtonType> showValidationAlert(String context) {
-        return GUIHelper.showAlert(
-            Alert.AlertType.INFORMATION,
+        return showExtendedValidationAlert(null, context);
+    }
+
+    public static Optional<ButtonType> showExtendedValidationAlert(String header, String context) {
+        return showCustomAlert(
+            Alert.AlertType.WARNING,
             "Validation problem",
-            "Validation problem occurs.",
+            header,
             context
         );
     }
-
+    
     public static Optional<ButtonType> showSuccessAlert(String context) {
-        return GUIHelper.showAlert(
+        return showExtendedSuccessAlert(null, context);
+    }
+
+    public static Optional<ButtonType> showExtendedSuccessAlert(String header, String context) {
+        return showCustomAlert(
             Alert.AlertType.INFORMATION,
             "Success",
-            null,
+            header,
             context
         );
     }
 
-    public static Optional<ButtonType> showAlert(Alert.AlertType type, String title, String header, String context) {
+    public static Optional<ButtonType> showErrorAlert(String context) {
+        return showExtendedErrorAlert(null, context);
+    }
+
+    public static Optional<ButtonType> showExtendedErrorAlert(String header, String context) {
+        return showCustomAlert(
+            Alert.AlertType.ERROR,
+            "Error",
+            header,
+            context
+        );
+    }
+
+    public static Optional<ButtonType> showCustomAlert(Alert.AlertType type, String title, String header, String context) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(header);

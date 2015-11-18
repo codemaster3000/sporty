@@ -40,10 +40,10 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public void createOrSaveMember(MemberDTO memberDTO)
+    public Integer createOrSaveMember(MemberDTO memberDTO)
     throws RemoteException, ValidationException {
 
-        if (memberDTO == null) return;
+        if (memberDTO == null) return null;
 
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -62,15 +62,16 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         /* Is valid, moving forward */
         try {
 
+            Member member = MAPPER.map(memberDTO, Member.class);
+
             /* pulling a MemberDAO and save the Member */
-            PersistenceFacade.getNewMemberDAO().saveOrUpdate(
-                MAPPER.map(memberDTO, Member.class)
-            );
+            PersistenceFacade.getNewMemberDAO().saveOrUpdate(member);
 
             LOGGER.info("Member \"{} {}\" was successfully saved.", memberDTO.getFirstName(), memberDTO.getLastName());
-
+            return member.getMemberId();
         } catch (PersistenceException e) {
             LOGGER.error("Error occurs while communicating with DB.", e);
+            return null;
         }
     }
     

@@ -86,8 +86,4 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
             return null;
         }
     }
-
-
-
-
 }
