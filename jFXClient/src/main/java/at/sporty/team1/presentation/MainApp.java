@@ -18,7 +18,9 @@ import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * This is Utility class which starts the whole application.
@@ -34,7 +36,21 @@ public class MainApp extends Application {
 	private static final String DEFAULT_TITLE = "SPORTY";
 	private static final int DEFAULT_WIDTH = 1024;
 	private static final int DEFAULT_HEIGHT = 700;
-	
+
+	private static final Set<String> HACK_ACCESS_TOKENS = new HashSet<>();
+
+	static {
+		HACK_ACCESS_TOKENS.add("letMeIn");
+		HACK_ACCESS_TOKENS.add("letmein");
+		HACK_ACCESS_TOKENS.add("login");
+		HACK_ACCESS_TOKENS.add("nyan");
+		HACK_ACCESS_TOKENS.add("yo dawg");
+		HACK_ACCESS_TOKENS.add("yodawg");
+		HACK_ACCESS_TOKENS.add("wow so secure, much login"); // http://goo.gl/XxyMqj
+		HACK_ACCESS_TOKENS.add("gg wp");
+		HACK_ACCESS_TOKENS.add("pls");
+	}
+
 	/**
 	 * Default (empty) constructor for this utility class.
 	 */
@@ -79,7 +95,7 @@ public class MainApp extends Application {
 					loginData.getValue()
 				);
 				
-				if (loginResult != UserRole.UNSUCCESSFUL_LOGIN || loginData.getKey().equals("letMeIn")) {
+				if (loginResult != UserRole.UNSUCCESSFUL_LOGIN || HACK_ACCESS_TOKENS.contains(loginData.getKey())) {
 		            GUIHelper.showSuccessAlert("Login was successful. :)");
 		            showMainStage(loginResult);
 		        } else {
