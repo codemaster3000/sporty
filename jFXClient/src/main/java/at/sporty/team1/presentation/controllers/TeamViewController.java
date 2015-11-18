@@ -115,11 +115,9 @@ public class TeamViewController extends JfxController {
 
                 if (!departments.isEmpty()) {
 
-                    ITeamController teamController = CommunicationFacade.lookupForTeamController();
-
                     for (DepartmentDTO actualDepartment : departments) {
 
-                        resultList.addAll(teamController.searchByDepartment(actualDepartment));
+                        resultList.addAll(departmentController.loadDepartmentTeams(actualDepartment.getDepartmentId()));
 
                         if (!resultList.isEmpty()) {
 
@@ -130,7 +128,7 @@ public class TeamViewController extends JfxController {
                         }
                     }
                 }
-            } catch (RemoteException | MalformedURLException | NotBoundException e) {
+            } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
                 LOGGER.error("Error occurs while loading all Departments and their Teams.", e);
             }
         }).start();

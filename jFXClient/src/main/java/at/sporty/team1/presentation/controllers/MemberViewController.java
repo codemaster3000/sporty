@@ -139,13 +139,15 @@ public class MemberViewController extends JfxController {
 
                 if (!departments.isEmpty()) {
 
-                    ITeamController teamController = CommunicationFacade.lookupForTeamController();
+                    IDepartmentController deptController = CommunicationFacade.lookupForDepartmentController();
 
                     for (DepartmentDTO actualDepartment : departments) {
+                        Integer departmentId = actualDepartment.getDepartmentId();
 
                         switch (actualDepartment.getSport()) {
                             case "Soccer": {
-                                List<TeamDTO> resultList = teamController.searchByDepartment(actualDepartment);
+
+                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(departmentId);
                                 if (resultList != null) {
 
                                     //loading values to comboBox
@@ -158,7 +160,7 @@ public class MemberViewController extends JfxController {
                             }
 
                             case "Volleyball": {
-                                List<TeamDTO> resultList = teamController.searchByDepartment(actualDepartment);
+                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(departmentId);
                                 if (resultList != null) {
 
                                     //loading values to comboBox
@@ -171,7 +173,7 @@ public class MemberViewController extends JfxController {
                             }
 
                             case "Baseball": {
-                                List<TeamDTO> resultList = teamController.searchByDepartment(actualDepartment);
+                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(departmentId);
                                 if (resultList != null) {
 
                                     //loading values to comboBox
@@ -184,7 +186,7 @@ public class MemberViewController extends JfxController {
                             }
 
                             case "Football": {
-                                List<TeamDTO> resultList = teamController.searchByDepartment(actualDepartment);
+                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(departmentId);
                                 if (resultList != null) {
 
                                     //loading values to comboBox
@@ -197,7 +199,7 @@ public class MemberViewController extends JfxController {
                         }
                     }
                 }
-            } catch (RemoteException | MalformedURLException | NotBoundException e) {
+            } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
                 LOGGER.error("Error occurs while loading all Departments and their Teams.", e);
             }
         }).start();
@@ -242,7 +244,7 @@ public class MemberViewController extends JfxController {
 
             try {
 				teamController = CommunicationFacade.lookupForTeamController();
-				teams = teamController.searchTeamsByMember(_activeMemberDTO);
+				teams = teamController.searchTeamsByMember(_activeMemberDTO.getMemberId());
 				
 				if(teams != null){
 					
@@ -285,10 +287,9 @@ public class MemberViewController extends JfxController {
 						}
 					}
 				}
-			} catch (RemoteException | MalformedURLException | NotBoundException e) {
+			} catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
                 LOGGER.error("Error occurs while loading Member data (Teams).", e);
 			}
-
 
             role = _activeMemberDTO.getRole();
             

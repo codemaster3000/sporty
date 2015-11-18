@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.api.ITeamController;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import org.apache.logging.log4j.LogManager;
@@ -227,16 +228,16 @@ public class CompetitionViewController extends JfxController {
              */
             try {
 
-                ITeamController teamController = CommunicationFacade.lookupForTeamController();
+                IDepartmentController departmentController = CommunicationFacade.lookupForDepartmentController();
 
-                List<TeamDTO> ownTournamentTeams = teamController.searchByDepartment(
-                    _tournamentDepartmentComboBox.getSelectionModel().getSelectedItem()
+                List<TeamDTO> ownTournamentTeams = departmentController.loadDepartmentTeams(
+                    _tournamentDepartmentComboBox.getSelectionModel().getSelectedItem().getDepartmentId()
                 );
 
                 ObservableList<TeamDTO> teamObservableList = FXCollections.observableList(ownTournamentTeams);
                 _teamToCompetitionComboBox.setItems(teamObservableList);
 
-            } catch (RemoteException | MalformedURLException | NotBoundException e) {
+            } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
             	LOGGER.error("Error occurs while searching all Teams by Department.", e);
             }
             
