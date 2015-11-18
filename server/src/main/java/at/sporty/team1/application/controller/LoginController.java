@@ -53,7 +53,7 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
     public UserRole authorize(String username, String password) throws RemoteException {
 
         InputSanitizer sanitizer = new InputSanitizer();
-        
+
         /* check if username and password are given and the format of this strings is OK */
         if (!username.equals("") && !password.equals("") &&
                 sanitizer.isValid(username, DataType.USERNAME)
@@ -65,21 +65,9 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
                 env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
                 env.put(Context.PROVIDER_URL, "ldaps://ldap.fhv.at:636/dc=uclv,dc=net");
                 env.put(Context.SECURITY_AUTHENTICATION, "simple"); //
-                env.put(Context.SECURITY_PRINCIPAL, "uid=" + username + ", ou=fhv, ou=People, dc=uclv, dc=net");
+                env.put(Context.SECURITY_PRINCIPAL, "uid=" + username + ",ou=fhv,ou=people,dc=uclv,dc=net");
                 env.put(Context.SECURITY_CREDENTIALS, password);
-                env.put(Context.SECURITY_PROTOCOL, "ssl"); //use SSL
-
-                /*
-                env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-
-        env.put(Context.PROVIDER_URL, "ldaps://ldap.fhv.at:636/dc=uclv,dc=net");
-
-        env.put(Context.SECURITY_AUTHENTICATION, "simple");
-
-        env.put(Context.SECURITY_PRINCIPAL, "uid=" + username + ", ou=fhv, ou=People, dc=uclv, dc=net");
-
-        env.put(Context.SECURITY_CREDENTIALS, password);
-                 */
+                //env.put(Context.SECURITY_PROTOCOL, "ssl"); //use SSL
 
                 try {
                     /* the next line tries to login to LDAP */
