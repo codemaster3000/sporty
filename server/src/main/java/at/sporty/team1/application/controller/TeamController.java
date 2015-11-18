@@ -1,15 +1,12 @@
 package at.sporty.team1.application.controller;
 
-import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Team;
-import at.sporty.team1.domain.interfaces.IDepartment;
 import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.ITeamController;
-import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.DataType;
@@ -23,7 +20,6 @@ import org.dozer.Mapper;
 import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,44 +63,15 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
     }
 
     @Override
-    public List<TeamDTO> searchByDepartment(DepartmentDTO departmentDTO)
-    throws RemoteException {
+    public List<TeamDTO> searchTeamsByMember(Integer memberId)
+    throws RemoteException, UnknownEntityException {
 
-        if (departmentDTO == null) return null;
-
-        try {
-
-            /* pulling a TeamDAO and searching for all teams assigned to given Department */
-            List<? extends ITeam> rawResults = PersistenceFacade.getNewTeamDAO().findTeamsByDepartment(
-                MAPPER.map(departmentDTO, Department.class)
-            );
-
-            //checking if there are an results
-            if (rawResults == null || rawResults.isEmpty()) return null;
-
-            //Converting results to TeamDTO
-            return rawResults.stream()
-                    .map(team -> MAPPER.map(team, TeamDTO.class))
-                    .collect(Collectors.toList());
-
-        } catch (PersistenceException e) {
-            LOGGER.error("An error occurs while searching for \"{}\".", departmentDTO.getSport(), e);
-            return null;
-        }
-    }
-
-    @Override
-    public List<TeamDTO> searchTeamsByMember(MemberDTO memberDTO)
-    throws RemoteException {
-
-        if (memberDTO == null) return null;
+        if (memberId == null) throw new UnknownEntityException(IMember.class);
 
         try {
 
             /* pulling a TeamDAO and searching for all teams assigned to given Member */
-            List<? extends ITeam> rawResults = PersistenceFacade.getNewTeamDAO().findTeamsByMember(
-                MAPPER.map(memberDTO, Member.class)
-            );
+            List<? extends ITeam> rawResults = PersistenceFacade.getNewTeamDAO().findTeamsByMemberId(memberId);
 
             //checking if there are an results
             if (rawResults == null || rawResults.isEmpty()) return null;
@@ -116,9 +83,8 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
 
         } catch (PersistenceException e) {
             LOGGER.error(
-                "An error occurs while searching for \"all Teams by Member: {} {}\".",
-                memberDTO.getLastName(),
-                memberDTO.getFirstName(),
+                "An error occurs while searching for \"all Teams by Member #{}\".",
+                memberId,
                 e
             );
             return null;

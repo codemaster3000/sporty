@@ -45,10 +45,10 @@ public class TeamDAO extends HibernateGenericDAO<Team> implements ITeamDAO {
     }
 
     @Override
-    public List<Team> findTeamsByMember(Member member)
+    public List<Team> findTeamsByMemberId(Integer memberId)
     throws PersistenceException {
 
-        if (member == null) return null;
+        if (memberId == null) return null;
 
         String rawQuery =
             "SELECT team.* " +
@@ -61,7 +61,7 @@ public class TeamDAO extends HibernateGenericDAO<Team> implements ITeamDAO {
 
         return findBySQLQuery(
             rawQuery,
-            new PropertyPair<>(PROP_MEMBER_ID, member.getMemberId())
+            new PropertyPair<>(PROP_MEMBER_ID, memberId)
         );
     }
 }

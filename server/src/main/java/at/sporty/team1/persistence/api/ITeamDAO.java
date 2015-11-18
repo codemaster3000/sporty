@@ -35,10 +35,10 @@ public interface ITeamDAO extends IGenericDAO<Team> {
     /**
      * Find team(s) by Member.
      *
-     * @param member member to be searched
+     * @param memberId id of the member to be searched
      * @return List<Team>
      * @throws PersistenceException
      */
-    List<Team> findTeamsByMember(Member member)
+    List<Team> findTeamsByMemberId(Integer memberId)
     throws PersistenceException;
 }
