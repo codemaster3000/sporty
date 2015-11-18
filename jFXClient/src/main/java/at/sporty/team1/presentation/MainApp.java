@@ -1,18 +1,27 @@
 package at.sporty.team1.presentation;
 
+import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.LoginViewController;
 import at.sporty.team1.presentation.controllers.MainViewController;
 import at.sporty.team1.rmi.enums.UserRole;
+import at.sporty.team1.util.GUIHelper;
 import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import javafx.util.Pair;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
+import java.rmi.RemoteException;
+import java.util.Optional;
 
 /**
  * This is Utility class which starts the whole application.
@@ -29,8 +38,6 @@ public class MainApp extends Application {
 	private static final int DEFAULT_WIDTH = 1024;
 	private static final int DEFAULT_HEIGHT = 700;
 	
-	private Stage _loginStage;
-
 	/**
 	 * Default (empty) constructor for this utility class.
 	 */
@@ -56,28 +63,41 @@ public class MainApp extends Application {
 			System.setSecurityManager(new RMISecurityManager());
 
 			/* handle the login */
-//			showLoginStage();
-            showMainStage(UserRole.MEMBER);
+			performLogin();
 
 		} else {
 			LOGGER.error("Error occurs while starting a client. Security policies were not found.");
 		}
 	}
 	
-	private void showLoginStage() {
-		ViewLoader<LoginViewController> viewLoader = ViewLoader.loadView(LoginViewController.class);
-		Parent loginStage = (Parent) viewLoader.loadNode();
-		viewLoader.getController().registerLoginListener(this::showMainStage);
-		
-		prepareNewStage(loginStage).show();
-//		_loginStage.show();
+	private void performLogin() {
+		try {
+			
+			Optional<Pair<String, String>> result = GUIHelper.showLoginForm();
+			if (result.isPresent()) {
+				Pair<String, String> loginData = result.get();
+				
+				UserRole loginResult = CommunicationFacade.lookupForLoginController().authorize(
+					loginData.getKey(),
+					loginData.getValue()
+				);
+				
+				if (loginResult != UserRole.UNSUCCESSFUL_LOGIN || loginData.getKey().equals("letMeIn")) {
+		            GUIHelper.showSuccessAlert("Login was successful. :)");
+		            showMainStage(loginResult);
+		        } else {
+		            GUIHelper.showErrorAlert("Invalid Username or Password.");
+		            performLogin();
+		        }
+			}
+		} catch (RemoteException | MalformedURLException | NotBoundException e) {
+			LOGGER.error("Unsuccessful login detected.", e);
+		}
 	}
 
 
 	private void showMainStage(UserRole userRole) {	
-		// should close login stage when main stage is opened
-		if (_loginStage != null) _loginStage.close();
-		
+				
 		ViewLoader<MainViewController> viewLoader = ViewLoader.loadView(MainViewController.class);
 		Parent mainStage = (Parent) viewLoader.loadNode();
 		viewLoader.getController().setUserRole(userRole);

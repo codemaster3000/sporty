@@ -8,6 +8,7 @@ import at.sporty.team1.util.GUIHelper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +30,7 @@ public class LoginViewController extends JfxController {
     @FXML
     private TextField tfUserName;
     @FXML
-    private TextField tfPassword;
+    private PasswordField tfPassword;
 
     private Consumer<UserRole> _roleConsumer;
 
