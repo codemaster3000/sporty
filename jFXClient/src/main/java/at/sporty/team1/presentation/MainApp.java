@@ -35,7 +35,7 @@ public class MainApp extends Application {
 
 	private static final String DEFAULT_TITLE = "SPORTY";
 	private static final int DEFAULT_WIDTH = 1024;
-	private static final int DEFAULT_HEIGHT = 700;
+	private static final int DEFAULT_HEIGHT = 680;
 
 	private static final Set<String> HACK_ACCESS_TOKENS = new HashSet<>();
 
