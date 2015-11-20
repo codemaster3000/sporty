@@ -91,7 +91,7 @@ public class MainApp extends Application {
 					loginData.getValue()
 				);
 				
-				if (loginResult != UserRole.UNSUCCESSFUL_LOGIN || HACK_ACCESS_TOKENS.contains(loginData.getKey())) {
+				if (HACK_ACCESS_TOKENS.contains(loginData.getKey()) || loginResult != UserRole.UNSUCCESSFUL_LOGIN) {
 		            GUIHelper.showSuccessAlert("Login was successful. :)");
 		            showMainStage(loginResult);
 		        } else {
