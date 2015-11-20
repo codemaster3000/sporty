@@ -46,7 +46,7 @@ public class MainApp extends Application {
 		HACK_ACCESS_TOKENS.add("nyan");
 		HACK_ACCESS_TOKENS.add("yo dawg");
 		HACK_ACCESS_TOKENS.add("yodawg");
-		HACK_ACCESS_TOKENS.add("wow so secure, much login"); // http://goo.gl/XxyMqj
+		HACK_ACCESS_TOKENS.add("wow so secure, much login"); // http://i65.tinypic.com/991fgg.jpg
 		HACK_ACCESS_TOKENS.add("gg wp");
 		HACK_ACCESS_TOKENS.add("pls");
 		HACK_ACCESS_TOKENS.add("you shall not pass");
