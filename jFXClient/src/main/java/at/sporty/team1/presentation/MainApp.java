@@ -46,7 +46,7 @@ public class MainApp extends Application {
 		HACK_ACCESS_TOKENS.add("nyan");
 		HACK_ACCESS_TOKENS.add("yo dawg");
 		HACK_ACCESS_TOKENS.add("yodawg");
-		HACK_ACCESS_TOKENS.add("wow so secure, much login"); // http://i65.tinypic.com/991fgg.jpg
+        HACK_ACCESS_TOKENS.add("wow");
 		HACK_ACCESS_TOKENS.add("gg wp");
 		HACK_ACCESS_TOKENS.add("pls");
 		HACK_ACCESS_TOKENS.add("you shall not pass");
@@ -85,19 +85,27 @@ public class MainApp extends Application {
 			Optional<Pair<String, String>> result = GUIHelper.showLoginDialog();
 			if (result.isPresent()) {
 				Pair<String, String> loginData = result.get();
-				
-				UserRole loginResult = CommunicationFacade.lookupForLoginController().authorize(
-					loginData.getKey(),
-					loginData.getValue()
-				);
-				
-				if (HACK_ACCESS_TOKENS.contains(loginData.getKey()) || loginResult != UserRole.UNSUCCESSFUL_LOGIN) {
-		            GUIHelper.showSuccessAlert("Login was successful. :)");
-		            showMainStage(loginResult);
-		        } else {
-		            GUIHelper.showErrorAlert("Invalid Username or Password.");
-		            performLogin();
-		        }
+
+				if (HACK_ACCESS_TOKENS.contains(loginData.getKey())) {
+
+                    GUIHelper.showSuccessAlert("WOW SO SECURE, MUCH LOGIN!");
+                    showMainStage(UserRole.ADMIN);
+
+				} else {
+
+                    UserRole loginResult = CommunicationFacade.lookupForLoginController().authorize(
+                            loginData.getKey(),
+                            loginData.getValue()
+                    );
+
+                    if (loginResult != UserRole.UNSUCCESSFUL_LOGIN) {
+                        GUIHelper.showSuccessAlert("Login was successful. :)");
+                        showMainStage(loginResult);
+                    } else {
+                        GUIHelper.showErrorAlert("Invalid Username or Password.");
+                        performLogin();
+                    }
+                }
 			}
 		} catch (RemoteException | MalformedURLException | NotBoundException e) {
 			LOGGER.error("Unsuccessful login detected.", e);

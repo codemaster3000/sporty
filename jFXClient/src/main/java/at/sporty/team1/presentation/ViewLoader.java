@@ -2,7 +2,7 @@ package at.sporty.team1.presentation;
 
 import at.sporty.team1.presentation.controllers.*;
 import at.sporty.team1.presentation.controllers.core.IJfxController;
-import at.sporty.team1.presentation.dialogs.LoginDialog;
+import at.sporty.team1.presentation.controllers.RichViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 
@@ -27,13 +27,15 @@ public class ViewLoader<T extends IJfxController> {
 
 		//All UI-Controller relations should be defined here.
 		_viewPaths.put(MainViewController.class, "/at/sporty/team1/presentation/views/MainView.fxml");
-		_viewPaths.put(MemberViewController.class, "/at/sporty/team1/presentation/views/NewMemberView.fxml");
-		_viewPaths.put(TeamViewController.class, "/at/sporty/team1/presentation/views/TeamView.fxml");
-		_viewPaths.put(SearchResultViewController.class, "/at/sporty/team1/presentation/views/SearchResultView.fxml");
-		_viewPaths.put(TestViewController.class, "/at/sporty/team1/presentation/views/TestView.fxml");
-		_viewPaths.put(CompetitionViewController.class, "/at/sporty/team1/presentation/views/CompetitionView.fxml");
-		_viewPaths.put(LoginMaskViewController.class, "/at/sporty/team1/presentation/views/LoginMaskView.fxml");
-	}
+        _viewPaths.put(RichViewController.class, "/at/sporty/team1/presentation/views/RichView.fxml");
+        _viewPaths.put(MemberDataViewController.class, "/at/sporty/team1/presentation/views/MemberDataView.fxml");
+        _viewPaths.put(TeamViewController.class, "/at/sporty/team1/presentation/views/TeamView.fxml");
+        _viewPaths.put(TestViewController.class, "/at/sporty/team1/presentation/views/TestView.fxml");
+        _viewPaths.put(CompetitionViewController.class, "/at/sporty/team1/presentation/views/CompetitionView.fxml");
+        _viewPaths.put(LoginMaskViewController.class, "/at/sporty/team1/presentation/views/LoginMaskView.fxml");
+        _viewPaths.put(MemberSearchViewController.class, "/at/sporty/team1/presentation/views/MemberSearchView.fxml");
+        _viewPaths.put(TournamentSearchViewController.class, "/at/sporty/team1/presentation/views/TournamentSearchView.fxml");
+    }
 
 	private FXMLLoader _loader;
 
@@ -48,8 +50,6 @@ public class ViewLoader<T extends IJfxController> {
 		assert(viewResource != null);
 
 		_loader = new FXMLLoader(viewResource);
-		
-		// TODO i18n RB = localisation
 	}
 
     /**

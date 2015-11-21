@@ -1,19 +1,16 @@
 package at.sporty.team1.rmi.api;
 
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
-import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 
-import java.io.Serializable;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
 /**
  * Created by f00 on 03.11.15.
  */
-public interface IDepartmentController extends Remote, Serializable {
+public interface IDepartmentController extends IRemoteController {
 
     /**
      * Search for all Departments.

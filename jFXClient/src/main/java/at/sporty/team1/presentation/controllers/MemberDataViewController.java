@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 
-public class MemberViewController extends JfxController {
+public class MemberDataViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SUCCESSFUL_MEMBER_SAVE = "Member was successfully saved.";
     private static final String FEMALE = "F";

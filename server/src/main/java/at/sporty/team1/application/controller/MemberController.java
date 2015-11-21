@@ -74,7 +74,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
     
     @Override
-    public List<MemberDTO> searchAllMembers(boolean notPaidCheckbox, boolean paidCheckbox)
+    public List<MemberDTO> searchAllMembers(boolean feePaid, boolean feeNotPaid)
     throws RemoteException {
 
         try {
@@ -82,7 +82,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findAll();
 
             //filtering results for fee
-            rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
+            rawResults = filterWithFee(rawResults, feePaid, feeNotPaid);
 
             //checking if there are an results
             if (rawResults == null || rawResults.isEmpty()) return null;
@@ -99,7 +99,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public List<MemberDTO> searchMembersByNameString(String searchString, boolean notPaidCheckbox, boolean paidCheckbox)
+    public List<MemberDTO> searchMembersByNameString(String searchString, boolean feePaid, boolean feeNotPaid)
     throws RemoteException, ValidationException {
 
         /* Validating Input */
@@ -114,7 +114,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByNameString(searchString);
 
             //filtering results for fee
-            rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
+            rawResults = filterWithFee(rawResults, feePaid, feeNotPaid);
 
             //checking if there are an results
             if (rawResults == null || rawResults.isEmpty()) return null;
@@ -131,7 +131,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public List<MemberDTO> searchMembersByCommonTeamName(String teamName, boolean notPaidCheckbox, boolean paidCheckbox)
+    public List<MemberDTO> searchMembersByCommonTeamName(String teamName, boolean feePaid, boolean feeNotPaid)
     throws RemoteException, ValidationException {
 
         /* Validating Input */
@@ -146,7 +146,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByCommonTeamName(teamName);
 
             //filtering results for fee
-            rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
+            rawResults = filterWithFee(rawResults, feePaid, feeNotPaid);
 
             //checking if there are an results
             if (rawResults == null || rawResults.isEmpty()) return null;
@@ -163,7 +163,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public List<MemberDTO> searchMembersByTournamentTeamName(String teamName, boolean notPaidCheckbox, boolean paidCheckbox)
+    public List<MemberDTO> searchMembersByTournamentTeamName(String teamName, boolean feePaid, boolean feeNotPaid)
     throws RemoteException, ValidationException {
 
         /* Validating Input */
@@ -178,7 +178,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByTournamentTeamName(teamName);
 
             //filtering results for fee
-            rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
+            rawResults = filterWithFee(rawResults, feePaid, feeNotPaid);
 
             //checking if there are an results
             if (rawResults == null || rawResults.isEmpty()) return null;
@@ -195,7 +195,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public List<MemberDTO> searchMembersByDateOfBirth(String dateOfBirth, boolean notPaidCheckbox, boolean paidCheckbox)
+    public List<MemberDTO> searchMembersByDateOfBirth(String dateOfBirth, boolean feePaid, boolean feeNotPaid)
     throws RemoteException, ValidationException {
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -209,7 +209,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByDateOfBirth(dateOfBirth);
 
             //filtering results for fee
-            rawResults = filterWithFee(rawResults, paidCheckbox, notPaidCheckbox);
+            rawResults = filterWithFee(rawResults, feePaid, feeNotPaid);
 
             //checking if there are an results
             if (rawResults == null || rawResults.isEmpty()) return null;

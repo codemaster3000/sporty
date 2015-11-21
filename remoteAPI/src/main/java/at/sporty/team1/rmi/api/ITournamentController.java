@@ -1,17 +1,15 @@
 package at.sporty.team1.rmi.api;
 
-import java.io.Serializable;
-import java.rmi.Remote;
-import java.rmi.RemoteException;
-import java.util.List;
-
 import at.sporty.team1.rmi.dtos.MatchDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 
+import java.rmi.RemoteException;
+import java.util.List;
 
-public interface ITournamentController extends Remote, Serializable {
+
+public interface ITournamentController extends IRemoteController {
 
 	/**
      * Search for all Tournaments.

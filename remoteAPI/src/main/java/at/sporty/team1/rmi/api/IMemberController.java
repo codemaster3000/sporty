@@ -2,24 +2,23 @@ package at.sporty.team1.rmi.api;
 
 
 import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 
-import java.io.Serializable;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
-public interface IMemberController extends Remote, Serializable {
+public interface IMemberController extends IRemoteController {
 
     /**
      * Search for all Members.
      *
+     * @param feePaid will search all members who paid the fee
+     * @param feeNotPaid will search all members who did not pay the fee
      * @return List<MemberDTO> List of all members
      * @throws RemoteException
      */
-    List<MemberDTO> searchAllMembers(boolean notPaidCheckbox, boolean paidCheckbox)
+    List<MemberDTO> searchAllMembers(boolean feePaid, boolean feeNotPaid)
     throws RemoteException;
 
     /**
@@ -37,10 +36,12 @@ public interface IMemberController extends Remote, Serializable {
      * Search for memberList by String (first name and last name, first name or last name).
      *
      * @param searchString String to be searched.
+     * @param feePaid will search all members who paid the fee
+     * @param feeNotPaid will search all members who did not pay the fee
      * @return List<MemberDTO> List of all members who's full name matched given data, or null.
      * @throws RemoteException
      */
-    List<MemberDTO> searchMembersByNameString(String searchString, boolean notPaidCheckbox, boolean paidCheckbox)
+    List<MemberDTO> searchMembersByNameString(String searchString, boolean feePaid, boolean feeNotPaid)
     throws RemoteException, ValidationException;
 
 
@@ -48,20 +49,24 @@ public interface IMemberController extends Remote, Serializable {
      * Search for memberList by common team name.
      *
      * @param teamName Team name to be searched.
+     * @param feePaid will search all members who paid the fee
+     * @param feeNotPaid will search all members who did not pay the fee
      * @return List<MemberDTO> List of all members who are assigned to the given team, or null.
      * @throws RemoteException
      */
-    List<MemberDTO> searchMembersByCommonTeamName(String teamName, boolean notPaidCheckbox, boolean paidCheckbox)
+    List<MemberDTO> searchMembersByCommonTeamName(String teamName, boolean feePaid, boolean feeNotPaid)
     throws RemoteException, ValidationException;
 
     /**
      * Search for memberList by tournament team name.
      *
      * @param teamName Team name to be searched.
+     * @param feePaid will search all members who paid the fee
+     * @param feeNotPaid will search all members who did not pay the fee
      * @return List<MemberDTO> List of all members who are assigned to the given team, or null.
      * @throws RemoteException
      */
-    List<MemberDTO> searchMembersByTournamentTeamName(String teamName, boolean notPaidCheckbox, boolean paidCheckbox)
+    List<MemberDTO> searchMembersByTournamentTeamName(String teamName, boolean feePaid, boolean feeNotPaid)
     throws RemoteException, ValidationException;
 
 
@@ -69,10 +74,12 @@ public interface IMemberController extends Remote, Serializable {
      * Search for memberList by date of birth.
      *
      * @param dateOfBirth Date of birth to be searched.
+     * @param feePaid will search all members who paid the fee
+     * @param feeNotPaid will search all members who did not pay the fee
      * @return List<MemberDTO> List of all members who's date of birth matched given data, or null.
      * @throws RemoteException
      */
-    List<MemberDTO> searchMembersByDateOfBirth(String dateOfBirth, boolean notPaidCheckbox, boolean paidCheckbox)
+    List<MemberDTO> searchMembersByDateOfBirth(String dateOfBirth, boolean feePaid, boolean feeNotPaid)
     throws RemoteException, ValidationException;
 
     /**

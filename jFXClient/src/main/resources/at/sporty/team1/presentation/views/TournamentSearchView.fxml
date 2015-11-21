@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/8"
+      fx:controller="at.sporty.team1.presentation.controllers.TournamentSearchViewController"
+      fx:id="_searchBox" alignment="TOP_CENTER">
+    <GridPane alignment="CENTER_LEFT" hgap="5.0" vgap="5.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="NEVER"/>
+            <ColumnConstraints hgrow="NEVER"/>
+            <ColumnConstraints hgrow="NEVER"/>
+            <ColumnConstraints hgrow="NEVER"/>
+            <ColumnConstraints hgrow="NEVER"/>
+            <ColumnConstraints hgrow="SOMETIMES"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints vgrow="NEVER"/>
+            <RowConstraints vgrow="NEVER"/>
+        </rowConstraints>
+        <VBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </VBox.margin>
+
+        <Label text="Search by:">
+            <font>
+                <Font name="System Bold"/>
+            </font>
+        </Label>
+        <AnchorPane GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.hgrow="ALWAYS">
+            <ComboBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                      AnchorPane.topAnchor="0.0"/>
+        </AnchorPane>
+
+        <Label text="Fee:" GridPane.rowIndex="1">
+            <font>
+                <Font name="System Bold"/>
+            </font>
+        </Label>
+        <RadioButton mnemonicParsing="false" selected="true" text="All" GridPane.columnIndex="1"
+                     GridPane.rowIndex="1"/>
+        <Separator orientation="VERTICAL" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+        <RadioButton mnemonicParsing="false" text="Paid" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+        <RadioButton mnemonicParsing="false" text="Not Paid" GridPane.columnIndex="4" GridPane.rowIndex="1"/>
+    </GridPane>
+</VBox>

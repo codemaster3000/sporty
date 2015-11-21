@@ -5,15 +5,13 @@ import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 
-import java.io.Serializable;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
 /**
  * Created by sereGkaluv on 02-Nov-15.
  */
-public interface ITeamController extends Remote, Serializable {
+public interface ITeamController extends IRemoteController  {
 
     /**
      * Creates new or saves old team in data storage with data from the DTO.

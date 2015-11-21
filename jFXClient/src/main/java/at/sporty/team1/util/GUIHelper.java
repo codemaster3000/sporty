@@ -39,6 +39,32 @@ public class GUIHelper {
             context
         );
     }
+
+    public static Optional<ButtonType> showWarningAlert(String context) {
+        return showExtendedWarningAlert(null, context);
+    }
+
+    public static Optional<ButtonType> showExtendedWarningAlert(String header, String context) {
+        return showCustomAlert(
+            Alert.AlertType.WARNING,
+            "Warning",
+            header,
+            context
+        );
+    }
+
+    public static Optional<ButtonType> showInformationAlert(String context) {
+        return showExtendedInformationAlert(null, context);
+    }
+
+    public static Optional<ButtonType> showExtendedInformationAlert(String header, String context) {
+        return showCustomAlert(
+            Alert.AlertType.INFORMATION,
+            "Information",
+            header,
+            context
+        );
+    }
     
     public static Optional<ButtonType> showSuccessAlert(String context) {
         return showExtendedSuccessAlert(null, context);
