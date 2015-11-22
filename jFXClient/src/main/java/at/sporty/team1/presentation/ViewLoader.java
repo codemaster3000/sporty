@@ -2,7 +2,6 @@ package at.sporty.team1.presentation;
 
 import at.sporty.team1.presentation.controllers.*;
 import at.sporty.team1.presentation.controllers.core.IJfxController;
-import at.sporty.team1.presentation.controllers.RichViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 

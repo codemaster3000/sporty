@@ -2,6 +2,7 @@ package at.sporty.team1.presentation.controllers.core;
 
 import at.sporty.team1.rmi.api.IDTO;
 import javafx.fxml.Initializable;
+
 import java.util.function.Consumer;
 
 /**

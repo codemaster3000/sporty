@@ -1,7 +1,7 @@
 package at.sporty.team1.persistence.daos;
 
-import at.sporty.team1.persistence.util.HibernateSessionUtil;
 import at.sporty.team1.persistence.api.IGenericDAO;
+import at.sporty.team1.persistence.util.HibernateSessionUtil;
 import at.sporty.team1.persistence.util.PropertyPair;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;

@@ -1,7 +1,6 @@
 package at.sporty.team1.persistence.api;
 
 import at.sporty.team1.domain.Department;
-import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Team;
 
 import javax.persistence.PersistenceException;

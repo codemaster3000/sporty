@@ -5,14 +5,12 @@ import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.ILoginController;
 import at.sporty.team1.rmi.enums.UserRole;
-import at.sporty.team1.rmi.exceptions.DataType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.naming.AuthenticationException;
 import javax.naming.Context;
 import javax.naming.NamingException;
-import javax.naming.OperationNotSupportedException;
 import javax.naming.directory.InitialDirContext;
 import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;

@@ -1,8 +1,6 @@
 package at.sporty.team1.domain.interfaces;
 
 import at.sporty.team1.domain.Department;
-import at.sporty.team1.domain.League;
-import at.sporty.team1.domain.Match;
 import at.sporty.team1.domain.readonly.IRTournament;
 
 import java.util.List;

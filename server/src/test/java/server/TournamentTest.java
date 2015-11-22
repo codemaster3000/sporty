@@ -1,20 +1,19 @@
 package server;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.rmi.RemoteException;
-import java.util.List;
-
+import at.sporty.team1.application.controller.TournamentController;
+import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MatchDTO;
+import at.sporty.team1.rmi.dtos.TournamentDTO;
+import at.sporty.team1.rmi.exceptions.UnknownEntityException;
+import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import at.sporty.team1.application.controller.TournamentController;
-import at.sporty.team1.rmi.dtos.DepartmentDTO;
-import at.sporty.team1.rmi.dtos.TournamentDTO;
-import at.sporty.team1.rmi.exceptions.UnknownEntityException;
-import at.sporty.team1.rmi.exceptions.ValidationException;
+import java.rmi.RemoteException;
+import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
 
 public class TournamentTest {
 

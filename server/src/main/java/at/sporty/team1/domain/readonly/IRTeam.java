@@ -1,7 +1,6 @@
 package at.sporty.team1.domain.readonly;
 
 import at.sporty.team1.domain.Department;
-import at.sporty.team1.domain.League;
 import at.sporty.team1.domain.Member;
 
 import java.util.List;

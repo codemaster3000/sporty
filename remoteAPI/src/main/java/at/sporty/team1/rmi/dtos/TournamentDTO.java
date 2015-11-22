@@ -2,8 +2,6 @@ package at.sporty.team1.rmi.dtos;
 
 import at.sporty.team1.rmi.api.IDTO;
 
-import java.util.List;
-
 /**
  * Created by f00 on 16.11.15.
  */

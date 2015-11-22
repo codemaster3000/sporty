@@ -4,7 +4,6 @@ import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.misc.converters.SQLDateConverter;
 
 import javax.persistence.*;
-import java.util.List;
 
 
 /**

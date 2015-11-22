@@ -1,14 +1,17 @@
 package at.sporty.team1.persistence.daos;
 
 import at.sporty.team1.domain.Member;
+import at.sporty.team1.persistence.api.IMemberDAO;
 import at.sporty.team1.persistence.util.PropertyPair;
 import at.sporty.team1.persistence.util.Util;
-import at.sporty.team1.persistence.api.IMemberDAO;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.PersistenceException;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a concrete DAO for Members

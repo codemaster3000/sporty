@@ -1,20 +1,10 @@
 package at.sporty.team1.executable;
 
-import at.sporty.team1.application.controller.DepartmentController;
-import at.sporty.team1.application.controller.LoginController;
-import at.sporty.team1.application.controller.MemberController;
-import at.sporty.team1.application.controller.TeamController;
-import at.sporty.team1.application.controller.TournamentController;
-import at.sporty.team1.domain.Department;
-import at.sporty.team1.domain.Member;
-import at.sporty.team1.domain.Team;
-import at.sporty.team1.persistence.PersistenceFacade;
+import at.sporty.team1.application.controller.*;
 import at.sporty.team1.persistence.util.HibernateSessionUtil;
 import at.sporty.team1.rmi.RemoteObjectRegistry;
-import at.sporty.team1.rmi.dtos.MemberDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.dozer.DozerBeanMapper;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -25,7 +15,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.List;
 
 /**
  * Created by sereGkaluv on 23-Oct-15.

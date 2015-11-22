@@ -1,17 +1,15 @@
 package server;
 
+import at.sporty.team1.application.controller.MemberController;
+import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.junit.Assert;
-
-import java.rmi.RemoteException;
-import java.util.List;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import at.sporty.team1.application.controller.MemberController;
-import at.sporty.team1.rmi.dtos.MemberDTO;
+import java.rmi.RemoteException;
+import java.util.List;
 
 
 public class SearchMemberTest {

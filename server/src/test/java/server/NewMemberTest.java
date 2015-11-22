@@ -3,9 +3,7 @@ package server;
 import at.sporty.team1.application.controller.MemberController;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.persistence.PersistenceFacade;
-import at.sporty.team1.rmi.api.ITeamController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.dozer.DozerBeanMapper;
@@ -14,7 +12,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;
 import java.util.List;
 

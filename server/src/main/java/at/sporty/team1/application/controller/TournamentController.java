@@ -1,9 +1,7 @@
 package at.sporty.team1.application.controller;
 
 import at.sporty.team1.domain.Match;
-import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Tournament;
-import at.sporty.team1.domain.interfaces.IMatch;
 import at.sporty.team1.domain.interfaces.ITournament;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;

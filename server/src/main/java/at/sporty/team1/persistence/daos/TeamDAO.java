@@ -1,17 +1,13 @@
 package at.sporty.team1.persistence.daos;
 
 import at.sporty.team1.domain.Department;
-import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Team;
 import at.sporty.team1.persistence.api.ITeamDAO;
 import at.sporty.team1.persistence.util.PropertyPair;
-import at.sporty.team1.persistence.util.Util;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.type.IntegerType;
 
 import javax.persistence.PersistenceException;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
