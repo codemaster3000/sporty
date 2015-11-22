@@ -80,7 +80,7 @@ public class MainViewController extends JfxController {
             closable,
             MemberDTO.class,
             MemberSearchViewController.class,
-            MemberDataViewController.class
+            MemberViewController.class
         );
 	}
 
