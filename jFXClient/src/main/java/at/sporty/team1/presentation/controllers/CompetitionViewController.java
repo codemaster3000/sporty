@@ -40,6 +40,7 @@ public class CompetitionViewController extends JfxController {
     private static final String SUCCESSFUL_MATCHES_SAVE = "Matches were saved successfully.";
 
     private TournamentDTO _activeCompetition;
+    private ObservableList<MatchDTO> _tableMatchList;
 
     @FXML
     private TextField _competitionDateTextField;
@@ -192,10 +193,11 @@ public class CompetitionViewController extends JfxController {
         _resultCol.setCellValueFactory(new PropertyValueFactory<>("result"));
 
         for (int i = 0; i < 20; ++i) {
-            tempList.add(new MatchDTO());
+        	tempList.add(new MatchDTO());
         }
 
-        _matchTableView.setItems(FXCollections.observableList(tempList));
+        _tableMatchList = FXCollections.observableList(tempList);
+        _matchTableView.setItems(FXCollections.observableList(_tableMatchList));
     }
 
     private void setVisibleOfMatchesView(boolean view) {
@@ -347,15 +349,14 @@ public class CompetitionViewController extends JfxController {
     @FXML
     public void removeSelectedMatch(ActionEvent event) {
 
-    	_matchTableView.getSelectionModel().clearSelection();
+    	_tableMatchList.remove(_matchTableView.getSelectionModel().getSelectedItem());
     }
 
     @FXML
     public void addTeamToTeamList(ActionEvent event) {
 
     	String teamFromTextField = GUIHelper.readNullOrEmpty(_competitionExternalTeamTextField.getText());
-    	
-    	
+    	  	
         if (teamFromTextField != null) {
         	_competitionTeamsListView.getItems().add(_competitionExternalTeamTextField.getText());
             
