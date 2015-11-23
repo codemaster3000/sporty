@@ -176,23 +176,29 @@ public class CompetitionViewController extends JfxController {
          */
         _team1Col.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
         _team1Col.setCellValueFactory(new PropertyValueFactory<>("team1"));
+        _team1Col.setOnEditCommit(cell -> cell.getRowValue().setTeam1(cell.getNewValue()));
 
         _team2Col.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
         _team2Col.setCellValueFactory(new PropertyValueFactory<>("team2"));
+        _team2Col.setOnEditCommit(cell -> cell.getRowValue().setTeam2(cell.getNewValue()));
 
         _timeCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
         _timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
+        _timeCol.setOnEditCommit(cell -> cell.getRowValue().setTime(cell.getNewValue()));
 
         _refereeCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
         _refereeCol.setCellValueFactory(new PropertyValueFactory<>("referee"));
+        _refereeCol.setOnEditCommit(cell -> cell.getRowValue().setReferee(cell.getNewValue()));
 
         _courtCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
         _courtCol.setCellValueFactory(new PropertyValueFactory<>("court"));
+        _courtCol.setOnEditCommit(cell -> cell.getRowValue().setLocation(cell.getNewValue()));
 
         _resultCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
         _resultCol.setCellValueFactory(new PropertyValueFactory<>("result"));
+        _resultCol.setOnEditCommit(cell -> cell.getRowValue().setResult(cell.getNewValue()));
 
-        for (int i = 0; i < 20; ++i) {
+        for (int i = 0; i < 5; ++i) {
         	tempList.add(new MatchDTO());
         }
 
@@ -348,8 +354,8 @@ public class CompetitionViewController extends JfxController {
 
     @FXML
     public void removeSelectedMatch(ActionEvent event) {
-
-    	_tableMatchList.remove(_matchTableView.getSelectionModel().getSelectedItem());
+        MatchDTO matchDTO = _matchTableView.getSelectionModel().getSelectedItem();
+        _matchTableView.getItems().remove(matchDTO);
     }
 
     @FXML
