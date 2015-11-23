@@ -3,6 +3,7 @@ package at.sporty.team1.application.controller;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
+import at.sporty.team1.persistence.util.TooManyResultsException;
 import at.sporty.team1.rmi.api.ILoginController;
 import at.sporty.team1.rmi.enums.UserRole;
 import org.apache.logging.log4j.LogManager;
@@ -30,27 +31,24 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
 
 	/**
 	 * *************************************************************************
-	 * **************************
-	 *
 	 * @return Enum to distinguish which default screen to load;
 	 *         UNSUCCESSFUL_LOGIN if not authorized *
 	 * *************************************************************************
-	 * ************************
-	 * @brief checks if a login is valid by comparing the login information to
-	 *        the database if the login is valid it prompts the default screen
-	 *        associated with the employees class if the login is invalid it
-	 *        logs the failed login attempt and prompts the loginscreen again
-	 *        <p>
-	 *        UNSUCCESSFUL_LOGIN false ADMIN MEMBER TRAINER DEPARTMENT_HEAD
-	 *        MANAGER .....
-	 * @param[in] username Users Username
-	 * @param[in] password Users Password
+	 * @apiNote  checks if a login is valid by comparing the login information to
+	 *           the database if the login is valid it prompts the default screen
+	 *           associated with the employees class if the login is invalid it
+	 *           logs the failed login attempt and prompts the login screen again
+	 *           <p>
+	 *           UNSUCCESSFUL_LOGIN false ADMIN MEMBER TRAINER DEPARTMENT_HEAD
+	 *           MANAGER .....
+	 * @param username Users Username
+	 * @param password Users Password
 	 */
 	@Override
 	public UserRole authorize(String username, String password) throws RemoteException {
 
 		/*
-		 * check if username and password are given and the format of this
+		 * Check if username and password are given and the format of this
 		 * strings is OK
 		 */
 		if (InputSanitizer.isNullOrEmpty(username) && InputSanitizer.isNullOrEmpty(password)) {
@@ -67,13 +65,13 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
 			env.put(Context.SECURITY_CREDENTIALS, password);
 			env.put(Context.SECURITY_PROTOCOL, "ssl"); //use SSL
 
-			/* the next line tries to login to LDAP */
+			/* The next line tries to login to LDAP */
 			InitialDirContext context = new InitialDirContext(env);
 			
 			LOGGER.info("Successful login of {}.", username);
 			context.close();
 
-			// get role of current user from database
+			// Get role of current user from database
 			UserRole currentRole = getUserRole(username);
 			if (currentRole != null) return currentRole;
 
@@ -89,19 +87,16 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
 
 	private UserRole getUserRole(String username) {
 
-		/* get the role of this user from our db */
+		/* Get the role of this user from our db */
 
 		try{
 			
-			List<Member> members = PersistenceFacade.getNewMemberDAO().findByUsername(username);
+			Member member = PersistenceFacade.getNewMemberDAO().findByUsername(username);
 	
-			if (members == null || members.isEmpty())
-				return UserRole.UNSUCCESSFUL_LOGIN;
-	
-			String role = members.get(0).getRole();
-	
-			/* return according to userrole */
-			switch (role) {
+			if (member == null) return UserRole.UNSUCCESSFUL_LOGIN;
+
+			/* Return according to user role */
+			switch (member.getRole()) {
 				case "admin": return UserRole.ADMIN;
 				case "member": return UserRole.MEMBER;
 				case "trainer": return UserRole.TRAINER;
@@ -111,8 +106,10 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
 			
 		} catch(PersistenceException e) {
 			LOGGER.error("Error occurred while getting/parsing user role.", e);
-		}
+		} catch (TooManyResultsException e) {
+            LOGGER.error("Too many authentication results were received.", e);
+        }
 
-		return UserRole.UNSUCCESSFUL_LOGIN;
+        return UserRole.UNSUCCESSFUL_LOGIN;
 	}
 }

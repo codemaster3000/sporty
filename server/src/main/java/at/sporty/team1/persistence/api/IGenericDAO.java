@@ -2,6 +2,7 @@ package at.sporty.team1.persistence.api;
 
 import at.sporty.team1.misc.functional.AliasContainer;
 import at.sporty.team1.persistence.util.PropertyPair;
+import at.sporty.team1.persistence.util.TooManyResultsException;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
@@ -19,6 +20,17 @@ public interface IGenericDAO<T> {
      */
     List<T> findAll()
     throws PersistenceException;
+
+    /**
+     * Returns a specific object identified according to the specified criterion(s) from the data store.
+     * @param criterion criterion to be matched.
+     * @return Object of the type {@code T} that match the given criterion(s), or null if n results,
+     * in case if more than one result will be found, this method will throw TooManyResultsException.
+     * @throws PersistenceException
+     * @throws TooManyResultsException
+     */
+    T findSingleResultByCriteria(Criterion... criterion)
+    throws PersistenceException, TooManyResultsException;
 
     /**
      * Returns all existing objects of the given type in the data store that

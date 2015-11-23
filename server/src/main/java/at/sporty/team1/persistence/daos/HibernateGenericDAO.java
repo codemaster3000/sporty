@@ -4,6 +4,7 @@ import at.sporty.team1.misc.functional.AliasContainer;
 import at.sporty.team1.persistence.api.IGenericDAO;
 import at.sporty.team1.persistence.util.HibernateSessionUtil;
 import at.sporty.team1.persistence.util.PropertyPair;
+import at.sporty.team1.persistence.util.TooManyResultsException;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -37,6 +38,18 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
         } catch (HibernateException e) {
             throw new PersistenceException(e);
         }
+    }
+
+    @Override
+    public T findSingleResultByCriteria(Criterion... criterion)
+    throws TooManyResultsException {
+        List<T> list = findByCriteria(criterion);
+        if (list.isEmpty()) {
+            return null;
+        } else if (list.size() > 1) {
+            throw new TooManyResultsException();
+        }
+        return list.get(0);
     }
 
     @SuppressWarnings("unchecked") //NON Generic Hibernate method.
@@ -101,7 +114,7 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
         });
     }
 
-
+    @SuppressWarnings("unchecked") //NON Generic Hibernate method.
     @Override
     public T findById(Serializable id)
     throws PersistenceException {

@@ -1,6 +1,7 @@
 package at.sporty.team1.persistence.api;
 
 import at.sporty.team1.domain.Member;
+import at.sporty.team1.persistence.util.TooManyResultsException;
 
 import javax.persistence.PersistenceException;
 import java.util.List;
@@ -11,13 +12,14 @@ import java.util.List;
 public interface IMemberDAO extends IGenericDAO<Member> {
 
     /**
-     * Find by username
+     * Find by username.
      *
-     * @param username
-     * @return
+     * @param username username of the user.
+     * @return Member with given username.
      * @throws PersistenceException
      */
-    List<Member> findByUsername(String username) throws PersistenceException;
+    Member findByUsername(String username)
+    throws PersistenceException, TooManyResultsException;
 
     /**
      * Find by name String.
@@ -26,7 +28,8 @@ public interface IMemberDAO extends IGenericDAO<Member> {
      * @return List<Member> List of all Members who's full name matched given data.
      * @throws PersistenceException
      */
-    List<Member> findByNameString(String searchString) throws PersistenceException;
+    List<Member> findByNameString(String searchString)
+    throws PersistenceException;
 
     /**
      * Find member by full name.
@@ -35,7 +38,8 @@ public interface IMemberDAO extends IGenericDAO<Member> {
      * @param lastName  member's last name
      * @return List<Member> List of all Members who's full name matched given data.
      */
-    List<Member> findByFullName(String firstName, String lastName) throws PersistenceException;
+    List<Member> findByFullName(String firstName, String lastName)
+    throws PersistenceException;
 
     /**
      * Find member by first name.
@@ -44,7 +48,8 @@ public interface IMemberDAO extends IGenericDAO<Member> {
      * @return List<Member> List of all Members who's first name matched given data.
      * @throws PersistenceException
      */
-    List<Member> findByFirstName(String firstName) throws PersistenceException;
+    List<Member> findByFirstName(String firstName)
+    throws PersistenceException;
 
     /**
      * Find member by last name.
@@ -53,7 +58,8 @@ public interface IMemberDAO extends IGenericDAO<Member> {
      * @return List<Member> List of all Members who's last name matched given data.
      * @throws PersistenceException
      */
-    List<Member> findByLastName(String lastName) throws PersistenceException;
+    List<Member> findByLastName(String lastName)
+    throws PersistenceException;
 
     /**
      * Find member(s) by date of birth.
@@ -62,7 +68,8 @@ public interface IMemberDAO extends IGenericDAO<Member> {
      * @return List<Member> List of all Members who were born at the given date.
      * @throws PersistenceException
      */
-    List<Member> findByDateOfBirth(String dateOfBirth) throws PersistenceException;
+    List<Member> findByDateOfBirth(String dateOfBirth)
+    throws PersistenceException;
 
     /**
      * Find member(s) by email.
@@ -71,7 +78,8 @@ public interface IMemberDAO extends IGenericDAO<Member> {
      * @return List<Member> List of all Members who's email matched given data.
      * @throws PersistenceException
      */
-    List<Member> findByEmail(String email) throws PersistenceException;
+    List<Member> findByEmail(String email)
+    throws PersistenceException;
 
     /**
      * Find member(s) by team name.
@@ -80,7 +88,8 @@ public interface IMemberDAO extends IGenericDAO<Member> {
      * @return List<Member> List of all Members who are assigned to given team.
      * @throws PersistenceException
      */
-    List<Member> findByCommonTeamName(String teamName) throws PersistenceException;
+    List<Member> findByCommonTeamName(String teamName)
+    throws PersistenceException;
 
     /**
      * Find member(s) by team name.
@@ -89,5 +98,6 @@ public interface IMemberDAO extends IGenericDAO<Member> {
      * @return List<Member> List of all Members who are assigned to given team.
      * @throws PersistenceException
      */
-    List<Member> findByTournamentTeamName(String teamName) throws PersistenceException;
+    List<Member> findByTournamentTeamName(String teamName)
+    throws PersistenceException;
 }

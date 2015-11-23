@@ -3,6 +3,7 @@ package at.sporty.team1.persistence.daos;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.persistence.api.IMemberDAO;
 import at.sporty.team1.persistence.util.PropertyPair;
+import at.sporty.team1.persistence.util.TooManyResultsException;
 import at.sporty.team1.persistence.util.Util;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -20,6 +21,7 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
 
     private static final String PROP_FIRST_NAME = "firstName";
     private static final String PROP_LAST_NAME = "lastName";
+    private static final String PROP_USERNAME = "username";
     private static final String PROP_DATE_OF_BIRTH = "dateOfBirth";
     private static final String PROP_EMAIL = "email";
     private static final String DELIMITER = " ";
@@ -64,10 +66,9 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
     }
 
     @Override
-    public List<Member> findByUsername(String username) throws PersistenceException {
-        String search = Util.wrapInWildcard(username);
-
-        return findByCriteria(Restrictions.like("username",search, MatchMode.EXACT));
+    public Member findByUsername(String username)
+    throws PersistenceException, TooManyResultsException {
+        return findSingleResultByCriteria(Restrictions.eq(PROP_USERNAME, username));
     }
 
     @Override
