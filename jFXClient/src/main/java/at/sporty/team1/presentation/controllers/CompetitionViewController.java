@@ -290,7 +290,7 @@ public class CompetitionViewController extends JfxController {
                     _activeCompetition = new TournamentDTO();
                 }
 
-                //if it is an already existing member, changed member data will be simply updated.
+                //if it is an already existing competition, changed competition data will be simply updated.
                 _activeCompetition.setDate(date)
                         .setDepartment(dept)
                         .setLocation(location);
@@ -304,7 +304,7 @@ public class CompetitionViewController extends JfxController {
 
                 //Logging and cleaning the tab
                 LOGGER.info("Tournament \"{} {}\" was successfully saved.", dept.getSport(), date);
-                dispose();
+                //dispose();
 
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
                 LOGGER.error("Error occurred while saving the tournament.", e);
@@ -321,6 +321,27 @@ public class CompetitionViewController extends JfxController {
     public void saveMatches(ActionEvent event) {
 
         //TODO: save Matches to _activeTournament
+    	ITournamentController imc = null;
+    	int tournamentId = _activeCompetition.getId();
+    	
+    	try {
+			imc = CommunicationFacade.lookupForTournamentController();
+			
+			List<MatchDTO> matches = _matchTableView.getItems();
+			
+			for(MatchDTO match : matches){
+				try {
+					imc.createNewMatch(tournamentId, match);
+				} catch (ValidationException | UnknownEntityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+		} catch (RemoteException | MalformedURLException | NotBoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     @FXML
@@ -365,6 +386,7 @@ public class CompetitionViewController extends JfxController {
                 }
 
                 GUIHelper.showSuccessAlert(savedTeamsCounter + SUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE);
+                setVisibleOfMatchesView(true);
             }
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
 
