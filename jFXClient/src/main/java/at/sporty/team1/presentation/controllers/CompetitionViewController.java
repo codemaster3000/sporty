@@ -303,9 +303,7 @@ public class CompetitionViewController extends JfxController {
                 GUIHelper.showSuccessAlert(SUCCESSFUL_TOURNAMENT_SAVE);
                 setVisibleOfTournamentTeamView(true);
 
-                //Logging and cleaning the tab
                 LOGGER.info("Tournament \"{} {}\" was successfully saved.", dept.getSport(), date);
-                //dispose();
 
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
                 LOGGER.error("Error occurred while saving the tournament.", e);
@@ -338,6 +336,7 @@ public class CompetitionViewController extends JfxController {
 					e.printStackTrace();
 				}
 			}
+			LOGGER.info("Matches was successfully saved. Size:\"{}, TournamentId: {}\"", matches.size(), tournamentId);
 			GUIHelper.showSuccessAlert(SUCCESSFUL_MATCHES_SAVE);
 			
 		} catch (RemoteException | MalformedURLException | NotBoundException e) {
