@@ -37,6 +37,7 @@ public class CompetitionViewController extends JfxController {
     private static final String SUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = " Tournament Teams were saved successfully.";
     private static final String UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = "Error occurred while saving Teams to Tournament.";
     private static final Label NO_CONTENT_PLACEHOLDER = new Label("No Content");
+    private static final String SUCCESSFUL_MATCHES_SAVE = "Matches were saved successfully.";
 
     private TournamentDTO _activeCompetition;
 
@@ -337,10 +338,10 @@ public class CompetitionViewController extends JfxController {
 					e.printStackTrace();
 				}
 			}
+			GUIHelper.showSuccessAlert(SUCCESSFUL_MATCHES_SAVE);
 			
 		} catch (RemoteException | MalformedURLException | NotBoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error("Error occurred while saving the matches.", e);
 		}
     }
 
