@@ -27,7 +27,7 @@ public interface ITeamController extends IRemoteController  {
      * Returns a list of all teams to which member with a given id is assigned.
      *
      * @param memberId id of the target member (will be used for search).
-     * @return List<TeamDTO> List of all teams.
+     * @return List<TeamDTO> List of all teams that contain given member in the member list, or null.
      * @throws RemoteException
      * @throws UnknownEntityException
      */
@@ -38,7 +38,7 @@ public interface ITeamController extends IRemoteController  {
      * Returns a list of all members assigned to the given team.
      *
      * @param teamId target team (will be used for search).
-     * @return List<MemberDTO> List of all members.
+     * @return List<MemberDTO> List of all members assigned to the given team.
      * @throws RemoteException
      * @throws UnknownEntityException
      */

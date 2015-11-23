@@ -28,7 +28,6 @@ import java.util.ResourceBundle;
  */
 public class MemberSearchViewController extends SearchViewController<MemberDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String NOT_VALID_SEARCH_INPUT = "Not valid search input";
     private static final String MEMBER_LAST_NAME_COLUMN = "LAST NAME";
     private static final String MEMBER_FIRST_NAME_COLUMN = "FIRST NAME";
     private static final String MEMBER_FEE_PAID_COLUMN = "FEE PAID";
@@ -172,7 +171,6 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
                     LOGGER.error("Error occurred while searching.", e);
                 }
-
             }).start();
         }
     }

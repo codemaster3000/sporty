@@ -1,5 +1,6 @@
 package at.sporty.team1.persistence.daos;
 
+import at.sporty.team1.misc.functional.AliasContainer;
 import at.sporty.team1.persistence.api.IGenericDAO;
 import at.sporty.team1.persistence.util.HibernateSessionUtil;
 import at.sporty.team1.persistence.util.PropertyPair;
@@ -8,6 +9,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.ProjectionList;
 
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
@@ -43,6 +46,20 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
 
         return (List<T>) HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
             Criteria criteria = session.createCriteria(_domainClass);
+            for (Criterion c : criterion) {
+                criteria.add(c);
+            }
+            return criteria.list();
+        });
+    }
+
+    @SuppressWarnings("unchecked") //NON Generic Hibernate method.
+    @Override
+    public List<T> findByCriteriaWithAlias(AliasContainer aliasContainer, Criterion... criterion)
+    throws PersistenceException {
+        return (List<T>) HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
+            Criteria criteria = session.createCriteria(_domainClass);
+            criteria = aliasContainer.applyAlias(criteria);
             for (Criterion c : criterion) {
                 criteria.add(c);
             }

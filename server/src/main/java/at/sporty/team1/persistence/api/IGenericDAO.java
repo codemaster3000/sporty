@@ -1,7 +1,10 @@
 package at.sporty.team1.persistence.api;
 
+import at.sporty.team1.misc.functional.AliasContainer;
 import at.sporty.team1.persistence.util.PropertyPair;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
@@ -26,6 +29,18 @@ public interface IGenericDAO<T> {
      * @throws PersistenceException
      */
     List<T> findByCriteria(Criterion... criterion)
+    throws PersistenceException;
+
+    /**
+     * Returns all existing objects of the given type in the data store that
+     * match the given criterion(s).
+     * @param aliasContainer container for aliases to be applied to the end criteria.
+     * @param criterion criterion to be matched.
+     * @return a list of all objects of the type {@code T} that match the
+     * given criterion(s).
+     * @throws PersistenceException
+     */
+    List<T> findByCriteriaWithAlias(AliasContainer aliasContainer, Criterion... criterion)
     throws PersistenceException;
 
     /**

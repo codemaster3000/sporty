@@ -2,11 +2,14 @@ package at.sporty.team1.application.controller;
 
 import at.sporty.team1.domain.Match;
 import at.sporty.team1.domain.Tournament;
+import at.sporty.team1.domain.interfaces.IMember;
+import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.domain.interfaces.ITournament;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.ITournamentController;
 import at.sporty.team1.rmi.dtos.MatchDTO;
+import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
 import at.sporty.team1.rmi.exceptions.DataType;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
@@ -53,6 +56,93 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
 
         } catch (PersistenceException e) {
             LOGGER.error("An error occurred while getting all Tournaments ", e);
+            return null;
+        }
+    }
+
+    @Override
+    public List<TournamentDTO> searchTournamentsBySport(String sport)
+    throws RemoteException, ValidationException {
+
+        /* Validating Input */
+        InputSanitizer inputSanitizer = new InputSanitizer();
+        if (!inputSanitizer.isValid(sport, DataType.TEXT)) {
+            throw inputSanitizer.getPreparedValidationException();
+        }
+
+        /* Is valid, moving forward */
+        try {
+
+            List<? extends ITournament> rawResults = PersistenceFacade.getNewTournamentDAO().findBySport(sport);
+
+            //checking if there are an results
+            if (rawResults == null || rawResults.isEmpty()) return null;
+
+            //Converting results to TournamentDTO
+            return rawResults.stream()
+                    .map(tournament -> MAPPER.map(tournament, TournamentDTO.class))
+                    .collect(Collectors.toList());
+
+        } catch (PersistenceException e) {
+            LOGGER.error("An error occurred while searching Tournaments by Sport \"{}\".", sport, e);
+            return null;
+        }
+    }
+
+    @Override
+    public List<TournamentDTO> searchTournamentsByDate(String eventDate)
+    throws RemoteException, ValidationException {
+
+        /* Validating Input */
+        InputSanitizer inputSanitizer = new InputSanitizer();
+        if (!inputSanitizer.isValid(eventDate, DataType.SQL_DATE)) {
+            throw inputSanitizer.getPreparedValidationException();
+        }
+
+        /* Is valid, moving forward */
+        try {
+
+            List<? extends ITournament> rawResults = PersistenceFacade.getNewTournamentDAO().findByEventDate(eventDate);
+
+            //checking if there are an results
+            if (rawResults == null || rawResults.isEmpty()) return null;
+
+            //Converting results to TournamentDTO
+            return rawResults.stream()
+                    .map(tournament -> MAPPER.map(tournament, TournamentDTO.class))
+                    .collect(Collectors.toList());
+
+        } catch (PersistenceException e) {
+            LOGGER.error("An error occurred while searching Tournaments by Event Date \"{}\".", eventDate, e);
+            return null;
+        }
+    }
+
+    @Override
+    public List<TournamentDTO> searchTournamentsByLocation(String location)
+    throws RemoteException, ValidationException {
+
+        /* Validating Input */
+        InputSanitizer inputSanitizer = new InputSanitizer();
+        if (!inputSanitizer.isValid(location, DataType.TEXT)) {
+            throw inputSanitizer.getPreparedValidationException();
+        }
+
+        /* Is valid, moving forward */
+        try {
+
+            List<? extends ITournament> rawResults = PersistenceFacade.getNewTournamentDAO().findByLocation(location);
+
+            //checking if there are an results
+            if (rawResults == null || rawResults.isEmpty()) return null;
+
+            //Converting results to TournamentDTO
+            return rawResults.stream()
+                    .map(tournament -> MAPPER.map(tournament, TournamentDTO.class))
+                    .collect(Collectors.toList());
+
+        } catch (PersistenceException e) {
+            LOGGER.error("An error occurred while searching Tournaments by Location \"{}\".", location, e);
             return null;
         }
     }

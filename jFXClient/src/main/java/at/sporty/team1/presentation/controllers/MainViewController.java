@@ -6,6 +6,7 @@ import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.presentation.controllers.core.SearchViewController;
 import at.sporty.team1.rmi.api.IDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.dtos.TournamentDTO;
 import at.sporty.team1.rmi.enums.UserRole;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
@@ -95,7 +96,13 @@ public class MainViewController extends JfxController {
     }
 
     private void openCompetitionView(boolean closable) {
-        openNewTab(COMPETITION_TAB_CAPTION, closable, null, CompetitionViewController.class);
+        openNewRichTab(
+            COMPETITION_TAB_CAPTION,
+            closable,
+            TournamentDTO.class,
+            TournamentSearchViewController.class,
+            CompetitionViewController.class
+        );
     }
 
     private void openNewTab(

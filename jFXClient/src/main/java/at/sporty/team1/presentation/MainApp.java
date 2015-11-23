@@ -141,11 +141,9 @@ public class MainApp extends Application {
 	/**
 	 * Default main method. Starts "this" application.
 	 *
-	 * @param args
-	 *            the command line arguments passed to the application.
+	 * @param args the command line arguments passed to the application.
 	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
-
 }

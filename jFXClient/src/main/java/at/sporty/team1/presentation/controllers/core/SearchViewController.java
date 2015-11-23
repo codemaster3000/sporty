@@ -23,8 +23,10 @@ import java.util.function.Consumer;
 public abstract class SearchViewController<T extends IDTO> extends JfxController {
     private static final String NO_RESULTS_CONTEXT = "No results were found.";
     private static final String PROGRESS_CSS_CLASS = "progress";
-    private static final Label NO_CONTENT_PLACEHOLDER = new Label("No Content");
-    private static final Label SEARCH_IN_PROGRESS_PLACEHOLDER = new Label("Searching...");
+    protected static final String NOT_VALID_SEARCH_INPUT = "Not valid search input";
+
+    private final Label NO_CONTENT_PLACEHOLDER = new Label("No Content");
+    private final Label SEARCH_IN_PROGRESS_PLACEHOLDER = new Label("Searching...");
 
     private TableView<T> _resultTable;
 
