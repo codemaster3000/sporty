@@ -1,16 +1,15 @@
 package at.sporty.team1.persistence.api;
 
-import at.sporty.team1.misc.functional.AliasContainer;
 import at.sporty.team1.persistence.util.PropertyPair;
 import at.sporty.team1.persistence.util.TooManyResultsException;
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.ProjectionList;
-import org.hibernate.criterion.Projections;
 
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public interface IGenericDAO<T> {
     /**
@@ -52,7 +51,7 @@ public interface IGenericDAO<T> {
      * given criterion(s).
      * @throws PersistenceException
      */
-    List<T> findByCriteriaWithAlias(AliasContainer aliasContainer, Criterion... criterion)
+    List<T> findByCriteriaWithAlias(Function<Criteria, Criteria> aliasContainer, Criterion... criterion)
     throws PersistenceException;
 
     /**
