@@ -14,6 +14,7 @@ import javax.persistence.PersistenceException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class HibernateGenericDAO<T> implements IGenericDAO<T> {
@@ -66,11 +67,11 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
 
     @SuppressWarnings("unchecked") //NON Generic Hibernate method.
     @Override
-    public List<T> findByCriteriaWithAlias(Function<Criteria, Criteria> aliasContainer, Criterion... criterion)
+    public List<T> findByCriteriaWithAlias(Consumer<Criteria> aliasApplier, Criterion... criterion)
     throws PersistenceException {
         return (List<T>) HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
             Criteria criteria = session.createCriteria(_domainClass);
-            criteria = aliasContainer.apply(criteria);
+            aliasApplier.accept(criteria);
             for (Criterion c : criterion) {
                 criteria.add(c);
             }

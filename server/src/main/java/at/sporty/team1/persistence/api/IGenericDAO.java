@@ -9,6 +9,7 @@ import javax.persistence.PersistenceException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public interface IGenericDAO<T> {
@@ -45,13 +46,13 @@ public interface IGenericDAO<T> {
     /**
      * Returns all existing objects of the given type in the data store that
      * match the given criterion(s).
-     * @param aliasContainer container for aliases to be applied to the end criteria.
+     * @param aliasApplier applies aliases to the end criteria.
      * @param criterion criterion to be matched.
      * @return a list of all objects of the type {@code T} that match the
      * given criterion(s).
      * @throws PersistenceException
      */
-    List<T> findByCriteriaWithAlias(Function<Criteria, Criteria> aliasContainer, Criterion... criterion)
+    List<T> findByCriteriaWithAlias(Consumer<Criteria> aliasApplier, Criterion... criterion)
     throws PersistenceException;
 
     /**
