@@ -107,7 +107,7 @@ public class TournamentTest {
         MatchDTO matchDTO = new MatchDTO();
 		matchDTO.setTeam1("Hobbits");
         matchDTO.setTeam2("Rabbits");
-        matchDTO.setTime("13.00");
+        matchDTO.setDate("13.00");
 		matchDTO.setLocation("court 1");
 
 		try {

@@ -2,14 +2,11 @@ package at.sporty.team1.application.controller;
 
 import at.sporty.team1.domain.Match;
 import at.sporty.team1.domain.Tournament;
-import at.sporty.team1.domain.interfaces.IMember;
-import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.domain.interfaces.ITournament;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.ITournamentController;
 import at.sporty.team1.rmi.dtos.MatchDTO;
-import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
 import at.sporty.team1.rmi.exceptions.DataType;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
@@ -285,7 +282,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
             !inputSanitizer.isValid(matchDTO.getResult(), DataType.TEXT) ||
             !inputSanitizer.isValid(matchDTO.getTeam1(), DataType.TEXT) ||
             !inputSanitizer.isValid(matchDTO.getTeam2(), DataType.TEXT) ||
-            !inputSanitizer.isValid(matchDTO.getTime(), DataType.TEXT)
+            !inputSanitizer.isValid(matchDTO.getDate(), DataType.TEXT)
         ) {
             throw inputSanitizer.getPreparedValidationException();
         }

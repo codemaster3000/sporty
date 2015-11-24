@@ -100,8 +100,8 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
                             handleReceivedResults(
                                 memberController.searchMembersByNameString(
                                     searchString,
-                                    _paidRadioButton.isArmed(),
-                                    _notPaidRadioButton.isArmed()
+                                    _paidRadioButton.isSelected(),
+                                    _notPaidRadioButton.isSelected()
                                 )
                             );
 
@@ -112,8 +112,8 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
                             handleReceivedResults(
                                 memberController.searchMembersByDateOfBirth(
                                     searchString,
-                                    _paidRadioButton.isArmed(),
-                                    _notPaidRadioButton.isArmed()
+                                    _paidRadioButton.isSelected(),
+                                    _notPaidRadioButton.isSelected()
                                 )
                             );
 
@@ -124,8 +124,8 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
                             handleReceivedResults(
                                 memberController.searchMembersByCommonTeamName(
                                     searchString,
-                                    _paidRadioButton.isArmed(),
-                                    _notPaidRadioButton.isArmed()
+                                    _paidRadioButton.isSelected(),
+                                    _notPaidRadioButton.isSelected()
                                 )
                             );
 
@@ -136,8 +136,8 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
                             handleReceivedResults(
                                 memberController.searchMembersByTournamentTeamName(
                                     searchString,
-                                    _paidRadioButton.isArmed(),
-                                    _notPaidRadioButton.isArmed()
+                                    _paidRadioButton.isSelected(),
+                                    _notPaidRadioButton.isSelected()
                                 )
                             );
 
@@ -164,8 +164,8 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
 
                     IMemberController memberController = CommunicationFacade.lookupForMemberController();
                     handleReceivedResults(memberController.searchAllMembers(
-                        _paidRadioButton.isArmed(),
-                        _notPaidRadioButton.isArmed()
+                        _paidRadioButton.isSelected(),
+                        _notPaidRadioButton.isSelected()
                     ));
 
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {

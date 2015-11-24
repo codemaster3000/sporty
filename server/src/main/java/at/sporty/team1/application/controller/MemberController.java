@@ -1,13 +1,19 @@
 package at.sporty.team1.application.controller;
 
 
+import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.Member;
+import at.sporty.team1.domain.Team;
+import at.sporty.team1.domain.interfaces.IDepartment;
 import at.sporty.team1.domain.interfaces.IMember;
+import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.domain.readonly.IRMember;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.IMemberController;
+import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.DataType;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
@@ -222,6 +228,190 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
         } catch (PersistenceException e) {
             LOGGER.error("An error occurred while searching for \"{}\".", dateOfBirth, e);
             return null;
+        }
+    }
+
+    @Override
+    public List<DepartmentDTO> loadMemberDepartments(Integer memberId)
+    throws RemoteException, UnknownEntityException {
+        try {
+
+            if (memberId == null) throw new UnknownEntityException(IMember.class);
+
+            Member member = PersistenceFacade.getNewMemberDAO().findById(memberId);
+            if (member == null) throw new UnknownEntityException(IMember.class);
+
+            //getting all departments for this entity
+            PersistenceFacade.forceLoadLazyProperty(member, Member::getDepartments);
+            List<? extends IDepartment> rawResults = member.getDepartments();
+
+            //checking if there are an results
+            if (rawResults == null || rawResults.isEmpty()) return null;
+
+            //Converting results to DepartmentDTO
+            return rawResults.stream()
+                    .map(department -> MAPPER.map(department, DepartmentDTO.class))
+                    .collect(Collectors.toList());
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurred while searching for Member #{} departments.",
+                memberId,
+                e
+            );
+            return null;
+        }
+    }
+
+    @Override
+    public void assignMemberToDepartment(Integer memberId, Integer departmentId)
+    throws RemoteException, UnknownEntityException {
+
+        if (memberId == null) throw new UnknownEntityException(IMember.class);
+        if (departmentId == null) throw new UnknownEntityException(IDepartment.class);
+
+        try {
+
+            Member member = PersistenceFacade.getNewMemberDAO().findById(memberId);
+            if (member == null) throw new UnknownEntityException(IMember.class);
+
+            Department department = PersistenceFacade.getNewDepartmentDAO().findById(departmentId);
+            if (department == null) throw new UnknownEntityException(IDepartment.class);
+
+            PersistenceFacade.forceLoadLazyProperty(member, Member::getDepartments);
+            member.addDepartment(department);
+
+            PersistenceFacade.getNewMemberDAO().saveOrUpdate(member);
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurred while assigning \"Member #{} to Department #{}\".",
+                memberId,
+                departmentId,
+                e
+            );
+        }
+    }
+
+    @Override
+    public void removeMemberFromDepartment(Integer memberId, Integer departmentId)
+    throws RemoteException, UnknownEntityException {
+
+        if (memberId == null) throw new UnknownEntityException(IMember.class);
+        if (departmentId == null) throw new UnknownEntityException(IDepartment.class);
+
+        try {
+
+            Member member = PersistenceFacade.getNewMemberDAO().findById(memberId);
+            if (member == null) throw new UnknownEntityException(IMember.class);
+
+            Department department = PersistenceFacade.getNewDepartmentDAO().findById(departmentId);
+            if (department == null) throw new UnknownEntityException(IDepartment.class);
+
+            PersistenceFacade.forceLoadLazyProperty(member, Member::getDepartments);
+            member.removeDepartment(department);
+
+            PersistenceFacade.getNewMemberDAO().saveOrUpdate(member);
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurred while removing \"Member #{} from Department #{}\".",
+                memberId,
+                departmentId,
+                e
+            );
+        }
+    }
+
+    @Override
+    public List<TeamDTO> loadMemberTeams(Integer memberId)
+    throws RemoteException, UnknownEntityException {
+        try {
+
+            if (memberId == null) throw new UnknownEntityException(IMember.class);
+
+            Member member = PersistenceFacade.getNewMemberDAO().findById(memberId);
+            if (member == null) throw new UnknownEntityException(IMember.class);
+
+            //getting all teams for this entity
+            PersistenceFacade.forceLoadLazyProperty(member, Member::getTeams);
+            List<? extends ITeam> rawResults = member.getTeams();
+
+            //checking if there are an results
+            if (rawResults == null || rawResults.isEmpty()) return null;
+
+            //Converting results to TeamDTO
+            return rawResults.stream()
+                    .map(team -> MAPPER.map(team, TeamDTO.class))
+                    .collect(Collectors.toList());
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurred while searching for Member #{} teams.",
+                memberId,
+                e
+            );
+            return null;
+        }
+    }
+
+    @Override
+    public void assignMemberToTeam(Integer memberId, Integer teamId)
+    throws RemoteException, UnknownEntityException {
+
+        if (memberId == null) throw new UnknownEntityException(IMember.class);
+        if (teamId == null) throw new UnknownEntityException(ITeam.class);
+
+        try {
+
+            Member member = PersistenceFacade.getNewMemberDAO().findById(memberId);
+            if (member == null) throw new UnknownEntityException(IMember.class);
+
+            Team team = PersistenceFacade.getNewTeamDAO().findById(teamId);
+            if (team == null) throw new UnknownEntityException(ITeam.class);
+
+            PersistenceFacade.forceLoadLazyProperty(member, Member::getTeams);
+            member.addTeam(team);
+
+            PersistenceFacade.getNewMemberDAO().saveOrUpdate(member);
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurred while assigning \"Member #{} to Team #{}\".",
+                memberId,
+                teamId,
+                e
+            );
+        }
+    }
+
+    @Override
+    public void removeMemberFromTeam(Integer memberId, Integer teamId)
+    throws RemoteException, UnknownEntityException {
+
+        if (memberId == null) throw new UnknownEntityException(IMember.class);
+        if (teamId == null) throw new UnknownEntityException(ITeam.class);
+
+        try {
+
+            Member member = PersistenceFacade.getNewMemberDAO().findById(memberId);
+            if (member == null) throw new UnknownEntityException(IMember.class);
+
+            Team team = PersistenceFacade.getNewTeamDAO().findById(teamId);
+            if (team == null) throw new UnknownEntityException(ITeam.class);
+
+            PersistenceFacade.forceLoadLazyProperty(member, Member::getTeams);
+            member.removeTeam(team);
+
+            PersistenceFacade.getNewMemberDAO().saveOrUpdate(member);
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurred while removing \"Member #{} from Team #{}\".",
+                memberId,
+                teamId,
+                e
+            );
         }
     }
 

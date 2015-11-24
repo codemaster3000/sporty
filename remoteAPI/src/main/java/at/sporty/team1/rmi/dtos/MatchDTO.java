@@ -3,17 +3,25 @@ package at.sporty.team1.rmi.dtos;
 import at.sporty.team1.rmi.api.IDTO;
 
 public class MatchDTO implements IDTO {
-    
 	private static final long serialVersionUID = 1L;
-	
+
+    private Integer _matchId;
 	private String _team1;
     private String _team2;
     private String _referee;
     private String _location;
-	private String _time; //TODO why 'time'? isn't this rather 'date' -> in Matches it is only 'time'. Tournament have a date.
-	private String _result;
+	private String _date;
+    private String _result;
    
     public MatchDTO() {   	
+    }
+
+    public Integer getMatchId() {
+        return _matchId;
+    }
+
+    public void setMatchId(Integer matchId) {
+        _matchId = matchId;
     }
 
     public String getLocation() {
@@ -24,12 +32,12 @@ public class MatchDTO implements IDTO {
 		_location = location;
 	}
     
-    public String getTime() {
-        return _time;
+    public String getDate() {
+        return _date;
     }
 
-    public void setTime(String time) {
-        _time = time;
+    public void setDate(String date) {
+        _date = date;
     }
 
     public String getTeam2() {

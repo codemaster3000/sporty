@@ -1,5 +1,6 @@
 package at.sporty.team1.rmi.api;
 
+import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
@@ -46,24 +47,13 @@ public interface ITeamController extends IRemoteController  {
     throws RemoteException, UnknownEntityException;
 
     /**
-     * Assigns member to selected team.
+     * Returns a Department assigned to the given team.
      *
-     * @param memberId target member (will be used to update teams list).
-     * @param teamId team to which member with given id will be assigned.
+     * @param teamId target team (will be used for search).
+     * @return DepartmentDTO Department assigned to the given team.
      * @throws RemoteException
      * @throws UnknownEntityException
      */
-    void assignMemberToTeam(Integer memberId, Integer teamId)
-    throws RemoteException, UnknownEntityException;
-
-    /**
-     * Removes member from selected team.
-     *
-     * @param memberId target member (will be used to update teams list).
-     * @param teamId team from which member with given id will be removed.
-     * @throws RemoteException
-     * @throws UnknownEntityException
-     */
-    void removeMemberFromTeam(Integer memberId, Integer teamId)
+    DepartmentDTO loadTeamDepartment(Integer teamId)
     throws RemoteException, UnknownEntityException;
 }

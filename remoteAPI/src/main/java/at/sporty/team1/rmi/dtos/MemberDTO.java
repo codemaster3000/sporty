@@ -6,6 +6,8 @@ import at.sporty.team1.rmi.api.IDTO;
  * This IDTO Object implements Object Builder pattern.
  */
 public class MemberDTO implements IDTO {
+    private static final long serialVersionUID = 1L;
+
     private Integer _memberId;
     private String _firstName;
     private String _lastName;

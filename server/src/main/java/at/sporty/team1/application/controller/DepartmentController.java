@@ -1,11 +1,14 @@
 package at.sporty.team1.application.controller;
 
 import at.sporty.team1.domain.Department;
+import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IDepartment;
+import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
+import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import org.apache.logging.log4j.LogManager;
@@ -80,6 +83,36 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
         } catch (PersistenceException e) {
             LOGGER.error(
                 "An error occurred while getting \"all Teams for Department #{}\".",
+                departmentId,
+                e
+            );
+            return null;
+        }
+    }
+
+    @Override
+    public MemberDTO loadDepartmentHead(Integer departmentId)
+    throws RemoteException, UnknownEntityException {
+        try {
+
+            if (departmentId == null) throw new UnknownEntityException(IDepartment.class);
+
+            Department department = PersistenceFacade.getNewDepartmentDAO().findById(departmentId);
+            if (department == null) throw new UnknownEntityException(IDepartment.class);
+
+            //getting all members for this entity
+            PersistenceFacade.forceLoadLazyProperty(department, Department::getDepartmentHead);
+            Member departmentHead = department.getDepartmentHead();
+
+            //checking if there are an results
+            if (departmentHead == null) return null;
+
+            //Converting results to MemberDTO
+            return MAPPER.map(departmentHead, MemberDTO.class);
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurred while searching department head by Department #{}.",
                 departmentId,
                 e
             );

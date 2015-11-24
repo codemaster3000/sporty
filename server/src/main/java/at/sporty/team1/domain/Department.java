@@ -1,6 +1,7 @@
 package at.sporty.team1.domain;
 
 import at.sporty.team1.domain.interfaces.IDepartment;
+import at.sporty.team1.domain.interfaces.IMember;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,6 +16,7 @@ public class Department implements IDepartment {
     private String sport;
     private Member head;
     private List<Team> teamList;
+    private List<Member> memberList;
 
     public Department(){
     }
@@ -45,7 +47,7 @@ public class Department implements IDepartment {
     }
 
     @Override
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "headId")
 	public Member getDepartmentHead() {
 		return head;
@@ -66,6 +68,45 @@ public class Department implements IDepartment {
     @Override
     public void setTeams(List<Team> teamList) {
         this.teamList = teamList;
+    }
+
+    @Override
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "memberDepartments",
+        joinColumns = @JoinColumn(name = "departmentId"),
+        inverseJoinColumns = @JoinColumn(name = "memberId")
+    )
+    public List<Member> getMembers() {
+        return memberList;
+    }
+
+    public void setMembers(List<Member> memberList) {
+        this.memberList = memberList;
+    }
+
+    @Override
+    public void addMember(IMember member) {
+
+        if (!(member instanceof Member)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (!memberList.contains(member)) {
+            memberList.add((Member) member);
+        }
+    }
+
+    @Override
+    public void removeMember(IMember member) {
+
+        if (!(member instanceof Member)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (memberList.isEmpty()) {
+            memberList.remove(member);
+        }
     }
 
     @Override

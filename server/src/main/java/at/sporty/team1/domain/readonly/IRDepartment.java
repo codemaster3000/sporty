@@ -16,4 +16,6 @@ public interface IRDepartment {
     Member getDepartmentHead();
 
     List<Team> getTeams();
+
+    List<Member> getMembers();
 }

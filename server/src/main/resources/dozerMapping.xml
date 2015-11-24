@@ -37,10 +37,6 @@
             <b>setLastName</b>
         </field>
         <field>
-            <a>setLastName</a>
-            <b>setLastName</b>
-        </field>
-        <field>
             <a>getGender</a>
             <b>getGender</b>
         </field>
@@ -119,22 +115,6 @@
             <b>setTeamId</b>
         </field>
         <field>
-            <a>getTrainer</a>
-            <b>getTrainer</b>
-        </field>
-        <field>
-            <a>setTrainer</a>
-            <b>setTrainer</b>
-        </field>
-        <field>
-            <a>getDepartment</a>
-            <b>getDepartment</b>
-        </field>
-        <field>
-            <a>setDepartment</a>
-            <b>setDepartment</b>
-        </field>
-        <field>
             <a>getTeamName</a>
             <b>getTeamName</b>
         </field>
@@ -172,14 +152,6 @@
             <a>setSport</a>
             <b>setSport</b>
         </field>
-        <field>
-            <a>getDepartmentHead</a>
-            <b>getDepartmentHead</b>
-        </field>
-        <field>
-            <a>setDepartmentHead</a>
-            <b>setDepartmentHead</b>
-        </field>
     </mapping>
     
     <!--MATCH TO DTO MAPPING-->
@@ -187,20 +159,28 @@
         <class-a>at.sporty.team1.domain.Match</class-a>
         <class-b>at.sporty.team1.rmi.dtos.MatchDTO</class-b>
         <field>
+            <a>getMatchId</a>
+            <b>getMatchId</b>
+        </field>
+        <field>
+            <a>setMatchId</a>
+            <b>setMatchId</b>
+        </field>
+        <field>
             <a>getLocation</a>
-            <b>getCourt</b>
+            <b>getLocation</b>
         </field>
         <field>
             <a>setLocation</a>
-            <b>setCourt</b>
+            <b>setLocation</b>
         </field>
         <field>
             <a>getDate</a>
-            <b>getTime</b>
+            <b>getDate</b>
         </field>
         <field>
             <a>setDate</a>
-            <b>setTime</b>
+            <b>setDate</b>
         </field>
         <field>
             <a>getTeam2</a>
@@ -219,11 +199,11 @@
             <b>setTeam1</b>
         </field>
         <field>
-            <a>getMatchResult</a>
+            <a>getResult</a>
             <b>getResult</b>
         </field>
         <field>
-            <a>getMatchResult</a>
+            <a>getResult</a>
             <b>setResult</b>
         </field>
         <field>
@@ -241,28 +221,12 @@
         <class-a>at.sporty.team1.domain.Tournament</class-a>
         <class-b>at.sporty.team1.rmi.dtos.TournamentDTO</class-b>
         <field>
-            <a>getId</a>
-            <b>getId</b>
+            <a>getTournamentId</a>
+            <b>getTournamentId</b>
         </field>
         <field>
-            <a>setId</a>
-            <b>setId</b>
-        </field>
-        <field>
-            <a>setMatches</a>
-            <b>setMatches</b>
-        </field>
-        <field>
-            <a>getMatches</a>
-            <b>getMatches</b>
-        </field>
-        <field>
-            <a>setTeams</a>
-            <b>setTeams</b>
-        </field>
-        <field>
-            <a>getTeams</a>
-            <b>getTeams</b>
+            <a>setTournamentId</a>
+            <b>setTournamentId</b>
         </field>
         <field>
             <a>getDate</a>
@@ -273,12 +237,12 @@
             <b>setDate</b>
         </field>
         <field>
-            <a>getLeague</a>
-            <b>getLeague</b>
+            <a>getLocation</a>
+            <b>getLocation</b>
         </field>
         <field>
-            <a>setLeague</a>
-            <b>setLeague</b>
+            <a>setLocation</a>
+            <b>setLocation</b>
         </field>
         <field>
             <a>getDepartment</a>

@@ -1,7 +1,9 @@
 package at.sporty.team1.rmi.api;
 
 
+import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 
@@ -85,6 +87,72 @@ public interface IMemberController extends IRemoteController {
      */
     List<MemberDTO> searchMembersByDateOfBirth(String dateOfBirth, boolean feePaid, boolean feeNotPaid)
     throws RemoteException, ValidationException;
+
+    /**
+     * Returns a list of all departments to which given member is assigned.
+     *
+     * @param memberId target member (will be used for search).
+     * @return List<DepartmentDTO> List of all departments to which given member is assigned.
+     * @throws RemoteException
+     * @throws UnknownEntityException
+     */
+    List<DepartmentDTO> loadMemberDepartments(Integer memberId)
+    throws RemoteException, UnknownEntityException;
+
+    /**
+     * Assigns member to selected department.
+     *
+     * @param memberId target member (will be used to update departments list).
+     * @param departmentId department to which member with given id will be assigned.
+     * @throws RemoteException
+     * @throws UnknownEntityException
+     */
+    void assignMemberToDepartment(Integer memberId, Integer departmentId)
+    throws RemoteException, UnknownEntityException;
+
+    /**
+     * Removes member from selected department.
+     *
+     * @param memberId target member (will be used to update departments list).
+     * @param departmentId department from which member with given id will be removed.
+     * @throws RemoteException
+     * @throws UnknownEntityException
+     */
+    void removeMemberFromDepartment(Integer memberId, Integer departmentId)
+    throws RemoteException, UnknownEntityException;
+
+    /**
+     * Returns a list of all teams to which given member is assigned.
+     *
+     * @param memberId target member (will be used for search).
+     * @return List<TeamDTO> List of all teams to which given member is assigned.
+     * @throws RemoteException
+     * @throws UnknownEntityException
+     */
+    List<TeamDTO> loadMemberTeams(Integer memberId)
+    throws RemoteException, UnknownEntityException;
+
+    /**
+     * Assigns member to selected team.
+     *
+     * @param memberId target member (will be used to update teams list).
+     * @param teamId team to which member with given id will be assigned.
+     * @throws RemoteException
+     * @throws UnknownEntityException
+     */
+    void assignMemberToTeam(Integer memberId, Integer teamId)
+    throws RemoteException, UnknownEntityException;
+
+    /**
+     * Removes member from selected team.
+     *
+     * @param memberId target member (will be used to update teams list).
+     * @param teamId team from which member with given id will be removed.
+     * @throws RemoteException
+     * @throws UnknownEntityException
+     */
+    void removeMemberFromTeam(Integer memberId, Integer teamId)
+    throws RemoteException, UnknownEntityException;
 
     /**
      * Deletes member form the data storage with data from the DTO.

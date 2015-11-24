@@ -184,7 +184,7 @@ public class CompetitionViewController extends JfxController {
 
         _timeCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
         _timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
-        _timeCol.setOnEditCommit(cell -> cell.getRowValue().setTime(cell.getNewValue()));
+        _timeCol.setOnEditCommit(cell -> cell.getRowValue().setDate(cell.getNewValue()));
 
         _refereeCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
         _refereeCol.setCellValueFactory(new PropertyValueFactory<>("referee"));
@@ -306,7 +306,7 @@ public class CompetitionViewController extends JfxController {
 
                 ITournamentController imc = CommunicationFacade.lookupForTournamentController();
                 Integer competitionId = imc.createOrSaveTournament(_activeCompetition);
-                _activeCompetition.setId(competitionId); //FIXME (Sergii) avoid DTO better own property
+                _activeCompetition.setTournamentId(competitionId); //FIXME (Sergii) avoid DTO better own property
 
                 GUIHelper.showSuccessAlert(SUCCESSFUL_TOURNAMENT_SAVE);
                 setVisibleOfTournamentTeamView(true);
@@ -329,7 +329,7 @@ public class CompetitionViewController extends JfxController {
 
         //TODO: save Matches to _activeTournament
     	ITournamentController imc = null;
-    	int tournamentId = _activeCompetition.getId();
+    	int tournamentId = _activeCompetition.getTournamentId();
     	
     	try {
 			imc = CommunicationFacade.lookupForTournamentController();
@@ -388,7 +388,7 @@ public class CompetitionViewController extends JfxController {
                 int savedTeamsCounter = 0;
 
                 for (String team : teams) {
-                    tournamentController.assignTeamToTournament(team, _activeCompetition.getId());
+                    tournamentController.assignTeamToTournament(team, _activeCompetition.getTournamentId());
                     ++savedTeamsCounter;
                 }
 

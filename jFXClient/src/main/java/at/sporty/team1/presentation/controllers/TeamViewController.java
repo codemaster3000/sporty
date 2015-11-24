@@ -4,6 +4,7 @@ import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.IDTO;
 import at.sporty.team1.rmi.api.IDepartmentController;
+import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.api.ITeamController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
@@ -183,11 +184,11 @@ public class TeamViewController extends JfxController {
         MemberDTO memberDTO = _membersListView.getSelectionModel().getSelectedItem();
 
         try {
-            ITeamController teamController = CommunicationFacade.lookupForTeamController();
+            IMemberController memberController = CommunicationFacade.lookupForMemberController();
 
             if ((_activeTeamDTO != null) && (memberDTO != null)) {
 
-                teamController.removeMemberFromTeam(memberDTO.getMemberId(), _activeTeamDTO.getTeamId());
+                memberController.removeMemberFromTeam(memberDTO.getMemberId(), _activeTeamDTO.getTeamId());
                 _membersListView.getItems().remove(memberDTO);
 
             } else if (memberDTO != null) {
@@ -218,10 +219,14 @@ public class TeamViewController extends JfxController {
 
                 for (MemberDTO member : memberList) {
                     try {
-                        CommunicationFacade.lookupForTeamController().assignMemberToTeam(member.getMemberId(), _activeTeamDTO.getTeamId());
+
+                        CommunicationFacade.lookupForMemberController().assignMemberToTeam(
+                            member.getMemberId(),
+                            _activeTeamDTO.getTeamId()
+                        );
+
                     } catch (UnknownEntityException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        LOGGER.error("Unable to assign Member to Team", e);
                     }
                 }
 

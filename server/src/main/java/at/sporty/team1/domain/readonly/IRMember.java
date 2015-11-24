@@ -1,6 +1,10 @@
 package at.sporty.team1.domain.readonly;
 
+import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.Gender;
+import at.sporty.team1.domain.Team;
+
+import java.util.List;
 
 /**
  * Created by sereGkaluv on 27-Oct-15.
@@ -28,4 +32,8 @@ public interface IRMember {
     String getUsername();
 
     Boolean getIsFeePaid();
+
+    List<Department> getDepartments();
+
+    List<Team> getTeams();
 }

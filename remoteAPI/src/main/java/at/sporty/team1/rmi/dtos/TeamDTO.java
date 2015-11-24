@@ -6,10 +6,9 @@ import at.sporty.team1.rmi.api.IDTO;
  * This IDTO Object implements Object Builder pattern.
  */
 public class TeamDTO implements IDTO {
+    private static final long serialVersionUID = 1L;
+
     private Integer _teamId;
-    private MemberDTO _trainer;
-    private DepartmentDTO _department;
-    private Integer _league; //TODO replace with league DTO
     private String _teamName;
     private Boolean _isTournamentSquad;
 
@@ -22,35 +21,6 @@ public class TeamDTO implements IDTO {
 
     public TeamDTO setTeamId(Integer teamId) {
         _teamId = teamId;
-        return this;
-    }
-
-    public MemberDTO getTrainer() {
-        return _trainer;
-    }
-
-    public TeamDTO setTrainer(MemberDTO trainer) {
-        _trainer = trainer;
-        return this;
-    }
-
-    public DepartmentDTO getDepartment() {
-        return _department;
-    }
-
-    public TeamDTO setDepartment(DepartmentDTO department) {
-        _department = department;
-        return this;
-    }
-
-    @Deprecated // not supported yet
-    public Integer getLeague() {
-        return _league;
-    }
-
-    @Deprecated // not supported yet
-    public TeamDTO setLeague(Integer league) {
-        _league = league;
         return this;
     }
 

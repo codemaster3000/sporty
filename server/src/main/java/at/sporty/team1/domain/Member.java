@@ -1,9 +1,12 @@
 package at.sporty.team1.domain;
 
+import at.sporty.team1.domain.interfaces.IDepartment;
 import at.sporty.team1.domain.interfaces.IMember;
+import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.misc.converters.SQLDateConverter;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -24,6 +27,8 @@ public class Member implements IMember {
     private String role;
     private String username;
     private Boolean isFeePaid;
+    private List<Department> departmentList;
+    private List<Team> teamList;
 
     public Member() {
     }
@@ -159,6 +164,83 @@ public class Member implements IMember {
     @Override
     public void setIsFeePaid(Boolean isFeePaid) {
         this.isFeePaid = isFeePaid;
+    }
+
+    @Override
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "memberDepartments",
+        joinColumns = @JoinColumn(name = "memberId"),
+        inverseJoinColumns = @JoinColumn(name = "departmentId")
+    )
+    public List<Department> getDepartments() {
+        return departmentList;
+    }
+
+    public void setDepartments(List<Department> departmentList) {
+        this.departmentList = departmentList;
+    }
+
+    @Override
+    public void addDepartment(IDepartment department) {
+
+        if (!(department instanceof Department)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (!departmentList.contains(department)) {
+            departmentList.add((Department) department);
+        }
+    }
+
+    @Override
+    public void removeDepartment(IDepartment department) {
+
+        if (!(department instanceof Department)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (departmentList.isEmpty()) {
+            departmentList.remove(department);
+        }
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "teamMembers",
+        joinColumns = @JoinColumn(name = "memberId"),
+        inverseJoinColumns = @JoinColumn(name = "teamId")
+    )
+    public List<Team> getTeams() {
+        return teamList;
+    }
+
+    public void setTeams(List<Team> teamList) {
+        this.teamList = teamList;
+    }
+
+    @Override
+    public void addTeam(ITeam team) {
+
+        if (!(team instanceof Team)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (!teamList.contains(team)) {
+            teamList.add((Team) team);
+        }
+    }
+
+    @Override
+    public void removeTeam(ITeam team) {
+
+        if (!(team instanceof Team)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (teamList.isEmpty()) {
+            teamList.remove(team);
+        }
     }
 
     @Override

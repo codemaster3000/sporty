@@ -1,12 +1,15 @@
 package at.sporty.team1.application.controller;
 
+import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Team;
+import at.sporty.team1.domain.interfaces.IDepartment;
 import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.ITeamController;
+import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.DataType;
@@ -125,62 +128,32 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
     }
 
     @Override
-    public void assignMemberToTeam(Integer memberId, Integer teamId)
+    public DepartmentDTO loadTeamDepartment(Integer teamId)
     throws RemoteException, UnknownEntityException {
-
-        if (memberId == null) throw new UnknownEntityException(IMember.class);
-        if (teamId == null) throw new UnknownEntityException(ITeam.class);
-
         try {
 
-            Member member = PersistenceFacade.getNewMemberDAO().findById(memberId);
-            if (member == null) throw new UnknownEntityException(IMember.class);
+            if (teamId == null) throw new UnknownEntityException(ITeam.class);
 
             Team team = PersistenceFacade.getNewTeamDAO().findById(teamId);
             if (team == null) throw new UnknownEntityException(ITeam.class);
 
-            PersistenceFacade.forceLoadLazyProperty(team, Team::getMembers);
-            team.addMember(member);
+            //getting all members for this entity
+            PersistenceFacade.forceLoadLazyProperty(team, Team::getDepartment);
+            Department department = team.getDepartment();
 
-            PersistenceFacade.getNewTeamDAO().saveOrUpdate(team);
+            //checking if there are an results
+            if (department == null) return null;
 
-        } catch (PersistenceException e) {
-            LOGGER.error(
-                "An error occurred while assigning \"Member #{} to Team #{}\".",
-                memberId,
-                teamId,
-                e
-            );
-        }
-    }
-
-    @Override
-    public void removeMemberFromTeam(Integer memberId, Integer teamId)
-    throws RemoteException, UnknownEntityException {
-
-        if (memberId == null) throw new UnknownEntityException(IMember.class);
-        if (teamId == null) throw new UnknownEntityException(ITeam.class);
-
-        try {
-
-            Member member = PersistenceFacade.getNewMemberDAO().findById(memberId);
-            if (member == null) throw new UnknownEntityException(IMember.class);
-
-            Team team = PersistenceFacade.getNewTeamDAO().findById(teamId);
-            if (team == null) throw new UnknownEntityException(ITeam.class);
-
-            PersistenceFacade.forceLoadLazyProperty(team, Team::getMembers);
-            team.removeMember(member);
-
-            PersistenceFacade.getNewTeamDAO().saveOrUpdate(team);
+            //Converting results to DepartmentDTO
+            return MAPPER.map(department, DepartmentDTO.class);
 
         } catch (PersistenceException e) {
             LOGGER.error(
-                "An error occurred while removing \"Member #{} from Team #{}\".",
-                memberId,
+                "An error occurred while searching Department assigned to Team #{}.",
                 teamId,
                 e
             );
+            return null;
         }
     }
 }

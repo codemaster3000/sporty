@@ -17,4 +17,10 @@ public interface IDepartment extends IRDepartment {
     void setDepartmentHead(Member head);
 
     void setTeams(List<Team> teamList);
+
+    void setMembers(List<Member> memberList);
+
+    void addMember(IMember member);
+
+    void removeMember(IMember member);
 }

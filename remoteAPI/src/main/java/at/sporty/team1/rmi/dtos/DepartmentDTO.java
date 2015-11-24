@@ -6,9 +6,10 @@ import at.sporty.team1.rmi.api.IDTO;
  * This IDTO Object implements Object Builder pattern.
  */
 public class DepartmentDTO implements IDTO {
+    private static final long serialVersionUID = 1L;
+
     private Integer _departmentId;
     private String _sport;
-    private MemberDTO _head;
 
     public DepartmentDTO() {
     }
@@ -28,15 +29,6 @@ public class DepartmentDTO implements IDTO {
 
     public DepartmentDTO setSport(String sport) {
         _sport = sport;
-        return this;
-    }
-    
-    public MemberDTO getDepartmentHead() {
-        return _head;
-    }
-
-    public DepartmentDTO setDepartmentHead(MemberDTO head) {
-        _head = head;
         return this;
     }
 }
