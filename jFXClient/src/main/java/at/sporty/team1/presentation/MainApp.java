@@ -135,6 +135,8 @@ public class MainApp extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setTitle(DEFAULT_TITLE);
 
+		WOW JENKINS NOTIFICATION TEST
+
 		return primaryStage;
 	}
 	
