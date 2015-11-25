@@ -1,14 +1,23 @@
 package at.sporty.team1.application.controller;
 
+import at.sporty.team1.rmi.security.SecurityModule;
 import at.sporty.team1.domain.Member;
-import at.sporty.team1.misc.InputSanitizer;
+import at.sporty.team1.rmi.exceptions.SecurityException;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.persistence.util.TooManyResultsException;
 import at.sporty.team1.rmi.api.ILoginController;
+import at.sporty.team1.rmi.dtos.AuthorisationDTO;
+import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.dtos.SessionDTO;
 import at.sporty.team1.rmi.enums.UserRole;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dozer.DozerBeanMapper;
+import org.dozer.Mapper;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.naming.AuthenticationException;
 import javax.naming.Context;
 import javax.naming.NamingException;
@@ -16,79 +25,119 @@ import javax.naming.directory.InitialDirContext;
 import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.InvalidKeyException;
+import java.security.KeyPair;
+import java.security.PublicKey;
 import java.util.Hashtable;
-import java.util.List;
+import java.util.UUID;
 
 /**
  * Represents a controller to handle the login.
  */
 public class LoginController extends UnicastRemoteObject implements ILoginController {
 	private static final Logger LOGGER = LogManager.getLogger();
+    private static final Mapper MAPPER = new DozerBeanMapper();
 
-	public LoginController() throws RemoteException {
+    private final Cipher _cipher;
+    private final KeyPair _keyPair;
+    private final byte[] _encodedPublicKey;
+
+	public LoginController() throws RemoteException, SecurityException {
 		super();
+
+        _cipher = SecurityModule.getNewRSACipher();
+        _keyPair = SecurityModule.generateNewRSAKeyPair(512);
+        _encodedPublicKey = SecurityModule.getEncodedRSAPublicKey(_keyPair);
 	}
 
-	/**
-	 * *************************************************************************
-	 * @return Enum to distinguish which default screen to load;
-	 *         UNSUCCESSFUL_LOGIN if not authorized *
-	 * *************************************************************************
-	 * @apiNote  checks if a login is valid by comparing the login information to
-	 *           the database if the login is valid it prompts the default screen
-	 *           associated with the employees class if the login is invalid it
-	 *           logs the failed login attempt and prompts the login screen again
-	 *           <p>
-	 *           UNSUCCESSFUL_LOGIN false ADMIN MEMBER TRAINER DEPARTMENT_HEAD
-	 *           MANAGER .....
-	 * @param username Users Username
-	 * @param password Users Password
-	 */
+    @Override
+    public byte[] getServerPublicKey()
+    throws RemoteException {
+        return _encodedPublicKey;
+    }
+
 	@Override
-	public UserRole authorize(String username, String password) throws RemoteException {
+	public SessionDTO authorize(AuthorisationDTO authorisationDTO)
+    throws RemoteException {
 
 		/*
-		 * Check if username and password are given and the format of this
-		 * strings is OK
+		 * Check if username and password are present in authorisationDTO
 		 */
-		if (InputSanitizer.isNullOrEmpty(username) && InputSanitizer.isNullOrEmpty(password)) {
-			return UserRole.UNSUCCESSFUL_LOGIN;
-		}
-		
-		try {
+		if (authorisationDTO == null) return null;
+        if (authorisationDTO.getClientPublicKey() == null) return null;
+        if (authorisationDTO.getEncryptedUserLogin() == null) return null;
+        if (authorisationDTO.getEncryptedUserPassword() == null) return null;
 
-			Hashtable<String, String> env = new Hashtable<>();
-			env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-			env.put(Context.PROVIDER_URL, "ldaps://ldap.fhv.at:636/dc=uclv,dc=net");
-			env.put(Context.SECURITY_AUTHENTICATION, "simple");
-			env.put(Context.SECURITY_PRINCIPAL, "uid=" + username + ",ou=fhv,ou=People,dc=uclv,dc=net");
-			env.put(Context.SECURITY_CREDENTIALS, password);
-			env.put(Context.SECURITY_PROTOCOL, "ssl"); //use SSL
+        try {
 
-			/* The next line tries to login to LDAP */
-			InitialDirContext context = new InitialDirContext(env);
-			
-			LOGGER.info("Successful login of {}.", username);
-			context.close();
+            _cipher.init(Cipher.DECRYPT_MODE, _keyPair.getPrivate());
 
-			// Get role of current user from database
-			UserRole currentRole = getUserRole(username);
-			if (currentRole != null) return currentRole;
+            //Decrypting username
+            String username = new String(
+                _cipher.doFinal(authorisationDTO.getEncryptedUserLogin())
+            );
 
-		} catch (AuthenticationException e) {
-			LOGGER.error("Invalid login attempt by {}.", username, e);
+            //Decrypting password
+            String password = new String(
+                _cipher.doFinal(authorisationDTO.getEncryptedUserPassword())
+            );
+
+            //Preparing environment for LDAP
+            Hashtable<String, String> env = new Hashtable<>();
+            env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+            env.put(Context.PROVIDER_URL, "ldaps://ldap.fhv.at:636/dc=uclv,dc=net");
+            env.put(Context.SECURITY_AUTHENTICATION, "simple");
+            env.put(Context.SECURITY_PRINCIPAL, "uid=" + username + ",ou=fhv,ou=People,dc=uclv,dc=net");
+            env.put(Context.SECURITY_CREDENTIALS, password);
+            env.put(Context.SECURITY_PROTOCOL, "ssl");
+
+			//Trying to login via LDAP
+            InitialDirContext context = new InitialDirContext(env);
+
+            //Successful login
+            LOGGER.info("Successful login of {}.", username);
+            context.close();
+
+            //Receiving member object from db
+            Member member = PersistenceFacade.getNewMemberDAO().findByUsername(username);
+
+            //Preparing client fingerprint
+            PublicKey clientKey = SecurityModule.getDecodedRSAPublicKey(authorisationDTO.getClientPublicKey());
+
+            _cipher.init(Cipher.ENCRYPT_MODE, clientKey);
+
+            byte[] sessionId = UUID.randomUUID().toString().getBytes();
+            byte[] clientFingerprint = _cipher.doFinal(sessionId);
+
+            //Sending session object for client
+            return new SessionDTO()
+                    .setMember(MAPPER.map(member, MemberDTO.class))
+                    .setClientFingerprint(clientFingerprint);
+
+        } catch (InvalidKeyException e) {
+            LOGGER.error("Private key is not suitable.", e);
+        } catch (BadPaddingException | IllegalBlockSizeException e) {
+            LOGGER.error("Received data is corrupted.", e);
+        } catch (AuthenticationException e) {
+			LOGGER.error("Not successful login attempt detected.", e);
 		} catch (NamingException e) {
 			LOGGER.error("LDAP protocol communication error.");
 			LOGGER.debug("LDAP protocol communication error.", e);
-		}
+		} catch (PersistenceException e) {
+            LOGGER.error("Error occurred while getting member from data store.", e);
+        } catch (TooManyResultsException e) {
+            LOGGER.error("Too many authentication results from data store were received.", e);
+        } catch (SecurityException e) {
+            LOGGER.error("Error occurs while generating client fingerprint", e);
+        }
 
-		return UserRole.UNSUCCESSFUL_LOGIN;
+        return null;
 	}
 
+	@Deprecated
 	private UserRole getUserRole(String username) {
 
 		/* Get the role of this user from our db */
-
 		try{
 			
 			Member member = PersistenceFacade.getNewMemberDAO().findByUsername(username);

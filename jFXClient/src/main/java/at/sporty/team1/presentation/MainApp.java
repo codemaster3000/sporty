@@ -2,7 +2,12 @@ package at.sporty.team1.presentation;
 
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.MainViewController;
+import at.sporty.team1.rmi.api.ILoginController;
+import at.sporty.team1.rmi.dtos.AuthorisationDTO;
+import at.sporty.team1.rmi.dtos.SessionDTO;
 import at.sporty.team1.rmi.enums.UserRole;
+import at.sporty.team1.rmi.exceptions.SecurityException;
+import at.sporty.team1.rmi.security.SecurityModule;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -12,11 +17,18 @@ import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
+import java.security.InvalidKeyException;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -88,21 +100,52 @@ public class MainApp extends Application {
 				if (HACK_ACCESS_TOKENS.contains(loginData.getKey())) {
 
                     GUIHelper.showSuccessAlert("WOW SO SECURE, MUCH LOGIN!");
-                    showMainStage(UserRole.ADMIN);
+                    showMainStage(new SessionDTO());
 
 				} else {
 
-                    UserRole loginResult = CommunicationFacade.lookupForLoginController().authorize(
-                            loginData.getKey(),
-                            loginData.getValue()
-                    );
+                    try {
 
-                    if (loginResult != UserRole.UNSUCCESSFUL_LOGIN) {
-                        GUIHelper.showSuccessAlert("Login was successful. :)");
-                        showMainStage(loginResult);
-                    } else {
-                        GUIHelper.showErrorAlert("Invalid Username or Password.");
-                        performLogin();
+                        //Reading username and password
+                        byte[] username = loginData.getKey().getBytes();
+                        byte[] password = loginData.getValue().getBytes();
+
+                        ILoginController loginController = CommunicationFacade.lookupForLoginController();
+
+                        //Pulling server public key
+                        PublicKey serverKey = SecurityModule.getDecodedRSAPublicKey(
+                            loginController.getServerPublicKey()
+                        );
+
+                        //TODO store keyPair somewhere
+                        KeyPair kp = SecurityModule.generateNewRSAKeyPair(512);
+
+                        //Preparing for data encryption
+                        Cipher cipher = SecurityModule.getNewRSACipher();
+                        cipher.init(Cipher.ENCRYPT_MODE, serverKey);
+
+                        AuthorisationDTO authorisationDTO = new AuthorisationDTO()
+                                .setClientPublicKey(SecurityModule.getEncodedRSAPublicKey(kp))
+                                .setEncryptedUserLogin(cipher.doFinal(username))
+                                .setEncryptedUserPassword(cipher.doFinal(password));
+
+                        //Getting authorisation result
+                        SessionDTO session = loginController.authorize(authorisationDTO);
+
+                        if (session != null) {
+                            GUIHelper.showSuccessAlert("Login was successful. :)");
+                            showMainStage(session);
+                        } else {
+                            GUIHelper.showErrorAlert("Invalid Username or Password.");
+                            performLogin();
+                        }
+
+                    } catch (InvalidKeyException e) {
+                        LOGGER.error("Private key is not suitable.", e);
+                    } catch (BadPaddingException | IllegalBlockSizeException e) {
+                        LOGGER.error("Received data is corrupted.", e);
+                    } catch (SecurityException e) {
+                        LOGGER.error("Error occurs while generating client fingerprint", e);
                     }
                 }
 			}
@@ -112,11 +155,11 @@ public class MainApp extends Application {
 	}
 
 
-	private void showMainStage(UserRole userRole) {	
+	private void showMainStage(SessionDTO session) {
 				
 		ViewLoader<MainViewController> viewLoader = ViewLoader.loadView(MainViewController.class);
 		Parent mainStage = (Parent) viewLoader.loadNode();
-		viewLoader.getController().setUserRole(userRole);
+		viewLoader.getController().activateSession(session);
 		
 		prepareNewStage(mainStage).show();
 	}

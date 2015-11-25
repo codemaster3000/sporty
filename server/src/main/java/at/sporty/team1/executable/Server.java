@@ -1,6 +1,7 @@
 package at.sporty.team1.executable;
 
 import at.sporty.team1.application.controller.*;
+import at.sporty.team1.rmi.exceptions.SecurityException;
 import at.sporty.team1.persistence.util.HibernateSessionUtil;
 import at.sporty.team1.rmi.RemoteObjectRegistry;
 import org.apache.logging.log4j.LogManager;
@@ -48,7 +49,7 @@ public class Server {
         }
     }
 
-    private static void bindRemoteObjects() throws RemoteException {
+    private static void bindRemoteObjects() throws RemoteException, SecurityException {
         bindName(RemoteObjectRegistry.MEMBER_CONTROLLER, new MemberController());
         bindName(RemoteObjectRegistry.TEAM_CONTROLLER, new TeamController());
         bindName(RemoteObjectRegistry.DEPARTMENT_CONTROLLER, new DepartmentController());

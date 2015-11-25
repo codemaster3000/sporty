@@ -6,6 +6,7 @@ import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.presentation.controllers.core.SearchViewController;
 import at.sporty.team1.rmi.api.IDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.dtos.SessionDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
 import at.sporty.team1.rmi.enums.UserRole;
 import at.sporty.team1.util.GUIHelper;
@@ -35,7 +36,7 @@ public class MainViewController extends JfxController {
     @FXML private TextField _searchField;
     @FXML private TabPane _tabPanel;
     
-    private UserRole _userRole;
+    private SessionDTO _session;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -52,8 +53,10 @@ public class MainViewController extends JfxController {
         openCompetitionView(false);
     }
 
-    public void setUserRole(UserRole userRole){
-        _userRole = userRole;
+    public void activateSession(SessionDTO session){
+        _session = session;
+
+
     }
 
     @FXML
