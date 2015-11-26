@@ -5,7 +5,7 @@ import at.sporty.team1.domain.interfaces.IMatch;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "match")
+@Table(name = "sportyMatch")
 public class Match implements IMatch {
 
     public Integer matchId;
@@ -44,7 +44,7 @@ public class Match implements IMatch {
 
     @Override
     @Basic
-    @Column(name = "date")
+    @Column(name = "matchDate")
     public String getDate() {
         return date;
     }
@@ -80,7 +80,7 @@ public class Match implements IMatch {
 
     @Override
     @Basic
-    @Column(name = "location")
+    @Column(name = "matchLocation")
     public String getLocation() {
         return location;
     }
@@ -92,7 +92,7 @@ public class Match implements IMatch {
 
     @Override
     @Basic
-    @Column(name = "result")
+    @Column(name = "matchResult")
     public String getResult() {
         return matchResult;
     }
@@ -104,7 +104,7 @@ public class Match implements IMatch {
 
     @Override
     @Basic
-    @Column(name = "referee")
+    @Column(name = "matchReferee")
     public String getReferee() {
         return referee;
     }
