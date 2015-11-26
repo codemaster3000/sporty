@@ -2,18 +2,32 @@ package at.sporty.team1.communication;
 
 import at.sporty.team1.rmi.RemoteObjectRegistry;
 import at.sporty.team1.rmi.api.*;
+import at.sporty.team1.rmi.dtos.AuthorisationDTO;
+import at.sporty.team1.rmi.dtos.SessionDTO;
+import at.sporty.team1.rmi.exceptions.SecurityException;
+import at.sporty.team1.rmi.security.SecurityModule;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.security.InvalidKeyException;
+import java.security.KeyPair;
+import java.security.PublicKey;
 import java.util.HashMap;
 import java.util.Map;
 
 public class CommunicationFacade {
     private static final String DEFAULT_RMI = "rmi://localhost/%s";
     private static final Map<Class<? extends IRemoteController>, Remote> CONTROLLER_MAP = new HashMap<>();
+
+    private static PublicKey _activeServerPublicKey;
+    private static KeyPair _activeRSAKeyPair;
+    private static SessionDTO _activeSession;
 
     private CommunicationFacade() {
     }
@@ -72,5 +86,65 @@ public class CommunicationFacade {
 
         return (ITournamentController) CONTROLLER_MAP.get(ITournamentController.class);
 	}
+
+    public static PublicKey getServerPublicKey()
+    throws RemoteException, NotBoundException, MalformedURLException, SecurityException {
+        if (_activeServerPublicKey == null) {
+            _activeServerPublicKey = SecurityModule.getDecodedRSAPublicKey(
+                lookupForLoginController().getServerPublicKey()
+            );
+        }
+        return _activeServerPublicKey;
+    }
+
+    public static KeyPair getClientRSAKeyPair()
+    throws SecurityException {
+        if (_activeRSAKeyPair == null) {
+            _activeRSAKeyPair = SecurityModule.generateNewRSAKeyPair(512);
+        }
+        return _activeRSAKeyPair;
+    }
+
+    public static SessionDTO getActiveSession() {
+        return _activeSession;
+    }
+
+    public static SessionDTO authorize(String username, String password)
+    throws RemoteException, NotBoundException, MalformedURLException, SecurityException,
+    InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+
+        //Reading username and password
+        byte[] rawUsername = username.getBytes();
+        byte[] rawPassword = password.getBytes();
+
+        //Preparing for data encryption
+        Cipher cipher = SecurityModule.getNewRSACipher();
+        cipher.init(Cipher.ENCRYPT_MODE, getServerPublicKey());
+
+        AuthorisationDTO authorisationDTO = new AuthorisationDTO()
+            .setEncryptedUserLogin(cipher.doFinal(rawUsername))
+            .setEncryptedUserPassword(cipher.doFinal(rawPassword))
+            .setClientPublicKey(SecurityModule.getEncodedRSAPublicKey(
+                CommunicationFacade.getClientRSAKeyPair()
+            ));
+
+        //Getting authorisation result
+        SessionDTO session = lookupForLoginController().authorize(authorisationDTO);
+        if (session != null) {
+            //Decrypting client fingerprint for client side
+            cipher.init(Cipher.DECRYPT_MODE, getClientRSAKeyPair().getPrivate());
+            byte[] decodedFingerprint = cipher.doFinal(session.getClientFingerprint());
+
+            //Encrypting client fingerprint for server side
+            cipher.init(Cipher.ENCRYPT_MODE, getServerPublicKey());
+            byte[] clientFingerprint = cipher.doFinal(decodedFingerprint);
+
+            session.setClientFingerprint(clientFingerprint);
+        }
+
+        _activeSession = session;
+
+        return _activeSession;
+    }
 }
 

@@ -11,8 +11,11 @@ import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.ITeamController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.dtos.SessionDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.enums.UserRole;
 import at.sporty.team1.rmi.exceptions.DataType;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +32,7 @@ import java.util.stream.Collectors;
 /**
  * Created by sereGkaluv on 27-Oct-15.
  */
-public class TeamController extends UnicastRemoteObject implements ITeamController{
+public class TeamController extends UnicastRemoteObject implements ITeamController {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Mapper MAPPER = new DozerBeanMapper();
@@ -39,8 +42,10 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
     }
 
     @Override
-    public void createOrSaveTeam(TeamDTO teamDTO)
-    throws RemoteException, ValidationException {
+    public void createOrSaveTeam(TeamDTO teamDTO, SessionDTO session)
+    throws RemoteException, ValidationException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MANAGER)) throw new NotAuthorisedException();
 
         if (teamDTO == null) return;
 
@@ -66,8 +71,10 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
     }
 
     @Override
-    public List<TeamDTO> searchTeamsByMember(Integer memberId)
-    throws RemoteException, UnknownEntityException {
+    public List<TeamDTO> searchTeamsByMember(Integer memberId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
 
         if (memberId == null) throw new UnknownEntityException(IMember.class);
 
@@ -95,8 +102,10 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
     }
 
     @Override
-    public List<MemberDTO> loadTeamMembers(Integer teamId)
-    throws RemoteException, UnknownEntityException {
+    public List<MemberDTO> loadTeamMembers(Integer teamId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
 
         if (teamId == null) throw new UnknownEntityException(ITeam.class);
 
@@ -128,9 +137,11 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
     }
 
     @Override
-    public DepartmentDTO loadTeamDepartment(Integer teamId)
-    throws RemoteException, UnknownEntityException {
+    public DepartmentDTO loadTeamDepartment(Integer teamId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
         try {
+
+            if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
 
             if (teamId == null) throw new UnknownEntityException(ITeam.class);
 

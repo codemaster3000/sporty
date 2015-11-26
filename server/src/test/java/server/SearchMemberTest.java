@@ -2,6 +2,8 @@ package server;
 
 import at.sporty.team1.application.controller.MemberController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.dtos.SessionDTO;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -28,7 +30,7 @@ public class SearchMemberTest {
 	public void searchMemberTest_1() {
 
 		String searchString = "Claudia";
-		List<MemberDTO> members = testSearchMember(searchString,false, false);
+		List<MemberDTO> members = testSearchMember(searchString, null, null);
 
 		Assert.assertNotNull(members);
 		Assert.assertEquals(1, members.size());
@@ -42,7 +44,7 @@ public class SearchMemberTest {
 	public void searchMemberTest_2() {
 
 		String searchString = "Field";
-		List<MemberDTO> members = testSearchMember(searchString, false, false);
+		List<MemberDTO> members = testSearchMember(searchString, null, null);
 
 		Assert.assertNotNull(members);
 		Assert.assertEquals(1, members.size());
@@ -60,12 +62,12 @@ public class SearchMemberTest {
 
 		try {
 			MemberController mem = new MemberController();
-			members = mem.searchMembersByDateOfBirth(searchString, false, false);
-		} catch (RemoteException | ValidationException e) {
+			members = mem.searchMembersByDateOfBirth(searchString, null, null);
+		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 
-		Assert.assertNotNull(members);
+        Assert.assertNotNull(members);
 		Assert.assertTrue(members.size() > 0);
 
 	}
@@ -85,12 +87,12 @@ public class SearchMemberTest {
 
 		try {
 			MemberController mem = new MemberController();
-			members = mem.searchMembersByNameString(searchString, false, false);
-		} catch (RemoteException | ValidationException e) {
+			members = mem.searchMembersByNameString(searchString, null, null);
+		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 
-		Assert.assertNotNull(members);
+        Assert.assertNotNull(members);
 		Assert.assertTrue(members.size() > 0);
 	}
 	
@@ -105,12 +107,12 @@ public class SearchMemberTest {
 
 		try {
 			MemberController mem = new MemberController();
-			members = mem.searchMembersByNameString(searchString, false, true);
-		} catch (RemoteException | ValidationException e) {
+			members = mem.searchMembersByNameString(searchString, true, null);
+		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 
-		Assert.assertNotNull(members);
+        Assert.assertNotNull(members);
 		Assert.assertTrue(members.size() > 5);
 	}
 	
@@ -122,12 +124,12 @@ public class SearchMemberTest {
 
 		try {
 			MemberController mem = new MemberController();
-			members = mem.searchMembersByNameString(searchString, false, false);
-		} catch (RemoteException | ValidationException e) {
+			members = mem.searchMembersByNameString(searchString, null, null);
+		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 
-		Assert.assertNotNull(members);
+        Assert.assertNotNull(members);
 		Assert.assertTrue(members.size() > 6);
 	}
 	
@@ -139,12 +141,12 @@ public class SearchMemberTest {
 
 		try {
 			MemberController mem = new MemberController();
-			members = mem.searchMembersByNameString(searchString, false, true);
-		} catch (RemoteException | ValidationException e) {
+			members = mem.searchMembersByNameString(searchString, true, null);
+		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 
-		Assert.assertNotNull(members);
+        Assert.assertNotNull(members);
 		Assert.assertTrue(members.size() > 6);
 	}
 	
@@ -156,21 +158,24 @@ public class SearchMemberTest {
 
 		try {
 			MemberController mem = new MemberController();
-			members = mem.searchMembersByNameString(searchString, true, false);
-		} catch (RemoteException | ValidationException e) {
+			members = mem.searchMembersByNameString(searchString, false, null);
+		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 
-		Assert.assertNotNull(members);
+        Assert.assertNotNull(members);
 		Assert.assertTrue(members.size() > 30);
 	}
 
-	private List<MemberDTO> testSearchMember(String searchString, boolean notPaidFee, boolean paidFee){
+	private List<MemberDTO> testSearchMember(String searchString, Boolean paidFee, SessionDTO session){
 
 		try {
 			MemberController mem = new MemberController();
-			return mem.searchMembersByNameString(searchString, notPaidFee, paidFee);
+			return mem.searchMembersByNameString(searchString, paidFee, session);
 		} catch (RemoteException | ValidationException e) {
+			e.printStackTrace();
+			return null;
+		} catch (NotAuthorisedException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -189,12 +194,12 @@ public class SearchMemberTest {
 
 		try {
 			MemberController mem = new MemberController();
-			members = mem.searchMembersByCommonTeamName(searchString, false, false);
-		} catch (RemoteException | ValidationException e) {
+			members = mem.searchMembersByCommonTeamName(searchString, null, null);
+		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 
-		Assert.assertNotNull(members);
+        Assert.assertNotNull(members);
 		Assert.assertTrue(members.size() > 0);
 	}
 	
@@ -206,12 +211,12 @@ public class SearchMemberTest {
 
 		try {
 			MemberController mem = new MemberController();
-			members = mem.searchMembersByCommonTeamName(searchString, true, false);
-		} catch (RemoteException | ValidationException e) {
+			members = mem.searchMembersByCommonTeamName(searchString, false, null);
+		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 
-		Assert.assertNotNull(members);
+        Assert.assertNotNull(members);
 		Assert.assertTrue(members.size() > 0);
 	}
 	
@@ -223,12 +228,12 @@ public class SearchMemberTest {
 
 		try {
 			MemberController mem = new MemberController();
-			members = mem.searchMembersByCommonTeamName(searchString, false, true);
-		} catch (RemoteException | ValidationException e) {
+			members = mem.searchMembersByCommonTeamName(searchString, true, null);
+		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 
-		Assert.assertNull(members);
+        Assert.assertNull(members);
 		//Assert.assertTrue(members.size() == 0);
 	}
 	

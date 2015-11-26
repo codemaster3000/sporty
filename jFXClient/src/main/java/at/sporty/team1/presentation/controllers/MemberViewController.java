@@ -9,6 +9,7 @@ import at.sporty.team1.rmi.api.ITeamController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
@@ -137,7 +138,9 @@ public class MemberViewController extends JfxController {
             try {
 
                 IDepartmentController departmentController = CommunicationFacade.lookupForDepartmentController();
-                List<DepartmentDTO> departments = departmentController.searchAllDepartments();
+                List<DepartmentDTO> departments = departmentController.searchAllDepartments(
+                    CommunicationFacade.getActiveSession()
+                );
 
                 if (!departments.isEmpty()) {
 
@@ -150,7 +153,11 @@ public class MemberViewController extends JfxController {
                             case SPORT_SOCCER: {
                                 SPORT_MAP.put(SPORT_SOCCER, actualDepartment);
 
-                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(departmentId);
+                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(
+                                    departmentId,
+                                    CommunicationFacade.getActiveSession()
+                                );
+
                                 if (resultList != null) {
 
                                     //loading values to comboBox
@@ -164,7 +171,11 @@ public class MemberViewController extends JfxController {
                             case SPORT_VOLLEYBALL: {
                                 SPORT_MAP.put(SPORT_VOLLEYBALL, actualDepartment);
 
-                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(departmentId);
+                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(
+                                    departmentId,
+                                    CommunicationFacade.getActiveSession()
+                                );
+
                                 if (resultList != null) {
 
                                     //loading values to comboBox
@@ -178,7 +189,11 @@ public class MemberViewController extends JfxController {
                             case SPORT_BASEBALL: {
                                 SPORT_MAP.put(SPORT_BASEBALL, actualDepartment);
 
-                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(departmentId);
+                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(
+                                    departmentId,
+                                    CommunicationFacade.getActiveSession()
+                                );
+
                                 if (resultList != null) {
 
                                     //loading values to comboBox
@@ -192,7 +207,11 @@ public class MemberViewController extends JfxController {
                             case SPORT_FOOTBALL: {
                                 SPORT_MAP.put(SPORT_FOOTBALL, actualDepartment);
 
-                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(departmentId);
+                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(
+                                    departmentId,
+                                    CommunicationFacade.getActiveSession()
+                                );
+
                                 if (resultList != null) {
 
                                     //loading values to comboBox
@@ -207,6 +226,9 @@ public class MemberViewController extends JfxController {
                 }
             } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
                 LOGGER.error("Error occurred while loading all Departments and their Teams.", e);
+            } catch (NotAuthorisedException e) {
+                //TODO
+                e.printStackTrace();
             }
         }).start();
 	}
@@ -248,7 +270,8 @@ public class MemberViewController extends JfxController {
                 IMemberController memberController = CommunicationFacade.lookupForMemberController();
 
                 List<DepartmentDTO> departments = memberController.loadMemberDepartments(
-                    _activeMemberDTO.getMemberId()
+                    _activeMemberDTO.getMemberId(),
+                    CommunicationFacade.getActiveSession()
                 );
 
                 if (departments != null) {
@@ -279,13 +302,18 @@ public class MemberViewController extends JfxController {
                 }
 
 
-                List<TeamDTO> teams = memberController.loadMemberTeams(_activeMemberDTO.getMemberId());
+                List<TeamDTO> teams = memberController.loadMemberTeams(
+                    _activeMemberDTO.getMemberId(),
+                    CommunicationFacade.getActiveSession()
+                );
+
                 if (teams != null) {
 
                     for (TeamDTO team : teams) {
 
                         DepartmentDTO department = CommunicationFacade.lookupForTeamController().loadTeamDepartment(
-                            team.getTeamId()
+                            team.getTeamId(),
+                            CommunicationFacade.getActiveSession()
                         );
 
                         switch (department.getSport()) {
@@ -334,6 +362,9 @@ public class MemberViewController extends JfxController {
 
             } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
                 LOGGER.error("Error occurred while loading Member data (Teams).", e);
+            } catch (NotAuthorisedException e) {
+                //TODO
+                e.printStackTrace();
             }
 
 
@@ -411,7 +442,10 @@ public class MemberViewController extends JfxController {
                         //.setSquad(squad)
 
                 IMemberController memberController = CommunicationFacade.lookupForMemberController();
-                Integer memberId = memberController.createOrSaveMember(_activeMemberDTO);
+                Integer memberId = memberController.createOrSaveMember(
+                    _activeMemberDTO,
+                    CommunicationFacade.getActiveSession()
+                );
 
                 saveOrUpdateMemberDepartments(memberId);
                 saveOrUpdateMemberTeams(memberId);
@@ -430,7 +464,10 @@ public class MemberViewController extends JfxController {
             	
             	GUIHelper.showValidationAlert(context);
 				LOGGER.error(context, e);
-			}
+			} catch (NotAuthorisedException e) {
+                //TODO
+                e.printStackTrace();
+            }
         }
     }
 
@@ -442,7 +479,8 @@ public class MemberViewController extends JfxController {
                 //Saving department for member
                 memberController.assignMemberToDepartment(
                     memberId,
-                    SPORT_MAP.get(SPORT_BASEBALL).getDepartmentId()
+                    SPORT_MAP.get(SPORT_BASEBALL).getDepartmentId(),
+                    CommunicationFacade.getActiveSession()
                 );
             }
 
@@ -450,7 +488,8 @@ public class MemberViewController extends JfxController {
                 //Saving department for member
                 memberController.assignMemberToDepartment(
                     memberId,
-                    SPORT_MAP.get(SPORT_FOOTBALL).getDepartmentId()
+                    SPORT_MAP.get(SPORT_FOOTBALL).getDepartmentId(),
+                    CommunicationFacade.getActiveSession()
                 );
             }
 
@@ -458,7 +497,8 @@ public class MemberViewController extends JfxController {
                 //Saving department for member
                 memberController.assignMemberToDepartment(
                     memberId,
-                    SPORT_MAP.get(SPORT_SOCCER).getDepartmentId()
+                    SPORT_MAP.get(SPORT_SOCCER).getDepartmentId(),
+                    CommunicationFacade.getActiveSession()
                 );
             }
 
@@ -466,7 +506,8 @@ public class MemberViewController extends JfxController {
                 //Saving department for member
                 memberController.assignMemberToDepartment(
                     memberId,
-                    SPORT_MAP.get(SPORT_VOLLEYBALL).getDepartmentId()
+                    SPORT_MAP.get(SPORT_VOLLEYBALL).getDepartmentId(),
+                    CommunicationFacade.getActiveSession()
                 );
             }
 
@@ -474,6 +515,9 @@ public class MemberViewController extends JfxController {
             LOGGER.error("Error occurred while assigning Member to Department.", e);
         } catch (UnknownEntityException e) {
             LOGGER.error("DTO was not saved in Data Storage before assigning Member to Department.", e);
+        } catch (NotAuthorisedException e) {
+            //TODO
+            e.printStackTrace();
         }
     }
 
@@ -485,35 +529,66 @@ public class MemberViewController extends JfxController {
             if (memberSportCheckboxBaseball.isSelected()) {
                 //Baseball team holen
                 TeamDTO teamDTO = memberTeamComboBoxBaseball.getSelectionModel().getSelectedItem();
+
                 //Saving team if available;
-                if (teamDTO != null) memberController.assignMemberToTeam(memberId, teamDTO.getTeamId());
+                if (teamDTO != null) {
+                    memberController.assignMemberToTeam(
+                        memberId,
+                        teamDTO.getTeamId(),
+                        CommunicationFacade.getActiveSession()
+                    );
+                }
             }
 
             if (memberSportCheckboxFootball.isSelected()) {
                 //Football team holen
                 TeamDTO teamDTO = memberTeamComboBoxFootball.getSelectionModel().getSelectedItem();
+
                 //Saving team if available;
-                if (teamDTO != null) memberController.assignMemberToTeam(memberId, teamDTO.getTeamId());
+                if (teamDTO != null) {
+                    memberController.assignMemberToTeam(
+                        memberId,
+                        teamDTO.getTeamId(),
+                        CommunicationFacade.getActiveSession()
+                    );
+                }
             }
 
             if (memberSportCheckboxSoccer.isSelected()) {
                 //Soccer team holen
                 TeamDTO teamDTO = memberTeamComboBoxSoccer.getSelectionModel().getSelectedItem();
+
                 //Saving team if available;
-                if (teamDTO != null) memberController.assignMemberToTeam(memberId, teamDTO.getTeamId());
+                if (teamDTO != null) {
+                    memberController.assignMemberToTeam(
+                        memberId,
+                        teamDTO.getTeamId(),
+                        CommunicationFacade.getActiveSession()
+                    );
+                }
             }
 
             if (memberSportCheckboxVolleyball.isSelected()) {
                 //Volleyball team holen
                 TeamDTO teamDTO = memberTeamComboBoxVolleyball.getSelectionModel().getSelectedItem();
+
                 //Saving team if available;
-                if (teamDTO != null) memberController.assignMemberToTeam(memberId, teamDTO.getTeamId());
+                if (teamDTO != null) {
+                    memberController.assignMemberToTeam(
+                        memberId,
+                        teamDTO.getTeamId(),
+                        CommunicationFacade.getActiveSession()
+                    );
+                }
             }
 
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
             LOGGER.error("Error occurred while assigning Member to Team.", e);
         } catch (UnknownEntityException e) {
             LOGGER.error("DTO was not saved in Data Storage before assigning Member to Team.", e);
+        } catch (NotAuthorisedException e) {
+            //TODO
+            e.printStackTrace();
         }
     }
 

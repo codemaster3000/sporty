@@ -9,6 +9,7 @@ import at.sporty.team1.rmi.api.ITeamController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
@@ -107,13 +108,18 @@ public class TeamViewController extends JfxController {
             try {
 
                 IDepartmentController departmentController = CommunicationFacade.lookupForDepartmentController();
-                List<DepartmentDTO> departments = departmentController.searchAllDepartments();
+                List<DepartmentDTO> departments = departmentController.searchAllDepartments(
+                    CommunicationFacade.getActiveSession()
+                );
 
                 if (!departments.isEmpty()) {
 
                     for (DepartmentDTO actualDepartment : departments) {
 
-                        resultList.addAll(departmentController.loadDepartmentTeams(actualDepartment.getDepartmentId()));
+                        resultList.addAll(departmentController.loadDepartmentTeams(
+                            actualDepartment.getDepartmentId(),
+                            CommunicationFacade.getActiveSession()
+                        ));
 
                         if (!resultList.isEmpty()) {
 
@@ -126,6 +132,9 @@ public class TeamViewController extends JfxController {
                 }
             } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
                 LOGGER.error("Error occurred while loading all Departments and their Teams.", e);
+            } catch (NotAuthorisedException e) {
+                //TODO
+                e.printStackTrace();
             }
         }).start();
 
@@ -160,7 +169,11 @@ public class TeamViewController extends JfxController {
 
                 ITeamController teamController = CommunicationFacade.lookupForTeamController();
 
-                List<MemberDTO> memberList = teamController.loadTeamMembers(_activeTeamDTO.getTeamId());
+                List<MemberDTO> memberList = teamController.loadTeamMembers(
+                    _activeTeamDTO.getTeamId(),
+                    CommunicationFacade.getActiveSession()
+                );
+
                 if (memberList != null && !memberList.isEmpty()) {
                     _membersListView.setItems(FXCollections.observableList(memberList));
                 }
@@ -169,6 +182,9 @@ public class TeamViewController extends JfxController {
                 LOGGER.error("Error occurred while displaying team data.", e);
             } catch (UnknownEntityException e) {
                 LOGGER.error("DTO was not saved in Data Storage before loading all Members from Team.", e);
+            } catch (NotAuthorisedException e) {
+                //TODO
+                e.printStackTrace();
             }
         }
     }
@@ -188,7 +204,12 @@ public class TeamViewController extends JfxController {
 
             if ((_activeTeamDTO != null) && (memberDTO != null)) {
 
-                memberController.removeMemberFromTeam(memberDTO.getMemberId(), _activeTeamDTO.getTeamId());
+                memberController.removeMemberFromTeam(
+                    memberDTO.getMemberId(),
+                    _activeTeamDTO.getTeamId(),
+                    CommunicationFacade.getActiveSession()
+                );
+
                 _membersListView.getItems().remove(memberDTO);
 
             } else if (memberDTO != null) {
@@ -202,6 +223,9 @@ public class TeamViewController extends JfxController {
             LOGGER.error("Error occurred while removing member from the team.", e);
         } catch (UnknownEntityException e) {
             LOGGER.error("DTO was not saved in Data Storage before removing Member from Team.", e);
+        } catch (NotAuthorisedException e) {
+            //TODO
+            e.printStackTrace();
         }
     }
 
@@ -215,18 +239,25 @@ public class TeamViewController extends JfxController {
             try {
 
                 ITeamController teamController = CommunicationFacade.lookupForTeamController();
-                teamController.createOrSaveTeam(_activeTeamDTO);
+                teamController.createOrSaveTeam(
+                    _activeTeamDTO,
+                    CommunicationFacade.getActiveSession()
+                );
 
                 for (MemberDTO member : memberList) {
                     try {
 
                         CommunicationFacade.lookupForMemberController().assignMemberToTeam(
                             member.getMemberId(),
-                            _activeTeamDTO.getTeamId()
+                            _activeTeamDTO.getTeamId(),
+                            CommunicationFacade.getActiveSession()
                         );
 
                     } catch (UnknownEntityException e) {
                         LOGGER.error("Unable to assign Member to Team", e);
+                    } catch (NotAuthorisedException e) {
+                        //TODO
+                        e.printStackTrace();
                     }
                 }
 
@@ -243,6 +274,9 @@ public class TeamViewController extends JfxController {
 
                 GUIHelper.showValidationAlert(context);
                 LOGGER.error(context, e);
+            } catch (NotAuthorisedException e) {
+                //TODO
+                e.printStackTrace();
             }
         }
     }

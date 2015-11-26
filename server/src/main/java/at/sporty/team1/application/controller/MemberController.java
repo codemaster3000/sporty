@@ -13,8 +13,11 @@ import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.dtos.SessionDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.enums.UserRole;
 import at.sporty.team1.rmi.exceptions.DataType;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
@@ -44,8 +47,10 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public Integer createOrSaveMember(MemberDTO memberDTO)
-    throws RemoteException, ValidationException {
+    public Integer createOrSaveMember(MemberDTO memberDTO, SessionDTO session)
+    throws RemoteException, ValidationException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
 
         if (memberDTO == null) return null;
 
@@ -80,15 +85,17 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
     
     @Override
-    public List<MemberDTO> searchAllMembers(boolean feePaid, boolean feeNotPaid)
-    throws RemoteException {
+    public List<MemberDTO> searchAllMembers(Boolean isFeePaid, SessionDTO session)
+    throws RemoteException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
 
         try {
 
             List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findAll();
 
             //filtering results for fee
-            rawResults = filterWithFee(rawResults, feePaid, feeNotPaid);
+            rawResults = filterWithFee(rawResults,isFeePaid);
 
             //checking if there are an results
             if (rawResults == null || rawResults.isEmpty()) return null;
@@ -105,8 +112,10 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public List<MemberDTO> searchMembersByNameString(String searchString, boolean feePaid, boolean feeNotPaid)
-    throws RemoteException, ValidationException {
+    public List<MemberDTO> searchMembersByNameString(String searchString, Boolean isFeePaid, SessionDTO session)
+    throws RemoteException, ValidationException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
 
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -120,7 +129,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByNameString(searchString);
 
             //filtering results for fee
-            rawResults = filterWithFee(rawResults, feePaid, feeNotPaid);
+            rawResults = filterWithFee(rawResults,isFeePaid);
 
             //checking if there are an results
             if (rawResults == null || rawResults.isEmpty()) return null;
@@ -137,8 +146,10 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public List<MemberDTO> searchMembersByCommonTeamName(String teamName, boolean feePaid, boolean feeNotPaid)
-    throws RemoteException, ValidationException {
+    public List<MemberDTO> searchMembersByCommonTeamName(String teamName, Boolean isFeePaid, SessionDTO session)
+    throws RemoteException, ValidationException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
 
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -152,7 +163,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByCommonTeamName(teamName);
 
             //filtering results for fee
-            rawResults = filterWithFee(rawResults, feePaid, feeNotPaid);
+            rawResults = filterWithFee(rawResults,isFeePaid);
 
             //checking if there are an results
             if (rawResults == null || rawResults.isEmpty()) return null;
@@ -169,8 +180,10 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public List<MemberDTO> searchMembersByTournamentTeamName(String teamName, boolean feePaid, boolean feeNotPaid)
-    throws RemoteException, ValidationException {
+    public List<MemberDTO> searchMembersByTournamentTeamName(String teamName, Boolean isFeePaid, SessionDTO session)
+    throws RemoteException, ValidationException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
 
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -184,7 +197,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByTournamentTeamName(teamName);
 
             //filtering results for fee
-            rawResults = filterWithFee(rawResults, feePaid, feeNotPaid);
+            rawResults = filterWithFee(rawResults,isFeePaid);
 
             //checking if there are an results
             if (rawResults == null || rawResults.isEmpty()) return null;
@@ -201,8 +214,11 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public List<MemberDTO> searchMembersByDateOfBirth(String dateOfBirth, boolean feePaid, boolean feeNotPaid)
-    throws RemoteException, ValidationException {
+    public List<MemberDTO> searchMembersByDateOfBirth(String dateOfBirth, Boolean isFeePaid, SessionDTO session)
+    throws RemoteException, ValidationException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
+
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
         if (!inputSanitizer.isValid(dateOfBirth, DataType.SQL_DATE)) {
@@ -215,7 +231,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             List<? extends IMember> rawResults = PersistenceFacade.getNewMemberDAO().findByDateOfBirth(dateOfBirth);
 
             //filtering results for fee
-            rawResults = filterWithFee(rawResults, feePaid, feeNotPaid);
+            rawResults = filterWithFee(rawResults,isFeePaid);
 
             //checking if there are an results
             if (rawResults == null || rawResults.isEmpty()) return null;
@@ -232,8 +248,11 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public List<DepartmentDTO> loadMemberDepartments(Integer memberId)
-    throws RemoteException, UnknownEntityException {
+    public List<DepartmentDTO> loadMemberDepartments(Integer memberId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
+
         try {
 
             if (memberId == null) throw new UnknownEntityException(IMember.class);
@@ -264,8 +283,10 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public void assignMemberToDepartment(Integer memberId, Integer departmentId)
-    throws RemoteException, UnknownEntityException {
+    public void assignMemberToDepartment(Integer memberId, Integer departmentId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MANAGER)) throw new NotAuthorisedException();
 
         if (memberId == null) throw new UnknownEntityException(IMember.class);
         if (departmentId == null) throw new UnknownEntityException(IDepartment.class);
@@ -294,8 +315,10 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public void removeMemberFromDepartment(Integer memberId, Integer departmentId)
-    throws RemoteException, UnknownEntityException {
+    public void removeMemberFromDepartment(Integer memberId, Integer departmentId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MANAGER)) throw new NotAuthorisedException();
 
         if (memberId == null) throw new UnknownEntityException(IMember.class);
         if (departmentId == null) throw new UnknownEntityException(IDepartment.class);
@@ -324,8 +347,11 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public List<TeamDTO> loadMemberTeams(Integer memberId)
-    throws RemoteException, UnknownEntityException {
+    public List<TeamDTO> loadMemberTeams(Integer memberId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
+
         try {
 
             if (memberId == null) throw new UnknownEntityException(IMember.class);
@@ -356,8 +382,10 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public void assignMemberToTeam(Integer memberId, Integer teamId)
-    throws RemoteException, UnknownEntityException {
+    public void assignMemberToTeam(Integer memberId, Integer teamId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.TRAINER)) throw new NotAuthorisedException();
 
         if (memberId == null) throw new UnknownEntityException(IMember.class);
         if (teamId == null) throw new UnknownEntityException(ITeam.class);
@@ -386,8 +414,10 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public void removeMemberFromTeam(Integer memberId, Integer teamId)
-    throws RemoteException, UnknownEntityException {
+    public void removeMemberFromTeam(Integer memberId, Integer teamId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.TRAINER)) throw new NotAuthorisedException();
 
         if (memberId == null) throw new UnknownEntityException(IMember.class);
         if (teamId == null) throw new UnknownEntityException(ITeam.class);
@@ -416,8 +446,11 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     }
 
     @Override
-    public void deleteMember(Integer memberId)
-    throws RemoteException, UnknownEntityException {
+    public void deleteMember(Integer memberId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MANAGER)) throw new NotAuthorisedException();
+
         try {
 
             if (memberId == null) throw new UnknownEntityException(IMember.class);
@@ -440,20 +473,22 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
      * Helping method which filters rawResults dependent on FeePaid state.
      *
      * @param rawResults List to be filtered.
-     * @param paid value of the feePaidCheckbox
-     * @param notPaid value of the notFeePaidCheckbox
+     * @param isFeePaid value of the feePaid true = paid, false = not paid
      * @return filtered rawResults list or null if rawResults were null or empty.
      */
-    private List<? extends IMember> filterWithFee(List<? extends IMember> rawResults, boolean paid, boolean notPaid) {
+    private List<? extends IMember> filterWithFee(List<? extends IMember> rawResults, Boolean isFeePaid) {
 
         //check if list is not null
         if (rawResults == null || rawResults.isEmpty()) return null;
+
+        //if nothing specified return full list
+        if (isFeePaid == null) return rawResults;
 
         //creating basic predicate for filtering with (Object != null)
         Predicate<IRMember> nonNullPredicate = Objects::nonNull;
 
         //filtering all rawResultsByName for isFeePaid
-        if (paid && !notPaid) {
+        if (isFeePaid) {
 
             //creating predicate for members who paid their Fee
             Predicate<IRMember> paidPredicate = nonNullPredicate.and(
@@ -463,7 +498,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             //filter for members who paid their Fee
             return rawResults.stream().filter(paidPredicate).collect(Collectors.toList());
 
-        } else if (notPaid && !paid) {
+        } else {
 
             //creating predicate for members who didn't pay their Fee
             Predicate<IRMember> notPaidPredicate = nonNullPredicate.and(
@@ -474,6 +509,5 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             return rawResults.stream().filter(notPaidPredicate).collect(Collectors.toList());
 
         }
-        return rawResults;
     }
 }

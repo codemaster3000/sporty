@@ -4,6 +4,7 @@ import at.sporty.team1.application.controller.MemberController;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.dozer.DozerBeanMapper;
@@ -69,7 +70,7 @@ public class NewMemberTest {
 
         try {
             createNewMemberTest(activeMemberDTO);
-        } catch (RemoteException | ValidationException e) {
+        } catch (RemoteException | ValidationException | NotAuthorisedException e) {
             //dumb check to be sure that anything is ok
             Assert.assertNotNull(e);
         }
@@ -116,12 +117,12 @@ public class NewMemberTest {
 
         try {
             createNewMemberTest(activeMemberDTO);
-        } catch (RemoteException | ValidationException e) {
+        } catch (RemoteException | ValidationException | NotAuthorisedException e) {
             e.printStackTrace();
             Assert.fail("ERROR WHILE CREATING NEW USER");
         }
 
-        Member receivedMember = findMemberByEmail(activeMemberDTO);
+		Member receivedMember = findMemberByEmail(activeMemberDTO);
 
 		//check if member was created or saved
 		Assert.assertNotNull(receivedMember);
@@ -148,8 +149,8 @@ public class NewMemberTest {
 		Assert.assertNull(findMemberByEmail(receivedMemberDTO));
 	}
 
-	private void createNewMemberTest(MemberDTO memberDTO) throws RemoteException, ValidationException {
-        new MemberController().createOrSaveMember(memberDTO);
+	private void createNewMemberTest(MemberDTO memberDTO) throws RemoteException, ValidationException, NotAuthorisedException {
+        new MemberController().createOrSaveMember(memberDTO, null);
 	}
 
 	private Member findMemberByEmail(MemberDTO memberDTO) {

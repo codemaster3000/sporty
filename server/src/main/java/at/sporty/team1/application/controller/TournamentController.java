@@ -7,8 +7,11 @@ import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.ITournamentController;
 import at.sporty.team1.rmi.dtos.MatchDTO;
+import at.sporty.team1.rmi.dtos.SessionDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
+import at.sporty.team1.rmi.enums.UserRole;
 import at.sporty.team1.rmi.exceptions.DataType;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
@@ -35,8 +38,10 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     }
 
     @Override
-    public List<TournamentDTO> searchAllTournaments()
-    throws RemoteException {
+    public List<TournamentDTO> searchAllTournaments(SessionDTO session)
+    throws RemoteException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
 
         try {
 
@@ -58,8 +63,10 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     }
 
     @Override
-    public List<TournamentDTO> searchTournamentsBySport(String sport)
-    throws RemoteException, ValidationException {
+    public List<TournamentDTO> searchTournamentsBySport(String sport, SessionDTO session)
+    throws RemoteException, ValidationException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
 
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -87,8 +94,10 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     }
 
     @Override
-    public List<TournamentDTO> searchTournamentsByDate(String eventDate)
-    throws RemoteException, ValidationException {
+    public List<TournamentDTO> searchTournamentsByDate(String eventDate, SessionDTO session)
+    throws RemoteException, ValidationException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
 
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -116,8 +125,10 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     }
 
     @Override
-    public List<TournamentDTO> searchTournamentsByLocation(String location)
-    throws RemoteException, ValidationException {
+    public List<TournamentDTO> searchTournamentsByLocation(String location, SessionDTO session)
+    throws RemoteException, ValidationException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
 
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -145,8 +156,10 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     }
 
     @Override
-    public List<String> searchAllTournamentTeams(Integer tournamentId)
-    throws RemoteException, UnknownEntityException {
+    public List<String> searchAllTournamentTeams(Integer tournamentId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
 
         if (tournamentId == null) throw new UnknownEntityException(ITournament.class);
 
@@ -171,8 +184,10 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     }
 
     @Override
-    public List<MatchDTO> searchAllTournamentMatches(Integer tournamentId)
-    throws RemoteException, UnknownEntityException {
+    public List<MatchDTO> searchAllTournamentMatches(Integer tournamentId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
 
         //TODO Match entity and MatchDTO
 
@@ -206,8 +221,10 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     }
 
     @Override
-    public void assignTeamToTournament(String teamName, Integer tournamentId)
-    throws RemoteException, UnknownEntityException, ValidationException {
+    public void assignTeamToTournament(String teamName, Integer tournamentId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, ValidationException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.TRAINER)) throw new NotAuthorisedException();
 
         /* Validating teamName */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -239,8 +256,10 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     }
 
 	@Override
-	public Integer createOrSaveTournament(TournamentDTO tournamentDTO)
-    throws RemoteException, ValidationException {
+	public Integer createOrSaveTournament(TournamentDTO tournamentDTO, SessionDTO session)
+    throws RemoteException, ValidationException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MANAGER)) throw new NotAuthorisedException();
 
         if (tournamentDTO == null) return null;
 
@@ -271,8 +290,10 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
 	}
 
     @Override
-    public void createNewMatch(Integer tournamentId, MatchDTO matchDTO)
-    throws RemoteException, ValidationException, UnknownEntityException {
+    public void createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
+    throws RemoteException, ValidationException, UnknownEntityException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MANAGER)) throw new NotAuthorisedException();
 
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();

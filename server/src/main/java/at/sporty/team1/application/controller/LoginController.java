@@ -1,19 +1,18 @@
 package at.sporty.team1.application.controller;
 
-import at.sporty.team1.rmi.security.SecurityModule;
 import at.sporty.team1.domain.Member;
-import at.sporty.team1.rmi.exceptions.SecurityException;
+import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.persistence.util.TooManyResultsException;
 import at.sporty.team1.rmi.api.ILoginController;
 import at.sporty.team1.rmi.dtos.AuthorisationDTO;
-import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.SessionDTO;
 import at.sporty.team1.rmi.enums.UserRole;
+import at.sporty.team1.rmi.exceptions.SecurityException;
+import at.sporty.team1.rmi.security.SecurityModule;
+import org.apache.commons.collections4.map.PassiveExpiringMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.dozer.DozerBeanMapper;
-import org.dozer.Mapper;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -30,30 +29,31 @@ import java.security.KeyPair;
 import java.security.PublicKey;
 import java.util.Hashtable;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Represents a controller to handle the login.
  */
 public class LoginController extends UnicastRemoteObject implements ILoginController {
-	private static final Logger LOGGER = LogManager.getLogger();
-    private static final Mapper MAPPER = new DozerBeanMapper();
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOGGER = LogManager.getLogger();
+    private static final PassiveExpiringMap<String, Integer> SESSION_REGISTRY = new PassiveExpiringMap<>(1, TimeUnit.HOURS);
 
-    private final Cipher _cipher;
-    private final KeyPair _keyPair;
-    private final byte[] _encodedPublicKey;
+    private static Cipher _cipher;
+    private static KeyPair _serverKeyPair;
+    private static byte[] _encodedPublicServerKey;
 
-	public LoginController() throws RemoteException, SecurityException {
+	public LoginController() throws RemoteException {
 		super();
-
-        _cipher = SecurityModule.getNewRSACipher();
-        _keyPair = SecurityModule.generateNewRSAKeyPair(512);
-        _encodedPublicKey = SecurityModule.getEncodedRSAPublicKey(_keyPair);
 	}
 
     @Override
     public byte[] getServerPublicKey()
-    throws RemoteException {
-        return _encodedPublicKey;
+    throws RemoteException, SecurityException {
+        if (_encodedPublicServerKey == null) {
+            _encodedPublicServerKey = SecurityModule.getEncodedRSAPublicKey(getServerKeyPair());
+        }
+        return _encodedPublicServerKey;
     }
 
 	@Override
@@ -70,16 +70,19 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
 
         try {
 
-            _cipher.init(Cipher.DECRYPT_MODE, _keyPair.getPrivate());
+            Cipher cipher = getCipher();
+            KeyPair serverKeyPair = getServerKeyPair();
+
+            cipher.init(Cipher.DECRYPT_MODE, serverKeyPair.getPrivate());
 
             //Decrypting username
             String username = new String(
-                _cipher.doFinal(authorisationDTO.getEncryptedUserLogin())
+                cipher.doFinal(authorisationDTO.getEncryptedUserLogin())
             );
 
             //Decrypting password
             String password = new String(
-                _cipher.doFinal(authorisationDTO.getEncryptedUserPassword())
+                cipher.doFinal(authorisationDTO.getEncryptedUserPassword())
             );
 
             //Preparing environment for LDAP
@@ -101,18 +104,25 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
             //Receiving member object from db
             Member member = PersistenceFacade.getNewMemberDAO().findByUsername(username);
 
-            //Preparing client fingerprint
-            PublicKey clientKey = SecurityModule.getDecodedRSAPublicKey(authorisationDTO.getClientPublicKey());
+            //If member was not found -> authorize will be declined
+            if (member != null) {
 
-            _cipher.init(Cipher.ENCRYPT_MODE, clientKey);
+                //Preparing client fingerprint
+                PublicKey clientKey = SecurityModule.getDecodedRSAPublicKey(authorisationDTO.getClientPublicKey());
 
-            byte[] sessionId = UUID.randomUUID().toString().getBytes();
-            byte[] clientFingerprint = _cipher.doFinal(sessionId);
+                //Generating new session id for client
+                String sessionId = UUID.randomUUID().toString();
+                SESSION_REGISTRY.put(sessionId, member.getMemberId());
 
-            //Sending session object for client
-            return new SessionDTO()
-                    .setMember(MAPPER.map(member, MemberDTO.class))
-                    .setClientFingerprint(clientFingerprint);
+                //Encrypting rawFingerprint expressly for target client
+                cipher.init(Cipher.ENCRYPT_MODE, clientKey);
+                byte[] clientFingerprint = cipher.doFinal(sessionId.getBytes());
+
+                //Sending session object for client
+                return new SessionDTO()
+                        .setMemberId(member.getMemberId())
+                        .setClientFingerprint(clientFingerprint);
+            }
 
         } catch (InvalidKeyException e) {
             LOGGER.error("Private key is not suitable.", e);
@@ -128,37 +138,99 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
         } catch (TooManyResultsException e) {
             LOGGER.error("Too many authentication results from data store were received.", e);
         } catch (SecurityException e) {
-            LOGGER.error("Error occurs while generating client fingerprint", e);
+            LOGGER.error("Error occurs while generating client fingerprint.", e);
         }
 
         return null;
 	}
 
-	@Deprecated
-	private UserRole getUserRole(String username) {
+    public static boolean hasEnoughPermissions(SessionDTO session, UserRole requiredRoleLevel) {
+        try {
 
-		/* Get the role of this user from our db */
-		try{
-			
-			Member member = PersistenceFacade.getNewMemberDAO().findByUsername(username);
-	
-			if (member == null) return UserRole.UNSUCCESSFUL_LOGIN;
+            Cipher cipher = getCipher();
+            KeyPair serverKeyPair = getServerKeyPair();
 
-			/* Return according to user role */
-			switch (member.getRole()) {
-				case "admin": return UserRole.ADMIN;
-				case "member": return UserRole.MEMBER;
-				case "trainer": return UserRole.TRAINER;
-				case "departmentHead": return UserRole.DEPARTMENT_HEAD;
-				case "manager": return UserRole.MANAGER;
-			}
-			
-		} catch(PersistenceException e) {
-			LOGGER.error("Error occurred while getting/parsing user role.", e);
-		} catch (TooManyResultsException e) {
-            LOGGER.error("Too many authentication results were received.", e);
+            //Normally this two values should be not null
+            if (cipher != null && serverKeyPair != null && session != null) {
+
+                //Decrypting client fingerprint
+                cipher.init(Cipher.DECRYPT_MODE, serverKeyPair.getPrivate());
+                String decryptedSession = new String(
+                    cipher.doFinal(session.getClientFingerprint())
+                );
+
+                if (SESSION_REGISTRY.containsKey(decryptedSession)) {
+                    //Loading member from data store.
+                    IMember member = PersistenceFacade.getNewMemberDAO().findById(session.getMemberId());
+
+                    if (member != null && isInPermissionBound(member.getRole(), requiredRoleLevel)) {
+                        //Resetting session timeout
+                        updateSessionTimeout(decryptedSession, member.getMemberId());
+                        return true;
+                    }
+                }
+            }
+
+        } catch (PersistenceException e) {
+            LOGGER.error("Error occurred while getting/parsing user role.", e);
+        } catch (InvalidKeyException e) {
+            LOGGER.error("Private key is not suitable.", e);
+        } catch (BadPaddingException | IllegalBlockSizeException e) {
+            LOGGER.error("Received data is corrupted.", e);
+        } catch (SecurityException e) {
+            LOGGER.error("Error occurs while checking client fingerprint.", e);
         }
 
-        return UserRole.UNSUCCESSFUL_LOGIN;
-	}
+        return false;
+    }
+
+    private static void updateSessionTimeout(String fingerprint, Integer memberId) {
+        //Remove value from registry.
+        SESSION_REGISTRY.remove(fingerprint);
+
+        //Restarting timeout for given session.
+        SESSION_REGISTRY.put(fingerprint, memberId);
+    }
+
+    private static boolean isInPermissionBound(String isRole, UserRole requiredRoleLevel) {
+        /* Return according to user role */
+        switch (isRole) {
+            case "admin": {
+                return UserRole.ADMIN.isInBound(requiredRoleLevel);
+            }
+
+            case "member": {
+                return UserRole.MEMBER.isInBound(requiredRoleLevel);
+            }
+
+            case "trainer": {
+                return UserRole.TRAINER.isInBound(requiredRoleLevel);
+            }
+
+            case "departmentHead": {
+                return UserRole.DEPARTMENT_HEAD.isInBound(requiredRoleLevel);
+            }
+
+            case "manager": {
+                return UserRole.MANAGER.isInBound(requiredRoleLevel);
+            }
+        }
+
+        return false;
+    }
+
+
+    private static KeyPair getServerKeyPair() throws SecurityException {
+        if (_serverKeyPair == null) {
+            _serverKeyPair = SecurityModule.generateNewRSAKeyPair(512);
+        }
+        return _serverKeyPair;
+    }
+
+    private static Cipher getCipher() throws SecurityException {
+        if (_cipher == null) {
+            _cipher = SecurityModule.getNewRSACipher();
+        }
+        return _cipher;
+    }
 }

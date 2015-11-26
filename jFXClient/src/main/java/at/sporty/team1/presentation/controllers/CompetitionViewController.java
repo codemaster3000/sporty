@@ -8,6 +8,8 @@ import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MatchDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
+import at.sporty.team1.rmi.exceptions.SecurityException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
@@ -40,7 +42,6 @@ public class CompetitionViewController extends JfxController {
     private static final String SUCCESSFUL_MATCHES_SAVE = "Matches were saved successfully.";
 
     private TournamentDTO _activeCompetition;
-    private ObservableList<MatchDTO> _tableMatchList;
 
     @FXML
     private TextField _competitionDateTextField;
@@ -108,9 +109,15 @@ public class CompetitionViewController extends JfxController {
          * TournamentView
          */
         try {
-            departments = CommunicationFacade.lookupForDepartmentController().searchAllDepartments();
+
+            departments = CommunicationFacade.lookupForDepartmentController().searchAllDepartments(
+                CommunicationFacade.getActiveSession()
+            );
+
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
-           
+            e.printStackTrace();
+        } catch (NotAuthorisedException e) {
+            //TODO
             e.printStackTrace();
         }
 
@@ -202,7 +209,7 @@ public class CompetitionViewController extends JfxController {
         	tempList.add(new MatchDTO());
         }
 
-        _tableMatchList = FXCollections.observableList(tempList);
+        ObservableList<MatchDTO> _tableMatchList = FXCollections.observableList(tempList);
         _matchTableView.setItems(FXCollections.observableList(_tableMatchList));
     }
 
@@ -228,7 +235,8 @@ public class CompetitionViewController extends JfxController {
                 IDepartmentController departmentController = CommunicationFacade.lookupForDepartmentController();
 
                 List<TeamDTO> ownTournamentTeams = departmentController.loadDepartmentTeams(
-                    _tournamentDepartmentComboBox.getSelectionModel().getSelectedItem().getDepartmentId()
+                    _tournamentDepartmentComboBox.getSelectionModel().getSelectedItem().getDepartmentId(),
+                    CommunicationFacade.getActiveSession()
                 );
 
                 ObservableList<TeamDTO> teamObservableList = FXCollections.observableList(ownTournamentTeams);
@@ -236,8 +244,11 @@ public class CompetitionViewController extends JfxController {
 
             } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
             	LOGGER.error("Error occurred while searching all Teams by Department.", e);
+            } catch (NotAuthorisedException e) {
+                //TODO
+                e.printStackTrace();
             }
-            
+
             /**
              * Converter from TeamDTO to Team name (String)
              */
@@ -305,8 +316,12 @@ public class CompetitionViewController extends JfxController {
                         .setLocation(location);
 
                 ITournamentController imc = CommunicationFacade.lookupForTournamentController();
-                Integer competitionId = imc.createOrSaveTournament(_activeCompetition);
-                _activeCompetition.setTournamentId(competitionId); //FIXME (Sergii) avoid DTO better own property
+                Integer competitionId = imc.createOrSaveTournament(
+                    _activeCompetition,
+                    CommunicationFacade.getActiveSession()
+                );
+
+                _activeCompetition.setTournamentId(competitionId);
 
                 GUIHelper.showSuccessAlert(SUCCESSFUL_TOURNAMENT_SAVE);
                 setVisibleOfTournamentTeamView(true);
@@ -320,6 +335,9 @@ public class CompetitionViewController extends JfxController {
 
                 GUIHelper.showValidationAlert(context);
                 LOGGER.error(context, e);
+            } catch (NotAuthorisedException e) {
+                //TODO
+                e.printStackTrace();
             }
         }
     }
@@ -338,12 +356,15 @@ public class CompetitionViewController extends JfxController {
 			
 			for(MatchDTO match : matches){
 				try {
-					imc.createNewMatch(tournamentId, match);
+					imc.createNewMatch(tournamentId, match, CommunicationFacade.getActiveSession());
 				} catch (ValidationException | UnknownEntityException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-			}
+				} catch (NotAuthorisedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
 			LOGGER.info("Matches was successfully saved. Size:\"{}, TournamentId: {}\"", matches.size(), tournamentId);
 			GUIHelper.showSuccessAlert(SUCCESSFUL_MATCHES_SAVE);
 			
@@ -388,7 +409,11 @@ public class CompetitionViewController extends JfxController {
                 int savedTeamsCounter = 0;
 
                 for (String team : teams) {
-                    tournamentController.assignTeamToTournament(team, _activeCompetition.getTournamentId());
+                    tournamentController.assignTeamToTournament(
+                        team,
+                        _activeCompetition.getTournamentId(),
+                        CommunicationFacade.getActiveSession()
+                    );
                     ++savedTeamsCounter;
                 }
 
@@ -413,6 +438,11 @@ public class CompetitionViewController extends JfxController {
                 e.getReason(),
                 e
             );
+
+        } catch (NotAuthorisedException e) {
+
+            //TODO
+            e.printStackTrace();
 
         }
     }

@@ -9,7 +9,10 @@ import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.dtos.SessionDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.enums.UserRole;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,6 +22,7 @@ import org.dozer.Mapper;
 import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,8 +39,10 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
     }
 
     @Override
-    public List<DepartmentDTO> searchAllDepartments()
-    throws RemoteException {
+    public List<DepartmentDTO> searchAllDepartments(SessionDTO session)
+    throws RemoteException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
 
         try {
 
@@ -58,8 +64,10 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
     }
 
     @Override
-    public List<TeamDTO> loadDepartmentTeams(Integer departmentId)
-    throws RemoteException, UnknownEntityException {
+    public List<TeamDTO> loadDepartmentTeams(Integer departmentId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
 
         if (departmentId == null) throw new UnknownEntityException(IDepartment.class);
 
@@ -91,9 +99,11 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
     }
 
     @Override
-    public MemberDTO loadDepartmentHead(Integer departmentId)
-    throws RemoteException, UnknownEntityException {
+    public MemberDTO loadDepartmentHead(Integer departmentId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
         try {
+
+            if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
 
             if (departmentId == null) throw new UnknownEntityException(IDepartment.class);
 
