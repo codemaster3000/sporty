@@ -183,14 +183,6 @@
             <b>setDate</b>
         </field>
         <field>
-            <a>getTeam2</a>
-            <b>getTeam2</b>
-        </field>
-        <field>
-            <a>setTeam2</a>
-            <b>setTeam2</b>
-        </field>
-        <field>
             <a>getTeam1</a>
             <b>getTeam1</b>
         </field>
@@ -199,12 +191,12 @@
             <b>setTeam1</b>
         </field>
         <field>
-            <a>getResult</a>
-            <b>getResult</b>
+            <a>getTeam2</a>
+            <b>getTeam2</b>
         </field>
         <field>
-            <a>getResult</a>
-            <b>setResult</b>
+            <a>setTeam2</a>
+            <b>setTeam2</b>
         </field>
         <field>
             <a>getReferee</a>
@@ -213,6 +205,14 @@
         <field>
             <a>setReferee</a>
             <b>setReferee</b>
+        </field>
+        <field>
+            <a>getResult</a>
+            <b>getResult</b>
+        </field>
+        <field>
+            <a>setResult</a>
+            <b>setResult</b>
         </field>
     </mapping>
 

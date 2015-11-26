@@ -43,21 +43,21 @@ public class MatchDTO implements IDTO {
         return this;
     }
 
+    public String getTeam1(){
+        return _team1;
+    }
+
+    public MatchDTO setTeam1(String team1) {
+        _team1 = team1;
+        return this;
+    }
+
     public String getTeam2() {
         return _team2;
     }
 
     public MatchDTO setTeam2(String team2) {
         _team2 = team2;
-        return this;
-    }
-    
-    public String getTeam1(){
-    	return _team1;
-    }
-
-    public MatchDTO setTeam1(String team1) {
-        _team1 = team1;
         return this;
     }
 

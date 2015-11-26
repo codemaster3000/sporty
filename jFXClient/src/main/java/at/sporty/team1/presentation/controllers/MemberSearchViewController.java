@@ -155,17 +155,16 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
                     }
 
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
-                    LOGGER.error("Error occurred while searching.", e);
+                    LOGGER.error("Error occurred while searching for members.", e);
                 } catch (ValidationException e) {
-                    LOGGER.error("Error occurred while searching.", e);
+                    LOGGER.error("Error occurred while searching for members.", e);
 
                     Platform.runLater(() -> {
                         GUIHelper.showValidationAlert(NOT_VALID_SEARCH_INPUT);
                         displayNoResults();
                     });
                 } catch (NotAuthorisedException e) {
-                    //TODO
-                    e.printStackTrace();
+                    LOGGER.error("Client search (Member) request was rejected. Not enough permissions.", e);
                 }
             }).start();
 
@@ -186,10 +185,9 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
                     handleReceivedResults(memberList);
 
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
-                    LOGGER.error("Error occurred while searching.", e);
+                    LOGGER.error("Error occurred while searching for members.", e);
                 } catch (NotAuthorisedException e) {
-                    //TODO
-                    e.printStackTrace();
+                    LOGGER.error("Client search (Member) request was rejected. Not enough permissions.", e);
                 }
             }).start();
         }

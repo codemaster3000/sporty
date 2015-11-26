@@ -125,8 +125,7 @@ public class TournamentSearchViewController extends SearchViewController<Tournam
                         displayNoResults();
                     });
                 } catch (NotAuthorisedException e) {
-                    //TODO
-                    e.printStackTrace();
+                    LOGGER.error("Client search (Tournaments) request was rejected. Not enough permissions.", e);
                 }
             }).start();
 
@@ -143,8 +142,7 @@ public class TournamentSearchViewController extends SearchViewController<Tournam
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
                     LOGGER.error("Error occurred while searching.", e);
                 } catch (NotAuthorisedException e) {
-                    //TODO
-                    e.printStackTrace();
+                    LOGGER.error("Client search (Tournaments) request was rejected. Not enough permissions.", e);
                 }
             }).start();
         }

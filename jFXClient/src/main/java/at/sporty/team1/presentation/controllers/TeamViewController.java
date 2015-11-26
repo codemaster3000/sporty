@@ -133,8 +133,7 @@ public class TeamViewController extends JfxController {
             } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
                 LOGGER.error("Error occurred while loading all Departments and their Teams.", e);
             } catch (NotAuthorisedException e) {
-                //TODO
-                e.printStackTrace();
+                LOGGER.error("Client load (Departments and Teams) request was rejected. Not enough permissions.", e);
             }
         }).start();
 
@@ -183,8 +182,7 @@ public class TeamViewController extends JfxController {
             } catch (UnknownEntityException e) {
                 LOGGER.error("DTO was not saved in Data Storage before loading all Members from Team.", e);
             } catch (NotAuthorisedException e) {
-                //TODO
-                e.printStackTrace();
+                LOGGER.error("Client load (Team Members) request was rejected. Not enough permissions.", e);
             }
         }
     }
@@ -224,8 +222,7 @@ public class TeamViewController extends JfxController {
         } catch (UnknownEntityException e) {
             LOGGER.error("DTO was not saved in Data Storage before removing Member from Team.", e);
         } catch (NotAuthorisedException e) {
-            //TODO
-            e.printStackTrace();
+            LOGGER.error("Client delete (Member) request was rejected. Not enough permissions.", e);
         }
     }
 
@@ -256,8 +253,7 @@ public class TeamViewController extends JfxController {
                     } catch (UnknownEntityException e) {
                         LOGGER.error("Unable to assign Member to Team", e);
                     } catch (NotAuthorisedException e) {
-                        //TODO
-                        e.printStackTrace();
+                        LOGGER.error("Client assign (Member to Team) request was rejected. Not enough permissions.", e);
                     }
                 }
 
@@ -275,8 +271,7 @@ public class TeamViewController extends JfxController {
                 GUIHelper.showValidationAlert(context);
                 LOGGER.error(context, e);
             } catch (NotAuthorisedException e) {
-                //TODO
-                e.printStackTrace();
+                LOGGER.error("Client save (Team) request was rejected. Not enough permissions.", e);
             }
         }
     }

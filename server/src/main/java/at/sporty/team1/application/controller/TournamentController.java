@@ -2,6 +2,7 @@ package at.sporty.team1.application.controller;
 
 import at.sporty.team1.domain.Match;
 import at.sporty.team1.domain.Tournament;
+import at.sporty.team1.domain.interfaces.IMatch;
 import at.sporty.team1.domain.interfaces.ITournament;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
@@ -189,8 +190,6 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
 
         if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
 
-        //TODO Match entity and MatchDTO
-
         if (tournamentId == null) throw new UnknownEntityException(ITournament.class);
 
         /* Is valid, moving forward */
@@ -317,11 +316,10 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
             Tournament tournament = PersistenceFacade.getNewTournamentDAO().findById(tournamentId);
             if (tournament == null) throw new UnknownEntityException(ITournament.class);
 
-//            IMatch match = MAPPER.map(matchDTO, Match.class);
+            IMatch match = MAPPER.map(matchDTO, Match.class);
 
-            //TODO uncomment when Matches will be bind in Tournament
-//            PersistenceFacade.forceLoadLazyProperty(tournament, Tournament::getMatches);
-//            tournament.addMatch(match);
+            PersistenceFacade.forceLoadLazyProperty(tournament, Tournament::getMatches);
+            tournament.addMatch(match);
 
             PersistenceFacade.getNewTournamentDAO().saveOrUpdate(tournament);
 

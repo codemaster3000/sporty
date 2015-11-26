@@ -115,10 +115,9 @@ public class CompetitionViewController extends JfxController {
             );
 
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
-            e.printStackTrace();
+            LOGGER.error("Error occurred while loading all known departments.", e);
         } catch (NotAuthorisedException e) {
-            //TODO
-            e.printStackTrace();
+            LOGGER.error("Client load (Department) request was rejected. Not enough permissions.", e);
         }
 
         if (departments != null) {
@@ -245,8 +244,7 @@ public class CompetitionViewController extends JfxController {
             } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
             	LOGGER.error("Error occurred while searching all Teams by Department.", e);
             } catch (NotAuthorisedException e) {
-                //TODO
-                e.printStackTrace();
+                LOGGER.error("Client search (Teams by Department) request was rejected. Not enough permissions.", e);
             }
 
             /**
@@ -336,8 +334,7 @@ public class CompetitionViewController extends JfxController {
                 GUIHelper.showValidationAlert(context);
                 LOGGER.error(context, e);
             } catch (NotAuthorisedException e) {
-                //TODO
-                e.printStackTrace();
+                LOGGER.error("Client save (Tournament) request was rejected. Not enough permissions.", e);
             }
         }
     }
@@ -357,12 +354,15 @@ public class CompetitionViewController extends JfxController {
 			for(MatchDTO match : matches){
 				try {
 					imc.createNewMatch(tournamentId, match, CommunicationFacade.getActiveSession());
-				} catch (ValidationException | UnknownEntityException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (NotAuthorisedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+				} catch (ValidationException e) {
+                    String context = String.format("Validation exception \"%s\" while saving match.", e.getCause());
+
+                    GUIHelper.showValidationAlert(context);
+                    LOGGER.error(context, e);
+				} catch (UnknownEntityException e) {
+                    LOGGER.error("DTO was not saved in Data Storage before assigning Match to Tournament.", e);
+                } catch (NotAuthorisedException e) {
+                    LOGGER.error("Client save (Match) request was rejected. Not enough permissions.", e);
                 }
             }
 			LOGGER.info("Matches was successfully saved. Size:\"{}, TournamentId: {}\"", matches.size(), tournamentId);
@@ -440,10 +440,7 @@ public class CompetitionViewController extends JfxController {
             );
 
         } catch (NotAuthorisedException e) {
-
-            //TODO
-            e.printStackTrace();
-
+            LOGGER.error("Client save (Teams to Tournament) request was rejected. Not enough permissions.", e);
         }
     }
 

@@ -144,8 +144,6 @@ public class MemberViewController extends JfxController {
 
                 if (!departments.isEmpty()) {
 
-                    IDepartmentController deptController = CommunicationFacade.lookupForDepartmentController();
-
                     for (DepartmentDTO actualDepartment : departments) {
                         Integer departmentId = actualDepartment.getDepartmentId();
 
@@ -227,8 +225,7 @@ public class MemberViewController extends JfxController {
             } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
                 LOGGER.error("Error occurred while loading all Departments and their Teams.", e);
             } catch (NotAuthorisedException e) {
-                //TODO
-                e.printStackTrace();
+                LOGGER.error("Client load (Departments and Teams) request was rejected. Not enough permissions.", e);
             }
         }).start();
 	}
@@ -363,8 +360,7 @@ public class MemberViewController extends JfxController {
             } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
                 LOGGER.error("Error occurred while loading Member data (Teams).", e);
             } catch (NotAuthorisedException e) {
-                //TODO
-                e.printStackTrace();
+                LOGGER.error("Client load (Departments and Teams) request was rejected. Not enough permissions.", e);
             }
 
 
@@ -460,13 +456,12 @@ public class MemberViewController extends JfxController {
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
                 LOGGER.error("Error occurred while saving the member.", e);
             } catch (ValidationException e) {
-            	String context = String.format("Validation exception %s while saving member.", e.getCause());
+            	String context = String.format("Validation exception \"%s\" while saving member.", e.getCause());
             	
             	GUIHelper.showValidationAlert(context);
 				LOGGER.error(context, e);
 			} catch (NotAuthorisedException e) {
-                //TODO
-                e.printStackTrace();
+                LOGGER.error("Client save (Member) request was rejected. Not enough permissions.", e);
             }
         }
     }
@@ -516,8 +511,7 @@ public class MemberViewController extends JfxController {
         } catch (UnknownEntityException e) {
             LOGGER.error("DTO was not saved in Data Storage before assigning Member to Department.", e);
         } catch (NotAuthorisedException e) {
-            //TODO
-            e.printStackTrace();
+            LOGGER.error("Client save (Member Departments) request was rejected. Not enough permissions.", e);
         }
     }
 
@@ -587,8 +581,7 @@ public class MemberViewController extends JfxController {
         } catch (UnknownEntityException e) {
             LOGGER.error("DTO was not saved in Data Storage before assigning Member to Team.", e);
         } catch (NotAuthorisedException e) {
-            //TODO
-            e.printStackTrace();
+            LOGGER.error("Client save (Team Members) request was rejected. Not enough permissions.", e);
         }
     }
 

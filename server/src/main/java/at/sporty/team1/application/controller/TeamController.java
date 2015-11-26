@@ -49,7 +49,7 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
 
         if (teamDTO == null) return;
 
-        /* Validating Input */   //TODO further validation
+        /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
         if (!inputSanitizer.isValid(teamDTO.getTeamName(), DataType.TEXT)) {
             // There has been bad Input, throw the Exception

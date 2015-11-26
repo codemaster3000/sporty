@@ -1,5 +1,6 @@
 package at.sporty.team1.domain.interfaces;
 
+import at.sporty.team1.domain.Match;
 import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.readonly.IRTournament;
 
@@ -9,7 +10,6 @@ import java.util.List;
  * Created by f00 on 16.11.15.
  */
 public interface ITournament extends IRTournament {
-
     void setTournamentId(Integer id);
 
     void setDate(String date);
@@ -19,10 +19,6 @@ public interface ITournament extends IRTournament {
     void setDepartment(Department department);
 
 //    void setLeague(League league);
-//
-//    void setMatches(List<Match> matches);
-//
-//    void setTeams(List<String> teams);
 
     void addTeam(String team);
 
@@ -32,5 +28,7 @@ public interface ITournament extends IRTournament {
 
     void removeMatch(IMatch match);
 
-	void setTeams(List<String> teams);
+	void setTeams(List<String> teamList);
+
+    void setMatches(List<Match> matchList);
 }

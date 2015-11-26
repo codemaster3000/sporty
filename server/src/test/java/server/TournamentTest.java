@@ -40,7 +40,6 @@ public class TournamentTest {
 			tournamentController = new TournamentController();
 			tournamentController.createOrSaveTournament(tournamentDTO, null);
 		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -60,7 +59,6 @@ public class TournamentTest {
 			tournamentController = new TournamentController();
 			tournamentController.createOrSaveTournament(tournamentDTO, null);
 		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -71,13 +69,12 @@ public class TournamentTest {
 		List<String> tournamentTeams = null;
 		TournamentController tournamentController = null;
 
-        Integer tournamentId = 1000; //TODO change to real one
+        Integer tournamentId = 1000;
 
 		try {
 			tournamentController = new TournamentController();
 			tournamentTeams = tournamentController.searchAllTournamentTeams(tournamentId, null);
 		} catch (RemoteException | UnknownEntityException | NotAuthorisedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -94,7 +91,6 @@ public class TournamentTest {
 			tournamentController = new TournamentController();
 			tournaments = tournamentController.searchAllTournaments(null);
 		} catch (RemoteException | NotAuthorisedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		assertNotNull(tournaments);
@@ -103,7 +99,7 @@ public class TournamentTest {
 	@Test
 	public void createNewMatchTest_1() {
 
-		Integer tournamentId = 1000; //TODO change to real one
+		Integer tournamentId = 1000;
 
         MatchDTO matchDTO = new MatchDTO();
 		matchDTO.setTeam1("Hobbits");
@@ -115,7 +111,6 @@ public class TournamentTest {
             TournamentController tournamentController = new TournamentController();
 			tournamentController.createNewMatch(tournamentId, matchDTO, null);
 		} catch (RemoteException | UnknownEntityException | ValidationException | NotAuthorisedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
