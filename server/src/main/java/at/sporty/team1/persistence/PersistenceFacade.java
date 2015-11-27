@@ -74,7 +74,7 @@ public class PersistenceFacade {
     }
 
     /**
-     * Initializes lazy-loaded collections.
+     * Initializes lazy-loaded properties and collections.
      * @param entityObject instance of the target entity.
      * @param proxyFunction getterMethod for lazy property.
      */

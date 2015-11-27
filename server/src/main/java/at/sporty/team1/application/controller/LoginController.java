@@ -159,9 +159,12 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
                     cipher.doFinal(session.getClientFingerprint())
                 );
 
-                if (SESSION_REGISTRY.containsKey(decryptedSession)) {
+                Integer assignedMemberId = SESSION_REGISTRY.get(decryptedSession);
+
+                //Check if user in session object is assigned to current fingerprint
+                if (assignedMemberId != null && assignedMemberId.equals(session.getMemberId())) {
                     //Loading member from data store.
-                    IMember member = PersistenceFacade.getNewMemberDAO().findById(session.getMemberId());
+                    IMember member = PersistenceFacade.getNewMemberDAO().findById(assignedMemberId);
 
                     if (member != null && isInPermissionBound(member.getRole(), requiredRoleLevel)) {
                         //Resetting session timeout
