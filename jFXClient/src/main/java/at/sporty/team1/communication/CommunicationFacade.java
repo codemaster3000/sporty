@@ -87,6 +87,17 @@ public class CommunicationFacade {
         return (ITournamentController) CONTROLLER_MAP.get(ITournamentController.class);
 	}
 
+    public static INotificationController lookupForNotificationController()
+    throws  RemoteException, NotBoundException, MalformedURLException {
+        if (!CONTROLLER_MAP.containsKey(INotificationController.class)) {
+            CONTROLLER_MAP.put(INotificationController.class, Naming.lookup(
+                String.format(DEFAULT_RMI, RemoteObjectRegistry.NOTIFICATION_CONTROLLER.getNaming())
+            ));
+        }
+
+        return (INotificationController) CONTROLLER_MAP.get(INotificationController.class);
+    }
+
     public static PublicKey getServerPublicKey()
     throws RemoteException, NotBoundException, MalformedURLException, SecurityException {
         if (_activeServerPublicKey == null) {

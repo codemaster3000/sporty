@@ -51,6 +51,7 @@ public class Server {
 
     private static void bindRemoteObjects() throws RemoteException, SecurityException {
         bindName(RemoteObjectRegistry.LOGIN_CONTROLLER, new LoginController());
+        bindName(RemoteObjectRegistry.NOTIFICATION_CONTROLLER, new NotificationController());
         bindName(RemoteObjectRegistry.MEMBER_CONTROLLER, new MemberController());
         bindName(RemoteObjectRegistry.TEAM_CONTROLLER, new TeamController());
         bindName(RemoteObjectRegistry.DEPARTMENT_CONTROLLER, new DepartmentController());
