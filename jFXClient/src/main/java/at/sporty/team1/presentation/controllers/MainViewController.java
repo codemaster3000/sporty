@@ -8,7 +8,6 @@ import at.sporty.team1.rmi.api.IDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.SessionDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
-import at.sporty.team1.rmi.enums.UserRole;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.fxml.FXML;

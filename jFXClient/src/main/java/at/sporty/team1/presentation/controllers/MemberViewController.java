@@ -5,7 +5,6 @@ import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.IDTO;
 import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.api.IMemberController;
-import at.sporty.team1.rmi.api.ITeamController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
@@ -26,11 +25,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class MemberViewController extends JfxController {
@@ -358,7 +353,7 @@ public class MemberViewController extends JfxController {
                 }
 
             } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
-                LOGGER.error("Error occurred while loading Member data (Teams).", e);
+                LOGGER.error("Error occurred while loading Member data (Departments and Teams).", e);
             } catch (NotAuthorisedException e) {
                 LOGGER.error("Client load (Departments and Teams) request was rejected. Not enough permissions.", e);
             }

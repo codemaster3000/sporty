@@ -1,14 +1,17 @@
 package at.sporty.team1.executable;
 
 import at.sporty.team1.application.controller.*;
-import at.sporty.team1.rmi.exceptions.SecurityException;
 import at.sporty.team1.persistence.util.HibernateSessionUtil;
 import at.sporty.team1.rmi.RemoteObjectRegistry;
+import at.sporty.team1.rmi.exceptions.SecurityException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.MarkerManager;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.rmi.Naming;
 import java.rmi.NoSuchObjectException;
 import java.rmi.Remote;
@@ -23,6 +26,7 @@ import java.rmi.server.UnicastRemoteObject;
  */
 public class Server {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final Marker SERVER_LIFECYCLE_MARKER = MarkerManager.getMarker("SERVER_LIFECYCLE");
     private static final String DEFAULT_RMI = "rmi://localhost/%s";
     private static final int DEFAULT_PORT = 1099;
 
@@ -36,16 +40,18 @@ public class Server {
     public static void main(String[] args) {
         try {
 
+            LOGGER.info(SERVER_LIFECYCLE_MARKER, "STARTING SPORTY SERVER");
+
             start();
 
             bindRemoteObjects();
 
-            LOGGER.info("Server started successfully.");
+            LOGGER.info(SERVER_LIFECYCLE_MARKER, "Server started successfully.");
 
             listenForCommands();
 
         } catch (Exception e) {
-            LOGGER.error("Error occurred on server initialisation stage.", e);
+            LOGGER.error(SERVER_LIFECYCLE_MARKER, "Error occurred on server initialisation stage.", e);
         }
     }
 
@@ -67,9 +73,9 @@ public class Server {
         try {
             Naming.bind(String.format(DEFAULT_RMI, stub.getNaming()), obj);
 
-            LOGGER.info("{} bounded to the registry.", stub.getNaming());
+            LOGGER.info(SERVER_LIFECYCLE_MARKER, "{} bounded to the registry.", stub.getNaming());
         } catch (Exception e) {
-            LOGGER.error("{} was not bounded to the registry.", stub.getNaming(), e);
+            LOGGER.error(SERVER_LIFECYCLE_MARKER, "{} was not bounded to the registry.", stub.getNaming(), e);
         }
     }
 
@@ -77,6 +83,7 @@ public class Server {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
             while (true) {
                 LOGGER.info(
+                    SERVER_LIFECYCLE_MARKER,
                     "Available Commands: {}",
                     ServerCommands.SHUTDOWN.getCommand()
                 );
@@ -113,7 +120,7 @@ public class Server {
      * Method should be executed on the server shutdown.
      */
     private static void shutdown() {
-        LOGGER.info("SHUTDOWN CLEANUP PROCESS STARTS");
+        LOGGER.info(SERVER_LIFECYCLE_MARKER, "SHUTDOWN CLEANUP PROCESS STARTS");
 
         if (rmiRegistry != null) {
             try {
@@ -122,12 +129,12 @@ public class Server {
                 LOGGER.error("RMI Registry is not shared (UnicastRemoteObject can't find the Object).", e);
             }
         }
-        LOGGER.info("RMI Registry successfully un-exported.");
+        LOGGER.info(SERVER_LIFECYCLE_MARKER, "RMI Registry successfully un-exported.");
 
         HibernateSessionUtil.getInstance().close();
-        LOGGER.info("Hibernate session was successfully closed.");
+        LOGGER.info(SERVER_LIFECYCLE_MARKER, "Hibernate session was successfully closed.");
 
-        LOGGER.info("Server successfully stopped.");
+        LOGGER.info(SERVER_LIFECYCLE_MARKER, "Server successfully stopped.");
     }
 
     private enum  ServerCommands {

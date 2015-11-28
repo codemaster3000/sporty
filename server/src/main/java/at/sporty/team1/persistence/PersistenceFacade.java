@@ -65,15 +65,6 @@ public class PersistenceFacade {
     }
 
     /**
-     * Returns an implementation of the IMatchDAO interface providing
-     * further operations with matches (remove, add..)
-     * @return an instance of IMatchDAO
-     */
-    public static IMatchDAO getNewMatchDAO() {
-        return new MatchDAO();
-    }
-
-    /**
      * Initializes lazy-loaded properties and collections.
      * @param entityObject instance of the target entity.
      * @param proxyFunction getterMethod for lazy property.

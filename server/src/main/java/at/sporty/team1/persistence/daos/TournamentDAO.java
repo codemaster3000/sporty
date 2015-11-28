@@ -4,7 +4,7 @@ package at.sporty.team1.persistence.daos;
 import at.sporty.team1.domain.Tournament;
 import at.sporty.team1.persistence.api.ITournamentDAO;
 import at.sporty.team1.persistence.util.Util;
-import org.hibernate.criterion.*;
+import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.PersistenceException;
 import java.util.List;

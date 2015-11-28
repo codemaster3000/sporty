@@ -3,7 +3,6 @@ package at.sporty.team1.application.controller;
 import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IDepartment;
-import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.IDepartmentController;
@@ -22,7 +21,6 @@ import org.dozer.Mapper;
 import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,7 +47,7 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
             /* pulling a DepartmentDAO and searching for all departments */
             List<? extends IDepartment> rawResults = PersistenceFacade.getNewDepartmentDAO().findAll();
 
-            //checking if there are an results
+            //checking if there are any results
             if (rawResults == null || rawResults.isEmpty()) return null;
 
             //Converting results to DepartmentDTO
@@ -80,7 +78,7 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
             PersistenceFacade.forceLoadLazyProperty(department, Department::getTeams);
             List<? extends ITeam> rawResults = department.getTeams();
 
-            //checking if there are an results
+            //checking if there are any results
             if (rawResults == null || rawResults.isEmpty()) return null;
 
             //Converting results to MemberDTO
@@ -114,7 +112,7 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
             PersistenceFacade.forceLoadLazyProperty(department, Department::getDepartmentHead);
             Member departmentHead = department.getDepartmentHead();
 
-            //checking if there are an results
+            //checking if there are any results
             if (departmentHead == null) return null;
 
             //Converting results to MemberDTO

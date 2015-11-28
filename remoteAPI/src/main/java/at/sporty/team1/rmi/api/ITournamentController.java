@@ -123,4 +123,17 @@ public interface ITournamentController extends IRemoteController {
      */
 	void assignTeamToTournament(String teamName, Integer tournamentId, SessionDTO session)
     throws RemoteException, ValidationException, UnknownEntityException, NotAuthorisedException;
+
+    /**
+     * Removes given team by name to the given tournament.
+     *
+     * @param teamName Name of the team to be removed from the given tournament.
+     * @param tournamentId Id of a tournament from which given team will be removed.
+     * @param session Session object.
+     * @throws RemoteException
+     * @throws ValidationException
+     * @throws UnknownEntityException
+     */
+    void removeTeamFromTournament(String teamName, Integer tournamentId, SessionDTO session)
+    throws RemoteException, ValidationException, UnknownEntityException, NotAuthorisedException;
 }

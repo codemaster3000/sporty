@@ -21,9 +21,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.security.InvalidKeyException;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * This is Utility class which starts the whole application.
@@ -62,7 +60,7 @@ public class MainApp extends Application {
 			performLogin();
 
 		} else {
-			LOGGER.error("Error occurred while starting a client. Security policies were not found.");
+			LOGGER.error("Error occurred while starting thr client. Security policies were not found.");
 		}
 	}
 	

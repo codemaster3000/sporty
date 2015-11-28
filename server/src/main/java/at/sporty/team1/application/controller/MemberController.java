@@ -1,6 +1,7 @@
 package at.sporty.team1.application.controller;
 
 
+import at.sporty.team1.application.auth.AccessPolicy;
 import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Team;
@@ -11,10 +12,7 @@ import at.sporty.team1.domain.readonly.IRMember;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.IMemberController;
-import at.sporty.team1.rmi.dtos.DepartmentDTO;
-import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.dtos.SessionDTO;
-import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.dtos.*;
 import at.sporty.team1.rmi.enums.UserRole;
 import at.sporty.team1.rmi.exceptions.DataType;
 import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
@@ -28,8 +26,7 @@ import org.dozer.Mapper;
 import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -97,7 +94,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             //filtering results for fee
             rawResults = filterWithFee(rawResults,isFeePaid);
 
-            //checking if there are an results
+            //checking if there are any results
             if (rawResults == null || rawResults.isEmpty()) return null;
 
             //Converting results to MemberDTO
@@ -131,7 +128,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             //filtering results for fee
             rawResults = filterWithFee(rawResults,isFeePaid);
 
-            //checking if there are an results
+            //checking if there are any results
             if (rawResults == null || rawResults.isEmpty()) return null;
 
             //Converting results to MemberDTO
@@ -165,7 +162,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             //filtering results for fee
             rawResults = filterWithFee(rawResults,isFeePaid);
 
-            //checking if there are an results
+            //checking if there are any results
             if (rawResults == null || rawResults.isEmpty()) return null;
 
             //Converting results to MemberDTO
@@ -199,7 +196,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             //filtering results for fee
             rawResults = filterWithFee(rawResults,isFeePaid);
 
-            //checking if there are an results
+            //checking if there are any results
             if (rawResults == null || rawResults.isEmpty()) return null;
 
             //Converting results to MemberDTO
@@ -233,7 +230,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             //filtering results for fee
             rawResults = filterWithFee(rawResults,isFeePaid);
 
-            //checking if there are an results
+            //checking if there are any results
             if (rawResults == null || rawResults.isEmpty()) return null;
 
             //Converting results to MemberDTO
@@ -243,6 +240,78 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
         } catch (PersistenceException e) {
             LOGGER.error("An error occurred while searching for \"{}\".", dateOfBirth, e);
+            return null;
+        }
+    }
+
+    @Override
+    public List<DTOPair<DepartmentDTO, TeamDTO>> loadFetchedDepartmentTeamList(Integer memberId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+
+        try {
+
+            if (memberId == null) throw new UnknownEntityException(IMember.class);
+
+            Member member = PersistenceFacade.getNewMemberDAO().findById(memberId);
+            if (member == null) throw new UnknownEntityException(IMember.class);
+
+            //Getting all departments for this entity
+            PersistenceFacade.forceLoadLazyProperty(member, Member::getDepartments);
+            Set<? extends IDepartment> rawResultsDepartments = new HashSet<>(member.getDepartments());
+
+            //Getting all teams for this entity
+            PersistenceFacade.forceLoadLazyProperty(member, Member::getTeams);
+            List<? extends ITeam> rawResultsTeam = member.getTeams();
+
+            List<DTOPair<DepartmentDTO, TeamDTO>> precookedResults = new LinkedList<>();
+
+            //Fetching and converting the results
+            for (ITeam team : rawResultsTeam) {
+                IDepartment department = team.getDepartment();
+
+                //Getting rid of duplicates
+                rawResultsDepartments.remove(department);
+
+                //Creating fetched pair
+                DTOPair<DepartmentDTO, TeamDTO> dtoPair = new DTOPair<>();
+                dtoPair.setDTO1(
+                    MAPPER.map(department, DepartmentDTO.class)
+                );
+                dtoPair.setDTO2(
+                    MAPPER.map(team, TeamDTO.class)
+                );
+                precookedResults.add(dtoPair);
+            }
+
+            //Check for departments assigned to member without a team
+            if (!rawResultsDepartments.isEmpty()) {
+                precookedResults.addAll(
+                    rawResultsDepartments.stream().map(department -> {
+
+                        //Creating fetched pair (team is null)
+                        DTOPair<DepartmentDTO, TeamDTO> dtoPair = new DTOPair<>();
+                        dtoPair.setDTO1(
+                            MAPPER.map(department, DepartmentDTO.class)
+                        );
+
+                        return dtoPair;
+
+                    }).collect(Collectors.toList())
+                );
+            }
+
+            //checking if there are any results
+            if (precookedResults.isEmpty()) return null;
+
+            //Converting results to TeamDTO
+            return precookedResults;
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurred while preparing departments and teams fetch list for Member #{}.",
+                memberId,
+                e
+            );
             return null;
         }
     }
@@ -264,7 +333,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             PersistenceFacade.forceLoadLazyProperty(member, Member::getDepartments);
             List<? extends IDepartment> rawResults = member.getDepartments();
 
-            //checking if there are an results
+            //checking if there are any results
             if (rawResults == null || rawResults.isEmpty()) return null;
 
             //Converting results to DepartmentDTO
@@ -286,7 +355,15 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     public void assignMemberToDepartment(Integer memberId, Integer departmentId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException {
 
-        if (!LoginController.hasEnoughPermissions(session, UserRole.MANAGER)) throw new NotAuthorisedException();
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            AccessPolicy.simplePolicy(
+                member -> LoginController.isInPermissionBound(member, UserRole.TRAINER)
+            ),
+            AccessPolicy.simplePolicy(
+                member -> PersistenceFacade.getNewDepartmentDAO().isDepartmentHead((Member) member, departmentId)
+            )
+        )) throw new NotAuthorisedException();
 
         if (memberId == null) throw new UnknownEntityException(IMember.class);
         if (departmentId == null) throw new UnknownEntityException(IDepartment.class);
@@ -318,7 +395,16 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
     public void removeMemberFromDepartment(Integer memberId, Integer departmentId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException {
 
-        if (!LoginController.hasEnoughPermissions(session, UserRole.MANAGER)) throw new NotAuthorisedException();
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            AccessPolicy.simplePolicy(
+                member -> LoginController.isInPermissionBound(member, UserRole.TRAINER)
+            ),
+            AccessPolicy.simplePolicy(
+                member -> PersistenceFacade.getNewDepartmentDAO().isDepartmentHead((Member) member, departmentId)
+            )
+        )) throw new NotAuthorisedException();
+
 
         if (memberId == null) throw new UnknownEntityException(IMember.class);
         if (departmentId == null) throw new UnknownEntityException(IDepartment.class);
@@ -363,7 +449,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             PersistenceFacade.forceLoadLazyProperty(member, Member::getTeams);
             List<? extends ITeam> rawResults = member.getTeams();
 
-            //checking if there are an results
+            //checking if there are any results
             if (rawResults == null || rawResults.isEmpty()) return null;
 
             //Converting results to TeamDTO
@@ -507,7 +593,6 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
             //filter for members who didn't pay their Fee
             return rawResults.stream().filter(notPaidPredicate).collect(Collectors.toList());
-
         }
     }
 }

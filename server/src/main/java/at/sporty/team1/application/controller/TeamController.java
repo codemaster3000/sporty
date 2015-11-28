@@ -1,9 +1,7 @@
 package at.sporty.team1.application.controller;
 
 import at.sporty.team1.domain.Department;
-import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Team;
-import at.sporty.team1.domain.interfaces.IDepartment;
 import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.misc.InputSanitizer;
@@ -83,7 +81,7 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
             /* pulling a TeamDAO and searching for all teams assigned to given Member */
             List<? extends ITeam> rawResults = PersistenceFacade.getNewTeamDAO().findTeamsByMemberId(memberId);
 
-            //checking if there are an results
+            //checking if there are any results
             if (rawResults == null || rawResults.isEmpty()) return null;
 
             //Converting results to TeamDTO
@@ -118,7 +116,7 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
             PersistenceFacade.forceLoadLazyProperty(team, Team::getMembers);
             List<? extends IMember> rawResults = team.getMembers();
 
-            //checking if there are an results
+            //checking if there are any results
             if (rawResults == null || rawResults.isEmpty()) return null;
 
             //Converting results to MemberDTO
@@ -152,7 +150,7 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
             PersistenceFacade.forceLoadLazyProperty(team, Team::getDepartment);
             Department department = team.getDepartment();
 
-            //checking if there are an results
+            //checking if there are any results
             if (department == null) return null;
 
             //Converting results to DepartmentDTO

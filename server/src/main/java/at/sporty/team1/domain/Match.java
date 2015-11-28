@@ -2,7 +2,6 @@ package at.sporty.team1.domain;
 
 import at.sporty.team1.domain.interfaces.IMatch;
 import at.sporty.team1.misc.converters.SQLDateConverter;
-import at.sporty.team1.rmi.dtos.MatchDTO;
 
 import javax.persistence.*;
 

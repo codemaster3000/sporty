@@ -1,10 +1,7 @@
 package at.sporty.team1.rmi.api;
 
 
-import at.sporty.team1.rmi.dtos.DepartmentDTO;
-import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.dtos.SessionDTO;
-import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.dtos.*;
 import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
@@ -90,6 +87,18 @@ public interface IMemberController extends IRemoteController {
      */
     List<MemberDTO> searchMembersByDateOfBirth(String dateOfBirth, Boolean isFeePaid, SessionDTO session)
     throws RemoteException, ValidationException, NotAuthorisedException;
+
+    /**
+     * Returns a fetched list of all departments and teams to which given member is assigned.
+     *
+     * @param memberId target member (will be used for search).
+     * @param session Session object.
+     * @return List<DTOPair> Fetched list of all departments ad teams to which given member is assigned.
+     * @throws RemoteException
+     * @throws UnknownEntityException
+     */
+    List<DTOPair<DepartmentDTO, TeamDTO>> loadFetchedDepartmentTeamList(Integer memberId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException;
 
     /**
      * Returns a list of all departments to which given member is assigned.

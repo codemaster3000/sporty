@@ -1,5 +1,6 @@
 package at.sporty.team1.application.controller;
 
+import at.sporty.team1.application.auth.AccessPolicy;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.persistence.PersistenceFacade;
@@ -144,6 +145,7 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
         return null;
 	}
 
+    @Deprecated
     public static boolean hasEnoughPermissions(SessionDTO session, UserRole requiredRoleLevel) {
         try {
 
@@ -187,6 +189,71 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
         return false;
     }
 
+    public static boolean hasEnoughPermissions(SessionDTO session, AccessPolicy... policies) {
+        try {
+
+            Cipher cipher = getCipher();
+            KeyPair serverKeyPair = getServerKeyPair();
+
+            //Normally this two values should be not null
+            if (cipher != null && serverKeyPair != null && session != null && session.getClientFingerprint() != null) {
+
+                //Decrypting client fingerprint
+                cipher.init(Cipher.DECRYPT_MODE, serverKeyPair.getPrivate());
+                String decryptedSession = new String(
+                    cipher.doFinal(session.getClientFingerprint())
+                );
+
+                Integer assignedMemberId = SESSION_REGISTRY.get(decryptedSession);
+
+                //Check if user in session object is assigned to current fingerprint
+                if (assignedMemberId != null && assignedMemberId.equals(session.getMemberId())) {
+
+                    //Loading member from data store.
+                    IMember member = PersistenceFacade.getNewMemberDAO().findById(assignedMemberId);
+
+                    //Check if member fulfill given policies
+                    if (member != null && AccessPolicy.hasMatched(member, policies)) {
+                        //Resetting session timeout
+                        updateSessionTimeout(decryptedSession, member.getMemberId());
+                        return true;
+                    }
+
+                } else if (assignedMemberId != null) {
+
+                    //Auth attempt from not expected member id, session is compromised
+                    SESSION_REGISTRY.remove(decryptedSession);
+
+                    LOGGER.warn(
+                        "Compromised session \"{}\" was removed. Auth attempt from #{}",
+                        decryptedSession,
+                        assignedMemberId
+                    );
+
+                } else {
+
+                    //Auth attempt with unknown/expired session
+                    LOGGER.warn(
+                        "Auth attempt from #\"{}\" with unknown/expired session \"{}\" was detected.",
+                        session.getMemberId(),
+                        decryptedSession
+                    );
+                }
+            }
+
+        } catch (PersistenceException e) {
+            LOGGER.error("Error occurred while getting/parsing user role.", e);
+        } catch (InvalidKeyException e) {
+            LOGGER.error("Private key is not suitable.", e);
+        } catch (BadPaddingException | IllegalBlockSizeException e) {
+            LOGGER.error("Received data is corrupted.", e);
+        } catch (SecurityException e) {
+            LOGGER.error("Error occurs while checking client fingerprint.", e);
+        }
+
+        return false;
+    }
+
     private static void updateSessionTimeout(String fingerprint, Integer memberId) {
         //Remove value from registry.
         SESSION_REGISTRY.remove(fingerprint);
@@ -195,7 +262,11 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
         SESSION_REGISTRY.put(fingerprint, memberId);
     }
 
-    private static boolean isInPermissionBound(String isRole, UserRole requiredRoleLevel) {
+    public static boolean isInPermissionBound(IMember member, UserRole requiredRoleLevel) {
+        return member != null && isInPermissionBound(member.getRole(), requiredRoleLevel);
+    }
+
+    public static boolean isInPermissionBound(String isRole, UserRole requiredRoleLevel) {
         /* Return according to user role */
         switch (isRole) {
             case "admin": {

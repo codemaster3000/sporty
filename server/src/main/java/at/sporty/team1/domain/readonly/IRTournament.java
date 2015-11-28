@@ -1,7 +1,7 @@
 package at.sporty.team1.domain.readonly;
 
-import at.sporty.team1.domain.Match;
 import at.sporty.team1.domain.Department;
+import at.sporty.team1.domain.Match;
 
 import java.util.List;
 

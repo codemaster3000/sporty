@@ -9,7 +9,6 @@ import at.sporty.team1.rmi.dtos.MatchDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
 import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.SecurityException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
