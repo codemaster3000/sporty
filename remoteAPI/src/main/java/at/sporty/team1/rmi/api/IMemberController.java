@@ -12,12 +12,25 @@ import java.util.List;
 public interface IMemberController extends IRemoteController {
 
     /**
+     * Search for Member with a given id.
+     *
+     * @param memberId target member (will be used for search).
+     * @param session Session object.
+     * @return MemberDTO searched member.
+     * @throws RemoteException
+     * @throws NotAuthorisedException
+     */
+    MemberDTO findMemberById(Integer memberId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException;
+
+    /**
      * Search for all Members.
      *
      * @param isFeePaid will search all members who paid the fee if value = true and not paid if = false.
      * @param session Session object.
      * @return List<MemberDTO> List of all members.
      * @throws RemoteException
+     * @throws NotAuthorisedException
      */
     List<MemberDTO> searchAllMembers(Boolean isFeePaid, SessionDTO session)
     throws RemoteException, NotAuthorisedException;
@@ -30,6 +43,7 @@ public interface IMemberController extends IRemoteController {
      * @return Integer Id of the updated or saved entity.
      * @throws RemoteException
      * @throws ValidationException
+     * @throws NotAuthorisedException
      */
     Integer createOrSaveMember(MemberDTO memberDTO, SessionDTO session)
     throws RemoteException, ValidationException, NotAuthorisedException;
@@ -43,6 +57,7 @@ public interface IMemberController extends IRemoteController {
      * @return List<MemberDTO> List of all members who's full name matched given data, or null.
      * @throws RemoteException
      * @throws ValidationException
+     * @throws NotAuthorisedException
      */
     List<MemberDTO> searchMembersByNameString(String searchString, Boolean isFeePaid, SessionDTO session)
     throws RemoteException, ValidationException, NotAuthorisedException;
@@ -57,6 +72,7 @@ public interface IMemberController extends IRemoteController {
      * @return List<MemberDTO> List of all members who are assigned to the given team, or null.
      * @throws RemoteException
      * @throws ValidationException
+     * @throws NotAuthorisedException
      */
     List<MemberDTO> searchMembersByCommonTeamName(String teamName, Boolean isFeePaid, SessionDTO session)
     throws RemoteException, ValidationException, NotAuthorisedException;
@@ -70,6 +86,7 @@ public interface IMemberController extends IRemoteController {
      * @return List<MemberDTO> List of all members who are assigned to the given team, or null.
      * @throws RemoteException
      * @throws ValidationException
+     * @throws NotAuthorisedException
      */
     List<MemberDTO> searchMembersByTournamentTeamName(String teamName, Boolean isFeePaid, SessionDTO session)
     throws RemoteException, ValidationException, NotAuthorisedException;
@@ -84,6 +101,7 @@ public interface IMemberController extends IRemoteController {
      * @return List<MemberDTO> List of all members who's date of birth matched given data, or null.
      * @throws RemoteException
      * @throws ValidationException
+     * @throws NotAuthorisedException
      */
     List<MemberDTO> searchMembersByDateOfBirth(String dateOfBirth, Boolean isFeePaid, SessionDTO session)
     throws RemoteException, ValidationException, NotAuthorisedException;
@@ -108,6 +126,7 @@ public interface IMemberController extends IRemoteController {
      * @return List<DepartmentDTO> List of all departments to which given member is assigned.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
     List<DepartmentDTO> loadMemberDepartments(Integer memberId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException;
@@ -120,6 +139,7 @@ public interface IMemberController extends IRemoteController {
      * @param session Session object.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
     void assignMemberToDepartment(Integer memberId, Integer departmentId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException;
@@ -132,6 +152,7 @@ public interface IMemberController extends IRemoteController {
      * @param session Session object.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
     void removeMemberFromDepartment(Integer memberId, Integer departmentId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException;
@@ -144,6 +165,7 @@ public interface IMemberController extends IRemoteController {
      * @return List<TeamDTO> List of all teams to which given member is assigned.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
     List<TeamDTO> loadMemberTeams(Integer memberId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException;
@@ -156,6 +178,7 @@ public interface IMemberController extends IRemoteController {
      * @param session Session object.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
     void assignMemberToTeam(Integer memberId, Integer teamId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException;
@@ -168,6 +191,7 @@ public interface IMemberController extends IRemoteController {
      * @param session Session object.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
     void removeMemberFromTeam(Integer memberId, Integer teamId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException;
@@ -179,6 +203,7 @@ public interface IMemberController extends IRemoteController {
      * @param session Session object.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
     void deleteMember(Integer memberId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException;

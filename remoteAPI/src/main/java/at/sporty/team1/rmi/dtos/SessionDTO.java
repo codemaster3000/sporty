@@ -8,15 +8,15 @@ import at.sporty.team1.rmi.api.IDTO;
 public class SessionDTO implements IDTO {
     private static final long serialVersionUID = 1L;
 
-    private Integer _memberId;
+    private Integer _userId;
     private byte[] _clientFingerprint;
 
-    public Integer getMemberId() {
-        return _memberId;
+    public Integer getUserId() {
+        return _userId;
     }
 
-    public SessionDTO setMemberId(Integer memberId) {
-        _memberId = memberId;
+    public SessionDTO setUserId(Integer userId) {
+        _userId = userId;
         return this;
     }
 

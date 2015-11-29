@@ -2,22 +2,30 @@ package at.sporty.team1.application.auth;
 
 import at.sporty.team1.domain.interfaces.IMember;
 
-import java.util.function.Function;
+import java.util.Objects;
 
 /**
  * Created by sereGkaluv on 27-Nov-15.
  */
-public interface AccessPolicy extends Function<IMember, Boolean> {
+public interface AccessPolicy<T extends IMember> {
 
-    static <T extends IMember> AccessPolicy simplePolicy(Function<T, Boolean> proxy) {
-        return (AccessPolicy) proxy;
+    Boolean isFollowedBy(T member);
+
+    static <T extends IMember> AccessPolicy<T> simplePolicy(AccessPolicy<T> proxy) {
+        return proxy;
     }
 
-    static <T extends IMember> boolean hasMatched(T t, AccessPolicy... policies) {
-        for (AccessPolicy policy : policies) {
-            //if policy is not fulfilled return negative result
-            if(!policy.apply(t)) return false;
-        }
-        return true;
+    static <T extends IMember> AccessPolicy<T> complexAndPolicy(AccessPolicy<T> proxy, AccessPolicy<T> proxy2) {
+        Objects.requireNonNull(proxy);
+        Objects.requireNonNull(proxy2);
+
+        return (T t) -> proxy.isFollowedBy(t) && proxy2.isFollowedBy(t);
+    }
+
+    static <T extends IMember> AccessPolicy<T> complexOrPolicy(AccessPolicy<T> proxy, AccessPolicy<T> proxy2) {
+        Objects.requireNonNull(proxy);
+        Objects.requireNonNull(proxy2);
+
+        return (T t) -> proxy.isFollowedBy(t) || proxy2.isFollowedBy(t);
     }
 }

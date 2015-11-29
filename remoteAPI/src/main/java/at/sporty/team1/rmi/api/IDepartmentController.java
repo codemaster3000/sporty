@@ -21,6 +21,7 @@ public interface IDepartmentController extends IRemoteController {
      * @param session Session object
      * @return List<DepartmentDTO> List of all departments
      * @throws RemoteException
+     * @throws NotAuthorisedException
      */
     List<DepartmentDTO> searchAllDepartments(SessionDTO session)
     throws RemoteException, NotAuthorisedException;
@@ -33,6 +34,7 @@ public interface IDepartmentController extends IRemoteController {
      * @return List<TeamDTO> List of all teams
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
     List<TeamDTO> loadDepartmentTeams(Integer departmentId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException;
@@ -45,6 +47,7 @@ public interface IDepartmentController extends IRemoteController {
      * @return MemberDTO department head, assigned to the given department.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
     MemberDTO loadDepartmentHead(Integer departmentId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException;

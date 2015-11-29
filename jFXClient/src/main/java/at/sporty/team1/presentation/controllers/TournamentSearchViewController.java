@@ -116,15 +116,14 @@ public class TournamentSearchViewController extends SearchViewController<Tournam
 
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
                     LOGGER.error("Error occurred while searching.", e);
+                    displayNoResults();
                 } catch (ValidationException e) {
                     LOGGER.error("Error occurred while searching.", e);
-
-                    Platform.runLater(() -> {
-                        GUIHelper.showValidationAlert(NOT_VALID_SEARCH_INPUT);
-                        displayNoResults();
-                    });
+                    Platform.runLater(() -> GUIHelper.showValidationAlert(NOT_VALID_SEARCH_INPUT));
+                    displayNoResults();
                 } catch (NotAuthorisedException e) {
                     LOGGER.error("Client search (Tournaments) request was rejected. Not enough permissions.", e);
+                    displayNoResults();
                 }
             }).start();
 
@@ -140,8 +139,10 @@ public class TournamentSearchViewController extends SearchViewController<Tournam
 
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
                     LOGGER.error("Error occurred while searching.", e);
+                    displayNoResults();
                 } catch (NotAuthorisedException e) {
                     LOGGER.error("Client search (Tournaments) request was rejected. Not enough permissions.", e);
+                    displayNoResults();
                 }
             }).start();
         }

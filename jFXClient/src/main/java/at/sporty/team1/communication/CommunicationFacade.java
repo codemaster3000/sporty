@@ -3,9 +3,13 @@ package at.sporty.team1.communication;
 import at.sporty.team1.rmi.RemoteObjectRegistry;
 import at.sporty.team1.rmi.api.*;
 import at.sporty.team1.rmi.dtos.AuthorisationDTO;
+import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.SessionDTO;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.SecurityException;
+import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.security.SecurityModule;
+import at.sporty.team1.util.CachedSession;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -27,7 +31,7 @@ public class CommunicationFacade {
 
     private static PublicKey _activeServerPublicKey;
     private static KeyPair _activeRSAKeyPair;
-    private static SessionDTO _activeSession;
+    private static CachedSession _extendedActiveSession;
 
     private CommunicationFacade() {
     }
@@ -117,12 +121,18 @@ public class CommunicationFacade {
     }
 
     public static SessionDTO getActiveSession() {
-        return _activeSession;
+        return _extendedActiveSession != null ? _extendedActiveSession.getSessionDTO() : null;
     }
 
-    public static SessionDTO authorize(String username, String password)
-    throws RemoteException, NotBoundException, MalformedURLException, SecurityException,
-    InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+    public static CachedSession getExtendedActiveSession() {
+        return _extendedActiveSession;
+    }
+
+    public static CachedSession authorize(String username, String password)
+    throws RemoteException, NotBoundException, MalformedURLException, SecurityException, InvalidKeyException,
+    BadPaddingException, IllegalBlockSizeException, UnknownEntityException, NotAuthorisedException {
+        //disposing old session
+        _extendedActiveSession = null;
 
         //Reading username and password
         byte[] rawUsername = username.getBytes();
@@ -151,11 +161,12 @@ public class CommunicationFacade {
             byte[] clientFingerprint = cipher.doFinal(decodedFingerprint);
 
             session.setClientFingerprint(clientFingerprint);
+
+            MemberDTO user = lookupForMemberController().findMemberById(session.getUserId(), session);
+            _extendedActiveSession = new CachedSession(user, session);
         }
 
-        _activeSession = session;
-
-        return _activeSession;
+        return _extendedActiveSession;
     }
 }
 

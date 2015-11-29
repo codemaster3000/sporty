@@ -23,6 +23,7 @@ public interface ITeamController extends IRemoteController  {
      * @param session Session object.
      * @throws RemoteException
      * @throws ValidationException
+     * @throws NotAuthorisedException
      */
     void createOrSaveTeam(TeamDTO teamDTO, SessionDTO session)
     throws RemoteException, ValidationException, NotAuthorisedException;
@@ -35,6 +36,7 @@ public interface ITeamController extends IRemoteController  {
      * @return List<TeamDTO> List of all teams that contain given member in the member list, or null.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
     List<TeamDTO> searchTeamsByMember(Integer memberId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException;
@@ -47,6 +49,7 @@ public interface ITeamController extends IRemoteController  {
      * @return List<MemberDTO> List of all members assigned to the given team.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
     List<MemberDTO> loadTeamMembers(Integer teamId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException;
@@ -59,6 +62,7 @@ public interface ITeamController extends IRemoteController  {
      * @return DepartmentDTO Department assigned to the given team.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
     DepartmentDTO loadTeamDepartment(Integer teamId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException;

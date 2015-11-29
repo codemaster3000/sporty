@@ -1,8 +1,7 @@
 package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
-import at.sporty.team1.presentation.controllers.core.JfxController;
-import at.sporty.team1.rmi.api.IDTO;
+import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
 import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.api.ITeamController;
@@ -35,7 +34,7 @@ import java.util.ResourceBundle;
 /**
  * Represents the View of a Team (Mannschaft)
  */
-public class TeamViewController extends JfxController {
+public class TeamViewController extends ConsumerViewController<MemberDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SUCCESSFUL_TEAM_SAVE = "Team was successfully saved.";
 
@@ -80,28 +79,10 @@ public class TeamViewController extends JfxController {
         });
 
         /**
-         * Load Teams
-         */
-
-        /**
          * Converter from TeamDTO to Team name (String)
          */
-        StringConverter<TeamDTO> teamDTOStringConverter = new StringConverter<TeamDTO>() {
-            @Override
-            public String toString(TeamDTO teamDTO) {
-                if (teamDTO != null) {
-                    return teamDTO.getTeamName();
-                }
-                return null;
-            }
-
-            @Override
-            public TeamDTO fromString(String string) {
-                return null;
-            }
-        };
-
-        _chooseTeamComboBox.setConverter(teamDTOStringConverter);
+        StringConverter<TeamDTO> teamDTOConverter = GUIHelper.getDTOToStringConverter(TeamDTO::getTeamName);
+        _chooseTeamComboBox.setConverter(teamDTOConverter);
 
         new Thread(() -> {
 
@@ -138,7 +119,6 @@ public class TeamViewController extends JfxController {
         }).start();
 
         _chooseTeamComboBox.setOnAction((event) -> {
-
             _membersListView.getItems().clear();
             displayTeamData(_chooseTeamComboBox.getSelectionModel().getSelectedItem());
         });
@@ -147,12 +127,8 @@ public class TeamViewController extends JfxController {
     private static TeamDTO _activeTeamDTO;
 
     @Override
-    public void displayDTO(IDTO idto) {
-        if (idto instanceof TeamDTO) {
-            displayTeamData((TeamDTO) idto);
-        } else if (idto instanceof MemberDTO) {
-            addNewMemberToTeam((MemberDTO) idto);
-        }
+    public void loadDTO(MemberDTO memberDTO) {
+        addNewMemberToTeam(memberDTO);
     }
 
     /**

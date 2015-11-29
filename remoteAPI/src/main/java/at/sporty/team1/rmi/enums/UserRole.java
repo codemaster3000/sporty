@@ -1,17 +1,19 @@
 package at.sporty.team1.rmi.enums;
 
 public enum UserRole {
-    UNSUCCESSFUL_LOGIN(0),
-    MEMBER(1),
-    TRAINER(2),
-    MANAGER(3),
-    DEPARTMENT_HEAD(4),
-    ADMIN(5);
+    GUEST(0, "guest"),
+    MEMBER(1, "member"),
+    TRAINER(2, "trainer"),
+    MANAGER(3, "manager"),
+    DEPARTMENT_HEAD(4, "departmentHead"),
+    ADMIN(5, "admin");
 
     private final int _roleLevel;
+    private final String _textForm;
 
-    UserRole(int roleLevel) {
+    UserRole(int roleLevel, String textFrom) {
         _roleLevel = roleLevel;
+        _textForm = textFrom;
     }
 
     public int getRoleLevel() {
@@ -23,5 +25,9 @@ public enum UserRole {
             return getRoleLevel() >= requiredRoleLevel.getRoleLevel();
         }
         return false;
+    }
+
+    public String getTextForm() {
+        return _textForm;
     }
 }

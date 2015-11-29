@@ -44,6 +44,9 @@ public class LoginDialog extends Dialog<Pair<String, String>> {
             loginButton.setDisable(newValue.trim().isEmpty());
         });
 
+        //Setting focus to username property
+        loginMaskController.setFocusToUsernameField();
+
         //defining the result converter for dialog return type
         setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
@@ -55,8 +58,6 @@ public class LoginDialog extends Dialog<Pair<String, String>> {
             return null;
         });
     }
-
-
 }
 
 

@@ -19,6 +19,7 @@ public interface ITournamentController extends IRemoteController {
      * @param session Session object.
      * @return List<TournamentDTO> List of all Tournaments.
      * @throws RemoteException
+     * @throws NotAuthorisedException
      */
     List<TournamentDTO> searchAllTournaments(SessionDTO session)
     throws RemoteException, NotAuthorisedException;
@@ -32,6 +33,7 @@ public interface ITournamentController extends IRemoteController {
      * @return List<TournamentDTO> List of all tournaments that are assigned to given sport, or null.
      * @throws RemoteException
      * @throws ValidationException
+     * @throws NotAuthorisedException
      */
     List<TournamentDTO> searchTournamentsBySport(String sport, SessionDTO session)
     throws RemoteException, ValidationException, NotAuthorisedException;
@@ -45,6 +47,7 @@ public interface ITournamentController extends IRemoteController {
      * @return List<TournamentDTO> List of all tournaments that are assigned to given event date, or null.
      * @throws RemoteException
      * @throws ValidationException
+     * @throws NotAuthorisedException
      */
     List<TournamentDTO> searchTournamentsByDate(String eventDate, SessionDTO session)
     throws RemoteException, ValidationException, NotAuthorisedException;
@@ -58,6 +61,7 @@ public interface ITournamentController extends IRemoteController {
      * @return List<TournamentDTO> List of all tournaments that are assigned to given location, or null.
      * @throws RemoteException
      * @throws ValidationException
+     * @throws NotAuthorisedException
      */
     List<TournamentDTO> searchTournamentsByLocation(String location, SessionDTO session)
     throws RemoteException, ValidationException, NotAuthorisedException;
@@ -70,6 +74,7 @@ public interface ITournamentController extends IRemoteController {
      * @return List<TournamentDTO> List of all teams assigned to the given tournament.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
     List<String> searchAllTournamentTeams(Integer tournamentId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException;
@@ -82,6 +87,7 @@ public interface ITournamentController extends IRemoteController {
      * @return List<MatchDTO> List of all Matches.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
     List<MatchDTO> searchAllTournamentMatches(Integer tournamentId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException;
@@ -94,6 +100,7 @@ public interface ITournamentController extends IRemoteController {
      * @return Integer Id of the updated or saved entity.
      * @throws RemoteException
      * @throws ValidationException
+     * @throws NotAuthorisedException
      */
     Integer createOrSaveTournament(TournamentDTO tournamentDTO, SessionDTO session)
     throws RemoteException, ValidationException, NotAuthorisedException;
@@ -107,6 +114,7 @@ public interface ITournamentController extends IRemoteController {
      * @throws RemoteException
      * @throws ValidationException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
     void createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
     throws RemoteException, ValidationException, UnknownEntityException, NotAuthorisedException;
@@ -120,6 +128,7 @@ public interface ITournamentController extends IRemoteController {
      * @throws RemoteException
      * @throws ValidationException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
 	void assignTeamToTournament(String teamName, Integer tournamentId, SessionDTO session)
     throws RemoteException, ValidationException, UnknownEntityException, NotAuthorisedException;
@@ -133,6 +142,7 @@ public interface ITournamentController extends IRemoteController {
      * @throws RemoteException
      * @throws ValidationException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
     void removeTeamFromTournament(String teamName, Integer tournamentId, SessionDTO session)
     throws RemoteException, ValidationException, UnknownEntityException, NotAuthorisedException;

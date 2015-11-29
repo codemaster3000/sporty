@@ -156,15 +156,14 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
 
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
                     LOGGER.error("Error occurred while searching for members.", e);
+                    displayNoResults();
                 } catch (ValidationException e) {
                     LOGGER.error("Error occurred while searching for members.", e);
-
-                    Platform.runLater(() -> {
-                        GUIHelper.showValidationAlert(NOT_VALID_SEARCH_INPUT);
-                        displayNoResults();
-                    });
+                    Platform.runLater(() -> GUIHelper.showValidationAlert(NOT_VALID_SEARCH_INPUT));
+                    displayNoResults();
                 } catch (NotAuthorisedException e) {
                     LOGGER.error("Client search (Member) request was rejected. Not enough permissions.", e);
+                    displayNoResults();
                 }
             }).start();
 
@@ -186,8 +185,10 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
 
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
                     LOGGER.error("Error occurred while searching for members.", e);
+                    displayNoResults();
                 } catch (NotAuthorisedException e) {
                     LOGGER.error("Client search (Member) request was rejected. Not enough permissions.", e);
+                    displayNoResults();
                 }
             }).start();
         }

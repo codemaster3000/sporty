@@ -1,14 +1,17 @@
 package at.sporty.team1.util;
 
 import at.sporty.team1.presentation.dialogs.LoginDialog;
+import at.sporty.team1.rmi.api.IDTO;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.SVGPath;
 import javafx.util.Pair;
+import javafx.util.StringConverter;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Created by sereGkaluv on 30-Oct-15.
@@ -111,5 +114,22 @@ public class GUIHelper {
         graphic.setContent(svg.getSVGString());
 
         return graphic;
+    }
+
+    public static <T extends IDTO> StringConverter<T> getDTOToStringConverter(Function<T, String> proxy) {
+        return new StringConverter<T>() {
+            @Override
+            public String toString(T dto) {
+                if (dto != null) {
+                    return proxy.apply(dto);
+                }
+                return null;
+            }
+
+            @Override
+            public T fromString(String string) {
+                return null;
+            }
+        };
     }
 }

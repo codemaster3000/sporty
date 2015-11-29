@@ -16,6 +16,7 @@ public interface ILoginController extends IRemoteController {
      *
      * @return byte[] server public key.
      * @throws RemoteException
+     * @throws SecurityException
      */
     byte[] getServerPublicKey()
     throws RemoteException, SecurityException;

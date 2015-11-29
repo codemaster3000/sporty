@@ -2,8 +2,10 @@ package at.sporty.team1.presentation;
 
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.MainViewController;
-import at.sporty.team1.rmi.dtos.SessionDTO;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.SecurityException;
+import at.sporty.team1.rmi.exceptions.UnknownEntityException;
+import at.sporty.team1.util.CachedSession;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -36,7 +38,7 @@ public class MainApp extends Application {
 
 	private static final String DEFAULT_TITLE = "SPORTY";
 	private static final int DEFAULT_WIDTH = 1024;
-	private static final int DEFAULT_HEIGHT = 680;
+	private static final int DEFAULT_HEIGHT = 600;
 
 	/**
 	 * Default (empty) constructor for this utility class.
@@ -73,7 +75,7 @@ public class MainApp extends Application {
 
                 try {
                     //Authorising
-                    SessionDTO session = CommunicationFacade.authorize(
+                    CachedSession session = CommunicationFacade.authorize(
                         loginData.getKey(),
                         loginData.getValue()
                     );
@@ -90,10 +92,10 @@ public class MainApp extends Application {
                     LOGGER.error("Private key is not suitable.", e);
                 } catch (BadPaddingException | IllegalBlockSizeException e) {
                     LOGGER.error("Received data is corrupted.", e);
-                } catch (SecurityException e) {
+                } catch (SecurityException | NotAuthorisedException | UnknownEntityException e) {
                     LOGGER.error("Error occurs while generating client fingerprint", e);
                 }
-            }
+			}
 
 		} catch (RemoteException | MalformedURLException | NotBoundException e) {
 			LOGGER.error("Unsuccessful login detected.", e);
@@ -101,7 +103,7 @@ public class MainApp extends Application {
 	}
 
 
-	private void showMainStage(SessionDTO session) {
+	private void showMainStage(CachedSession session) {
 				
 		ViewLoader<MainViewController> viewLoader = ViewLoader.loadView(MainViewController.class);
 		Parent mainStage = (Parent) viewLoader.loadNode();

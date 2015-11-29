@@ -11,7 +11,6 @@ import org.apache.logging.log4j.MarkerManager;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.rmi.Naming;
 import java.rmi.NoSuchObjectException;
 import java.rmi.Remote;

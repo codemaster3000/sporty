@@ -80,7 +80,21 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
             return null;
         }
     }
-    
+
+    @Override
+    public MemberDTO findMemberById(Integer memberId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+
+        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
+
+        if (memberId == null) throw new UnknownEntityException(IMember.class);
+
+        Member member = PersistenceFacade.getNewMemberDAO().findById(memberId);
+        if (member == null) throw new UnknownEntityException(IMember.class);
+
+        return MAPPER.map(member, MemberDTO.class);
+    }
+
     @Override
     public List<MemberDTO> searchAllMembers(Boolean isFeePaid, SessionDTO session)
     throws RemoteException, NotAuthorisedException {
@@ -274,12 +288,15 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
                 //Creating fetched pair
                 DTOPair<DepartmentDTO, TeamDTO> dtoPair = new DTOPair<>();
-                dtoPair.setDTO1(
-                    MAPPER.map(department, DepartmentDTO.class)
-                );
                 dtoPair.setDTO2(
                     MAPPER.map(team, TeamDTO.class)
                 );
+
+                if (department != null) {
+                    dtoPair.setDTO1(
+                        MAPPER.map(department, DepartmentDTO.class)
+                    );
+                }
                 precookedResults.add(dtoPair);
             }
 
@@ -357,11 +374,18 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
         if (!LoginController.hasEnoughPermissions(
             session,
-            AccessPolicy.simplePolicy(
-                member -> LoginController.isInPermissionBound(member, UserRole.TRAINER)
-            ),
-            AccessPolicy.simplePolicy(
-                member -> PersistenceFacade.getNewDepartmentDAO().isDepartmentHead((Member) member, departmentId)
+            AccessPolicy.complexOrPolicy(
+                AccessPolicy.simplePolicy(
+                    member -> LoginController.isInPermissionBound(member, UserRole.ADMIN)
+                ),
+                AccessPolicy.complexAndPolicy(
+                    AccessPolicy.simplePolicy(
+                        member -> LoginController.isInPermissionBound(member, UserRole.TRAINER)
+                    ),
+                    AccessPolicy.simplePolicy(
+                        member -> PersistenceFacade.getNewDepartmentDAO().isDepartmentHead((Member) member, departmentId)
+                    )
+                )
             )
         )) throw new NotAuthorisedException();
 
@@ -397,11 +421,18 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
         if (!LoginController.hasEnoughPermissions(
             session,
-            AccessPolicy.simplePolicy(
-                member -> LoginController.isInPermissionBound(member, UserRole.TRAINER)
-            ),
-            AccessPolicy.simplePolicy(
-                member -> PersistenceFacade.getNewDepartmentDAO().isDepartmentHead((Member) member, departmentId)
+            AccessPolicy.complexOrPolicy(
+                AccessPolicy.simplePolicy(
+                    member -> LoginController.isInPermissionBound(member, UserRole.ADMIN)
+                ),
+                AccessPolicy.complexAndPolicy(
+                    AccessPolicy.simplePolicy(
+                        member -> LoginController.isInPermissionBound(member, UserRole.TRAINER)
+                    ),
+                    AccessPolicy.simplePolicy(
+                        member -> PersistenceFacade.getNewDepartmentDAO().isDepartmentHead((Member) member, departmentId)
+                    )
+                )
             )
         )) throw new NotAuthorisedException();
 

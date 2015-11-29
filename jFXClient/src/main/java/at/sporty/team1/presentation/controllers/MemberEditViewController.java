@@ -1,8 +1,7 @@
 package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
-import at.sporty.team1.presentation.controllers.core.JfxController;
-import at.sporty.team1.rmi.api.IDTO;
+import at.sporty.team1.presentation.controllers.core.EditViewController;
 import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
@@ -14,7 +13,6 @@ import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.StringConverter;
@@ -28,9 +26,10 @@ import java.rmi.RemoteException;
 import java.util.*;
 
 
-public class MemberViewController extends JfxController {
+public class MemberEditViewController extends EditViewController<MemberDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Map<String, DepartmentDTO> SPORT_MAP = new HashMap<>();
+    private static final String VIEW_TEXT_HEADER = "MEMBER EDITING VIEW";
     private static final String SUCCESSFUL_MEMBER_SAVE = "Member was successfully saved.";
     private static final String SPORT_VOLLEYBALL = "Volleyball";
     private static final String SPORT_FOOTBALL = "Football";
@@ -43,7 +42,6 @@ public class MemberViewController extends JfxController {
     @FXML private TextField lNameTextField;
     @FXML private TextField birthTextField;
     @FXML private TextField emailTextField;
-    @FXML private TextField phoneTextField;
     @FXML private TextField addressTextField;
     @FXML private RadioButton radioGenderFemale;
     @FXML private RadioButton radioGenderMale;
@@ -67,6 +65,11 @@ public class MemberViewController extends JfxController {
         Platform.runLater(fNameTextField::requestFocus);
         
         doComboBoxAndCheckBoxInitialization();
+    }
+
+    @Override
+    public String getHeaderText() {
+        return VIEW_TEXT_HEADER;
     }
 
     /**
@@ -95,27 +98,13 @@ public class MemberViewController extends JfxController {
         );
 
         /**
-         * Converter from TeamDTO to Team name (String)
+         * Setting Converter from TeamDTO to Team name (String)
          */
-        StringConverter<TeamDTO> teamDTOStringConverter = new StringConverter<TeamDTO>() {
-            @Override
-            public String toString(TeamDTO teamDTO) {
-                if (teamDTO != null) {
-                    return teamDTO.getTeamName();
-                }
-                return null;
-            }
-
-            @Override
-            public TeamDTO fromString(String string) {
-                return null;
-            }
-        };
-
-        memberTeamComboBoxBaseball.setConverter(teamDTOStringConverter);
-        memberTeamComboBoxFootball.setConverter(teamDTOStringConverter);
-        memberTeamComboBoxSoccer.setConverter(teamDTOStringConverter);
-        memberTeamComboBoxVolleyball.setConverter(teamDTOStringConverter);
+        StringConverter<TeamDTO> teamDTOConverter = GUIHelper.getDTOToStringConverter(TeamDTO::getTeamName);
+        memberTeamComboBoxBaseball.setConverter(teamDTOConverter);
+        memberTeamComboBoxFootball.setConverter(teamDTOConverter);
+        memberTeamComboBoxSoccer.setConverter(teamDTOConverter);
+        memberTeamComboBoxVolleyball.setConverter(teamDTOConverter);
 
         /**
          * Role Combobox
@@ -225,11 +214,10 @@ public class MemberViewController extends JfxController {
         }).start();
 	}
 
-	@Override
-    public void displayDTO(IDTO idto){
-        if (idto instanceof MemberDTO) {
-            displayMemberDTO((MemberDTO) idto);
-        }
+    @Override
+    public void loadDTO(MemberDTO memberDTO) {
+        _activeMemberDTO = memberDTO;
+        displayMemberDTO(memberDTO);
     }
 
     /**
@@ -237,13 +225,7 @@ public class MemberViewController extends JfxController {
      * @param memberDTO MemberDTO that will be preloaded.
      */
     private void displayMemberDTO(MemberDTO memberDTO) {
-
-        //clear form
-        dispose();
-
         if (memberDTO != null) {
-            _activeMemberDTO = memberDTO;
-
             fNameTextField.setText(_activeMemberDTO.getFirstName());
             lNameTextField.setText(_activeMemberDTO.getLastName());
 
@@ -308,45 +290,47 @@ public class MemberViewController extends JfxController {
                             CommunicationFacade.getActiveSession()
                         );
 
-                        switch (department.getSport()) {
-                            case SPORT_VOLLEYBALL: {
-                                Platform.runLater(() -> {
-                                    memberSportCheckboxVolleyball.setSelected(true);
-                                    memberTeamComboBoxSoccer.setDisable(false);
-                                    memberTeamComboBoxVolleyball.getSelectionModel().select(team);
-                                });
+                        if (department != null) {
+                            switch (department.getSport()) {
+                                case SPORT_VOLLEYBALL: {
+                                    Platform.runLater(() -> {
+                                        memberSportCheckboxVolleyball.setSelected(true);
+                                        memberTeamComboBoxVolleyball.setDisable(false);
+                                        memberTeamComboBoxVolleyball.getSelectionModel().select(team);
+                                    });
 
-                                break;
-                            }
+                                    break;
+                                }
 
-                            case SPORT_FOOTBALL: {
-                                Platform.runLater(() -> {
-                                    memberSportCheckboxFootball.setSelected(true);
-                                    memberTeamComboBoxSoccer.setDisable(false);
-                                    memberTeamComboBoxFootball.getSelectionModel().select(team);
-                                });
+                                case SPORT_FOOTBALL: {
+                                    Platform.runLater(() -> {
+                                        memberSportCheckboxFootball.setSelected(true);
+                                        memberTeamComboBoxFootball.setDisable(false);
+                                        memberTeamComboBoxFootball.getSelectionModel().select(team);
+                                    });
 
-                                break;
-                            }
+                                    break;
+                                }
 
-                            case SPORT_BASEBALL: {
-                                Platform.runLater(() -> {
-                                    memberSportCheckboxBaseball.setSelected(true);
-                                    memberTeamComboBoxSoccer.setDisable(false);
-                                    memberTeamComboBoxBaseball.getSelectionModel().select(team);
-                                });
+                                case SPORT_BASEBALL: {
+                                    Platform.runLater(() -> {
+                                        memberSportCheckboxBaseball.setSelected(true);
+                                        memberTeamComboBoxBaseball.setDisable(false);
+                                        memberTeamComboBoxBaseball.getSelectionModel().select(team);
+                                    });
 
-                                break;
-                            }
+                                    break;
+                                }
 
-                            case SPORT_SOCCER: {
-                                Platform.runLater(() -> {
-                                    memberSportCheckboxSoccer.setSelected(true);
-                                    memberTeamComboBoxSoccer.setDisable(false);
-                                    memberTeamComboBoxSoccer.getSelectionModel().select(team);
-                                });
+                                case SPORT_SOCCER: {
+                                    Platform.runLater(() -> {
+                                        memberSportCheckboxSoccer.setSelected(true);
+                                        memberTeamComboBoxSoccer.setDisable(false);
+                                        memberTeamComboBoxSoccer.getSelectionModel().select(team);
+                                    });
 
-                                break;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -390,17 +374,15 @@ public class MemberViewController extends JfxController {
 
     /**
      * Save Form-Method
-     * saves the member data into the database
+     * saves the member data to the data store
      */
-    @FXML
-    private void saveForm(ActionEvent actionEvent) {
+    @Override
+    public MemberDTO saveDTO() {
         String fName = GUIHelper.readNullOrEmpty(fNameTextField.getText());
         String lName = GUIHelper.readNullOrEmpty(lNameTextField.getText());
-        String bday = GUIHelper.readNullOrEmpty(birthTextField.getText());
+        String dateOfBirth = GUIHelper.readNullOrEmpty(birthTextField.getText());
         String email = GUIHelper.readNullOrEmpty(emailTextField.getText());
         String address = GUIHelper.readNullOrEmpty(addressTextField.getText());
-        //TODO refactor phone to squad
-        String phone = GUIHelper.readNullOrEmpty(phoneTextField.getText());
         String gender = null;
         
         if (radioGenderFemale.isSelected()) {
@@ -411,26 +393,25 @@ public class MemberViewController extends JfxController {
 
         //check if mandatory fields are filled with data,
         //validation was moved to a separate method for refactoring convenience (IDTO)
-        if(isValidForm(fName, lName, bday, gender, address)) {
-            try {
+        if(isValidForm(fName, lName, dateOfBirth, gender, address)) {
 
-                //check if we are creating a new or editing an existing Member
-                if (_activeMemberDTO == null) {
-                    //this is a new Member
-                    _activeMemberDTO = new MemberDTO();
-                }
+            //check if we are creating a new or editing an existing Member
+            if (_activeMemberDTO == null) {
+                //this is a new Member
+                _activeMemberDTO = new MemberDTO();
+            }
+
+            try {
 
                 //if it is an already existing member, changed member data will be simply updated.
                 _activeMemberDTO.setFirstName(fName)
                         .setLastName(lName)
                         .setGender(gender)
-                        .setDateOfBirth(bday)
+                        .setDateOfBirth(dateOfBirth)
                         .setEmail(email)
                         .setAddress(address)
                         .setIsFeePaid(false)
                         .setRole(roleComboBox.getSelectionModel().getSelectedItem().toString());
-                        //TODO
-                        //.setSquad(squad)
 
                 IMemberController memberController = CommunicationFacade.lookupForMemberController();
                 Integer memberId = memberController.createOrSaveMember(
@@ -446,7 +427,8 @@ public class MemberViewController extends JfxController {
 
                 //Logging and cleaning the tab
                 LOGGER.info("Member \"{} {}\" was successfully saved.", fName, lName);
-                dispose();
+
+                return _activeMemberDTO;
 
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
                 LOGGER.error("Error occurred while saving the member.", e);
@@ -459,6 +441,8 @@ public class MemberViewController extends JfxController {
                 LOGGER.error("Client save (Member) request was rejected. Not enough permissions.", e);
             }
         }
+
+        return null;
     }
 
     private void saveOrUpdateMemberDepartments(Integer memberId) {
@@ -618,21 +602,13 @@ public class MemberViewController extends JfxController {
 
         return true;
     }
-	
-	@FXML
-    private void clearFields(ActionEvent actionEvent) {
-        dispose();
-	}
 
     @Override
     public void dispose() {
-        _activeMemberDTO = null;
-
         fNameTextField.clear();
         lNameTextField.clear();
         birthTextField.clear();
         emailTextField.clear();
-        phoneTextField.clear();
         addressTextField.clear();
 
         radioGenderFemale.setSelected(false);
@@ -660,9 +636,9 @@ public class MemberViewController extends JfxController {
         memberTeamComboBoxFootball.getSelectionModel().select(null);
         memberTeamComboBoxSoccer.setValue(null);
 
-        roleComboBox.getSelectionModel().select(RoleType.MEMBER);
+        roleComboBox.getSelectionModel().select(null);
     }
-    
+
     private enum RoleType {
         MEMBER("Member"),
     	TRAINER("Trainer"),

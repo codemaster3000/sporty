@@ -1,14 +1,14 @@
 package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.presentation.ViewLoader;
+import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
 import at.sporty.team1.presentation.controllers.core.IJfxController;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.presentation.controllers.core.SearchViewController;
 import at.sporty.team1.rmi.api.IDTO;
-import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.dtos.SessionDTO;
-import at.sporty.team1.rmi.dtos.TournamentDTO;
+import at.sporty.team1.util.CachedSession;
 import at.sporty.team1.util.GUIHelper;
+import at.sporty.team1.util.SVGContainer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -23,6 +23,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class MainViewController extends JfxController {
     private static final String TEAM_TAB_CAPTION = "TEAM";
@@ -34,11 +36,11 @@ public class MainViewController extends JfxController {
 
     @FXML private TextField _searchField;
     @FXML private TabPane _tabPanel;
-    
-    private SessionDTO _session;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+        _tabPanel.getStyleClass().add(TabPane.STYLE_CLASS_FLOATING);
+
         //Enter listener for search table
         _searchField.setOnKeyPressed(e -> {
             if(e.getCode() == KeyCode.ENTER){
@@ -47,15 +49,16 @@ public class MainViewController extends JfxController {
         });
 
         //Opening un-closable tabs
-        openMemberView(false);
-        openTeamView(false);
-        openCompetitionView(false);
+
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(loadMemberViewTask(false));
+        executor.execute(loadTeamViewTask(false));
+        executor.execute(loadCompetitionViewTask(false));
+        executor.execute(() -> Platform.runLater(() -> _tabPanel.getSelectionModel().selectFirst()));
     }
 
-    public void activateSession(SessionDTO session){
-        _session = session;
-
-
+    public void activateSession(CachedSession session){
+        //TODO move login functionality
     }
 
     @FXML
@@ -65,7 +68,7 @@ public class MainViewController extends JfxController {
 
         if (activeController instanceof RichViewController) {
             ((RichViewController) activeController).getSearchController().search(searchString);
-        } else {
+        } else if (activeController != null) {
             LOGGER.warn(
                 "Currently selected view controller \"{}\" does not support search option.",
                 activeController.getClass().getCanonicalName()
@@ -77,51 +80,47 @@ public class MainViewController extends JfxController {
         return _tabPanel.getSelectionModel().getSelectedItem();
     }
 
-	private void openMemberView(boolean closable) {
-        openNewRichTab(
+	private Thread loadMemberViewTask(boolean closable) {
+        return newOpenNewRichTabTask(
             MEMBER_TAB_CAPTION,
+            SVGContainer.MEMBER_ICON,
             closable,
-            MemberDTO.class,
             MemberSearchViewController.class,
-            MemberViewController.class
+            MemberReadOnlyViewController.class
         );
 	}
 
-    private void openTeamView(boolean closable) {
-        openNewRichTab(
+    private Thread loadTeamViewTask(boolean closable) {
+        return newOpenNewRichTabTask(
             TEAM_TAB_CAPTION,
+            SVGContainer.TEAM_ICON,
             closable,
-            MemberDTO.class,
             MemberSearchViewController.class,
             TeamViewController.class
         );
     }
 
-    private void openCompetitionView(boolean closable) {
-        openNewRichTab(
+    private Thread loadCompetitionViewTask(boolean closable) {
+        return newOpenNewRichTabTask(
             COMPETITION_TAB_CAPTION,
+            SVGContainer.TOURNAMENT_ICON,
             closable,
-            TournamentDTO.class,
             TournamentSearchViewController.class,
             CompetitionViewController.class
         );
     }
 
-    private void openNewTab(
+    private Thread newOpenNewSimpleTabTask(
         String tabCaption,
         boolean closable,
-        IDTO idto,
         Class<? extends IJfxController> controllerClass
     ) {
 
-        new Thread(() -> {
+        return new Thread(() -> {
 
             ViewLoader<? extends IJfxController> viewLoader = ViewLoader.loadView(controllerClass);
             Node node = viewLoader.loadNode();
             IJfxController controller = viewLoader.getController();
-
-            //check if need to load a dto
-            if (idto != null) controller.displayDTO(idto);
 
             Tab t = new Tab();
             t.setText(tabCaption);
@@ -135,19 +134,18 @@ public class MainViewController extends JfxController {
                 _tabPanel.getTabs().add(t);
                 _tabPanel.getSelectionModel().select(t);
             });
-        }).start();
+        });
     }
 
-
-    private void openNewRichTab(
+    private <T extends IDTO, U extends SearchViewController<T>, V extends ConsumerViewController<T>> Thread newOpenNewRichTabTask(
         String tabCaption,
+        SVGContainer icon,
         boolean closable,
-        Class<? extends IDTO> dtoClass,
-        Class<? extends SearchViewController<? extends IDTO>> searchControllerClass,
-        Class<? extends JfxController> consumerControllerClass
+        Class<U> searchControllerClass,
+        Class<V> consumerControllerClass
     ) {
 
-        new Thread(() -> {
+        return new Thread(() -> {
 
             ViewLoader<RichViewController> viewLoader = ViewLoader.loadView(RichViewController.class);
             Node node = viewLoader.loadNode();
@@ -156,6 +154,7 @@ public class MainViewController extends JfxController {
 
             Tab t = new Tab();
             t.setText(tabCaption);
+            t.setGraphic(GUIHelper.loadSVGGraphic(icon));
             t.setContent(node);
             t.setClosable(closable);
 
@@ -166,6 +165,6 @@ public class MainViewController extends JfxController {
                 _tabPanel.getTabs().add(t);
                 _tabPanel.getSelectionModel().select(t);
             });
-        }).start();
+        });
     }
 }

@@ -1,7 +1,7 @@
 package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
-import at.sporty.team1.presentation.controllers.core.JfxController;
+import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
 import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.api.ITournamentController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
@@ -32,7 +32,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class CompetitionViewController extends JfxController {
+public class CompetitionViewController extends ConsumerViewController<TournamentDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SUCCESSFUL_TOURNAMENT_SAVE = "Tournament was saved successfully.";
     private static final String SUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = " Tournament Teams were saved successfully.";
@@ -126,23 +126,10 @@ public class CompetitionViewController extends JfxController {
         /**
          * Converter from TeamDTO to Team name (String)
          */
-        StringConverter<DepartmentDTO> departmentDTOStringConverter = new StringConverter<DepartmentDTO>() {
-            @Override
-            public String toString(DepartmentDTO departmentDTO) {
-                if (departmentDTO != null) {
-                    return departmentDTO.getSport();
-                }
-                return null;
-            }
+        StringConverter<DepartmentDTO> deptDTOConverter = GUIHelper.getDTOToStringConverter(DepartmentDTO::getSport);
+        _tournamentDepartmentComboBox.setConverter(deptDTOConverter);
 
-            @Override
-            public DepartmentDTO fromString(String string) {
-                return null;
-            }
-        };
-        _tournamentDepartmentComboBox.setConverter(departmentDTOStringConverter);
-
-        //TODO: LeagueCombobox
+        //TODO: LeagueComboBox
         
         /**
          * addTeamsView
@@ -209,6 +196,11 @@ public class CompetitionViewController extends JfxController {
 
         ObservableList<MatchDTO> _tableMatchList = FXCollections.observableList(tempList);
         _matchTableView.setItems(FXCollections.observableList(_tableMatchList));
+    }
+
+    @Override
+    public void loadDTO(TournamentDTO dto) {
+        //TODO loadDTO
     }
 
     private void setVisibleOfMatchesView(boolean view) {
@@ -444,8 +436,7 @@ public class CompetitionViewController extends JfxController {
     }
 
     @FXML
-    public void removeTeamFromTournament(ActionEvent event) {
-
+    private void removeTeamFromTournament(ActionEvent event) {
         _competitionTeamsListView.getItems().remove(_competitionTeamsListView.getSelectionModel().getSelectedItem());
     }
 }

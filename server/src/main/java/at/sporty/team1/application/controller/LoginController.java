@@ -121,7 +121,7 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
 
                 //Sending session object for client
                 return new SessionDTO()
-                        .setMemberId(member.getMemberId())
+                        .setUserId(member.getMemberId())
                         .setClientFingerprint(clientFingerprint);
             }
 
@@ -164,7 +164,7 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
                 Integer assignedMemberId = SESSION_REGISTRY.get(decryptedSession);
 
                 //Check if user in session object is assigned to current fingerprint
-                if (assignedMemberId != null && assignedMemberId.equals(session.getMemberId())) {
+                if (assignedMemberId != null && assignedMemberId.equals(session.getUserId())) {
                     //Loading member from data store.
                     IMember member = PersistenceFacade.getNewMemberDAO().findById(assignedMemberId);
 
@@ -189,7 +189,7 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
         return false;
     }
 
-    public static boolean hasEnoughPermissions(SessionDTO session, AccessPolicy... policies) {
+    public static boolean hasEnoughPermissions(SessionDTO session, AccessPolicy<IMember> policy) {
         try {
 
             Cipher cipher = getCipher();
@@ -207,13 +207,13 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
                 Integer assignedMemberId = SESSION_REGISTRY.get(decryptedSession);
 
                 //Check if user in session object is assigned to current fingerprint
-                if (assignedMemberId != null && assignedMemberId.equals(session.getMemberId())) {
+                if (assignedMemberId != null && assignedMemberId.equals(session.getUserId())) {
 
                     //Loading member from data store.
                     IMember member = PersistenceFacade.getNewMemberDAO().findById(assignedMemberId);
 
                     //Check if member fulfill given policies
-                    if (member != null && AccessPolicy.hasMatched(member, policies)) {
+                    if (member != null && policy.isFollowedBy(member)) {
                         //Resetting session timeout
                         updateSessionTimeout(decryptedSession, member.getMemberId());
                         return true;
@@ -235,7 +235,7 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
                     //Auth attempt with unknown/expired session
                     LOGGER.warn(
                         "Auth attempt from #\"{}\" with unknown/expired session \"{}\" was detected.",
-                        session.getMemberId(),
+                        session.getUserId(),
                         decryptedSession
                     );
                 }
@@ -269,10 +269,6 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
     public static boolean isInPermissionBound(String isRole, UserRole requiredRoleLevel) {
         /* Return according to user role */
         switch (isRole) {
-            case "admin": {
-                return UserRole.ADMIN.isInBound(requiredRoleLevel);
-            }
-
             case "member": {
                 return UserRole.MEMBER.isInBound(requiredRoleLevel);
             }
@@ -281,12 +277,16 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
                 return UserRole.TRAINER.isInBound(requiredRoleLevel);
             }
 
+            case "manager": {
+                return UserRole.MANAGER.isInBound(requiredRoleLevel);
+            }
+
             case "departmentHead": {
                 return UserRole.DEPARTMENT_HEAD.isInBound(requiredRoleLevel);
             }
 
-            case "manager": {
-                return UserRole.MANAGER.isInBound(requiredRoleLevel);
+            case "admin": {
+                return UserRole.ADMIN.isInBound(requiredRoleLevel);
             }
         }
 

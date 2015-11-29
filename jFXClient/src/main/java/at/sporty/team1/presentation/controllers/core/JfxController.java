@@ -1,6 +1,5 @@
 package at.sporty.team1.presentation.controllers.core;
 
-import at.sporty.team1.rmi.api.IDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,13 +20,5 @@ public abstract class JfxController implements IJfxController {
     @Override
     public void dispose() {
         if (_disposeFunction != null) _disposeFunction.accept(this);
-    }
-
-    @Override
-    public void displayDTO(IDTO idto) {
-        LOGGER.warn(
-            "DisplayDTO method is not reloaded for {} Controller. Standard implementation is used.",
-            this.getClass().getName()
-        );
     }
 }

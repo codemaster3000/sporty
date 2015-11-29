@@ -1,8 +1,8 @@
 package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
-import at.sporty.team1.presentation.controllers.core.JfxController;
-import at.sporty.team1.rmi.api.IDTO;
+import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
+import at.sporty.team1.presentation.dialogs.EditViewDialog;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.dtos.DTOPair;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
@@ -12,6 +12,8 @@ import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -28,12 +30,15 @@ import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 
-public class MemberReadOnlyViewController extends JfxController {
+public class MemberReadOnlyViewController extends ConsumerViewController<MemberDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String NOT_AVAILABLE = "N/A";
+    private static final SimpleBooleanProperty ENOUGH_PERMISSIONS_PROPERTY = new SimpleBooleanProperty(false);
+    private static final SimpleObjectProperty<MemberDTO> ACTIVE_DTO = new SimpleObjectProperty<>();
 
     @FXML private Label _lastName;
     @FXML private Label _firstName;
@@ -47,10 +52,34 @@ public class MemberReadOnlyViewController extends JfxController {
     @FXML private Label _role;
     @FXML private ButtonBar _options;
 
-    private static MemberDTO _activeMemberDTO;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        _options.visibleProperty().bind(ENOUGH_PERMISSIONS_PROPERTY.and(ACTIVE_DTO.isNotNull()));
+
+        if (CommunicationFacade.getExtendedActiveSession() != null) {
+            String role = CommunicationFacade.getExtendedActiveSession().getUser().getRole();
+
+            //enabling gui options for specific roles
+            switch (role) {
+                case "manager": {
+                    ENOUGH_PERMISSIONS_PROPERTY.set(true);
+                    break;
+                }
+
+                case "departmentHead": {
+                    ENOUGH_PERMISSIONS_PROPERTY.set(true);
+                    break;
+                }
+
+                case "admin": {
+                    ENOUGH_PERMISSIONS_PROPERTY.set(true);
+                    break;
+                }
+            }
+        }
+
+        _departmentTeamTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         _departmentColumn.setCellValueFactory(dto -> {
             DTOPair<DepartmentDTO, TeamDTO> dtoPair = dto.getValue();
 
@@ -77,10 +106,9 @@ public class MemberReadOnlyViewController extends JfxController {
     }
 
 	@Override
-    public void displayDTO(IDTO idto){
-        if (idto instanceof MemberDTO) {
-            displayMemberDTO((MemberDTO) idto);
-        }
+    public void loadDTO(MemberDTO memberDTO){
+        ACTIVE_DTO.set(memberDTO);
+        displayMemberDTO(memberDTO);
     }
 
     /**
@@ -88,58 +116,63 @@ public class MemberReadOnlyViewController extends JfxController {
      * @param memberDTO MemberDTO that will be preloaded.
      */
     private void displayMemberDTO(MemberDTO memberDTO) {
-        //clear form
-        dispose();
-
         if (memberDTO != null) {
-            _activeMemberDTO = memberDTO;
+
             new Thread(() -> {
+
                 try {
 
                     IMemberController memberController = CommunicationFacade.lookupForMemberController();
 
-                    List<DTOPair<DepartmentDTO, TeamDTO>> fetchedList = memberController.loadFetchedDepartmentTeamList(
-                        _activeMemberDTO.getMemberId(),
+                    final List<DTOPair<DepartmentDTO, TeamDTO>> fetchedList = memberController.loadFetchedDepartmentTeamList(
+                        memberDTO.getMemberId(),
                         CommunicationFacade.getActiveSession()
                     );
 
                     Platform.runLater(() -> {
 
-                        if (fetchedList != null) {
+                        //clearing old values
+                        dispose();
+
+                        _lastName.setText(readOrNotAvailable(memberDTO.getLastName()));
+                        _firstName.setText(readOrNotAvailable(memberDTO.getFirstName()));
+                        _dateOfBirth.setText(readOrNotAvailable(memberDTO.getDateOfBirth()));
+                        _gender.setText(readOrNotAvailable(memberDTO.getGender()));
+                        _address.setText(readOrNotAvailable(memberDTO.getAddress()));
+                        _email.setText(readOrNotAvailable(memberDTO.getEmail()));
+                        _role.setText(readOrNotAvailable(memberDTO.getRole()));
+
+                        if (fetchedList != null && !fetchedList.isEmpty()) {
                             _departmentTeamTable.setItems(FXCollections.observableList(fetchedList));
                         }
-
-                        _lastName.setText(readOrNotAvailable(_activeMemberDTO.getLastName()));
-                        _firstName.setText(readOrNotAvailable(_activeMemberDTO.getFirstName()));
-                        _dateOfBirth.setText(readOrNotAvailable(_activeMemberDTO.getDateOfBirth()));
-                        _gender.setText(readOrNotAvailable(_activeMemberDTO.getGender()));
-                        _address.setText(readOrNotAvailable(_activeMemberDTO.getAddress()));
-                        _email.setText(readOrNotAvailable(_activeMemberDTO.getEmail()));
-                        _role.setText(readOrNotAvailable(_activeMemberDTO.getRole()));
                     });
 
                 } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
 
                     LOGGER.error("Error occurred while loading Member data (Departments and Teams).", e);
-                    GUIHelper.showErrorAlert("Error occurred while loading Member data (Departments and Teams).");
+                    Platform.runLater(() ->
+                        GUIHelper.showErrorAlert("Error occurred while loading Member data (Departments and Teams).")
+                    );
 
                 } catch (NotAuthorisedException e) {
 
                     LOGGER.error("Client load (Departments and Teams) request was rejected. Not enough permissions.", e);
                 }
+
             }).start();
         }
     }
 
     @FXML
     private void onEditMember(ActionEvent actionEvent) {
-        //TODO open editing dialog
+        Optional<MemberDTO> result = new EditViewDialog<>(ACTIVE_DTO.get(), MemberEditViewController.class).showAndWait();
+        if (result.isPresent()) {
+            loadDTO(result.get());
+        }
     }
 
     @Override
     public void dispose() {
-        _activeMemberDTO = null;
-
         _lastName.setText(NOT_AVAILABLE);
         _firstName.setText(NOT_AVAILABLE);
         _dateOfBirth.setText(NOT_AVAILABLE);
