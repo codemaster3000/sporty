@@ -109,14 +109,10 @@ public class CompetitionViewController extends ConsumerViewController<Tournament
          */
         try {
 
-            departments = CommunicationFacade.lookupForDepartmentController().searchAllDepartments(
-                CommunicationFacade.getActiveSession()
-            );
+            departments = CommunicationFacade.lookupForDepartmentController().searchAllDepartments();
 
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
             LOGGER.error("Error occurred while loading all known departments.", e);
-        } catch (NotAuthorisedException e) {
-            LOGGER.error("Client load (Department) request was rejected. Not enough permissions.", e);
         }
 
         if (departments != null) {
@@ -225,8 +221,7 @@ public class CompetitionViewController extends ConsumerViewController<Tournament
                 IDepartmentController departmentController = CommunicationFacade.lookupForDepartmentController();
 
                 List<TeamDTO> ownTournamentTeams = departmentController.loadDepartmentTeams(
-                    _tournamentDepartmentComboBox.getSelectionModel().getSelectedItem().getDepartmentId(),
-                    CommunicationFacade.getActiveSession()
+                    _tournamentDepartmentComboBox.getSelectionModel().getSelectedItem().getDepartmentId()
                 );
 
                 ObservableList<TeamDTO> teamObservableList = FXCollections.observableList(ownTournamentTeams);
@@ -234,8 +229,6 @@ public class CompetitionViewController extends ConsumerViewController<Tournament
 
             } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
             	LOGGER.error("Error occurred while searching all Teams by Department.", e);
-            } catch (NotAuthorisedException e) {
-                LOGGER.error("Client search (Teams by Department) request was rejected. Not enough permissions.", e);
             }
 
             /**

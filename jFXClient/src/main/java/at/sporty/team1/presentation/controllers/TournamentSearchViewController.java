@@ -85,8 +85,7 @@ public class TournamentSearchViewController extends SearchViewController<Tournam
                     switch (_searchType.getValue()) {
                         case DEPARTMENT: {
                             List<TournamentDTO> tournamentList = tournamentController.searchTournamentsBySport(
-                                searchString,
-                                CommunicationFacade.getActiveSession()
+                                searchString
                             );
 
                             handleReceivedResults(tournamentList);
@@ -95,8 +94,7 @@ public class TournamentSearchViewController extends SearchViewController<Tournam
 
                         case EVENT_DATE: {
                             List<TournamentDTO> tournamentList = tournamentController.searchTournamentsByDate(
-                                searchString,
-                                CommunicationFacade.getActiveSession()
+                                searchString
                             );
 
                             handleReceivedResults(tournamentList);
@@ -105,8 +103,7 @@ public class TournamentSearchViewController extends SearchViewController<Tournam
 
                         case LOCATION: {
                             List<TournamentDTO> tournamentList = tournamentController.searchTournamentsByLocation(
-                                searchString,
-                                CommunicationFacade.getActiveSession()
+                                searchString
                             );
 
                             handleReceivedResults(tournamentList);
@@ -121,9 +118,6 @@ public class TournamentSearchViewController extends SearchViewController<Tournam
                     LOGGER.error("Error occurred while searching.", e);
                     Platform.runLater(() -> GUIHelper.showValidationAlert(NOT_VALID_SEARCH_INPUT));
                     displayNoResults();
-                } catch (NotAuthorisedException e) {
-                    LOGGER.error("Client search (Tournaments) request was rejected. Not enough permissions.", e);
-                    displayNoResults();
                 }
             }).start();
 
@@ -133,15 +127,10 @@ public class TournamentSearchViewController extends SearchViewController<Tournam
                 try {
 
                     ITournamentController tournamentController = CommunicationFacade.lookupForTournamentController();
-                    handleReceivedResults(
-                        tournamentController.searchAllTournaments(CommunicationFacade.getActiveSession())
-                    );
+                    handleReceivedResults(tournamentController.searchAllTournaments());
 
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
                     LOGGER.error("Error occurred while searching.", e);
-                    displayNoResults();
-                } catch (NotAuthorisedException e) {
-                    LOGGER.error("Client search (Tournaments) request was rejected. Not enough permissions.", e);
                     displayNoResults();
                 }
             }).start();

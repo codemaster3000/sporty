@@ -30,4 +30,37 @@ public interface IDepartmentDAO extends IGenericDAO<Department> {
      */
     Boolean isDepartmentHead(Member member, Integer departmentId)
     throws PersistenceException;
+
+    /**
+     * Checks if given department head is a department head of a given member.
+     *
+     * @param departmentHead departmentHead to be checked
+     * @param memberId member to be checked
+     * @return Boolean result of the check, true if is a department head, false if not.
+     * @throws PersistenceException
+     */
+    Boolean isDepartmentHeadOfMember(Member departmentHead, Integer memberId)
+    throws PersistenceException;
+
+    /**
+     * Checks if given department head is a department head of a given team.
+     *
+     * @param departmentHead departmentHead to be checked
+     * @param teamId team to be checked
+     * @return Boolean result of the check, true if is a department head, false if not.
+     * @throws PersistenceException
+     */
+    Boolean isDepartmentHeadOfTeam(Member departmentHead, Integer teamId)
+    throws PersistenceException;
+
+    /**
+     * Checks if given department head is a department head of a given tournament.
+     *
+     * @param departmentHead departmentHead to be checked
+     * @param tournamentId tournament to be checked
+     * @return Boolean result of the check, true if is a department head, false if not.
+     * @throws PersistenceException
+     */
+    Boolean isDepartmentHeadOfTournament(Member departmentHead, Integer tournamentId)
+    throws PersistenceException;
 }

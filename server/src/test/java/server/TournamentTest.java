@@ -73,8 +73,8 @@ public class TournamentTest {
 
 		try {
 			tournamentController = new TournamentController();
-			tournamentTeams = tournamentController.searchAllTournamentTeams(tournamentId, null);
-		} catch (RemoteException | UnknownEntityException | NotAuthorisedException e) {
+			tournamentTeams = tournamentController.searchAllTournamentTeams(tournamentId);
+		} catch (RemoteException | UnknownEntityException e) {
 			e.printStackTrace();
 		}
 		
@@ -89,8 +89,8 @@ public class TournamentTest {
 
 		try {
 			tournamentController = new TournamentController();
-			tournaments = tournamentController.searchAllTournaments(null);
-		} catch (RemoteException | NotAuthorisedException e) {
+			tournaments = tournamentController.searchAllTournaments();
+		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
 		assertNotNull(tournaments);

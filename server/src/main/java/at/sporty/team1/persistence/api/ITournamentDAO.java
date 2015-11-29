@@ -1,5 +1,6 @@
 package at.sporty.team1.persistence.api;
 
+import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Tournament;
 
 import javax.persistence.PersistenceException;
@@ -38,5 +39,16 @@ public interface ITournamentDAO extends IGenericDAO<Tournament> {
      * @throws PersistenceException
      */
     List<Tournament> findByLocation(String location)
+    throws PersistenceException;
+
+    /**
+     * Checks if given trainer is a trainer of a given tournament.
+     *
+     * @param trainer trainer to be checked
+     * @param tournamentId team to be checked
+     * @return Boolean result of the check, true if is a trainer, false if not.
+     * @throws PersistenceException
+     */
+    Boolean isTrainerOfTournament(Member trainer, Integer tournamentId)
     throws PersistenceException;
 }

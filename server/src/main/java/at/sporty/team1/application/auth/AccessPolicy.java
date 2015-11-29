@@ -15,17 +15,41 @@ public interface AccessPolicy<T extends IMember> {
         return proxy;
     }
 
-    static <T extends IMember> AccessPolicy<T> complexAndPolicy(AccessPolicy<T> proxy, AccessPolicy<T> proxy2) {
+    static <T extends IMember> AccessPolicy<T> and(AccessPolicy<T> proxy, AccessPolicy<T> proxy2) {
         Objects.requireNonNull(proxy);
         Objects.requireNonNull(proxy2);
 
         return (T t) -> proxy.isFollowedBy(t) && proxy2.isFollowedBy(t);
     }
 
-    static <T extends IMember> AccessPolicy<T> complexOrPolicy(AccessPolicy<T> proxy, AccessPolicy<T> proxy2) {
+    @SafeVarargs
+    static <T extends IMember> AccessPolicy<T> and(AccessPolicy<T>... proxies) {
+        return (T t) -> {
+            for (AccessPolicy<T> proxy : proxies) {
+                Objects.requireNonNull(proxy);
+
+                if (!proxy.isFollowedBy(t)) return false;
+            }
+            return true;
+        };
+    }
+
+    static <T extends IMember> AccessPolicy<T> or(AccessPolicy<T> proxy, AccessPolicy<T> proxy2) {
         Objects.requireNonNull(proxy);
         Objects.requireNonNull(proxy2);
 
         return (T t) -> proxy.isFollowedBy(t) || proxy2.isFollowedBy(t);
+    }
+
+    @SafeVarargs
+    static <T extends IMember> AccessPolicy<T> or(AccessPolicy<T>... proxies) {
+        return (T t) -> {
+            for (AccessPolicy<T> proxy : proxies) {
+                Objects.requireNonNull(proxy);
+
+                if (proxy.isFollowedBy(t)) return true;
+            }
+            return false;
+        };
     }
 }

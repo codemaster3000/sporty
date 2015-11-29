@@ -16,81 +16,69 @@ public interface ITournamentController extends IRemoteController {
 	/**
      * Search for all Tournaments.
      *
-     * @param session Session object.
      * @return List<TournamentDTO> List of all Tournaments.
      * @throws RemoteException
-     * @throws NotAuthorisedException
      */
-    List<TournamentDTO> searchAllTournaments(SessionDTO session)
-    throws RemoteException, NotAuthorisedException;
+    List<TournamentDTO> searchAllTournaments()
+    throws RemoteException;
 
 
     /**
      * Search for tournamentList by sport.
      *
      * @param sport Sport name (Department) to be searched.
-     * @param session Session object.
      * @return List<TournamentDTO> List of all tournaments that are assigned to given sport, or null.
      * @throws RemoteException
      * @throws ValidationException
-     * @throws NotAuthorisedException
      */
-    List<TournamentDTO> searchTournamentsBySport(String sport, SessionDTO session)
-    throws RemoteException, ValidationException, NotAuthorisedException;
+    List<TournamentDTO> searchTournamentsBySport(String sport)
+    throws RemoteException, ValidationException;
 
 
     /**
      * Search for all Tournaments.
      *
      * @param eventDate Date of the event to be searched.
-     * @param session Session object.
      * @return List<TournamentDTO> List of all tournaments that are assigned to given event date, or null.
      * @throws RemoteException
      * @throws ValidationException
-     * @throws NotAuthorisedException
      */
-    List<TournamentDTO> searchTournamentsByDate(String eventDate, SessionDTO session)
-    throws RemoteException, ValidationException, NotAuthorisedException;
+    List<TournamentDTO> searchTournamentsByDate(String eventDate)
+    throws RemoteException, ValidationException;
 
 
     /**
      * Search for all Tournaments.
      *
      * @param location Location to be searched.
-     * @param session Session object.
      * @return List<TournamentDTO> List of all tournaments that are assigned to given location, or null.
      * @throws RemoteException
      * @throws ValidationException
-     * @throws NotAuthorisedException
      */
-    List<TournamentDTO> searchTournamentsByLocation(String location, SessionDTO session)
-    throws RemoteException, ValidationException, NotAuthorisedException;
+    List<TournamentDTO> searchTournamentsByLocation(String location)
+    throws RemoteException, ValidationException;
     
     /**
      * Search for all tournament teams.
      *
      * @param tournamentId Id of of the target tournament (will be used for search).
-     * @param session Session object.
      * @return List<TournamentDTO> List of all teams assigned to the given tournament.
      * @throws RemoteException
      * @throws UnknownEntityException
-     * @throws NotAuthorisedException
      */
-    List<String> searchAllTournamentTeams(Integer tournamentId, SessionDTO session)
-    throws RemoteException, UnknownEntityException, NotAuthorisedException;
+    List<String> searchAllTournamentTeams(Integer tournamentId)
+    throws RemoteException, UnknownEntityException;
 
     /**
      * Search for all Matches.
      *
      * @param tournamentId Id of of the target tournament (will be used for search).
-     * @param session Session object.
      * @return List<MatchDTO> List of all Matches.
      * @throws RemoteException
      * @throws UnknownEntityException
-     * @throws NotAuthorisedException
      */
-    List<MatchDTO> searchAllTournamentMatches(Integer tournamentId, SessionDTO session)
-    throws RemoteException, UnknownEntityException, NotAuthorisedException;
+    List<MatchDTO> searchAllTournamentMatches(Integer tournamentId)
+    throws RemoteException, UnknownEntityException;
 
 	/**
      * Creates new or saves old tournament in data storage with data from the DTO.

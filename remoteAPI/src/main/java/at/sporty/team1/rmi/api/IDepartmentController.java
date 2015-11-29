@@ -18,26 +18,22 @@ public interface IDepartmentController extends IRemoteController {
     /**
      * Search for all Departments.
      *
-     * @param session Session object
      * @return List<DepartmentDTO> List of all departments
      * @throws RemoteException
-     * @throws NotAuthorisedException
      */
-    List<DepartmentDTO> searchAllDepartments(SessionDTO session)
-    throws RemoteException, NotAuthorisedException;
+    List<DepartmentDTO> searchAllDepartments()
+    throws RemoteException;
 
     /**
      * Returns a list of all teams assigned to the given department.
      *
      * @param departmentId target department (will be used for search)
-     * @param session Session object.
      * @return List<TeamDTO> List of all teams
      * @throws RemoteException
      * @throws UnknownEntityException
-     * @throws NotAuthorisedException
      */
-    List<TeamDTO> loadDepartmentTeams(Integer departmentId, SessionDTO session)
-    throws RemoteException, UnknownEntityException, NotAuthorisedException;
+    List<TeamDTO> loadDepartmentTeams(Integer departmentId)
+    throws RemoteException, UnknownEntityException;
 
     /**
      * Returns a MemberDTO (department head) assigned to the given department.

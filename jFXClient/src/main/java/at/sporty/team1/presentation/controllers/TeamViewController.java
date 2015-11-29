@@ -89,17 +89,14 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
             try {
 
                 IDepartmentController departmentController = CommunicationFacade.lookupForDepartmentController();
-                List<DepartmentDTO> departments = departmentController.searchAllDepartments(
-                    CommunicationFacade.getActiveSession()
-                );
+                List<DepartmentDTO> departments = departmentController.searchAllDepartments();
 
                 if (!departments.isEmpty()) {
 
                     for (DepartmentDTO actualDepartment : departments) {
 
                         resultList.addAll(departmentController.loadDepartmentTeams(
-                            actualDepartment.getDepartmentId(),
-                            CommunicationFacade.getActiveSession()
+                            actualDepartment.getDepartmentId()
                         ));
 
                         if (!resultList.isEmpty()) {
@@ -113,8 +110,6 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
                 }
             } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
                 LOGGER.error("Error occurred while loading all Departments and their Teams.", e);
-            } catch (NotAuthorisedException e) {
-                LOGGER.error("Client load (Departments and Teams) request was rejected. Not enough permissions.", e);
             }
         }).start();
 

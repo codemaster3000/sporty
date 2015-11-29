@@ -122,9 +122,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
             try {
 
                 IDepartmentController departmentController = CommunicationFacade.lookupForDepartmentController();
-                List<DepartmentDTO> departments = departmentController.searchAllDepartments(
-                    CommunicationFacade.getActiveSession()
-                );
+                List<DepartmentDTO> departments = departmentController.searchAllDepartments();
 
                 if (!departments.isEmpty()) {
 
@@ -135,10 +133,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                             case SPORT_SOCCER: {
                                 SPORT_MAP.put(SPORT_SOCCER, actualDepartment);
 
-                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(
-                                    departmentId,
-                                    CommunicationFacade.getActiveSession()
-                                );
+                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(departmentId);
 
                                 if (resultList != null) {
 
@@ -153,10 +148,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                             case SPORT_VOLLEYBALL: {
                                 SPORT_MAP.put(SPORT_VOLLEYBALL, actualDepartment);
 
-                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(
-                                    departmentId,
-                                    CommunicationFacade.getActiveSession()
-                                );
+                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(departmentId);
 
                                 if (resultList != null) {
 
@@ -171,10 +163,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                             case SPORT_BASEBALL: {
                                 SPORT_MAP.put(SPORT_BASEBALL, actualDepartment);
 
-                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(
-                                    departmentId,
-                                    CommunicationFacade.getActiveSession()
-                                );
+                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(departmentId);
 
                                 if (resultList != null) {
 
@@ -189,10 +178,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                             case SPORT_FOOTBALL: {
                                 SPORT_MAP.put(SPORT_FOOTBALL, actualDepartment);
 
-                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(
-                                    departmentId,
-                                    CommunicationFacade.getActiveSession()
-                                );
+                                List<TeamDTO> resultList = departmentController.loadDepartmentTeams(departmentId);
 
                                 if (resultList != null) {
 
@@ -208,8 +194,6 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                 }
             } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
                 LOGGER.error("Error occurred while loading all Departments and their Teams.", e);
-            } catch (NotAuthorisedException e) {
-                LOGGER.error("Client load (Departments and Teams) request was rejected. Not enough permissions.", e);
             }
         }).start();
 	}

@@ -1,5 +1,7 @@
 package at.sporty.team1.application.controller;
 
+import at.sporty.team1.application.auth.AccessPolicy;
+import at.sporty.team1.application.auth.BasicAccessPolicies;
 import at.sporty.team1.domain.Match;
 import at.sporty.team1.domain.Tournament;
 import at.sporty.team1.domain.interfaces.IMatch;
@@ -39,13 +41,10 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     }
 
     @Override
-    public List<TournamentDTO> searchAllTournaments(SessionDTO session)
-    throws RemoteException, NotAuthorisedException {
-
-        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
+    public List<TournamentDTO> searchAllTournaments()
+    throws RemoteException {
 
         try {
-
             /* pulling a TournamentDAO and getting all Tournaments */
             List<Tournament> tournaments = PersistenceFacade.getNewGenericDAO(Tournament.class).findAll();
 
@@ -64,10 +63,8 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     }
 
     @Override
-    public List<TournamentDTO> searchTournamentsBySport(String sport, SessionDTO session)
-    throws RemoteException, ValidationException, NotAuthorisedException {
-
-        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
+    public List<TournamentDTO> searchTournamentsBySport(String sport)
+    throws RemoteException, ValidationException {
 
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -95,10 +92,8 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     }
 
     @Override
-    public List<TournamentDTO> searchTournamentsByDate(String eventDate, SessionDTO session)
-    throws RemoteException, ValidationException, NotAuthorisedException {
-
-        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
+    public List<TournamentDTO> searchTournamentsByDate(String eventDate)
+    throws RemoteException, ValidationException {
 
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -126,10 +121,8 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     }
 
     @Override
-    public List<TournamentDTO> searchTournamentsByLocation(String location, SessionDTO session)
-    throws RemoteException, ValidationException, NotAuthorisedException {
-
-        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
+    public List<TournamentDTO> searchTournamentsByLocation(String location)
+    throws RemoteException, ValidationException {
 
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -157,10 +150,8 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     }
 
     @Override
-    public List<String> searchAllTournamentTeams(Integer tournamentId, SessionDTO session)
-    throws RemoteException, UnknownEntityException, NotAuthorisedException {
-
-        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
+    public List<String> searchAllTournamentTeams(Integer tournamentId)
+    throws RemoteException, UnknownEntityException {
 
         if (tournamentId == null) throw new UnknownEntityException(ITournament.class);
 
@@ -185,10 +176,8 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     }
 
     @Override
-    public List<MatchDTO> searchAllTournamentMatches(Integer tournamentId, SessionDTO session)
-    throws RemoteException, UnknownEntityException, NotAuthorisedException {
-
-        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
+    public List<MatchDTO> searchAllTournamentMatches(Integer tournamentId)
+    throws RemoteException, UnknownEntityException {
 
         if (tournamentId == null) throw new UnknownEntityException(ITournament.class);
 
@@ -201,7 +190,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
 
             PersistenceFacade.forceLoadLazyProperty(tournament, Tournament::getMatches);
             List<? extends IMatch> rawResults = tournament.getMatches();
-            
+
             //checking if there are any results
             if (rawResults == null || rawResults.isEmpty()) return null;
 
@@ -221,10 +210,130 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     }
 
     @Override
+    public Integer createOrSaveTournament(TournamentDTO tournamentDTO, SessionDTO session)
+    throws RemoteException, ValidationException, NotAuthorisedException {
+
+        /* Checking access permissions */
+        //1 STEP
+        if (tournamentDTO == null || tournamentDTO.getDepartment() == null) throw new NotAuthorisedException();
+
+        //2 STEP
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            AccessPolicy.or(
+                BasicAccessPolicies.isInPermissionBound(UserRole.ADMIN),
+
+                AccessPolicy.and(
+                    BasicAccessPolicies.isInPermissionBound(UserRole.DEPARTMENT_HEAD),
+
+                    AccessPolicy.or(
+                        //create new tournament (new tournaments doesn't have id))
+                        AccessPolicy.simplePolicy(user -> tournamentDTO.getTournamentId() == null),
+                        BasicAccessPolicies.isDepartmentHead(tournamentDTO.getDepartment().getDepartmentId())
+                    )
+                )
+            )
+        )) throw new NotAuthorisedException();
+
+		 /* Validating Input */
+        InputSanitizer inputSanitizer = new InputSanitizer();
+        if (
+            !inputSanitizer.isValid(tournamentDTO.getLocation(), DataType.TEXT) ||
+            !inputSanitizer.isValid(tournamentDTO.getDate(), DataType.SQL_DATE)
+        ) {
+            throw inputSanitizer.getPreparedValidationException();
+        }
+
+        /* Is valid, moving forward */
+        try {
+
+            Tournament tournament = MAPPER.map(tournamentDTO, Tournament.class);
+
+            /* pulling a TournamentDAO and save the Tournament */
+            PersistenceFacade.getNewTournamentDAO().saveOrUpdate(tournament);
+
+            LOGGER.info("Tournament for \"{}\" was successfully saved.", tournamentDTO.getDate());
+            return tournament.getTournamentId();
+
+        } catch (PersistenceException e) {
+            LOGGER.error("Error occurred while communicating with DB.", e);
+            return null;
+        }
+    }
+
+    @Override
+    public void createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
+    throws RemoteException, ValidationException, UnknownEntityException, NotAuthorisedException {
+
+        /* Checking access permissions */
+        //1 STEP
+        if (matchDTO == null) throw new NotAuthorisedException();
+
+        //2 STEP
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            AccessPolicy.or(
+                BasicAccessPolicies.isInPermissionBound(UserRole.ADMIN),
+
+                AccessPolicy.and(
+                    BasicAccessPolicies.isInPermissionBound(UserRole.DEPARTMENT_HEAD),
+
+                    AccessPolicy.or(
+                        //create new match (new matches doesn't have id))
+                        AccessPolicy.simplePolicy(user -> matchDTO.getMatchId() == null),
+                        BasicAccessPolicies.isDepartmentHeadOfTournament(tournamentId)
+                    )
+                )
+            )
+        )) throw new NotAuthorisedException();
+
+        /* Validating Input */
+        InputSanitizer inputSanitizer = new InputSanitizer();
+        if (
+            !inputSanitizer.isValid(matchDTO.getLocation(), DataType.TEXT) ||
+            !inputSanitizer.isValid(matchDTO.getReferee(), DataType.TEXT) ||
+            !inputSanitizer.isValid(matchDTO.getResult(), DataType.TEXT) ||
+            !inputSanitizer.isValid(matchDTO.getTeam1(), DataType.TEXT) ||
+            !inputSanitizer.isValid(matchDTO.getTeam2(), DataType.TEXT) ||
+            !inputSanitizer.isValid(matchDTO.getDate(), DataType.TEXT)
+        ) {
+            throw inputSanitizer.getPreparedValidationException();
+        }
+
+        if (tournamentId == null) throw new UnknownEntityException(ITournament.class);
+
+        /* Is valid, moving forward */
+        try {
+
+            /* pulling a TournamentDAO and save the Tournament */
+            Tournament tournament = PersistenceFacade.getNewTournamentDAO().findById(tournamentId);
+            if (tournament == null) throw new UnknownEntityException(ITournament.class);
+
+            IMatch match = MAPPER.map(matchDTO, Match.class);
+
+            PersistenceFacade.forceLoadLazyProperty(tournament, Tournament::getMatches);
+            tournament.addMatch(match);
+
+            PersistenceFacade.getNewTournamentDAO().saveOrUpdate(tournament);
+
+        } catch (PersistenceException e) {
+            LOGGER.error("An error occurred during adding a new Match to the Tournament: ", e);
+        }
+    }
+
+    @Override
     public void assignTeamToTournament(String teamName, Integer tournamentId, SessionDTO session)
     throws RemoteException, UnknownEntityException, ValidationException, NotAuthorisedException {
 
-        if (!LoginController.hasEnoughPermissions(session, UserRole.TRAINER)) throw new NotAuthorisedException();
+        /* Checking access permissions */
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            AccessPolicy.or(
+                BasicAccessPolicies.isInPermissionBound(UserRole.ADMIN),
+                BasicAccessPolicies.isTrainerOfTournament(tournamentId),
+                BasicAccessPolicies.isDepartmentHeadOfTournament(tournamentId)
+            )
+        )) throw new NotAuthorisedException();
 
         /* Validating teamName */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -259,7 +368,15 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
     public void removeTeamFromTournament(String teamName, Integer tournamentId, SessionDTO session)
     throws RemoteException, ValidationException, UnknownEntityException, NotAuthorisedException {
 
-        if (!LoginController.hasEnoughPermissions(session, UserRole.TRAINER)) throw new NotAuthorisedException();
+        /* Checking access permissions */
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            AccessPolicy.or(
+                BasicAccessPolicies.isInPermissionBound(UserRole.ADMIN),
+                BasicAccessPolicies.isTrainerOfTournament(tournamentId),
+                BasicAccessPolicies.isDepartmentHeadOfTournament(tournamentId)
+            )
+        )) throw new NotAuthorisedException();
 
         /* Validating teamName */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -287,80 +404,6 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
                 tournamentId,
                 e
             );
-        }
-    }
-
-    @Override
-	public Integer createOrSaveTournament(TournamentDTO tournamentDTO, SessionDTO session)
-    throws RemoteException, ValidationException, NotAuthorisedException {
-
-        if (!LoginController.hasEnoughPermissions(session, UserRole.MANAGER)) throw new NotAuthorisedException();
-
-        if (tournamentDTO == null) return null;
-
-		 /* Validating Input */
-        InputSanitizer inputSanitizer = new InputSanitizer();
-        if (
-            !inputSanitizer.isValid(tournamentDTO.getLocation(), DataType.TEXT) ||
-            !inputSanitizer.isValid(tournamentDTO.getDate(), DataType.SQL_DATE)
-        ) {
-            throw inputSanitizer.getPreparedValidationException();
-        }
-
-        /* Is valid, moving forward */
-        try {
-
-            Tournament tournament = MAPPER.map(tournamentDTO, Tournament.class);
-
-            /* pulling a TournamentDAO and save the Tournament */
-            PersistenceFacade.getNewTournamentDAO().saveOrUpdate(tournament);
-
-            LOGGER.info("Tournament for \"{}\" was successfully saved.", tournamentDTO.getDate());
-            return tournament.getTournamentId();
-
-        } catch (PersistenceException e) {
-            LOGGER.error("Error occurred while communicating with DB.", e);
-            return null;
-        }
-	}
-
-    @Override
-    public void createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
-    throws RemoteException, ValidationException, UnknownEntityException, NotAuthorisedException {
-
-        if (!LoginController.hasEnoughPermissions(session, UserRole.MANAGER)) throw new NotAuthorisedException();
-
-        /* Validating Input */
-        InputSanitizer inputSanitizer = new InputSanitizer();
-        if (
-            !inputSanitizer.isValid(matchDTO.getLocation(), DataType.TEXT) ||
-            !inputSanitizer.isValid(matchDTO.getReferee(), DataType.TEXT) ||
-            !inputSanitizer.isValid(matchDTO.getResult(), DataType.TEXT) ||
-            !inputSanitizer.isValid(matchDTO.getTeam1(), DataType.TEXT) ||
-            !inputSanitizer.isValid(matchDTO.getTeam2(), DataType.TEXT) ||
-            !inputSanitizer.isValid(matchDTO.getDate(), DataType.TEXT)
-        ) {
-            throw inputSanitizer.getPreparedValidationException();
-        }
-
-        if (tournamentId == null) throw new UnknownEntityException(ITournament.class);
-
-        /* Is valid, moving forward */
-        try {
-
-            /* pulling a TournamentDAO and save the Tournament */
-            Tournament tournament = PersistenceFacade.getNewTournamentDAO().findById(tournamentId);
-            if (tournament == null) throw new UnknownEntityException(ITournament.class);
-
-            IMatch match = MAPPER.map(matchDTO, Match.class);
-
-            PersistenceFacade.forceLoadLazyProperty(tournament, Tournament::getMatches);
-            tournament.addMatch(match);
-
-            PersistenceFacade.getNewTournamentDAO().saveOrUpdate(tournament);
-
-        } catch (PersistenceException e) {
-            LOGGER.error("An error occurred during adding a new Match to the Tournament: ", e);
         }
     }
 }

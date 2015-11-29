@@ -21,11 +21,12 @@ public interface ITeamController extends IRemoteController  {
      *
      * @param teamDTO DTO for team creation or save.
      * @param session Session object.
+     * @return Integer Id of the updated or saved entity.
      * @throws RemoteException
      * @throws ValidationException
      * @throws NotAuthorisedException
      */
-    void createOrSaveTeam(TeamDTO teamDTO, SessionDTO session)
+    Integer createOrSaveTeam(TeamDTO teamDTO, SessionDTO session)
     throws RemoteException, ValidationException, NotAuthorisedException;
 
     /**

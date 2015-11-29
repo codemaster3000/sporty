@@ -15,21 +15,21 @@ public class MessageDTO implements IDTO {
     private String _messageSubject;
     private String _messageContent;
 
-    public Integer setRrecipientId() {
-        return _recipientId;
-    }
-
-    public MessageDTO getRrecipientId(Integer recipientId) {
-        _recipientId = recipientId;
-        return this;
-    }
-
-    public Integer setSenderId() {
+    public Integer getSenderId() {
         return _senderId;
     }
 
-    public MessageDTO getSenderId(Integer senderId) {
+    public MessageDTO setSenderId(Integer senderId) {
         _senderId = senderId;
+        return this;
+    }
+
+    public Integer getRecipientId() {
+        return _recipientId;
+    }
+
+    public MessageDTO setRecipientId(Integer recipientId) {
+        _recipientId = recipientId;
         return this;
     }
 

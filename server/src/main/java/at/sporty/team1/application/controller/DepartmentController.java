@@ -1,5 +1,6 @@
 package at.sporty.team1.application.controller;
 
+import at.sporty.team1.application.auth.BasicAccessPolicies;
 import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IDepartment;
@@ -37,14 +38,11 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
     }
 
     @Override
-    public List<DepartmentDTO> searchAllDepartments(SessionDTO session)
-    throws RemoteException, NotAuthorisedException {
-
-        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
+    public List<DepartmentDTO> searchAllDepartments()
+    throws RemoteException {
 
         try {
-
-            /* pulling a DepartmentDAO and searching for all departments */
+            //pulling a DepartmentDAO and searching for all departments
             List<? extends IDepartment> rawResults = PersistenceFacade.getNewDepartmentDAO().findAll();
 
             //checking if there are any results
@@ -62,13 +60,13 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
     }
 
     @Override
-    public List<TeamDTO> loadDepartmentTeams(Integer departmentId, SessionDTO session)
-    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+    public List<TeamDTO> loadDepartmentTeams(Integer departmentId)
+    throws RemoteException, UnknownEntityException {
 
-        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
-
+        /* Validating Input */
         if (departmentId == null) throw new UnknownEntityException(IDepartment.class);
 
+        /* Is valid, moving forward */
         try {
 
             Department department = PersistenceFacade.getNewDepartmentDAO().findById(departmentId);
@@ -99,11 +97,18 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
     @Override
     public MemberDTO loadDepartmentHead(Integer departmentId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException {
+
+        /* Checking access permissions */
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            BasicAccessPolicies.isInPermissionBound(UserRole.MEMBER)
+        )) throw new NotAuthorisedException();
+
+        /* Validating Input */
+        if (departmentId == null) throw new UnknownEntityException(IDepartment.class);
+
+        /* Is valid, moving forward */
         try {
-
-            if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
-
-            if (departmentId == null) throw new UnknownEntityException(IDepartment.class);
 
             Department department = PersistenceFacade.getNewDepartmentDAO().findById(departmentId);
             if (department == null) throw new UnknownEntityException(IDepartment.class);

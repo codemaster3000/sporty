@@ -60,7 +60,6 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
 	@Override
 	public SessionDTO authorize(AuthorisationDTO authorisationDTO)
     throws RemoteException {
-
 		/*
 		 * Check if username and password are present in authorisationDTO
 		 */
@@ -241,7 +240,7 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
                 }
             }
 
-        } catch (PersistenceException e) {
+        } catch (PersistenceException | NullPointerException e) {
             LOGGER.error("Error occurred while getting/parsing user role.", e);
         } catch (InvalidKeyException e) {
             LOGGER.error("Private key is not suitable.", e);

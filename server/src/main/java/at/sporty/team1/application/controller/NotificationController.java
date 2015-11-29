@@ -1,8 +1,11 @@
 package at.sporty.team1.application.controller;
 
+import at.sporty.team1.application.auth.AccessPolicy;
+import at.sporty.team1.application.auth.BasicAccessPolicies;
 import at.sporty.team1.rmi.api.INotificationController;
 import at.sporty.team1.rmi.dtos.MessageDTO;
 import at.sporty.team1.rmi.dtos.SessionDTO;
+import at.sporty.team1.rmi.enums.UserRole;
 import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
@@ -30,12 +33,34 @@ public class NotificationController extends UnicastRemoteObject implements INoti
     @Override
     public void sendMessage(MessageDTO messageDTO, SessionDTO session)
     throws RemoteException, ValidationException, NotAuthorisedException {
+
+        /* Checking access permissions */
+        //1 STEP
+        if (messageDTO == null) throw new NotAuthorisedException();
+
+        //2 STEP
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            AccessPolicy.or(
+                BasicAccessPolicies.isInPermissionBound(UserRole.ADMIN),
+                BasicAccessPolicies.isTrainerOfMember(messageDTO.getRecipientId()),
+                BasicAccessPolicies.isDepartmentHeadOfMember(messageDTO.getRecipientId())
+            )
+        )) throw new NotAuthorisedException();
+
         //TODO unimplemented method
     }
 
     @Override
     public List<MessageDTO> pullMessages(SessionDTO session)
     throws RemoteException, NotAuthorisedException {
+
+        /* Checking access permissions */
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            BasicAccessPolicies.isSelf(session.getUserId())
+        )) throw new NotAuthorisedException();
+
         //TODO unimplemented method
         return null;
     }
@@ -43,6 +68,20 @@ public class NotificationController extends UnicastRemoteObject implements INoti
     @Override
     public void confirmMessagePoll(MessageDTO messageDTO, SessionDTO session)
     throws RemoteException, ValidationException, NotAuthorisedException {
+
+        /* Checking access permissions */
+        //1 STEP
+        if (messageDTO == null) throw new NotAuthorisedException();
+
+        //2 STEP
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            AccessPolicy.and(
+                BasicAccessPolicies.isSelf(session.getUserId()),
+                BasicAccessPolicies.isSelf(messageDTO.getRecipientId())
+            )
+        )) throw new NotAuthorisedException();
+
         //TODO unimplemented method
     }
 }

@@ -1,5 +1,7 @@
 package at.sporty.team1.application.controller;
 
+import at.sporty.team1.application.auth.AccessPolicy;
+import at.sporty.team1.application.auth.BasicAccessPolicies;
 import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.Team;
 import at.sporty.team1.domain.interfaces.IMember;
@@ -40,12 +42,31 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
     }
 
     @Override
-    public void createOrSaveTeam(TeamDTO teamDTO, SessionDTO session)
+    public Integer createOrSaveTeam(TeamDTO teamDTO, SessionDTO session)
     throws RemoteException, ValidationException, NotAuthorisedException {
 
-        if (!LoginController.hasEnoughPermissions(session, UserRole.MANAGER)) throw new NotAuthorisedException();
+        /* Checking access permissions */
+        //1 STEP
+        if (teamDTO == null) throw new NotAuthorisedException();
 
-        if (teamDTO == null) return;
+        //2 STEP
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            AccessPolicy.or(
+                BasicAccessPolicies.isInPermissionBound(UserRole.ADMIN),
+
+                AccessPolicy.and(
+                    BasicAccessPolicies.isInPermissionBound(UserRole.TRAINER),
+
+                    AccessPolicy.or(
+                        //create new team (new teams doesn't have id))
+                        AccessPolicy.simplePolicy(user -> teamDTO.getTeamId() == null),
+                        BasicAccessPolicies.isTrainerOfTeam(teamDTO.getTeamId()),
+                        BasicAccessPolicies.isDepartmentHeadOfTeam(teamDTO.getTeamId())
+                    )
+                )
+            )
+        )) throw new NotAuthorisedException();
 
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -62,9 +83,10 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
             );
 
             LOGGER.info("Team \"{}\" was successfully saved.", teamDTO.getTeamName());
-
+            return teamDTO.getTeamId();
         } catch (PersistenceException e) {
             LOGGER.error("Error occurred while communicating with DB.", e);
+            return null;
         }
     }
 
@@ -72,10 +94,19 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
     public List<TeamDTO> searchTeamsByMember(Integer memberId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException {
 
-        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
+        /* Checking access permissions */
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            AccessPolicy.or(
+                BasicAccessPolicies.isInPermissionBound(UserRole.ADMIN),
+                BasicAccessPolicies.isDepartmentHeadOfMember(memberId)
+            )
+        )) throw new NotAuthorisedException();
 
+        /* Validating Input */
         if (memberId == null) throw new UnknownEntityException(IMember.class);
 
+        /* Is valid, moving forward */
         try {
 
             /* pulling a TeamDAO and searching for all teams assigned to given Member */
@@ -103,10 +134,21 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
     public List<MemberDTO> loadTeamMembers(Integer teamId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException {
 
-        if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
+        /* Checking access permissions */
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            AccessPolicy.or(
+                BasicAccessPolicies.isInPermissionBound(UserRole.ADMIN),
+                BasicAccessPolicies.isMemberOfTeam(teamId),
+                BasicAccessPolicies.isTrainerOfTeam(teamId),
+                BasicAccessPolicies.isDepartmentHeadOfTeam(teamId)
+            )
+        )) throw new NotAuthorisedException();
 
+        /* Validating Input */
         if (teamId == null) throw new UnknownEntityException(ITeam.class);
 
+        /* Is valid, moving forward */
         try {
 
             Team team = PersistenceFacade.getNewTeamDAO().findById(teamId);
@@ -137,11 +179,23 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
     @Override
     public DepartmentDTO loadTeamDepartment(Integer teamId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException {
+
+        /* Checking access permissions */
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            AccessPolicy.or(
+                BasicAccessPolicies.isInPermissionBound(UserRole.ADMIN),
+                BasicAccessPolicies.isMemberOfTeam(teamId),
+                BasicAccessPolicies.isTrainerOfTeam(teamId),
+                BasicAccessPolicies.isDepartmentHeadOfTeam(teamId)
+            )
+        )) throw new NotAuthorisedException();
+
+        /* Validating Input */
+        if (teamId == null) throw new UnknownEntityException(ITeam.class);
+
+        /* Is valid, moving forward */
         try {
-
-            if (!LoginController.hasEnoughPermissions(session, UserRole.MEMBER)) throw new NotAuthorisedException();
-
-            if (teamId == null) throw new UnknownEntityException(ITeam.class);
 
             Team team = PersistenceFacade.getNewTeamDAO().findById(teamId);
             if (team == null) throw new UnknownEntityException(ITeam.class);
