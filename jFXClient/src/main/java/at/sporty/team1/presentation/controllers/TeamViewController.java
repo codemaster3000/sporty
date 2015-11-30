@@ -1,14 +1,14 @@
 package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
-import at.sporty.team1.presentation.controllers.core.JfxController;
-import at.sporty.team1.rmi.api.IDTO;
+import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
 import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.api.ITeamController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
@@ -34,7 +34,7 @@ import java.util.ResourceBundle;
 /**
  * Represents the View of a Team (Mannschaft)
  */
-public class TeamViewController extends JfxController {
+public class TeamViewController extends ConsumerViewController<MemberDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SUCCESSFUL_TEAM_SAVE = "Team was successfully saved.";
 
@@ -79,28 +79,10 @@ public class TeamViewController extends JfxController {
         });
 
         /**
-         * Load Teams
-         */
-
-        /**
          * Converter from TeamDTO to Team name (String)
          */
-        StringConverter<TeamDTO> teamDTOStringConverter = new StringConverter<TeamDTO>() {
-            @Override
-            public String toString(TeamDTO teamDTO) {
-                if (teamDTO != null) {
-                    return teamDTO.getTeamName();
-                }
-                return null;
-            }
-
-            @Override
-            public TeamDTO fromString(String string) {
-                return null;
-            }
-        };
-
-        _chooseTeamComboBox.setConverter(teamDTOStringConverter);
+        StringConverter<TeamDTO> teamDTOConverter = GUIHelper.getDTOToStringConverter(TeamDTO::getTeamName);
+        _chooseTeamComboBox.setConverter(teamDTOConverter);
 
         new Thread(() -> {
 
@@ -113,7 +95,9 @@ public class TeamViewController extends JfxController {
 
                     for (DepartmentDTO actualDepartment : departments) {
 
-                        resultList.addAll(departmentController.loadDepartmentTeams(actualDepartment.getDepartmentId()));
+                        resultList.addAll(departmentController.loadDepartmentTeams(
+                            actualDepartment.getDepartmentId()
+                        ));
 
                         if (!resultList.isEmpty()) {
 
@@ -130,7 +114,6 @@ public class TeamViewController extends JfxController {
         }).start();
 
         _chooseTeamComboBox.setOnAction((event) -> {
-
             _membersListView.getItems().clear();
             displayTeamData(_chooseTeamComboBox.getSelectionModel().getSelectedItem());
         });
@@ -139,12 +122,8 @@ public class TeamViewController extends JfxController {
     private static TeamDTO _activeTeamDTO;
 
     @Override
-    public void displayDTO(IDTO idto) {
-        if (idto instanceof TeamDTO) {
-            displayTeamData((TeamDTO) idto);
-        } else if (idto instanceof MemberDTO) {
-            addNewMemberToTeam((MemberDTO) idto);
-        }
+    public void loadDTO(MemberDTO memberDTO) {
+        addNewMemberToTeam(memberDTO);
     }
 
     /**
@@ -160,7 +139,11 @@ public class TeamViewController extends JfxController {
 
                 ITeamController teamController = CommunicationFacade.lookupForTeamController();
 
-                List<MemberDTO> memberList = teamController.loadTeamMembers(_activeTeamDTO.getTeamId());
+                List<MemberDTO> memberList = teamController.loadTeamMembers(
+                    _activeTeamDTO.getTeamId(),
+                    CommunicationFacade.getActiveSession()
+                );
+
                 if (memberList != null && !memberList.isEmpty()) {
                     _membersListView.setItems(FXCollections.observableList(memberList));
                 }
@@ -169,6 +152,8 @@ public class TeamViewController extends JfxController {
                 LOGGER.error("Error occurred while displaying team data.", e);
             } catch (UnknownEntityException e) {
                 LOGGER.error("DTO was not saved in Data Storage before loading all Members from Team.", e);
+            } catch (NotAuthorisedException e) {
+                LOGGER.error("Client load (Team Members) request was rejected. Not enough permissions.", e);
             }
         }
     }
@@ -188,7 +173,12 @@ public class TeamViewController extends JfxController {
 
             if ((_activeTeamDTO != null) && (memberDTO != null)) {
 
-                memberController.removeMemberFromTeam(memberDTO.getMemberId(), _activeTeamDTO.getTeamId());
+                memberController.removeMemberFromTeam(
+                    memberDTO.getMemberId(),
+                    _activeTeamDTO.getTeamId(),
+                    CommunicationFacade.getActiveSession()
+                );
+
                 _membersListView.getItems().remove(memberDTO);
 
             } else if (memberDTO != null) {
@@ -202,6 +192,8 @@ public class TeamViewController extends JfxController {
             LOGGER.error("Error occurred while removing member from the team.", e);
         } catch (UnknownEntityException e) {
             LOGGER.error("DTO was not saved in Data Storage before removing Member from Team.", e);
+        } catch (NotAuthorisedException e) {
+            LOGGER.error("Client delete (Member) request was rejected. Not enough permissions.", e);
         }
     }
 
@@ -215,18 +207,24 @@ public class TeamViewController extends JfxController {
             try {
 
                 ITeamController teamController = CommunicationFacade.lookupForTeamController();
-                teamController.createOrSaveTeam(_activeTeamDTO);
+                teamController.createOrSaveTeam(
+                    _activeTeamDTO,
+                    CommunicationFacade.getActiveSession()
+                );
 
                 for (MemberDTO member : memberList) {
                     try {
 
                         CommunicationFacade.lookupForMemberController().assignMemberToTeam(
                             member.getMemberId(),
-                            _activeTeamDTO.getTeamId()
+                            _activeTeamDTO.getTeamId(),
+                            CommunicationFacade.getActiveSession()
                         );
 
                     } catch (UnknownEntityException e) {
                         LOGGER.error("Unable to assign Member to Team", e);
+                    } catch (NotAuthorisedException e) {
+                        LOGGER.error("Client assign (Member to Team) request was rejected. Not enough permissions.", e);
                     }
                 }
 
@@ -243,6 +241,8 @@ public class TeamViewController extends JfxController {
 
                 GUIHelper.showValidationAlert(context);
                 LOGGER.error(context, e);
+            } catch (NotAuthorisedException e) {
+                LOGGER.error("Client save (Team) request was rejected. Not enough permissions.", e);
             }
         }
     }

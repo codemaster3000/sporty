@@ -211,12 +211,12 @@ public class MemberViewController extends JfxController {
         }).start();
 	}
 
-	@Override
-    public void displayDTO(IDTO idto){
-        if (idto instanceof MemberDTO) {
-            displayMemberDTO((MemberDTO) idto);
-        }
-    }
+//	@Override
+//    public void displayDTO(IDTO idto){
+//        if (idto instanceof MemberDTO) {
+//            displayMemberDTO((MemberDTO) idto);
+//        }
+//    }
 
     /**
      * Pre-loads data into all view fields.

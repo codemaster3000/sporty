@@ -12,13 +12,13 @@ import java.util.List;
 @Entity
 @Table(name = "team")
 public class Team implements ITeam {
-    public Integer teamId;
-    public Member trainer;
-    public Department department;
-    public League league;
-    public String teamname;
-    public Boolean isTournamentSquad;
-    public List<Member> memberList;
+    private Integer teamId;
+    private Member trainer;
+    private Department department;
+    private League league;
+    private String teamname;
+    private Boolean isTournamentSquad;
+    private List<Member> memberList;
 
     public Team() {
     }
@@ -58,44 +58,6 @@ public class Team implements ITeam {
         this.department = department;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-        name = "teamMembers",
-        joinColumns = @JoinColumn(name = "teamId"),
-        inverseJoinColumns = @JoinColumn(name = "memberId")
-    )
-    public List<Member> getMembers() {
-        return memberList;
-    }
-
-    public void setMembers(List<Member> memberList) {
-        this.memberList = memberList;
-    }
-
-    @Override
-    public void addMember(IMember member) {
-
-        if (!(member instanceof Member)) {
-            throw new IllegalArgumentException();
-        }
-
-        if (!memberList.contains(member)) {
-            memberList.add((Member) member);
-        }
-    }
-
-    @Override
-    public void removeMember(IMember member) {
-
-        if (!(member instanceof Member)) {
-            throw new IllegalArgumentException();
-        }
-
-        if (memberList.isEmpty()) {
-            memberList.remove(member);
-        }
-    }
-
     //TODO League table in db
 //    @Override
 //    @ManyToOne(fetch = FetchType.EAGER)
@@ -133,6 +95,44 @@ public class Team implements ITeam {
         this.isTournamentSquad = isTournamentSquad;
     }
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "teamMembers",
+            joinColumns = @JoinColumn(name = "teamId"),
+            inverseJoinColumns = @JoinColumn(name = "memberId")
+    )
+    public List<Member> getMembers() {
+        return memberList;
+    }
+
+    public void setMembers(List<Member> memberList) {
+        this.memberList = memberList;
+    }
+
+    @Override
+    public void addMember(IMember member) {
+
+        if (!(member instanceof Member)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (!memberList.contains(member)) {
+            memberList.add((Member) member);
+        }
+    }
+
+    @Override
+    public void removeMember(IMember member) {
+
+        if (!(member instanceof Member)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (memberList.isEmpty()) {
+            memberList.remove(member);
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -141,9 +141,6 @@ public class Team implements ITeam {
         Team team = (Team) o;
 
         if (teamId != null ? !teamId.equals(team.teamId) : team.teamId != null) return false;
-        if (trainer != null ? !trainer.equals(team.trainer) : team.trainer != null) return false;
-        if (department != null ? !department.equals(team.department) : team.department != null) return false;
-//        if (league != null ? !league.equals(team.league) : team.league != null) return false;
         if (teamname != null ? !teamname.equals(team.teamname) : team.teamname != null) return false;
         if (isTournamentSquad != null ? !isTournamentSquad.equals(team.isTournamentSquad) : team.isTournamentSquad != null) return false;
 
@@ -153,9 +150,6 @@ public class Team implements ITeam {
     @Override
     public int hashCode() {
         int result = teamId != null ? teamId.hashCode() : 0;
-        result = 31 * result + (trainer != null ? trainer.hashCode() : 0);
-        result = 31 * result + (department != null ? department.hashCode() : 0);
-//        result = 31 * result + (league != null ? league.hashCode() : 0);
         result = 31 * result + (teamname != null ? teamname.hashCode() : 0);
         result = 31 * result + (isTournamentSquad != null ? isTournamentSquad.hashCode() : 0);
         return result;

@@ -12,10 +12,10 @@ import java.util.List;
 @Table(name = "league")
 public class League implements ILeague {
 
-    public String name;
-    public List<Team> order; // ordered!! Leagueleader = first
-    public List<Team> teams; // one to many
-    public List<Match> matches; //one to many
+    private String name;
+    private List<Team> order; // ordered!! Leagueleader = first
+    private List<Team> teams; // one to many
+    private List<Match> matches; //one to many
 
 
     @Override

@@ -19,7 +19,7 @@ public interface IRTeam {
 
     String getTeamName();
 
-    List<Member> getMembers();
-
     Boolean getIsTournamentSquad();
+
+    List<Member> getMembers();
 }

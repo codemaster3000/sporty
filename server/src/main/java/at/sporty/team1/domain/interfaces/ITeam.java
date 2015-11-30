@@ -21,11 +21,11 @@ public interface ITeam extends IRTeam {
 
     void setTeamName(String teamName);
 
-    void setMembers(List<Member> memberList);
-
     void addMember(IMember member);
 
     void removeMember(IMember member);
 
     void setIsTournamentSquad(Boolean isTournamentSquad);
+
+    void setMembers(List<Member> memberList);
 }

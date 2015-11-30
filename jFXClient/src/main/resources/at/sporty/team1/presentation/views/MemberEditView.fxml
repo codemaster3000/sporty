@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<GridPane hgap="5.0" vgap="5.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="at.sporty.team1.presentation.controllers.MemberEditViewController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="NEVER" minWidth="200.0"/>
+        <ColumnConstraints hgrow="ALWAYS" minWidth="400.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="NEVER"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="NEVER"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="NEVER"/>
+    </rowConstraints>
+    <padding>
+        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+    </padding>
+    <children>
+
+        <Label text="First Name"/>
+        <TextField fx:id="fNameTextField" promptText="Mandatory" GridPane.columnIndex="1"/>
+
+        <Label text="Last Name" GridPane.rowIndex="1"/>
+        <TextField fx:id="lNameTextField" promptText="Mandatory" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+        <Label text="Date of Birth (yyyy-mm-dd)" GridPane.rowIndex="2"/>
+        <TextField fx:id="birthTextField" promptText="Mandatory" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+        <Label text="Gender" GridPane.rowIndex="3"/>
+        <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.valignment="BASELINE">
+            <children>
+                <RadioButton fx:id="radioGenderMale" mnemonicParsing="false" text="Male"/>
+                <RadioButton fx:id="radioGenderFemale" mnemonicParsing="false" text="Female"/>
+            </children>
+        </HBox>
+
+        <Label text="Address" GridPane.rowIndex="4"/>
+        <TextField fx:id="addressTextField" promptText="Mandatory" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+        <Label text="E-mail" GridPane.rowIndex="5"/>
+        <TextField fx:id="emailTextField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+        <Separator GridPane.columnSpan="2" GridPane.rowIndex="6"/>
+
+        <Label text="Role" GridPane.rowIndex="7"/>
+        <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="7">
+            <ComboBox fx:id="roleComboBox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+        </AnchorPane>
+
+        <Separator GridPane.columnSpan="2" GridPane.rowIndex="8"/>
+
+        <Label text="Sport" GridPane.rowIndex="9"/>
+
+        <GridPane hgap="5.0" vgap="5.0" GridPane.rowIndex="9" GridPane.columnIndex="1">
+            <columnConstraints>
+                <ColumnConstraints hgrow="NEVER" prefWidth="145.0"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="35.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="35.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="35.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="35.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <CheckBox fx:id="memberSportCheckboxSoccer" mnemonicParsing="false" text="Soccer"/>
+                <AnchorPane GridPane.columnIndex="1">
+                    <ComboBox fx:id="memberTeamComboBoxSoccer" disable="true" AnchorPane.bottomAnchor="0.0"
+                              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                </AnchorPane>
+
+                <CheckBox fx:id="memberSportCheckboxVolleyball" mnemonicParsing="false" text="Volleyball"
+                          GridPane.rowIndex="1"/>
+                <AnchorPane GridPane.rowIndex="1" GridPane.columnIndex="1">
+                    <ComboBox fx:id="memberTeamComboBoxVolleyball" disable="true" AnchorPane.bottomAnchor="0.0"
+                              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                </AnchorPane>
+
+                <CheckBox fx:id="memberSportCheckboxBaseball" mnemonicParsing="false" text="Baseball"
+                          GridPane.rowIndex="2"/>
+                <AnchorPane GridPane.rowIndex="2" GridPane.columnIndex="1">
+                    <ComboBox fx:id="memberTeamComboBoxBaseball" disable="true" AnchorPane.bottomAnchor="0.0"
+                              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                </AnchorPane>
+
+                <CheckBox fx:id="memberSportCheckboxFootball" mnemonicParsing="false" text="Football"
+                          GridPane.rowIndex="3"/>
+                <AnchorPane GridPane.rowIndex="3" GridPane.columnIndex="1">
+                    <ComboBox fx:id="memberTeamComboBoxFootball" disable="true" AnchorPane.bottomAnchor="0.0"
+                              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                </AnchorPane>
+            </children>
+        </GridPane>
+
+        <Separator GridPane.columnSpan="2" GridPane.rowIndex="10"/>
+    </children>
+</GridPane>

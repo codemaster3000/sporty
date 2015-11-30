@@ -1,9 +1,8 @@
 package at.sporty.team1.rmi.api;
 
 
-import at.sporty.team1.rmi.dtos.DepartmentDTO;
-import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.dtos.*;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 
@@ -13,154 +12,199 @@ import java.util.List;
 public interface IMemberController extends IRemoteController {
 
     /**
+     * Search for Member with a given id.
+     *
+     * @param memberId target member (will be used for search).
+     * @param session Session object.
+     * @return MemberDTO searched member.
+     * @throws RemoteException
+     * @throws NotAuthorisedException
+     */
+    MemberDTO findMemberById(Integer memberId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException;
+
+    /**
      * Search for all Members.
      *
-     * @param feePaid will search all members who paid the fee.
-     * @param feeNotPaid will search all members who did not pay the fee.
+     * @param isFeePaid will search all members who paid the fee if value = true and not paid if = false.
+     * @param session Session object.
      * @return List<MemberDTO> List of all members.
      * @throws RemoteException
+     * @throws NotAuthorisedException
      */
-    List<MemberDTO> searchAllMembers(boolean feePaid, boolean feeNotPaid)
-    throws RemoteException;
+    List<MemberDTO> searchAllMembers(Boolean isFeePaid, SessionDTO session)
+    throws RemoteException, NotAuthorisedException;
 
     /**
      * Creates new or saves old member in data storage with data from the DTO.
      *
      * @param memberDTO DTO for member creation or save.
+     * @param session Session object.
      * @return Integer Id of the updated or saved entity.
      * @throws RemoteException
      * @throws ValidationException
+     * @throws NotAuthorisedException
      */
-    Integer createOrSaveMember(MemberDTO memberDTO)
-    throws RemoteException, ValidationException;
+    Integer createOrSaveMember(MemberDTO memberDTO, SessionDTO session)
+    throws RemoteException, ValidationException, NotAuthorisedException;
 
     /**
      * Search for memberList by String (first name and last name, first name or last name).
      *
      * @param searchString String to be searched.
-     * @param feePaid will search all members who paid the fee.
-     * @param feeNotPaid will search all members who did not pay the fee.
+     * @param isFeePaid will search all members who paid the fee if value = true and not paid if = false.
+     * @param session Session object.
      * @return List<MemberDTO> List of all members who's full name matched given data, or null.
      * @throws RemoteException
      * @throws ValidationException
+     * @throws NotAuthorisedException
      */
-    List<MemberDTO> searchMembersByNameString(String searchString, boolean feePaid, boolean feeNotPaid)
-    throws RemoteException, ValidationException;
+    List<MemberDTO> searchMembersByNameString(String searchString, Boolean isFeePaid, SessionDTO session)
+    throws RemoteException, ValidationException, NotAuthorisedException;
 
 
     /**
      * Search for memberList by common team name.
      *
      * @param teamName Team name to be searched.
-     * @param feePaid will search all members who paid the fee.
-     * @param feeNotPaid will search all members who did not pay the fee.
+     * @param isFeePaid will search all members who paid the fee if value = true and not paid if = false.
+     * @param session Session object.
      * @return List<MemberDTO> List of all members who are assigned to the given team, or null.
      * @throws RemoteException
      * @throws ValidationException
+     * @throws NotAuthorisedException
      */
-    List<MemberDTO> searchMembersByCommonTeamName(String teamName, boolean feePaid, boolean feeNotPaid)
-    throws RemoteException, ValidationException;
+    List<MemberDTO> searchMembersByCommonTeamName(String teamName, Boolean isFeePaid, SessionDTO session)
+    throws RemoteException, ValidationException, NotAuthorisedException;
 
     /**
      * Search for memberList by tournament team name.
      *
      * @param teamName Team name to be searched.
-     * @param feePaid will search all members who paid the fee.
-     * @param feeNotPaid will search all members who did not pay the fee.
+     * @param isFeePaid will search all members who paid the fee if value = true and not paid if = false.
+     * @param session Session object.
      * @return List<MemberDTO> List of all members who are assigned to the given team, or null.
      * @throws RemoteException
      * @throws ValidationException
+     * @throws NotAuthorisedException
      */
-    List<MemberDTO> searchMembersByTournamentTeamName(String teamName, boolean feePaid, boolean feeNotPaid)
-    throws RemoteException, ValidationException;
+    List<MemberDTO> searchMembersByTournamentTeamName(String teamName, Boolean isFeePaid, SessionDTO session)
+    throws RemoteException, ValidationException, NotAuthorisedException;
 
 
     /**
      * Search for memberList by date of birth.
      *
      * @param dateOfBirth Date of birth to be searched.
-     * @param feePaid will search all members who paid the fee.
-     * @param feeNotPaid will search all members who did not pay the fee.
+     * @param isFeePaid will search all members who paid the fee if value = true and not paid if = false.
+     * @param session Session object.
      * @return List<MemberDTO> List of all members who's date of birth matched given data, or null.
      * @throws RemoteException
      * @throws ValidationException
+     * @throws NotAuthorisedException
      */
-    List<MemberDTO> searchMembersByDateOfBirth(String dateOfBirth, boolean feePaid, boolean feeNotPaid)
-    throws RemoteException, ValidationException;
+    List<MemberDTO> searchMembersByDateOfBirth(String dateOfBirth, Boolean isFeePaid, SessionDTO session)
+    throws RemoteException, ValidationException, NotAuthorisedException;
+
+    /**
+     * Returns a fetched list of all departments and teams to which given member is assigned.
+     *
+     * @param memberId target member (will be used for search).
+     * @param session Session object.
+     * @return List<DTOPair> Fetched list of all departments ad teams to which given member is assigned.
+     * @throws RemoteException
+     * @throws UnknownEntityException
+     */
+    List<DTOPair<DepartmentDTO, TeamDTO>> loadFetchedDepartmentTeamList(Integer memberId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException;
 
     /**
      * Returns a list of all departments to which given member is assigned.
      *
      * @param memberId target member (will be used for search).
+     * @param session Session object.
      * @return List<DepartmentDTO> List of all departments to which given member is assigned.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
-    List<DepartmentDTO> loadMemberDepartments(Integer memberId)
-    throws RemoteException, UnknownEntityException;
+    List<DepartmentDTO> loadMemberDepartments(Integer memberId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException;
 
     /**
      * Assigns member to selected department.
      *
      * @param memberId target member (will be used to update departments list).
      * @param departmentId department to which member with given id will be assigned.
+     * @param session Session object.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
-    void assignMemberToDepartment(Integer memberId, Integer departmentId)
-    throws RemoteException, UnknownEntityException;
+    void assignMemberToDepartment(Integer memberId, Integer departmentId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException;
 
     /**
      * Removes member from selected department.
      *
      * @param memberId target member (will be used to update departments list).
      * @param departmentId department from which member with given id will be removed.
+     * @param session Session object.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
-    void removeMemberFromDepartment(Integer memberId, Integer departmentId)
-    throws RemoteException, UnknownEntityException;
+    void removeMemberFromDepartment(Integer memberId, Integer departmentId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException;
 
     /**
      * Returns a list of all teams to which given member is assigned.
      *
      * @param memberId target member (will be used for search).
+     * @param session Session object.
      * @return List<TeamDTO> List of all teams to which given member is assigned.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
-    List<TeamDTO> loadMemberTeams(Integer memberId)
-    throws RemoteException, UnknownEntityException;
+    List<TeamDTO> loadMemberTeams(Integer memberId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException;
 
     /**
      * Assigns member to selected team.
      *
      * @param memberId target member (will be used to update teams list).
      * @param teamId team to which member with given id will be assigned.
+     * @param session Session object.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
-    void assignMemberToTeam(Integer memberId, Integer teamId)
-    throws RemoteException, UnknownEntityException;
+    void assignMemberToTeam(Integer memberId, Integer teamId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException;
 
     /**
      * Removes member from selected team.
      *
      * @param memberId target member (will be used to update teams list).
      * @param teamId team from which member with given id will be removed.
+     * @param session Session object.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
-    void removeMemberFromTeam(Integer memberId, Integer teamId)
-    throws RemoteException, UnknownEntityException;
+    void removeMemberFromTeam(Integer memberId, Integer teamId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException;
 
     /**
      * Deletes member form the data storage with data from the DTO.
      *
      * @param memberId Id of a member who will be deleted.
+     * @param session Session object.
      * @throws RemoteException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
-    void deleteMember(Integer memberId)
-    throws RemoteException, UnknownEntityException;
+    void deleteMember(Integer memberId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException;
 }

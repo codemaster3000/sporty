@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<GridPane hgap="5.0" vgap="5.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="at.sporty.team1.presentation.controllers.MemberReadOnlyViewController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="NEVER" minWidth="200.0"/>
+        <ColumnConstraints hgrow="ALWAYS" minWidth="400.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="NEVER"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="NEVER"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="NEVER"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="NEVER"/>
+        <RowConstraints vgrow="NEVER"/>
+    </rowConstraints>
+    <padding>
+        <Insets left="15.0" right="15.0" top="15.0"/>
+    </padding>
+
+    <Label text="First Name" GridPane.valignment="TOP">
+        <font>
+            <Font name="System Bold"/>
+        </font>
+    </Label>
+    <Label fx:id="_firstName" GridPane.columnIndex="1" GridPane.valignment="TOP"/>
+
+    <Label text="Last Name" GridPane.rowIndex="1" GridPane.valignment="TOP">
+        <font>
+            <Font name="System Bold"/>
+        </font>
+    </Label>
+    <Label fx:id="_lastName" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP"/>
+
+    <Label text="Date of Birth (yyyy-mm-dd)" GridPane.rowIndex="2" GridPane.valignment="TOP">
+        <font>
+            <Font name="System Bold"/>
+        </font>
+    </Label>
+    <Label fx:id="_dateOfBirth" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.valignment="TOP"/>
+
+    <Label text="Gender" GridPane.rowIndex="3" GridPane.valignment="TOP">
+        <font>
+            <Font name="System Bold"/>
+        </font>
+    </Label>
+    <Label fx:id="_gender" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.valignment="TOP"/>
+
+    <Label text="Address" GridPane.rowIndex="4" GridPane.valignment="TOP">
+        <font>
+            <Font name="System Bold"/>
+        </font>
+    </Label>
+    <Label fx:id="_address" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.valignment="TOP"/>
+
+    <Label text="E-mail" GridPane.rowIndex="5" GridPane.valignment="TOP">
+        <font>
+            <Font name="System Bold"/>
+        </font>
+    </Label>
+    <Label fx:id="_email" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.valignment="TOP"/>
+
+    <Separator GridPane.columnSpan="2" GridPane.rowIndex="6"/>
+
+    <Label text="Role" GridPane.rowIndex="7" GridPane.valignment="TOP">
+        <font>
+            <Font name="System Bold"/>
+        </font>
+    </Label>
+    <Label fx:id="_role" GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.valignment="TOP"/>
+
+    <Separator GridPane.columnSpan="2" GridPane.rowIndex="8"/>
+
+    <TableView fx:id="_departmentTeamTable" GridPane.rowIndex="9" GridPane.columnSpan="2" GridPane.valignment="TOP">
+        <columns>
+            <TableColumn fx:id="_departmentColumn" text="DEPARTMENT"/>
+            <TableColumn fx:id="_teamColumn" text="TEAM"/>
+        </columns>
+    </TableView>
+
+    <Separator GridPane.columnSpan="2" GridPane.rowIndex="10"/>
+
+    <!--THIS IS A LEGIT CODE BUT SCENE BUILDER 2.0 DOES NOT SUPPORT IT YET (IT IS A VERY FRESH FEATURE)-->
+    <!--TO EDIT THIS FILE GRAPHICALLY YOU NEED TO USE SCENE BUILDER 8.0 (CUSTOM BUILD OF SB THAT SUPPORTS JAVA FX8)-->
+    <!--DOWNLOAD LINK: http://gluonhq.com/products/downloads/-->
+    <ButtonBar fx:id="_options" buttonMinWidth="150.0" visible="false" GridPane.columnSpan="2" GridPane.rowIndex="11">
+        <buttons>
+            <!--BUTTON UNIFORM SHOULD BE USED ONLY AFTER ALL SIZE MANIPULATIONS-->
+            <Button minHeight="30.0" minWidth="75" mnemonicParsing="false" onAction="#onEditMember"
+                    text="EDIT" ButtonBar.buttonData="NEXT_FORWARD" ButtonBar.buttonUniformSize="false"/>
+        </buttons>
+    </ButtonBar>
+</GridPane>

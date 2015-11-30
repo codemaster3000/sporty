@@ -1,6 +1,5 @@
 package at.sporty.team1.presentation.controllers.core;
 
-import at.sporty.team1.rmi.api.IDTO;
 import javafx.fxml.Initializable;
 
 import java.util.function.Consumer;
@@ -30,11 +29,4 @@ public interface IJfxController extends Initializable {
      * is a child of the different view.
      */
     void dispose();
-
-
-    /**
-     * Displays DTO content in view as specified.
-     * @param idto DTO object to be displayed;
-     */
-    void displayDTO(IDTO idto);
 }

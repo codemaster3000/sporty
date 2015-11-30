@@ -4,7 +4,7 @@ package at.sporty.team1.rmi.exceptions;
  * Created by f00 on 29.10.15.
  */
 
-public class ValidationException extends Exception  {
+public class ValidationException extends Exception {
     private String reason;
 
     public ValidationException() {

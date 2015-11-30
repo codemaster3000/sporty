@@ -1,6 +1,7 @@
 package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.presentation.controllers.core.JfxController;
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
@@ -21,7 +22,10 @@ public class LoginMaskViewController extends JfxController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        _usernameField.requestFocus();
+    }
+
+    public void setFocusToUsernameField() {
+        Platform.runLater(() -> _usernameField.requestFocus());
     }
 
     public StringProperty getObservableUsernameProperty() {

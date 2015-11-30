@@ -1,6 +1,7 @@
 package at.sporty.team1.domain.readonly;
 
 import at.sporty.team1.domain.Department;
+import at.sporty.team1.domain.Match;
 
 import java.util.List;
 
@@ -16,11 +17,9 @@ public interface IRTournament {
 
     Department getDepartment();
 
-	List<String> getTeams();
-
 //    League getLeague();
-//
-//    List<Match> getMatches();
-//
-//    List<String> getTeams();
+
+    List<String> getTeams();
+
+    List<Match> getMatches();
 }

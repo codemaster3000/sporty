@@ -13,26 +13,28 @@ import java.util.List;
 @Entity
 @Table(name = "tournament")
 public class Tournament implements ITournament {
-    private Integer id;
+    private Integer tournamentId;
     private String date;
     private String location;
     private Department department;
-    private List<String> teams;
     private League league; //TODO Entity
-    private List<Match> matches; //TODO Entity
+    private List<String> teamList;
+    private List<Match> matchList;
 
+    public Tournament() {
+    }
 
     @Override
     @Id
     @GeneratedValue
     @Column(name = "tournamentId")
     public Integer getTournamentId() {
-        return id;
+        return tournamentId;
     }
 
     @Override
-    public void setTournamentId(Integer id) {
-        this.id = id;
+    public void setTournamentId(Integer tournamentId) {
+        this.tournamentId = tournamentId;
     }
 
 
@@ -84,51 +86,47 @@ public class Tournament implements ITournament {
 //    public void setLeague(League league) {
 //        this.league = league;
 //    }
-//
-//
-//    @Override
-//    @OneToMany
-//    @Column(name = "matches") //TODO is this right?
-//    public List<Match> getMatches() {
-//        return matches;
-//    }
-//
-//
-//    @Override
-//    public void setMatches(List<Match> matches) {
-//        this.matches = matches;
-//    }
-//
-//
+
     @Override
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(
         name = "tournamentTeams",
-        joinColumns=@JoinColumn(name="tournamentId")
+        joinColumns = @JoinColumn(name="tournamentId")
     )
-    @Column(name="teamName")
+    @Column(name = "teamName")
     public List<String> getTeams() {
-        return teams;
+        return teamList;
     }
 
     @Override
-    public void setTeams(List<String> teams) {
-        this.teams = teams;
+    public void setTeams(List<String> teamList) {
+        this.teamList = teamList;
     }
 
-    /* helping methods */
     @Override
     public void addTeam(String teamName) {
-        if (!teams.contains(teamName)) {
-            teams.add(teamName);
+        if (!teamList.contains(teamName)) {
+            teamList.add(teamName);
         }
     }
 
     @Override
     public void removeTeam(String teamName) {
-        if (teams.isEmpty()) {
-            teams.remove(teamName);
+        if (teamList.isEmpty()) {
+            teamList.remove(teamName);
         }
+    }
+
+    @Override
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "tournamentId")
+    public List<Match> getMatches() {
+        return matchList;
+    }
+
+    @Override
+    public void setMatches(List<Match> matchList) {
+        this.matchList = matchList;
     }
 
     @Override
@@ -138,8 +136,8 @@ public class Tournament implements ITournament {
             throw new IllegalArgumentException();
         }
 
-        if (!matches.contains(match)) {
-            matches.add((Match) match);
+        if (!matchList.contains(match)) {
+            matchList.add((Match) match);
         }
     }
 
@@ -150,8 +148,29 @@ public class Tournament implements ITournament {
             throw new IllegalArgumentException();
         }
 
-        if (matches.isEmpty()) {
-            matches.remove(match);
+        if (matchList.isEmpty()) {
+            matchList.remove(match);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Tournament tournament = (Tournament) o;
+
+        if (tournamentId != null ? !tournamentId.equals(tournament.tournamentId) : tournament.tournamentId != null) return false;
+        if (date != null ? !date.equals(tournament.date) : tournament.date != null) return false;
+        if (location != null ? !location.equals(tournament.location) : tournament.location != null) return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = tournamentId != null ? tournamentId.hashCode() :0;
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (location != null ? location.hashCode() : 0);
+        return result;
     }
 }

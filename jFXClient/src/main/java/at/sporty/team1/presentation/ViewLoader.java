@@ -27,7 +27,8 @@ public class ViewLoader<T extends IJfxController> {
 		//All UI-Controller relations should be defined here.
 		_viewPaths.put(MainViewController.class, "/at/sporty/team1/presentation/views/MainView.fxml");
         _viewPaths.put(RichViewController.class, "/at/sporty/team1/presentation/views/RichView.fxml");
-        _viewPaths.put(MemberViewController.class, "/at/sporty/team1/presentation/views/MemberDataView.fxml");
+        _viewPaths.put(MemberEditViewController.class, "/at/sporty/team1/presentation/views/MemberEditView.fxml");
+        _viewPaths.put(MemberReadOnlyViewController.class, "/at/sporty/team1/presentation/views/MemberReadOnlyView.fxml");
         _viewPaths.put(TeamViewController.class, "/at/sporty/team1/presentation/views/TeamView.fxml");
         _viewPaths.put(TestViewController.class, "/at/sporty/team1/presentation/views/TestView.fxml");
         _viewPaths.put(CompetitionViewController.class, "/at/sporty/team1/presentation/views/CompetitionView.fxml");

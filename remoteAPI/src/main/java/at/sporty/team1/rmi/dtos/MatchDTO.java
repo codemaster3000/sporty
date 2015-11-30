@@ -20,55 +20,62 @@ public class MatchDTO implements IDTO {
         return _matchId;
     }
 
-    public void setMatchId(Integer matchId) {
+    public MatchDTO setMatchId(Integer matchId) {
         _matchId = matchId;
+        return this;
     }
 
     public String getLocation() {
 		return _location;
 	}
 
-	public void setLocation(String location) {
+	public MatchDTO setLocation(String location) {
 		_location = location;
+		return this;
 	}
     
     public String getDate() {
         return _date;
     }
 
-    public void setDate(String date) {
+    public MatchDTO setDate(String date) {
         _date = date;
+        return this;
+    }
+
+    public String getTeam1(){
+        return _team1;
+    }
+
+    public MatchDTO setTeam1(String team1) {
+        _team1 = team1;
+        return this;
     }
 
     public String getTeam2() {
         return _team2;
     }
 
-    public void setTeam2(String team2) {
+    public MatchDTO setTeam2(String team2) {
         _team2 = team2;
-    }
-    
-    public String getTeam1(){
-    	return _team1;
-    }
-
-    public void setTeam1(String team1) {
-        _team1 = team1;
+        return this;
     }
 
     public String getReferee() {
         return _referee;
     }
 
-    public void setReferee(String referee) {
+    public MatchDTO setReferee(String referee) {
         _referee = referee;
+        return this;
     }
 
 	public String getResult() {
 		return _result;
 	}
 
-	public void setResult(String result) {
+	public MatchDTO setResult(String result) {
 		_result = result;
+		return this;
 	}
 }

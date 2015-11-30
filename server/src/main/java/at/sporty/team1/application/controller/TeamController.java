@@ -1,9 +1,9 @@
 package at.sporty.team1.application.controller;
 
+import at.sporty.team1.application.auth.AccessPolicy;
+import at.sporty.team1.application.auth.BasicAccessPolicies;
 import at.sporty.team1.domain.Department;
-import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Team;
-import at.sporty.team1.domain.interfaces.IDepartment;
 import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.misc.InputSanitizer;
@@ -11,8 +11,11 @@ import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.ITeamController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.dtos.SessionDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.enums.UserRole;
 import at.sporty.team1.rmi.exceptions.DataType;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +32,7 @@ import java.util.stream.Collectors;
 /**
  * Created by sereGkaluv on 27-Oct-15.
  */
-public class TeamController extends UnicastRemoteObject implements ITeamController{
+public class TeamController extends UnicastRemoteObject implements ITeamController {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Mapper MAPPER = new DozerBeanMapper();
@@ -39,12 +42,33 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
     }
 
     @Override
-    public void createOrSaveTeam(TeamDTO teamDTO)
-    throws RemoteException, ValidationException {
+    public Integer createOrSaveTeam(TeamDTO teamDTO, SessionDTO session)
+    throws RemoteException, ValidationException, NotAuthorisedException {
 
-        if (teamDTO == null) return;
+        /* Checking access permissions */
+        //1 STEP
+        if (teamDTO == null) throw new NotAuthorisedException();
 
-        /* Validating Input */   //TODO further validation
+        //2 STEP
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            AccessPolicy.or(
+                BasicAccessPolicies.isInPermissionBound(UserRole.ADMIN),
+
+                AccessPolicy.and(
+                    BasicAccessPolicies.isInPermissionBound(UserRole.TRAINER),
+
+                    AccessPolicy.or(
+                        //create new team (new teams doesn't have id))
+                        AccessPolicy.simplePolicy(user -> teamDTO.getTeamId() == null),
+                        BasicAccessPolicies.isTrainerOfTeam(teamDTO.getTeamId()),
+                        BasicAccessPolicies.isDepartmentHeadOfTeam(teamDTO.getTeamId())
+                    )
+                )
+            )
+        )) throw new NotAuthorisedException();
+
+        /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
         if (!inputSanitizer.isValid(teamDTO.getTeamName(), DataType.TEXT)) {
             // There has been bad Input, throw the Exception
@@ -59,24 +83,36 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
             );
 
             LOGGER.info("Team \"{}\" was successfully saved.", teamDTO.getTeamName());
-
+            return teamDTO.getTeamId();
         } catch (PersistenceException e) {
             LOGGER.error("Error occurred while communicating with DB.", e);
+            return null;
         }
     }
 
     @Override
-    public List<TeamDTO> searchTeamsByMember(Integer memberId)
-    throws RemoteException, UnknownEntityException {
+    public List<TeamDTO> searchTeamsByMember(Integer memberId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
 
+        /* Checking access permissions */
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            AccessPolicy.or(
+                BasicAccessPolicies.isInPermissionBound(UserRole.ADMIN),
+                BasicAccessPolicies.isDepartmentHeadOfMember(memberId)
+            )
+        )) throw new NotAuthorisedException();
+
+        /* Validating Input */
         if (memberId == null) throw new UnknownEntityException(IMember.class);
 
+        /* Is valid, moving forward */
         try {
 
             /* pulling a TeamDAO and searching for all teams assigned to given Member */
             List<? extends ITeam> rawResults = PersistenceFacade.getNewTeamDAO().findTeamsByMemberId(memberId);
 
-            //checking if there are an results
+            //checking if there are any results
             if (rawResults == null || rawResults.isEmpty()) return null;
 
             //Converting results to TeamDTO
@@ -95,11 +131,24 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
     }
 
     @Override
-    public List<MemberDTO> loadTeamMembers(Integer teamId)
-    throws RemoteException, UnknownEntityException {
+    public List<MemberDTO> loadTeamMembers(Integer teamId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
 
+        /* Checking access permissions */
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            AccessPolicy.or(
+                BasicAccessPolicies.isInPermissionBound(UserRole.ADMIN),
+                BasicAccessPolicies.isMemberOfTeam(teamId),
+                BasicAccessPolicies.isTrainerOfTeam(teamId),
+                BasicAccessPolicies.isDepartmentHeadOfTeam(teamId)
+            )
+        )) throw new NotAuthorisedException();
+
+        /* Validating Input */
         if (teamId == null) throw new UnknownEntityException(ITeam.class);
 
+        /* Is valid, moving forward */
         try {
 
             Team team = PersistenceFacade.getNewTeamDAO().findById(teamId);
@@ -109,7 +158,7 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
             PersistenceFacade.forceLoadLazyProperty(team, Team::getMembers);
             List<? extends IMember> rawResults = team.getMembers();
 
-            //checking if there are an results
+            //checking if there are any results
             if (rawResults == null || rawResults.isEmpty()) return null;
 
             //Converting results to MemberDTO
@@ -128,11 +177,25 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
     }
 
     @Override
-    public DepartmentDTO loadTeamDepartment(Integer teamId)
-    throws RemoteException, UnknownEntityException {
-        try {
+    public DepartmentDTO loadTeamDepartment(Integer teamId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
 
-            if (teamId == null) throw new UnknownEntityException(ITeam.class);
+        /* Checking access permissions */
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            AccessPolicy.or(
+                BasicAccessPolicies.isInPermissionBound(UserRole.ADMIN),
+                BasicAccessPolicies.isMemberOfTeam(teamId),
+                BasicAccessPolicies.isTrainerOfTeam(teamId),
+                BasicAccessPolicies.isDepartmentHeadOfTeam(teamId)
+            )
+        )) throw new NotAuthorisedException();
+
+        /* Validating Input */
+        if (teamId == null) throw new UnknownEntityException(ITeam.class);
+
+        /* Is valid, moving forward */
+        try {
 
             Team team = PersistenceFacade.getNewTeamDAO().findById(teamId);
             if (team == null) throw new UnknownEntityException(ITeam.class);
@@ -141,7 +204,7 @@ public class TeamController extends UnicastRemoteObject implements ITeamControll
             PersistenceFacade.forceLoadLazyProperty(team, Team::getDepartment);
             Department department = team.getDepartment();
 
-            //checking if there are an results
+            //checking if there are any results
             if (department == null) return null;
 
             //Converting results to DepartmentDTO

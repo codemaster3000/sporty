@@ -42,8 +42,8 @@ public abstract class SearchViewController<T extends IDTO> extends JfxController
         Platform.runLater(() -> {
             if (_resultTable.getItems() != null) _resultTable.getItems().clear();
 
-            GUIHelper.showInformationAlert(NO_RESULTS_CONTEXT);
             hideProgressAnimation();
+            GUIHelper.showInformationAlert(NO_RESULTS_CONTEXT);
         });
     }
 
@@ -80,6 +80,8 @@ public abstract class SearchViewController<T extends IDTO> extends JfxController
             //sorting only if comparator is specified
             if (comparator != null) precookedResults.sort(comparator);
 
+            hideProgressAnimation();
+
             Platform.runLater(() -> {
                 //setting values to table
                 _resultTable.setItems(precookedResults);
@@ -90,8 +92,8 @@ public abstract class SearchViewController<T extends IDTO> extends JfxController
                 _resultTable.getFocusModel().focus(0);
             });
 
-        } else if (rawResults != null) {
-            Platform.runLater(() -> _resultTable.getItems().clear());
+        } else {
+            displayNoResults();
         }
     }
 

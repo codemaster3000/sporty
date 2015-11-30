@@ -2,7 +2,7 @@ package at.sporty.team1.rmi.api;
 
 import at.sporty.team1.rmi.dtos.AuthorisationDTO;
 import at.sporty.team1.rmi.dtos.SessionDTO;
-import at.sporty.team1.rmi.enums.UserRole;
+import at.sporty.team1.rmi.exceptions.SecurityException;
 
 import java.rmi.RemoteException;
 
@@ -16,9 +16,10 @@ public interface ILoginController extends IRemoteController {
      *
      * @return byte[] server public key.
      * @throws RemoteException
+     * @throws SecurityException
      */
     byte[] getServerPublicKey()
-    throws RemoteException;
+    throws RemoteException, SecurityException;
 
     /**
      * *************************************************************************

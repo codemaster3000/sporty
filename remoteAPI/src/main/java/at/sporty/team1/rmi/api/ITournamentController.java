@@ -1,7 +1,9 @@
 package at.sporty.team1.rmi.api;
 
 import at.sporty.team1.rmi.dtos.MatchDTO;
+import at.sporty.team1.rmi.dtos.SessionDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 
@@ -82,34 +84,54 @@ public interface ITournamentController extends IRemoteController {
      * Creates new or saves old tournament in data storage with data from the DTO.
      *
      * @param tournamentDTO DTO for tournament creation or save.
+     * @param session Session object.
      * @return Integer Id of the updated or saved entity.
      * @throws RemoteException
      * @throws ValidationException
+     * @throws NotAuthorisedException
      */
-    Integer createOrSaveTournament(TournamentDTO tournamentDTO)
-    throws RemoteException, ValidationException;
+    Integer createOrSaveTournament(TournamentDTO tournamentDTO, SessionDTO session)
+    throws RemoteException, ValidationException, NotAuthorisedException;
 
     /**
      * Creates new match for a given tournament.
      *
      * @param tournamentId Id of a tournament for which given match will be created.
      * @param matchDTO DTO for match creation or save.
+     * @param session Session object.
      * @throws RemoteException
      * @throws ValidationException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
-    void createNewMatch(Integer tournamentId, MatchDTO matchDTO)
-    throws RemoteException, ValidationException, UnknownEntityException;
+    void createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
+    throws RemoteException, ValidationException, UnknownEntityException, NotAuthorisedException;
 
 	/**
      * Assigns given team by name to the given tournament.
      *
      * @param teamName Name of the team to be assigned to the given tournament.
      * @param tournamentId Id of a tournament to which given team will be assigned.
+     * @param session Session object.
      * @throws RemoteException
      * @throws ValidationException
      * @throws UnknownEntityException
+     * @throws NotAuthorisedException
      */
-	void assignTeamToTournament(String teamName, Integer tournamentId)
-    throws RemoteException, ValidationException, UnknownEntityException;
+	void assignTeamToTournament(String teamName, Integer tournamentId, SessionDTO session)
+    throws RemoteException, ValidationException, UnknownEntityException, NotAuthorisedException;
+
+    /**
+     * Removes given team by name to the given tournament.
+     *
+     * @param teamName Name of the team to be removed from the given tournament.
+     * @param tournamentId Id of a tournament from which given team will be removed.
+     * @param session Session object.
+     * @throws RemoteException
+     * @throws ValidationException
+     * @throws UnknownEntityException
+     * @throws NotAuthorisedException
+     */
+    void removeTeamFromTournament(String teamName, Integer tournamentId, SessionDTO session)
+    throws RemoteException, ValidationException, UnknownEntityException, NotAuthorisedException;
 }

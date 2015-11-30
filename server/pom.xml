@@ -65,6 +65,13 @@
             <version>5.5.1</version>
         </dependency>
 
+        <!-- Apache Commons Collections-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.0</version>
+        </dependency>
+
         <!-- JUnit Dependency -->
         <dependency>
             <groupId>junit</groupId>

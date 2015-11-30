@@ -1,9 +1,13 @@
 package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
+
 import at.sporty.team1.presentation.controllers.MemberViewController.RoleType;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.rmi.api.IDTO;
+
+import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
+
 import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.api.ITournamentController;
@@ -12,6 +16,7 @@ import at.sporty.team1.rmi.dtos.MatchDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
@@ -36,7 +41,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class CompetitionViewController extends JfxController {
+public class CompetitionViewController extends ConsumerViewController<TournamentDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SUCCESSFUL_TOURNAMENT_SAVE = "Tournament was saved successfully.";
     private static final String SUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = " Tournament Teams were saved successfully.";
@@ -44,6 +49,7 @@ public class CompetitionViewController extends JfxController {
     private static final Label NO_CONTENT_PLACEHOLDER = new Label("No Content");
     private static final String SUCCESSFUL_MATCHES_SAVE = "Matches were saved successfully.";
     private static final String CANNOT_LOAD_TEAMS = "Cannot load Teams.";
+
 
     private static TournamentDTO _activeCompetition;
     private ObservableList<MatchDTO> _tableMatchList;
@@ -114,10 +120,11 @@ public class CompetitionViewController extends JfxController {
          * TournamentView
          */
         try {
+
             departments = CommunicationFacade.lookupForDepartmentController().searchAllDepartments();
+
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
-           
-            e.printStackTrace();
+            LOGGER.error("Error occurred while loading all known departments.", e);
         }
 
         if (departments != null) {
@@ -127,23 +134,10 @@ public class CompetitionViewController extends JfxController {
         /**
          * Converter from TeamDTO to Team name (String)
          */
-        StringConverter<DepartmentDTO> departmentDTOStringConverter = new StringConverter<DepartmentDTO>() {
-            @Override
-            public String toString(DepartmentDTO departmentDTO) {
-                if (departmentDTO != null) {
-                    return departmentDTO.getSport();
-                }
-                return null;
-            }
+        StringConverter<DepartmentDTO> deptDTOConverter = GUIHelper.getDTOToStringConverter(DepartmentDTO::getSport);
+        _tournamentDepartmentComboBox.setConverter(deptDTOConverter);
 
-            @Override
-            public DepartmentDTO fromString(String string) {
-                return null;
-            }
-        };
-        _tournamentDepartmentComboBox.setConverter(departmentDTOStringConverter);
-
-        //TODO: LeagueCombobox
+        //TODO: LeagueComboBox
         
         /**
          * addTeamsView
@@ -208,8 +202,13 @@ public class CompetitionViewController extends JfxController {
         	tempList.add(new MatchDTO());
         }
 
-        _tableMatchList = FXCollections.observableList(tempList);
+        ObservableList<MatchDTO> _tableMatchList = FXCollections.observableList(tempList);
         _matchTableView.setItems(FXCollections.observableList(_tableMatchList));
+    }
+
+    @Override
+    public void loadDTO(TournamentDTO dto) {
+        //TODO loadDTO
     }
 
     private void setVisibleOfMatchesView(boolean view) {
@@ -243,7 +242,7 @@ public class CompetitionViewController extends JfxController {
             } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
             	LOGGER.error("Error occurred while searching all Teams by Department.", e);
             }
-            
+
             /**
              * Converter from TeamDTO to Team name (String)
              */
@@ -317,8 +316,12 @@ public class CompetitionViewController extends JfxController {
                         .setLocation(location);
 
                 ITournamentController imc = CommunicationFacade.lookupForTournamentController();
-                Integer competitionId = imc.createOrSaveTournament(_activeCompetition);
-                _activeCompetition.setTournamentId(competitionId); //FIXME (Sergii) avoid DTO better own property
+                Integer competitionId = imc.createOrSaveTournament(
+                    _activeCompetition,
+                    CommunicationFacade.getActiveSession()
+                );
+
+                _activeCompetition.setTournamentId(competitionId);
 
                 GUIHelper.showSuccessAlert(SUCCESSFUL_TOURNAMENT_SAVE);
                 setVisibleOfTournamentTeamView(true);
@@ -332,6 +335,8 @@ public class CompetitionViewController extends JfxController {
 
                 GUIHelper.showValidationAlert(context);
                 LOGGER.error(context, e);
+            } catch (NotAuthorisedException e) {
+                LOGGER.error("Client save (Tournament) request was rejected. Not enough permissions.", e);
             }
         }
     }
@@ -350,12 +355,18 @@ public class CompetitionViewController extends JfxController {
 			
 			for(MatchDTO match : matches){
 				try {
-					imc.createNewMatch(tournamentId, match);
-				} catch (ValidationException | UnknownEntityException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+					imc.createNewMatch(tournamentId, match, CommunicationFacade.getActiveSession());
+				} catch (ValidationException e) {
+                    String context = String.format("Validation exception \"%s\" while saving match.", e.getCause());
+
+                    GUIHelper.showValidationAlert(context);
+                    LOGGER.error(context, e);
+				} catch (UnknownEntityException e) {
+                    LOGGER.error("DTO was not saved in Data Storage before assigning Match to Tournament.", e);
+                } catch (NotAuthorisedException e) {
+                    LOGGER.error("Client save (Match) request was rejected. Not enough permissions.", e);
+                }
+            }
 			LOGGER.info("Matches was successfully saved. Size:\"{}, TournamentId: {}\"", matches.size(), tournamentId);
 			GUIHelper.showSuccessAlert(SUCCESSFUL_MATCHES_SAVE);
 			
@@ -399,7 +410,11 @@ public class CompetitionViewController extends JfxController {
                 int savedTeamsCounter = 0;
 
                 for (String team : teams) {
-                    tournamentController.assignTeamToTournament(team, _activeCompetition.getTournamentId());
+                    tournamentController.assignTeamToTournament(
+                        team,
+                        _activeCompetition.getTournamentId(),
+                        CommunicationFacade.getActiveSession()
+                    );
                     ++savedTeamsCounter;
                 }
 
@@ -424,21 +439,23 @@ public class CompetitionViewController extends JfxController {
                 e.getReason(),
                 e
             );
+
+        } catch (NotAuthorisedException e) {
+            LOGGER.error("Client save (Teams to Tournament) request was rejected. Not enough permissions.", e);
         }
     }
 
     @FXML
-    public void removeTeamFromTournament(ActionEvent event) {
-
+    private void removeTeamFromTournament(ActionEvent event) {
         _competitionTeamsListView.getItems().remove(_competitionTeamsListView.getSelectionModel().getSelectedItem());
     }
-    
-    @Override
-    public void displayDTO(IDTO idto){
-        if (idto instanceof TournamentDTO) {
-            displayTournamentDTO((TournamentDTO) idto);
-        }
-    }
+//    
+//    @Override
+//    public void displayDTO(IDTO idto){
+//        if (idto instanceof TournamentDTO) {
+//            displayTournamentDTO((TournamentDTO) idto);
+//        }
+//    }
     
     /**
      * Pre-loads data into all view fields.

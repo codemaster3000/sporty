@@ -4,6 +4,7 @@ import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.SearchViewController;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
@@ -97,63 +98,72 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
                     //Performing search depending on selected search type
                     switch (_searchType.getValue()) {
                         case MEMBER_NAME: {
-                            handleReceivedResults(
-                                memberController.searchMembersByNameString(
-                                    searchString,
+                            List<MemberDTO> memberList = memberController.searchMembersByNameString(
+                                searchString,
+                                readIsFeePaidState(
                                     _paidRadioButton.isSelected(),
                                     _notPaidRadioButton.isSelected()
-                                )
+                                ),
+                                CommunicationFacade.getActiveSession()
                             );
 
+                            handleReceivedResults(memberList);
                             break;
                         }
 
                         case DATE_OF_BIRTH: {
-                            handleReceivedResults(
-                                memberController.searchMembersByDateOfBirth(
-                                    searchString,
+                            List<MemberDTO> memberList = memberController.searchMembersByDateOfBirth(
+                                searchString,
+                                readIsFeePaidState(
                                     _paidRadioButton.isSelected(),
                                     _notPaidRadioButton.isSelected()
-                                )
+                                ),
+                                CommunicationFacade.getActiveSession()
                             );
 
+                            handleReceivedResults(memberList);
                             break;
                         }
 
                         case COMMON_TEAM_NAME: {
-                            handleReceivedResults(
-                                memberController.searchMembersByCommonTeamName(
-                                    searchString,
+                            List<MemberDTO> memberList = memberController.searchMembersByCommonTeamName(
+                                searchString,
+                                readIsFeePaidState(
                                     _paidRadioButton.isSelected(),
                                     _notPaidRadioButton.isSelected()
-                                )
+                                ),
+                                CommunicationFacade.getActiveSession()
                             );
 
+                            handleReceivedResults(memberList);
                             break;
                         }
 
                         case TOURNAMENT_TEAM_NAME: {
-                            handleReceivedResults(
-                                memberController.searchMembersByTournamentTeamName(
-                                    searchString,
+                            List<MemberDTO> memberList = memberController.searchMembersByTournamentTeamName(
+                                searchString,
+                                readIsFeePaidState(
                                     _paidRadioButton.isSelected(),
                                     _notPaidRadioButton.isSelected()
-                                )
+                                ),
+                                CommunicationFacade.getActiveSession()
                             );
 
+                            handleReceivedResults(memberList);
                             break;
                         }
                     }
 
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
-                    LOGGER.error("Error occurred while searching.", e);
+                    LOGGER.error("Error occurred while searching for members.", e);
+                    displayNoResults();
                 } catch (ValidationException e) {
-                    LOGGER.error("Error occurred while searching.", e);
-
-                    Platform.runLater(() -> {
-                        GUIHelper.showValidationAlert(NOT_VALID_SEARCH_INPUT);
-                        displayNoResults();
-                    });
+                    LOGGER.error("Error occurred while searching for members.", e);
+                    Platform.runLater(() -> GUIHelper.showValidationAlert(NOT_VALID_SEARCH_INPUT));
+                    displayNoResults();
+                } catch (NotAuthorisedException e) {
+                    LOGGER.error("Client search (Member) request was rejected. Not enough permissions.", e);
+                    displayNoResults();
                 }
             }).start();
 
@@ -163,13 +173,22 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
                 try {
 
                     IMemberController memberController = CommunicationFacade.lookupForMemberController();
-                    handleReceivedResults(memberController.searchAllMembers(
-                        _paidRadioButton.isSelected(),
-                        _notPaidRadioButton.isSelected()
-                    ));
+                    List<MemberDTO> memberList = memberController.searchAllMembers(
+                        readIsFeePaidState(
+                            _paidRadioButton.isSelected(),
+                            _notPaidRadioButton.isSelected()
+                        ),
+                        CommunicationFacade.getActiveSession()
+                    );
+
+                    handleReceivedResults(memberList);
 
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
-                    LOGGER.error("Error occurred while searching.", e);
+                    LOGGER.error("Error occurred while searching for members.", e);
+                    displayNoResults();
+                } catch (NotAuthorisedException e) {
+                    LOGGER.error("Client search (Member) request was rejected. Not enough permissions.", e);
+                    displayNoResults();
                 }
             }).start();
         }
@@ -192,6 +211,13 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
         } else {
             displayNoResults();
         }
+    }
+
+    private Boolean readIsFeePaidState(boolean isPaidState, boolean isNotPaidState) {
+        if (isPaidState == isNotPaidState) {
+            return null;
+        }
+        return isPaidState;
     }
 
     private enum SearchType {

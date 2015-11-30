@@ -2,12 +2,10 @@ package at.sporty.team1.presentation;
 
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.MainViewController;
-import at.sporty.team1.rmi.api.ILoginController;
-import at.sporty.team1.rmi.dtos.AuthorisationDTO;
-import at.sporty.team1.rmi.dtos.SessionDTO;
-import at.sporty.team1.rmi.enums.UserRole;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.SecurityException;
-import at.sporty.team1.rmi.security.SecurityModule;
+import at.sporty.team1.rmi.exceptions.UnknownEntityException;
+import at.sporty.team1.util.CachedSession;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -18,7 +16,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,12 +23,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.security.InvalidKeyException;
-import java.security.KeyPair;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * This is Utility class which starts the whole application.
@@ -46,23 +38,7 @@ public class MainApp extends Application {
 
 	private static final String DEFAULT_TITLE = "SPORTY";
 	private static final int DEFAULT_WIDTH = 1024;
-	private static final int DEFAULT_HEIGHT = 680;
-
-	private static final Set<String> HACK_ACCESS_TOKENS = new HashSet<>();
-
-	static {
-		HACK_ACCESS_TOKENS.add("letMeIn");
-		HACK_ACCESS_TOKENS.add("letmein");
-		HACK_ACCESS_TOKENS.add("login");
-		HACK_ACCESS_TOKENS.add("nyan");
-		HACK_ACCESS_TOKENS.add("yo dawg");
-		HACK_ACCESS_TOKENS.add("yodawg");
-        HACK_ACCESS_TOKENS.add("wow");
-		HACK_ACCESS_TOKENS.add("gg wp");
-		HACK_ACCESS_TOKENS.add("pls");
-		HACK_ACCESS_TOKENS.add("you shall not pass");
-		HACK_ACCESS_TOKENS.add("you have no power here");
-	}
+	private static final int DEFAULT_HEIGHT = 600;
 
 	/**
 	 * Default (empty) constructor for this utility class.
@@ -86,7 +62,7 @@ public class MainApp extends Application {
 			performLogin();
 
 		} else {
-			LOGGER.error("Error occurred while starting a client. Security policies were not found.");
+			LOGGER.error("Error occurred while starting thr client. Security policies were not found.");
 		}
 	}
 	
@@ -97,65 +73,37 @@ public class MainApp extends Application {
 			if (result.isPresent()) {
 				Pair<String, String> loginData = result.get();
 
-				if (HACK_ACCESS_TOKENS.contains(loginData.getKey())) {
+                try {
+                    //Authorising
+                    CachedSession session = CommunicationFacade.authorize(
+                        loginData.getKey(),
+                        loginData.getValue()
+                    );
 
-                    GUIHelper.showSuccessAlert("WOW SO SECURE, MUCH LOGIN!");
-                    showMainStage(new SessionDTO());
-
-				} else {
-
-                    try {
-
-                        //Reading username and password
-                        byte[] username = loginData.getKey().getBytes();
-                        byte[] password = loginData.getValue().getBytes();
-
-                        ILoginController loginController = CommunicationFacade.lookupForLoginController();
-
-                        //Pulling server public key
-                        PublicKey serverKey = SecurityModule.getDecodedRSAPublicKey(
-                            loginController.getServerPublicKey()
-                        );
-
-                        //TODO store keyPair somewhere
-                        KeyPair kp = SecurityModule.generateNewRSAKeyPair(512);
-
-                        //Preparing for data encryption
-                        Cipher cipher = SecurityModule.getNewRSACipher();
-                        cipher.init(Cipher.ENCRYPT_MODE, serverKey);
-
-                        AuthorisationDTO authorisationDTO = new AuthorisationDTO()
-                                .setClientPublicKey(SecurityModule.getEncodedRSAPublicKey(kp))
-                                .setEncryptedUserLogin(cipher.doFinal(username))
-                                .setEncryptedUserPassword(cipher.doFinal(password));
-
-                        //Getting authorisation result
-                        SessionDTO session = loginController.authorize(authorisationDTO);
-
-                        if (session != null) {
-                            GUIHelper.showSuccessAlert("Login was successful. :)");
-                            showMainStage(session);
-                        } else {
-                            GUIHelper.showErrorAlert("Invalid Username or Password.");
-                            performLogin();
-                        }
-
-                    } catch (InvalidKeyException e) {
-                        LOGGER.error("Private key is not suitable.", e);
-                    } catch (BadPaddingException | IllegalBlockSizeException e) {
-                        LOGGER.error("Received data is corrupted.", e);
-                    } catch (SecurityException e) {
-                        LOGGER.error("Error occurs while generating client fingerprint", e);
+                    if (session != null) {
+                        GUIHelper.showSuccessAlert("Login was successful. :)");
+                        showMainStage(session);
+                    } else {
+                        GUIHelper.showErrorAlert("Invalid Username or Password.");
+                        performLogin();
                     }
+
+                } catch (InvalidKeyException e) {
+                    LOGGER.error("Private key is not suitable.", e);
+                } catch (BadPaddingException | IllegalBlockSizeException e) {
+                    LOGGER.error("Received data is corrupted.", e);
+                } catch (SecurityException | NotAuthorisedException | UnknownEntityException e) {
+                    LOGGER.error("Error occurs while generating client fingerprint", e);
                 }
 			}
+
 		} catch (RemoteException | MalformedURLException | NotBoundException e) {
 			LOGGER.error("Unsuccessful login detected.", e);
 		}
 	}
 
 
-	private void showMainStage(SessionDTO session) {
+	private void showMainStage(CachedSession session) {
 				
 		ViewLoader<MainViewController> viewLoader = ViewLoader.loadView(MainViewController.class);
 		Parent mainStage = (Parent) viewLoader.loadNode();

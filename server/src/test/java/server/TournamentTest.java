@@ -4,6 +4,7 @@ import at.sporty.team1.application.controller.TournamentController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MatchDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import org.junit.Rule;
@@ -37,9 +38,8 @@ public class TournamentTest {
 		
 		try {
 			tournamentController = new TournamentController();
-			tournamentController.createOrSaveTournament(tournamentDTO);
-		} catch (RemoteException | ValidationException e) {
-			// TODO Auto-generated catch block
+			tournamentController.createOrSaveTournament(tournamentDTO, null);
+		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 	}
@@ -57,9 +57,8 @@ public class TournamentTest {
 		
 		try {
 			tournamentController = new TournamentController();
-			tournamentController.createOrSaveTournament(tournamentDTO);
-		} catch (RemoteException | ValidationException e) {
-			// TODO Auto-generated catch block
+			tournamentController.createOrSaveTournament(tournamentDTO, null);
+		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 	}
@@ -70,13 +69,12 @@ public class TournamentTest {
 		List<String> tournamentTeams = null;
 		TournamentController tournamentController = null;
 
-        Integer tournamentId = 1000; //TODO change to real one
+        Integer tournamentId = 1000;
 
 		try {
 			tournamentController = new TournamentController();
 			tournamentTeams = tournamentController.searchAllTournamentTeams(tournamentId);
 		} catch (RemoteException | UnknownEntityException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -93,7 +91,6 @@ public class TournamentTest {
 			tournamentController = new TournamentController();
 			tournaments = tournamentController.searchAllTournaments();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		assertNotNull(tournaments);
@@ -102,7 +99,7 @@ public class TournamentTest {
 	@Test
 	public void createNewMatchTest_1() {
 
-		Integer tournamentId = 1000; //TODO change to real one
+		Integer tournamentId = 1000;
 
         MatchDTO matchDTO = new MatchDTO();
 		matchDTO.setTeam1("Hobbits");
@@ -112,9 +109,8 @@ public class TournamentTest {
 
 		try {
             TournamentController tournamentController = new TournamentController();
-			tournamentController.createNewMatch(tournamentId, matchDTO);
-		} catch (RemoteException | UnknownEntityException | ValidationException e) {
-			// TODO Auto-generated catch block
+			tournamentController.createNewMatch(tournamentId, matchDTO, null);
+		} catch (RemoteException | UnknownEntityException | ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
     }

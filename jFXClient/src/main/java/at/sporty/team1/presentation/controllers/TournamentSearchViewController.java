@@ -2,9 +2,9 @@ package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.SearchViewController;
-import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.api.ITournamentController;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
@@ -84,39 +84,40 @@ public class TournamentSearchViewController extends SearchViewController<Tournam
                     //Performing search depending on selected search type
                     switch (_searchType.getValue()) {
                         case DEPARTMENT: {
-                            handleReceivedResults(
-                                tournamentController.searchTournamentsBySport(searchString)
+                            List<TournamentDTO> tournamentList = tournamentController.searchTournamentsBySport(
+                                searchString
                             );
 
+                            handleReceivedResults(tournamentList);
                             break;
                         }
 
                         case EVENT_DATE: {
-                            handleReceivedResults(
-                                tournamentController.searchTournamentsByDate(searchString)
+                            List<TournamentDTO> tournamentList = tournamentController.searchTournamentsByDate(
+                                searchString
                             );
 
+                            handleReceivedResults(tournamentList);
                             break;
                         }
 
                         case LOCATION: {
-                            handleReceivedResults(
-                                tournamentController.searchTournamentsByLocation(searchString)
+                            List<TournamentDTO> tournamentList = tournamentController.searchTournamentsByLocation(
+                                searchString
                             );
 
+                            handleReceivedResults(tournamentList);
                             break;
                         }
                     }
 
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
                     LOGGER.error("Error occurred while searching.", e);
+                    displayNoResults();
                 } catch (ValidationException e) {
                     LOGGER.error("Error occurred while searching.", e);
-
-                    Platform.runLater(() -> {
-                        GUIHelper.showValidationAlert(NOT_VALID_SEARCH_INPUT);
-                        displayNoResults();
-                    });
+                    Platform.runLater(() -> GUIHelper.showValidationAlert(NOT_VALID_SEARCH_INPUT));
+                    displayNoResults();
                 }
             }).start();
 
@@ -130,6 +131,7 @@ public class TournamentSearchViewController extends SearchViewController<Tournam
 
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
                     LOGGER.error("Error occurred while searching.", e);
+                    displayNoResults();
                 }
             }).start();
         }

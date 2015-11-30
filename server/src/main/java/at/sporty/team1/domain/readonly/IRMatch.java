@@ -1,5 +1,7 @@
 package at.sporty.team1.domain.readonly;
 
+import at.sporty.team1.domain.Tournament;
+
 /**
  * Created by f00 on 03.11.15.
  */
@@ -7,17 +9,17 @@ public interface IRMatch {
 
     Integer getMatchId();
 
-    String getMatchResult();
+    String getLocation();
 
     String getDate();
 
-    String getTeam2();
-
     String getTeam1();
 
-    String getLocation();
+    String getTeam2();
+
+    String getReferee();
 
     String getResult();
 
-    String getReferee();
+    Tournament getTournament();
 }

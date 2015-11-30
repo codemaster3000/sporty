@@ -18,7 +18,7 @@ public class Department implements IDepartment {
     private List<Team> teamList;
     private List<Member> memberList;
 
-    public Department(){
+    public Department() {
     }
 
     @Override
@@ -118,7 +118,6 @@ public class Department implements IDepartment {
 
         if (departmentId != null ? !departmentId.equals(dept.departmentId) : dept.departmentId != null) return false;
         if (sport != null ? !sport.equals(dept.sport) : dept.sport != null) return false;
-        if (head != null ? !head.equals(dept.head) : dept.head != null) return false;
         return true;
     }
 
@@ -126,8 +125,6 @@ public class Department implements IDepartment {
     public int hashCode() {
         int result = departmentId != null ? departmentId.hashCode() :0;
         result = 31 * result + (sport != null ? sport.hashCode() : 0);
-        result = 31 * result + (head != null ? head.hashCode() : 0);
         return result;
     }
-
 }

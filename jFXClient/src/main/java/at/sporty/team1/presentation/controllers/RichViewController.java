@@ -1,6 +1,7 @@
 package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.presentation.ViewLoader;
+import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.presentation.controllers.core.SearchViewController;
 import at.sporty.team1.rmi.api.IDTO;
@@ -20,32 +21,32 @@ public class RichViewController extends JfxController {
     @FXML private BorderPane _borderPanel;
 
     private Class<? extends SearchViewController<? extends IDTO>> _searchControllerClass;
-    private Class<? extends JfxController> _consumerControllerClass;
+    private Class<? extends ConsumerViewController<? extends IDTO>> _consumerControllerClass;
     private SearchViewController<? extends IDTO> _searchController;
-    private JfxController _consumerController;
+    private ConsumerViewController<? extends IDTO> _consumerController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
 
-    public void setViews(
-        Class<? extends SearchViewController<? extends IDTO>> searchControllerClass,
-        Class<? extends JfxController> consumerControllerClass
-    ) {
-
+    public <T extends IDTO, U extends SearchViewController<T>, V extends ConsumerViewController<T>>
+    void setViews(Class<U> searchControllerClass, Class<V> consumerControllerClass) {
         _searchControllerClass = searchControllerClass;
         _consumerControllerClass = consumerControllerClass;
 
         new Thread(() -> {
 
-            ViewLoader<? extends JfxController> consumerViewLoader = ViewLoader.loadView(_consumerControllerClass);
+            ViewLoader<V> consumerViewLoader = ViewLoader.loadView(consumerControllerClass);
             Node consumerView = consumerViewLoader.loadNode();
-            _consumerController = consumerViewLoader.getController();
+            V consumerController = consumerViewLoader.getController();
+            _consumerController = consumerController;
 
-            ViewLoader<? extends SearchViewController<? extends IDTO>> searchViewLoader = ViewLoader.loadView(_searchControllerClass);
+            ViewLoader<U> searchViewLoader = ViewLoader.loadView(searchControllerClass);
             Node searchView = searchViewLoader.loadNode();
-            _searchController = searchViewLoader.getController();
-            _searchController.setTargetConsumer(_consumerController::displayDTO);
+            U searchController = searchViewLoader.getController();
+            _searchController = searchController;
+
+            searchController.setTargetConsumer(consumerController::loadDTO);
 
             Platform.runLater(() -> {
                 _borderPanel.setLeft(searchView);
@@ -54,7 +55,6 @@ public class RichViewController extends JfxController {
 
         }).start();
     }
-
 
     public SearchViewController<? extends IDTO> getSearchController() {
         return _searchController;

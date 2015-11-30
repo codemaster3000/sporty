@@ -1,15 +1,18 @@
 package at.sporty.team1.application.controller;
 
+import at.sporty.team1.application.auth.BasicAccessPolicies;
 import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IDepartment;
-import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.dtos.SessionDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.enums.UserRole;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,11 +42,10 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
     throws RemoteException {
 
         try {
-
-            /* pulling a DepartmentDAO and searching for all departments */
+            //pulling a DepartmentDAO and searching for all departments
             List<? extends IDepartment> rawResults = PersistenceFacade.getNewDepartmentDAO().findAll();
 
-            //checking if there are an results
+            //checking if there are any results
             if (rawResults == null || rawResults.isEmpty()) return null;
 
             //Converting results to DepartmentDTO
@@ -61,8 +63,10 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
     public List<TeamDTO> loadDepartmentTeams(Integer departmentId)
     throws RemoteException, UnknownEntityException {
 
+        /* Validating Input */
         if (departmentId == null) throw new UnknownEntityException(IDepartment.class);
 
+        /* Is valid, moving forward */
         try {
 
             Department department = PersistenceFacade.getNewDepartmentDAO().findById(departmentId);
@@ -72,7 +76,7 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
             PersistenceFacade.forceLoadLazyProperty(department, Department::getTeams);
             List<? extends ITeam> rawResults = department.getTeams();
 
-            //checking if there are an results
+            //checking if there are any results
             if (rawResults == null || rawResults.isEmpty()) return null;
 
             //Converting results to MemberDTO
@@ -91,11 +95,20 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
     }
 
     @Override
-    public MemberDTO loadDepartmentHead(Integer departmentId)
-    throws RemoteException, UnknownEntityException {
-        try {
+    public MemberDTO loadDepartmentHead(Integer departmentId, SessionDTO session)
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
 
-            if (departmentId == null) throw new UnknownEntityException(IDepartment.class);
+        /* Checking access permissions */
+        if (!LoginController.hasEnoughPermissions(
+            session,
+            BasicAccessPolicies.isInPermissionBound(UserRole.MEMBER)
+        )) throw new NotAuthorisedException();
+
+        /* Validating Input */
+        if (departmentId == null) throw new UnknownEntityException(IDepartment.class);
+
+        /* Is valid, moving forward */
+        try {
 
             Department department = PersistenceFacade.getNewDepartmentDAO().findById(departmentId);
             if (department == null) throw new UnknownEntityException(IDepartment.class);
@@ -104,7 +117,7 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
             PersistenceFacade.forceLoadLazyProperty(department, Department::getDepartmentHead);
             Member departmentHead = department.getDepartmentHead();
 
-            //checking if there are an results
+            //checking if there are any results
             if (departmentHead == null) return null;
 
             //Converting results to MemberDTO
