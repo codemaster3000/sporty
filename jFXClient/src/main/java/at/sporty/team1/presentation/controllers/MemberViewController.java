@@ -600,7 +600,7 @@ public class MemberViewController extends JfxController {
         roleComboBox.getSelectionModel().select(RoleType.MEMBER);
     }
     
-    private enum RoleType {
+    public enum RoleType {
         MEMBER("Member"),
     	TRAINER("Trainer"),
         DEPARTMENT_HEAD("Department Head"),

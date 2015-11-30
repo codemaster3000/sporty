@@ -1,16 +1,21 @@
 package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
+import at.sporty.team1.presentation.controllers.MemberViewController.RoleType;
 import at.sporty.team1.presentation.controllers.core.JfxController;
+import at.sporty.team1.rmi.api.IDTO;
 import at.sporty.team1.rmi.api.IDepartmentController;
+import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.api.ITournamentController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MatchDTO;
+import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -38,8 +43,9 @@ public class CompetitionViewController extends JfxController {
     private static final String UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = "Error occurred while saving Teams to Tournament.";
     private static final Label NO_CONTENT_PLACEHOLDER = new Label("No Content");
     private static final String SUCCESSFUL_MATCHES_SAVE = "Matches were saved successfully.";
+    private static final String CANNOT_LOAD_TEAMS = "Cannot load Teams.";
 
-    private TournamentDTO _activeCompetition;
+    private static TournamentDTO _activeCompetition;
     private ObservableList<MatchDTO> _tableMatchList;
 
     @FXML
@@ -274,11 +280,17 @@ public class CompetitionViewController extends JfxController {
 
     @Override
     public void dispose() {
-
+    	//Competition
         _competitionDateTextField.clear();
         _competitionPlaceTextField.clear();
         _tournamentDepartmentComboBox.getSelectionModel().clearSelection();
         _tournamentLeagueComboBox.getSelectionModel().clearSelection();
+        //Team
+        _teamToCompetitionComboBox.getSelectionModel().clearSelection();
+        _competitionExternalTeamTextField.clear();
+        _competitionTeamsListView.getItems().clear();
+        //Matches
+        _matchTableView.getItems().clear();
     }
 
     @FXML
@@ -379,7 +391,6 @@ public class CompetitionViewController extends JfxController {
 
         List<String> teams = _competitionTeamsListView.getItems();
 
-
         try {
             ITournamentController tournamentController = CommunicationFacade.lookupForTournamentController();
 
@@ -413,7 +424,6 @@ public class CompetitionViewController extends JfxController {
                 e.getReason(),
                 e
             );
-
         }
     }
 
@@ -421,5 +431,51 @@ public class CompetitionViewController extends JfxController {
     public void removeTeamFromTournament(ActionEvent event) {
 
         _competitionTeamsListView.getItems().remove(_competitionTeamsListView.getSelectionModel().getSelectedItem());
+    }
+    
+    @Override
+    public void displayDTO(IDTO idto){
+        if (idto instanceof TournamentDTO) {
+            displayTournamentDTO((TournamentDTO) idto);
+        }
+    }
+    
+    /**
+     * Pre-loads data into all view fields.
+     * @param tournamentDTO TournamentDTO that will be preloaded.
+     */
+    private void displayTournamentDTO(TournamentDTO tournamentDTO) {
+
+        //clear form
+        dispose();
+
+        if (tournamentDTO != null) {
+            _activeCompetition = tournamentDTO;
+
+            //Competition
+            _competitionDateTextField.setText(_activeCompetition.getDate());
+            _competitionPlaceTextField.setText(_activeCompetition.getLocation());
+            _tournamentDepartmentComboBox.getSelectionModel().select(_activeCompetition.getDepartment());
+
+           //Teams
+            try {
+				List<String> teams = CommunicationFacade.lookupForTournamentController().searchAllTournamentTeams(_activeCompetition.getTournamentId());
+				_competitionTeamsListView.getItems().addAll(teams);
+			} catch (RemoteException | MalformedURLException | UnknownEntityException | NotBoundException e) {
+				GUIHelper.showErrorAlert(CANNOT_LOAD_TEAMS);
+	            LOGGER.error(CANNOT_LOAD_TEAMS + "[Communication problem]", e);
+			}
+            
+            //Matches
+            try {
+				List<MatchDTO> matches = CommunicationFacade.lookupForTournamentController().searchAllTournamentMatches(_activeCompetition.getTournamentId());
+				
+			} catch (RemoteException | MalformedURLException | UnknownEntityException | NotBoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
+
+       }
     }
 }
