@@ -29,7 +29,7 @@ import java.util.concurrent.Executors;
 public class MainViewController extends JfxController {
     private static final String TEAM_TAB_CAPTION = "TEAM";
     private static final String MEMBER_TAB_CAPTION = "MEMBER";
-    private static final String COMPETITION_TAB_CAPTION = "NEW COMPETITION";
+    private static final String COMPETITION_TAB_CAPTION = "COMPETITION";
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Map<Tab, IJfxController> CONTROLLER_TO_TAB_MAP = new HashMap<>();
@@ -106,7 +106,7 @@ public class MainViewController extends JfxController {
             SVGContainer.TOURNAMENT_ICON,
             closable,
             TournamentSearchViewController.class,
-            CompetitionViewController.class
+            CompetitionReadOnlyViewController.class
         );
     }
 

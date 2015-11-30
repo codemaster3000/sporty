@@ -32,6 +32,7 @@ public class CommunicationFacade {
     private static PublicKey _activeServerPublicKey;
     private static KeyPair _activeRSAKeyPair;
     private static CachedSession _extendedActiveSession;
+    private static ClientNotificationPuller _clientNotificationPuller;
 
     private CommunicationFacade() {
     }
@@ -168,5 +169,7 @@ public class CommunicationFacade {
 
         return _extendedActiveSession;
     }
+    
+    // TODO register ClientNotificationPuller
 }
 

@@ -1,7 +1,19 @@
 package at.sporty.team1.presentation.controllers;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
+import at.sporty.team1.presentation.controllers.core.EditViewController;
 import at.sporty.team1.rmi.api.IDepartmentController;
 import at.sporty.team1.rmi.api.ITournamentController;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
@@ -17,30 +29,32 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.StringConverter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
-
-public class CompetitionViewController extends ConsumerViewController<TournamentDTO> {
+public class CompetitionEditViewController extends EditViewController<TournamentDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SUCCESSFUL_TOURNAMENT_SAVE = "Tournament was saved successfully.";
     private static final String SUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = " Tournament Teams were saved successfully.";
     private static final String UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = "Error occurred while saving Teams to Tournament.";
     private static final Label NO_CONTENT_PLACEHOLDER = new Label("No Content");
     private static final String SUCCESSFUL_MATCHES_SAVE = "Matches were saved successfully.";
+    private static final String CANNOT_LOAD_TEAMS = "Cannot load Teams.";
 
-    private TournamentDTO _activeCompetition;
+
+    private static TournamentDTO _activeCompetition;
+    private ObservableList<MatchDTO> _tableMatchList;
 
     @FXML
     private TextField _competitionDateTextField;
@@ -196,7 +210,10 @@ public class CompetitionViewController extends ConsumerViewController<Tournament
 
     @Override
     public void loadDTO(TournamentDTO dto) {
-        //TODO loadDTO
+       
+    	if(dto instanceof TournamentDTO){
+    		displayTournamentDTO((TournamentDTO) dto);
+    	}
     }
 
     private void setVisibleOfMatchesView(boolean view) {
@@ -267,11 +284,17 @@ public class CompetitionViewController extends ConsumerViewController<Tournament
 
     @Override
     public void dispose() {
-
+    	//Competition
         _competitionDateTextField.clear();
         _competitionPlaceTextField.clear();
         _tournamentDepartmentComboBox.getSelectionModel().clearSelection();
         _tournamentLeagueComboBox.getSelectionModel().clearSelection();
+        //Team
+        _teamToCompetitionComboBox.getSelectionModel().clearSelection();
+        _competitionExternalTeamTextField.clear();
+        _competitionTeamsListView.getItems().clear();
+        //Matches
+        _matchTableView.getItems().clear();
     }
 
     @FXML
@@ -384,7 +407,6 @@ public class CompetitionViewController extends ConsumerViewController<Tournament
 
         List<String> teams = _competitionTeamsListView.getItems();
 
-
         try {
             ITournamentController tournamentController = CommunicationFacade.lookupForTournamentController();
 
@@ -432,4 +454,56 @@ public class CompetitionViewController extends ConsumerViewController<Tournament
     private void removeTeamFromTournament(ActionEvent event) {
         _competitionTeamsListView.getItems().remove(_competitionTeamsListView.getSelectionModel().getSelectedItem());
     }
+
+    
+    /**
+     * Pre-loads data into all view fields.
+     * @param tournamentDTO TournamentDTO that will be preloaded.
+     */
+    private void displayTournamentDTO(TournamentDTO tournamentDTO) {
+
+        //clear form
+        dispose();
+
+        if (tournamentDTO != null) {
+            _activeCompetition = tournamentDTO;
+
+            //Competition
+            _competitionDateTextField.setText(_activeCompetition.getDate());
+            _competitionPlaceTextField.setText(_activeCompetition.getLocation());
+            _tournamentDepartmentComboBox.getSelectionModel().select(_activeCompetition.getDepartment());
+
+           //Teams
+            try {
+				List<String> teams = CommunicationFacade.lookupForTournamentController().searchAllTournamentTeams(_activeCompetition.getTournamentId());
+				_competitionTeamsListView.getItems().addAll(teams);
+			} catch (RemoteException | MalformedURLException | UnknownEntityException | NotBoundException e) {
+				GUIHelper.showErrorAlert(CANNOT_LOAD_TEAMS);
+	            LOGGER.error(CANNOT_LOAD_TEAMS + "[Communication problem]", e);
+			}
+            
+            //Matches
+            try {
+				List<MatchDTO> matches = CommunicationFacade.lookupForTournamentController().searchAllTournamentMatches(_activeCompetition.getTournamentId());
+				
+			} catch (RemoteException | MalformedURLException | UnknownEntityException | NotBoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
+
+       }
+    }
+
+	@Override
+	public String getHeaderText() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TournamentDTO saveDTO() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
