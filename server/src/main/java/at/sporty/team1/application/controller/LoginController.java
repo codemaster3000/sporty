@@ -144,50 +144,6 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
         return null;
 	}
 
-    @Deprecated
-    public static boolean hasEnoughPermissions(SessionDTO session, UserRole requiredRoleLevel) {
-        try {
-
-            Cipher cipher = getCipher();
-            KeyPair serverKeyPair = getServerKeyPair();
-
-            //Normally this two values should be not null
-            if (cipher != null && serverKeyPair != null && session != null) {
-
-                //Decrypting client fingerprint
-                cipher.init(Cipher.DECRYPT_MODE, serverKeyPair.getPrivate());
-                String decryptedSession = new String(
-                    cipher.doFinal(session.getClientFingerprint())
-                );
-
-                Integer assignedMemberId = SESSION_REGISTRY.get(decryptedSession);
-
-                //Check if user in session object is assigned to current fingerprint
-                if (assignedMemberId != null && assignedMemberId.equals(session.getUserId())) {
-                    //Loading member from data store.
-                    IMember member = PersistenceFacade.getNewMemberDAO().findById(assignedMemberId);
-
-                    if (member != null && isInPermissionBound(member.getRole(), requiredRoleLevel)) {
-                        //Resetting session timeout
-                        updateSessionTimeout(decryptedSession, member.getMemberId());
-                        return true;
-                    }
-                }
-            }
-
-        } catch (PersistenceException e) {
-            LOGGER.error("Error occurred while getting/parsing user role.", e);
-        } catch (InvalidKeyException e) {
-            LOGGER.error("Private key is not suitable.", e);
-        } catch (BadPaddingException | IllegalBlockSizeException e) {
-            LOGGER.error("Received data is corrupted.", e);
-        } catch (SecurityException e) {
-            LOGGER.error("Error occurs while checking client fingerprint.", e);
-        }
-
-        return false;
-    }
-
     public static boolean hasEnoughPermissions(SessionDTO session, AccessPolicy<IMember> policy) {
         try {
 
@@ -276,10 +232,6 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
                 return UserRole.TRAINER.isInBound(requiredRoleLevel);
             }
 
-            case "manager": {
-                return UserRole.MANAGER.isInBound(requiredRoleLevel);
-            }
-
             case "departmentHead": {
                 return UserRole.DEPARTMENT_HEAD.isInBound(requiredRoleLevel);
             }
@@ -287,9 +239,11 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
             case "admin": {
                 return UserRole.ADMIN.isInBound(requiredRoleLevel);
             }
-        }
 
-        return false;
+            default: {
+                return UserRole.GUEST.isInBound(requiredRoleLevel);
+            }
+        }
     }
 
 
