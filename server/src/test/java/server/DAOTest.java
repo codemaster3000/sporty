@@ -1,11 +1,13 @@
 package server;
 
 import at.sporty.team1.application.controller.MemberController;
+import at.sporty.team1.application.controller.TournamentController;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Tournament;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.rmi.dtos.DTOPair;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
+import at.sporty.team1.rmi.dtos.MatchDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
@@ -20,6 +22,16 @@ import java.util.List;
 public class DAOTest {
 
     //This is a fast and dirty implementation of test for DAO methods
+
+    @Test
+    public void MatchLoadTest() {
+        try {
+            List<MatchDTO> l = new TournamentController().searchAllTournamentMatches(1);
+            System.out.println("Received list of size: " + l.size());
+        } catch (RemoteException | UnknownEntityException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void departmentTeamFetchedListTest() {

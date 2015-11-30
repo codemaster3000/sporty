@@ -72,6 +72,19 @@
             <version>4.0</version>
         </dependency>
 
+        <!-- JMS Dependency -->
+        <dependency>
+            <groupId>javax.jms</groupId>
+            <artifactId>jms</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
+        </dependency>
+
         <!-- JUnit Dependency -->
         <dependency>
             <groupId>junit</groupId>

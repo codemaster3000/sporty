@@ -108,6 +108,7 @@ public class Match implements IMatch {
 
     @Override
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tournamentId")
     public Tournament getTournament() {
         return tournament;
     }
