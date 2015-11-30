@@ -1,38 +1,5 @@
 package at.sporty.team1.presentation.controllers;
 
-import at.sporty.team1.communication.CommunicationFacade;
-
-import at.sporty.team1.presentation.controllers.MemberViewController.RoleType;
-import at.sporty.team1.presentation.controllers.core.JfxController;
-import at.sporty.team1.rmi.api.IDTO;
-
-import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
-
-import at.sporty.team1.rmi.api.IDepartmentController;
-import at.sporty.team1.rmi.api.IMemberController;
-import at.sporty.team1.rmi.api.ITournamentController;
-import at.sporty.team1.rmi.dtos.DepartmentDTO;
-import at.sporty.team1.rmi.dtos.MatchDTO;
-import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.dtos.TeamDTO;
-import at.sporty.team1.rmi.dtos.TournamentDTO;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.UnknownEntityException;
-import at.sporty.team1.rmi.exceptions.ValidationException;
-import at.sporty.team1.util.GUIHelper;
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.StringConverter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NotBoundException;
@@ -41,7 +8,42 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class CompetitionViewController extends ConsumerViewController<TournamentDTO> {
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import at.sporty.team1.communication.CommunicationFacade;
+import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
+import at.sporty.team1.presentation.controllers.core.EditViewController;
+import at.sporty.team1.rmi.api.IDepartmentController;
+import at.sporty.team1.rmi.api.ITournamentController;
+import at.sporty.team1.rmi.dtos.DepartmentDTO;
+import at.sporty.team1.rmi.dtos.MatchDTO;
+import at.sporty.team1.rmi.dtos.TeamDTO;
+import at.sporty.team1.rmi.dtos.TournamentDTO;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
+import at.sporty.team1.rmi.exceptions.UnknownEntityException;
+import at.sporty.team1.rmi.exceptions.ValidationException;
+import at.sporty.team1.util.GUIHelper;
+import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.StringConverter;
+
+public class CompetitionEditViewController extends EditViewController<TournamentDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SUCCESSFUL_TOURNAMENT_SAVE = "Tournament was saved successfully.";
     private static final String SUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = " Tournament Teams were saved successfully.";
@@ -208,7 +210,10 @@ public class CompetitionViewController extends ConsumerViewController<Tournament
 
     @Override
     public void loadDTO(TournamentDTO dto) {
-        //TODO loadDTO
+       
+    	if(dto instanceof TournamentDTO){
+    		displayTournamentDTO((TournamentDTO) dto);
+    	}
     }
 
     private void setVisibleOfMatchesView(boolean view) {
@@ -449,13 +454,7 @@ public class CompetitionViewController extends ConsumerViewController<Tournament
     private void removeTeamFromTournament(ActionEvent event) {
         _competitionTeamsListView.getItems().remove(_competitionTeamsListView.getSelectionModel().getSelectedItem());
     }
-//    
-//    @Override
-//    public void displayDTO(IDTO idto){
-//        if (idto instanceof TournamentDTO) {
-//            displayTournamentDTO((TournamentDTO) idto);
-//        }
-//    }
+
     
     /**
      * Pre-loads data into all view fields.
@@ -495,4 +494,16 @@ public class CompetitionViewController extends ConsumerViewController<Tournament
 
        }
     }
+
+	@Override
+	public String getHeaderText() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TournamentDTO saveDTO() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

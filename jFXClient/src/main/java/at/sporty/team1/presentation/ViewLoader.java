@@ -31,7 +31,8 @@ public class ViewLoader<T extends IJfxController> {
         _viewPaths.put(MemberReadOnlyViewController.class, "/at/sporty/team1/presentation/views/MemberReadOnlyView.fxml");
         _viewPaths.put(TeamViewController.class, "/at/sporty/team1/presentation/views/TeamView.fxml");
         _viewPaths.put(TestViewController.class, "/at/sporty/team1/presentation/views/TestView.fxml");
-        _viewPaths.put(CompetitionViewController.class, "/at/sporty/team1/presentation/views/CompetitionView.fxml");
+        _viewPaths.put(CompetitionEditViewController.class, "/at/sporty/team1/presentation/views/CompetitionView.fxml");
+        _viewPaths.put(CompetitionReadOnlyViewController.class, "/at/sporty/team1/presentation/views/CompetitionReadOnlyView.fxml");
         _viewPaths.put(LoginMaskViewController.class, "/at/sporty/team1/presentation/views/LoginMaskView.fxml");
         _viewPaths.put(MemberSearchViewController.class, "/at/sporty/team1/presentation/views/MemberSearchView.fxml");
         _viewPaths.put(TournamentSearchViewController.class, "/at/sporty/team1/presentation/views/TournamentSearchView.fxml");

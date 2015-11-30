@@ -403,6 +403,8 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                     CommunicationFacade.getActiveSession()
                 );
 
+                _activeMemberDTO.setMemberId(memberId);
+                
                 saveOrUpdateMemberDepartments(memberId);
                 saveOrUpdateMemberTeams(memberId);
 

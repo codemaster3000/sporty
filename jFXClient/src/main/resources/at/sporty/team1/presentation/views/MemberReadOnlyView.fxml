@@ -95,11 +95,13 @@
     <!--THIS IS A LEGIT CODE BUT SCENE BUILDER 2.0 DOES NOT SUPPORT IT YET (IT IS A VERY FRESH FEATURE)-->
     <!--TO EDIT THIS FILE GRAPHICALLY YOU NEED TO USE SCENE BUILDER 8.0 (CUSTOM BUILD OF SB THAT SUPPORTS JAVA FX8)-->
     <!--DOWNLOAD LINK: http://gluonhq.com/products/downloads/-->
-    <ButtonBar fx:id="_options" buttonMinWidth="150.0" visible="false" GridPane.columnSpan="2" GridPane.rowIndex="11">
+    <ButtonBar buttonMinWidth="150.0" GridPane.columnSpan="2" GridPane.rowIndex="11">
         <buttons>
             <!--BUTTON UNIFORM SHOULD BE USED ONLY AFTER ALL SIZE MANIPULATIONS-->
-            <Button minHeight="30.0" minWidth="75" mnemonicParsing="false" onAction="#onEditMember"
+            <Button fx:id="_editMemberButton" visible="false" minHeight="30.0" minWidth="75" mnemonicParsing="false" onAction="#onEditMember"
                     text="EDIT" ButtonBar.buttonData="NEXT_FORWARD" ButtonBar.buttonUniformSize="false"/>
+            <Button fx:id="_createMemberButton" visible="false" minHeight="30.0" minWidth="75" mnemonicParsing="false" onAction="#onCreateMember"
+                    text="CREATE" ButtonBar.buttonData="NEXT_FORWARD" ButtonBar.buttonUniformSize="false"/>
         </buttons>
     </ButtonBar>
 </GridPane>

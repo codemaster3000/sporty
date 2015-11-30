@@ -18,6 +18,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -37,7 +38,8 @@ import java.util.ResourceBundle;
 public class MemberReadOnlyViewController extends ConsumerViewController<MemberDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String NOT_AVAILABLE = "N/A";
-    private static final SimpleBooleanProperty ENOUGH_PERMISSIONS_PROPERTY = new SimpleBooleanProperty(false);
+    private static final SimpleBooleanProperty EDIT_VISIBILITY_PROPERTY = new SimpleBooleanProperty(false);
+    private static final SimpleBooleanProperty CREATE_VISIBILITY_PROPERTY = new SimpleBooleanProperty(false);
     private static final SimpleObjectProperty<MemberDTO> ACTIVE_DTO = new SimpleObjectProperty<>();
 
     @FXML private Label _lastName;
@@ -50,29 +52,28 @@ public class MemberReadOnlyViewController extends ConsumerViewController<MemberD
     @FXML private TableColumn<DTOPair<DepartmentDTO, TeamDTO>, String> _departmentColumn;
     @FXML private TableColumn<DTOPair<DepartmentDTO, TeamDTO>, String> _teamColumn;
     @FXML private Label _role;
-    @FXML private ButtonBar _options;
+    @FXML private Button _editMemberButton;
+    @FXML private Button _createMemberButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        _options.visibleProperty().bind(ENOUGH_PERMISSIONS_PROPERTY.and(ACTIVE_DTO.isNotNull()));
+    	_createMemberButton.visibleProperty().bind(CREATE_VISIBILITY_PROPERTY);
+        _editMemberButton.visibleProperty().bind(EDIT_VISIBILITY_PROPERTY.and(ACTIVE_DTO.isNotNull()));
 
         if (CommunicationFacade.getExtendedActiveSession() != null) {
             String role = CommunicationFacade.getExtendedActiveSession().getUser().getRole();
 
             //enabling gui options for specific roles
             switch (role) {
-                case "manager": {
-                    ENOUGH_PERMISSIONS_PROPERTY.set(true);
-                    break;
-                }
-
                 case "departmentHead": {
-                    ENOUGH_PERMISSIONS_PROPERTY.set(true);
+                    EDIT_VISIBILITY_PROPERTY.set(true);
+                    CREATE_VISIBILITY_PROPERTY.set(true);
                     break;
                 }
 
                 case "admin": {
-                    ENOUGH_PERMISSIONS_PROPERTY.set(true);
+                    EDIT_VISIBILITY_PROPERTY.set(true);
+                    CREATE_VISIBILITY_PROPERTY.set(true);
                     break;
                 }
             }
@@ -166,6 +167,14 @@ public class MemberReadOnlyViewController extends ConsumerViewController<MemberD
     @FXML
     private void onEditMember(ActionEvent actionEvent) {
         Optional<MemberDTO> result = new EditViewDialog<>(ACTIVE_DTO.get(), MemberEditViewController.class).showAndWait();
+        if (result.isPresent()) {
+            loadDTO(result.get());
+        }
+    }
+    
+    @FXML
+    private void onCreateMember(ActionEvent actionEvent) {
+        Optional<MemberDTO> result = new EditViewDialog<>(null, MemberEditViewController.class).showAndWait();
         if (result.isPresent()) {
             loadDTO(result.get());
         }
