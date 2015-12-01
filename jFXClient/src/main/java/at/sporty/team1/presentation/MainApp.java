@@ -1,29 +1,15 @@
 package at.sporty.team1.presentation;
 
-import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.MainViewController;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.SecurityException;
-import at.sporty.team1.rmi.exceptions.UnknownEntityException;
-import at.sporty.team1.util.CachedSession;
-import at.sporty.team1.util.GUIHelper;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
-import java.rmi.RemoteException;
-import java.security.InvalidKeyException;
-import java.util.Optional;
 
 /**
  * This is Utility class which starts the whole application.

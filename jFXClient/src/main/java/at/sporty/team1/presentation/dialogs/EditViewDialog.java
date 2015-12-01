@@ -6,7 +6,6 @@ import at.sporty.team1.rmi.api.IDTO;
 import at.sporty.team1.util.GUIHelper;
 import at.sporty.team1.util.SVGContainer;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;

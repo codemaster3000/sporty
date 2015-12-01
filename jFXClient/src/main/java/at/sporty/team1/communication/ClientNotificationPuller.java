@@ -1,14 +1,5 @@
 package at.sporty.team1.communication;
 
-import java.net.MalformedURLException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.util.List;
-import java.util.Optional;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import at.sporty.team1.rmi.api.INotificationController;
 import at.sporty.team1.rmi.dtos.MessageDTO;
 import at.sporty.team1.rmi.dtos.SessionDTO;
@@ -18,6 +9,14 @@ import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.util.List;
+import java.util.Optional;
 
 public class ClientNotificationPuller extends Thread {
 

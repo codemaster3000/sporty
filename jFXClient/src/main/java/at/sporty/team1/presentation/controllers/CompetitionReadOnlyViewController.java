@@ -1,5 +1,24 @@
 package at.sporty.team1.presentation.controllers;
 
+import at.sporty.team1.communication.CommunicationFacade;
+import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
+import at.sporty.team1.presentation.dialogs.EditViewDialog;
+import at.sporty.team1.rmi.api.ITournamentController;
+import at.sporty.team1.rmi.dtos.MatchDTO;
+import at.sporty.team1.rmi.dtos.TournamentDTO;
+import at.sporty.team1.rmi.exceptions.UnknownEntityException;
+import at.sporty.team1.util.GUIHelper;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NotBoundException;
@@ -7,37 +26,6 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
-import javafx.beans.property.SimpleStringProperty;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import at.sporty.team1.communication.CommunicationFacade;
-import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
-import at.sporty.team1.presentation.dialogs.EditViewDialog;
-import at.sporty.team1.rmi.api.IMemberController;
-import at.sporty.team1.rmi.api.ITournamentController;
-import at.sporty.team1.rmi.dtos.DTOPair;
-import at.sporty.team1.rmi.dtos.DepartmentDTO;
-import at.sporty.team1.rmi.dtos.MatchDTO;
-import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.dtos.TeamDTO;
-import at.sporty.team1.rmi.dtos.TournamentDTO;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.UnknownEntityException;
-import at.sporty.team1.util.GUIHelper;
-import javafx.application.Platform;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 
 public class CompetitionReadOnlyViewController extends ConsumerViewController<TournamentDTO> {
 
