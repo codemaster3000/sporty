@@ -39,7 +39,7 @@ public class SenderJMS {
 
             ctx = new InitialContext();
 
-            QueueConnectionFactory fact = (QueueConnectionFactory) ctx.lookup("sportyJmsFactory");
+            QueueConnectionFactory fact = (QueueConnectionFactory) ctx.lookup("java:jboss/exported/jms/sportyJmsFactory");
             connect = fact.createQueueConnection();
             session = connect.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 
