@@ -17,9 +17,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
-/**
- * Created by CarolaFHV on 27-Nov-15.
- */
 public class NotificationController extends UnicastRemoteObject implements INotificationController {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LogManager.getLogger();

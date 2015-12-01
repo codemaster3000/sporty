@@ -31,7 +31,6 @@ public class CommunicationFacade {
 
     private static final String DEFAULT_RMI = "rmi://localhost/%s";
     private static final Map<Class<? extends IRemoteController>, Remote> CONTROLLER_MAP = new HashMap<>();
-    private static ClientNotificationPuller _clientNotificationPuller;
     private static PublicKey _activeServerPublicKey;
     private static KeyPair _activeRSAKeyPair;
     private static CachedSession _extendedActiveSession;

@@ -5,6 +5,5 @@ package at.sporty.team1.rmi.enums;
  */
 public enum MessageType {
     PLAIN_TEXT,
-    CONFIRMATION_REQUEST,
-    CONFIRMATION_RESPONSE
+    CONFIRMATION_REQUEST
 }
