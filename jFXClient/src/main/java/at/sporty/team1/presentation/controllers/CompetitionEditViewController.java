@@ -45,6 +45,7 @@ import javafx.util.StringConverter;
 
 public class CompetitionEditViewController extends EditViewController<TournamentDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final String VIEW_TEXT_HEADER = "TOURNAMENT EDITING VIEW";
     private static final String SUCCESSFUL_TOURNAMENT_SAVE = "Tournament was saved successfully.";
     private static final String SUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = " Tournament Teams were saved successfully.";
     private static final String UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = "Error occurred while saving Teams to Tournament.";
@@ -198,10 +199,6 @@ public class CompetitionEditViewController extends EditViewController<Tournament
         _resultCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
         _resultCol.setCellValueFactory(new PropertyValueFactory<>("result"));
         _resultCol.setOnEditCommit(cell -> cell.getRowValue().setResult(cell.getNewValue()));
-
-        for (int i = 0; i < 5; ++i) {
-        	tempList.add(new MatchDTO());
-        }
 
         ObservableList<MatchDTO> _tableMatchList = FXCollections.observableList(tempList);
         _matchTableView.setItems(FXCollections.observableList(_tableMatchList));
@@ -486,20 +483,21 @@ public class CompetitionEditViewController extends EditViewController<Tournament
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            
-
        }
     }
 
 	@Override
 	public String getHeaderText() {
-		// TODO Auto-generated method stub
-		return null;
+		return VIEW_TEXT_HEADER;
 	}
 
 	@Override
 	public TournamentDTO saveDTO() {
-		// TODO Auto-generated method stub
-		return null;
+		return _activeCompetition;
 	}
+
+    @FXML
+    private void addNewMatchRowButton() {
+        _matchTableView.getItems().add(new MatchDTO());
+    }
 }

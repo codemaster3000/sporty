@@ -57,30 +57,37 @@ public class MemberReadOnlyViewController extends ConsumerViewController<MemberD
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-    	_createMemberButton.visibleProperty().bind(CREATE_VISIBILITY_PROPERTY);
-        _editMemberButton.visibleProperty().bind(
-                EDIT_VISIBILITY_PROPERTY.and(
-            ACTIVE_DTO.isNotNull())
+    	_createMemberButton.visibleProperty().bind(
+            CommunicationFacade.SESSION_AVAILABLE_PROPERTY.and(
+            CREATE_VISIBILITY_PROPERTY)
         );
 
-        if (CommunicationFacade.getExtendedActiveSession() != null) {
-            String role = CommunicationFacade.getExtendedActiveSession().getUser().getRole();
+        _editMemberButton.visibleProperty().bind(
+            CommunicationFacade.SESSION_AVAILABLE_PROPERTY.and(
+            EDIT_VISIBILITY_PROPERTY.and(
+            ACTIVE_DTO.isNotNull()))
+        );
 
-            //enabling gui options for specific roles
-            switch (role) {
-                case "departmentHead": {
-                    EDIT_VISIBILITY_PROPERTY.set(true);
-                    CREATE_VISIBILITY_PROPERTY.set(true);
-                    break;
-                }
+        CommunicationFacade.SESSION_AVAILABLE_PROPERTY.addListener((p, newValue, oldValue) -> {
+            if (CommunicationFacade.getExtendedActiveSession() != null) {
+                String role = CommunicationFacade.getExtendedActiveSession().getUser().getRole();
 
-                case "admin": {
-                    EDIT_VISIBILITY_PROPERTY.set(true);
-                    CREATE_VISIBILITY_PROPERTY.set(true);
-                    break;
+                //enabling gui options for specific roles
+                switch (role) {
+                    case "departmentHead": {
+                        EDIT_VISIBILITY_PROPERTY.set(true);
+                        CREATE_VISIBILITY_PROPERTY.set(true);
+                        break;
+                    }
+
+                    case "admin": {
+                        EDIT_VISIBILITY_PROPERTY.set(true);
+                        CREATE_VISIBILITY_PROPERTY.set(true);
+                        break;
+                    }
                 }
             }
-        }
+        });
 
         _departmentTeamTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 

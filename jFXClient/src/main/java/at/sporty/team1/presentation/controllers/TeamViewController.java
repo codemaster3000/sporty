@@ -91,7 +91,7 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
                 IDepartmentController departmentController = CommunicationFacade.lookupForDepartmentController();
                 List<DepartmentDTO> departments = departmentController.searchAllDepartments();
 
-                if (!departments.isEmpty()) {
+                if (departments != null && !departments.isEmpty()) {
 
                     for (DepartmentDTO actualDepartment : departments) {
 
