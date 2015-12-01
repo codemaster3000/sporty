@@ -478,7 +478,7 @@ public class CompetitionEditViewController extends EditViewController<Tournament
             //Matches
             try {
 				List<MatchDTO> matches = CommunicationFacade.lookupForTournamentController().searchAllTournamentMatches(_activeCompetition.getTournamentId());
-				
+				_matchTableView.getItems().addAll(FXCollections.observableList(matches));
 			} catch (RemoteException | MalformedURLException | UnknownEntityException | NotBoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

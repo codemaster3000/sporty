@@ -159,8 +159,7 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
                         }
 
                         if (matches != null && !matches.isEmpty()) {
-                            _matchTableView.setItems(FXCollections.observableList(matches)); 
-                           
+                            _matchTableView.setItems(FXCollections.observableList(matches));
                         }
                     });
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
@@ -178,7 +177,7 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
     }
 
 	@FXML
-    public void onEditTournament(ActionEvent event) {
+    private void onEditTournament(ActionEvent event) {
         Optional<TournamentDTO> result = new EditViewDialog<>(ACTIVE_DTO.get(), CompetitionEditViewController.class).showAndWait();
         if (result.isPresent()) {
             loadDTO(result.get());
@@ -186,7 +185,7 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
     }
 
     @FXML
-    public void onCreateTournament(ActionEvent event) {
+    private void onCreateTournament(ActionEvent event) {
         Optional<TournamentDTO> result = new EditViewDialog<>(null, CompetitionEditViewController.class).showAndWait();
         if (result.isPresent()) {
             loadDTO(result.get());
