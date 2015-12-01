@@ -37,6 +37,7 @@ public class Server {
      * @param args the command line arguments passed to the application.
      */
     public static void main(String[] args) {
+
         try {
 
             LOGGER.info(SERVER_LIFECYCLE_MARKER, "STARTING SPORTY SERVER");
@@ -80,7 +81,9 @@ public class Server {
 
     private static void listenForCommands() {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+
             while (true) {
+
                 LOGGER.info(
                     SERVER_LIFECYCLE_MARKER,
                     "Available Commands: {}",
@@ -88,6 +91,7 @@ public class Server {
                 );
 
                 String command = br.readLine();
+
                 if (command != null) {
                     switch (ServerCommands.valueOf(command.toUpperCase())) {
                         case SHUTDOWN: System.exit(0);
@@ -98,6 +102,7 @@ public class Server {
                     }
                 }
             }
+
         } catch (Exception e) {
             LOGGER.error("Problem occurred while handling command.", e);
         }

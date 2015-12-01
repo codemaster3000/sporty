@@ -5,12 +5,12 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Resource;
 import javax.jms.*;
-import javax.naming.InitialContext;
 
 /**
  * Created by sereGkaluv on 30-Nov-15.
  */
 public class ProducerJMS {
+
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Resource(lookup = "java:comp/DefaultJMSConnectionFactory")
