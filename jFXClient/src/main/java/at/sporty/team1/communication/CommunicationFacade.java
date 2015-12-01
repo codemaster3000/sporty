@@ -10,6 +10,7 @@ import at.sporty.team1.rmi.exceptions.SecurityException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.security.SecurityModule;
 import at.sporty.team1.util.CachedSession;
+import javafx.beans.property.SimpleBooleanProperty;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -26,13 +27,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommunicationFacade {
+    public static final SimpleBooleanProperty SESSION_AVAILABLE_PROPERTY = new SimpleBooleanProperty(false);
+
     private static final String DEFAULT_RMI = "rmi://localhost/%s";
     private static final Map<Class<? extends IRemoteController>, Remote> CONTROLLER_MAP = new HashMap<>();
-
+    private static ClientNotificationPuller _clientNotificationPuller;
     private static PublicKey _activeServerPublicKey;
     private static KeyPair _activeRSAKeyPair;
     private static CachedSession _extendedActiveSession;
-    private static ClientNotificationPuller _clientNotificationPuller;
+
 
     private CommunicationFacade() {
     }
@@ -129,7 +132,7 @@ public class CommunicationFacade {
         return _extendedActiveSession;
     }
 
-    public static CachedSession authorize(String username, String password)
+    public static boolean authorize(String username, String password)
     throws RemoteException, NotBoundException, MalformedURLException, SecurityException, InvalidKeyException,
     BadPaddingException, IllegalBlockSizeException, UnknownEntityException, NotAuthorisedException {
         //disposing old session
@@ -165,9 +168,19 @@ public class CommunicationFacade {
 
             MemberDTO user = lookupForMemberController().findMemberById(session.getUserId(), session);
             _extendedActiveSession = new CachedSession(user, session);
-        }
 
-        return _extendedActiveSession;
+            SESSION_AVAILABLE_PROPERTY.set(true);
+            return true;
+        } else {
+
+            logout();
+            return false;
+        }
+    }
+
+    public static void logout() {
+        SESSION_AVAILABLE_PROPERTY.set(false);
+        _extendedActiveSession = null;
     }
     
     // TODO register ClientNotificationPuller

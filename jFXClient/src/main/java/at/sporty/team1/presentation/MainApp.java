@@ -58,56 +58,16 @@ public class MainApp extends Application {
 			System.setProperty(SECURITY_PROPERTY, securityPoliciesURL.toString());
 			System.setSecurityManager(new RMISecurityManager());
 
-			/* handle the login */
-			performLogin();
+			showMainStage();
 
 		} else {
 			LOGGER.error("Error occurred while starting thr client. Security policies were not found.");
 		}
 	}
-	
-	private void performLogin() {
-		try {
-			
-			Optional<Pair<String, String>> result = GUIHelper.showLoginDialog();
-			if (result.isPresent()) {
-				Pair<String, String> loginData = result.get();
 
-                try {
-                    //Authorising
-                    CachedSession session = CommunicationFacade.authorize(
-                        loginData.getKey(),
-                        loginData.getValue()
-                    );
-
-                    if (session != null) {
-                        GUIHelper.showSuccessAlert("Login was successful. :)");
-                        showMainStage(session);
-                    } else {
-                        GUIHelper.showErrorAlert("Invalid Username or Password.");
-                        performLogin();
-                    }
-
-                } catch (InvalidKeyException e) {
-                    LOGGER.error("Private key is not suitable.", e);
-                } catch (BadPaddingException | IllegalBlockSizeException e) {
-                    LOGGER.error("Received data is corrupted.", e);
-                } catch (SecurityException | NotAuthorisedException | UnknownEntityException e) {
-                    LOGGER.error("Error occurs while generating client fingerprint", e);
-                }
-			}
-
-		} catch (RemoteException | MalformedURLException | NotBoundException e) {
-			LOGGER.error("Unsuccessful login detected.", e);
-		}
-	}
-
-
-	private void showMainStage(CachedSession session) {
-				
+	private void showMainStage() {
 		ViewLoader<MainViewController> viewLoader = ViewLoader.loadView(MainViewController.class);
 		Parent mainStage = (Parent) viewLoader.loadNode();
-		viewLoader.getController().activateSession(session);
 		
 		prepareNewStage(mainStage).show();
 	}

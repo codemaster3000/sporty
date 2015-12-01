@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="at.sporty.team1.presentation.controllers.MainViewController">
@@ -11,6 +8,14 @@
         <ToolBar AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
             <TextField fx:id="_searchField" prefWidth="200.0" promptText="SEARCH"/>
             <Button onAction="#startSearch" prefWidth="105.0" text="GO" HBox.hgrow="NEVER"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+
+            <Separator orientation="VERTICAL"/>
+
+            <Button fx:id="_loginButton" onAction="#onLogin" text="LOGIN" minWidth="75"/>
+            <Button fx:id="_logoutButton" onAction="#onLogout" visible="false" managed="false" text="LOGOUT"
+                    minWidth="75"/>
+
         </ToolBar>
 	</top>
 	<center>

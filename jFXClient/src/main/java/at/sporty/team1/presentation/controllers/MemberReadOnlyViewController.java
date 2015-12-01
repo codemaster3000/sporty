@@ -58,7 +58,10 @@ public class MemberReadOnlyViewController extends ConsumerViewController<MemberD
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     	_createMemberButton.visibleProperty().bind(CREATE_VISIBILITY_PROPERTY);
-        _editMemberButton.visibleProperty().bind(EDIT_VISIBILITY_PROPERTY.and(ACTIVE_DTO.isNotNull()));
+        _editMemberButton.visibleProperty().bind(
+                EDIT_VISIBILITY_PROPERTY.and(
+            ACTIVE_DTO.isNotNull())
+        );
 
         if (CommunicationFacade.getExtendedActiveSession() != null) {
             String role = CommunicationFacade.getExtendedActiveSession().getUser().getRole();

@@ -1,45 +1,68 @@
 package at.sporty.team1.presentation.controllers;
 
+import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.ViewLoader;
 import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
 import at.sporty.team1.presentation.controllers.core.IJfxController;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.presentation.controllers.core.SearchViewController;
 import at.sporty.team1.rmi.api.IDTO;
-import at.sporty.team1.util.CachedSession;
+import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
+import at.sporty.team1.rmi.exceptions.SecurityException;
+import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.util.GUIHelper;
 import at.sporty.team1.util.SVGContainer;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.security.InvalidKeyException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class MainViewController extends JfxController {
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final String TEAM_TAB_CAPTION = "TEAM";
     private static final String MEMBER_TAB_CAPTION = "MEMBER";
     private static final String COMPETITION_TAB_CAPTION = "COMPETITION";
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final SimpleBooleanProperty LOGIN_BUTTON_VISIBILITY_PROPERTY = new SimpleBooleanProperty(true);
     private static final Map<Tab, IJfxController> CONTROLLER_TO_TAB_MAP = new HashMap<>();
 
     @FXML private TextField _searchField;
+    @FXML private Button _loginButton;
+    @FXML private Button _logoutButton;
     @FXML private TabPane _tabPanel;
 
-	@Override
+
+    @Override
 	public void initialize(URL location, ResourceBundle resources) {
         _tabPanel.getStyleClass().add(TabPane.STYLE_CLASS_FLOATING);
+
+        _loginButton.visibleProperty().bind(LOGIN_BUTTON_VISIBILITY_PROPERTY);
+        _loginButton.managedProperty().bind(_loginButton.visibleProperty());
+
+        _logoutButton.visibleProperty().bind(_loginButton.visibleProperty().not());
+        _logoutButton.managedProperty().bind(_logoutButton.visibleProperty());
 
         //Enter listener for search table
         _searchField.setOnKeyPressed(e -> {
@@ -57,8 +80,56 @@ public class MainViewController extends JfxController {
         executor.execute(() -> Platform.runLater(() -> _tabPanel.getSelectionModel().selectFirst()));
     }
 
-    public void activateSession(CachedSession session){
-        //TODO move login functionality
+    @FXML
+    private void onLogin() {
+        //In case of successful onLogin hide onLogin button
+        if (performLogin()) LOGIN_BUTTON_VISIBILITY_PROPERTY.set(false);
+    }
+
+    @FXML
+    private void onLogout() {
+        LOGIN_BUTTON_VISIBILITY_PROPERTY.set(true);
+        CommunicationFacade.logout();
+    }
+
+    private boolean performLogin() {
+        try {
+
+            Optional<Pair<String, String>> result = GUIHelper.showLoginDialog();
+            if (result.isPresent()) {
+                Pair<String, String> loginData = result.get();
+
+                try {
+                    //Authorising
+                    boolean isSuccessful = CommunicationFacade.authorize(
+                        loginData.getKey(),
+                        loginData.getValue()
+                    );
+
+                    if (isSuccessful) {
+
+                        GUIHelper.showSuccessAlert("Login was successful. :)");
+                        return true;
+                    } else {
+
+                        GUIHelper.showErrorAlert("Invalid Username or Password.");
+                        return performLogin();
+                    }
+
+                } catch (InvalidKeyException e) {
+                    LOGGER.error("Private key is not suitable.", e);
+                } catch (BadPaddingException | IllegalBlockSizeException e) {
+                    LOGGER.error("Received data is corrupted.", e);
+                } catch (SecurityException | NotAuthorisedException | UnknownEntityException e) {
+                    LOGGER.error("Error occurs while generating client fingerprint", e);
+                }
+            }
+
+        } catch (RemoteException | MalformedURLException | NotBoundException e) {
+            LOGGER.error("Unsuccessful onLogin detected.", e);
+        }
+
+        return false;
     }
 
     @FXML
