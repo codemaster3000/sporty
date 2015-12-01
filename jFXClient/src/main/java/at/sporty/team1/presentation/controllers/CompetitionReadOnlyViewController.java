@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import javafx.beans.property.SimpleStringProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -84,8 +85,6 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        _matchTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
         _createTournamentButton.visibleProperty().bind(
             CommunicationFacade.SESSION_AVAILABLE_PROPERTY.and(
             CREATE_VISIBILITY_PROPERTY)
@@ -116,6 +115,50 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
                     }
                 }
             }
+        });
+
+        _matchTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        _team1Col.setCellValueFactory(dto -> {
+            MatchDTO matchDTO = dto.getValue();
+
+            if (matchDTO != null && matchDTO.getTeam1() != null) return new SimpleStringProperty(matchDTO.getTeam1());
+            return new SimpleStringProperty(NOT_AVAILABLE);
+        });
+
+        _team2Col.setCellValueFactory(dto -> {
+            MatchDTO matchDTO = dto.getValue();
+
+            if (matchDTO != null && matchDTO.getTeam2() != null) return new SimpleStringProperty(matchDTO.getTeam2());
+            return new SimpleStringProperty(NOT_AVAILABLE);
+        });
+
+        _timeCol.setCellValueFactory(dto -> {
+            MatchDTO matchDTO = dto.getValue();
+
+            if (matchDTO != null && matchDTO.getDate() != null) return new SimpleStringProperty(matchDTO.getDate());
+            return new SimpleStringProperty(NOT_AVAILABLE);
+        });
+
+        _refereeCol.setCellValueFactory(dto -> {
+            MatchDTO matchDTO = dto.getValue();
+
+            if (matchDTO != null && matchDTO.getReferee() != null) return new SimpleStringProperty(matchDTO.getReferee());
+            return new SimpleStringProperty(NOT_AVAILABLE);
+        });
+
+        _courtCol.setCellValueFactory(dto -> {
+            MatchDTO matchDTO = dto.getValue();
+
+            if (matchDTO != null && matchDTO.getLocation() != null) return new SimpleStringProperty(matchDTO.getLocation());
+            return new SimpleStringProperty(NOT_AVAILABLE);
+        });
+
+        _resultCol.setCellValueFactory(dto -> {
+            MatchDTO matchDTO = dto.getValue();
+
+            if (matchDTO != null && matchDTO.getResult() != null) return new SimpleStringProperty(matchDTO.getResult());
+            return new SimpleStringProperty(NOT_AVAILABLE);
         });
     }
 

@@ -206,14 +206,10 @@ public class CompetitionEditViewController extends EditViewController<Tournament
 
     @Override
     public void loadDTO(TournamentDTO dto) {
-       
-    	if(dto instanceof TournamentDTO){
-    		displayTournamentDTO((TournamentDTO) dto);
-    	}
+        displayTournamentDTO(dto);
     }
 
     private void setVisibleOfMatchesView(boolean view) {
-
         _saveMatchesButton.setVisible(view);
         _removeSelectedMatch.setVisible(view);
         _labelMatches.setVisible(view);
@@ -244,20 +240,7 @@ public class CompetitionEditViewController extends EditViewController<Tournament
             /**
              * Converter from TeamDTO to Team name (String)
              */
-            StringConverter<TeamDTO> departmentDTOStringConverter = new StringConverter<TeamDTO>() {
-                @Override
-                public String toString(TeamDTO teamDTO) {
-                    if (teamDTO != null) {
-                        return teamDTO.getTeamName();
-                    }
-                    return null;
-                }
-
-                @Override
-                public TeamDTO fromString(String string) {
-                    return null;
-                }
-            };
+            StringConverter<TeamDTO> departmentDTOStringConverter = GUIHelper.getDTOToStringConverter(TeamDTO::getTeamName);
             _teamToCompetitionComboBox.setConverter(departmentDTOStringConverter);
         }
 
