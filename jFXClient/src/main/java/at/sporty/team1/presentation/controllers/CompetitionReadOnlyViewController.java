@@ -4,7 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -15,22 +14,15 @@ import org.apache.logging.log4j.Logger;
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
 import at.sporty.team1.presentation.dialogs.EditViewDialog;
-import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.api.ITournamentController;
-import at.sporty.team1.rmi.dtos.DTOPair;
-import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MatchDTO;
-import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -117,6 +109,8 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
                 }
             }
         });
+        
+        
     }
 
     @Override
@@ -153,13 +147,13 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
                         _tournamentDepartmentLabel.setText(tournamentDTO.getDepartment().getSport());
                         _competitionDateTextField.setText(tournamentDTO.getDate());
                         _competitionPlaceTextField.setText(tournamentDTO.getLocation());
-
+                   
                         if (teams != null && !teams.isEmpty()) {
                             _competitionTeamsListView.getItems().addAll(FXCollections.observableList(teams));
                         }
 
                         if (matches != null && !matches.isEmpty()) {
-                            _matchTableView.getItems().addAll(FXCollections.observableList(matches));
+                            _matchTableView.setItems(FXCollections.observableList(matches)); 
                         }
                     });
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
@@ -176,7 +170,7 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
         }
     }
 
-    @FXML
+	@FXML
     public void onEditTournament(ActionEvent event) {
         Optional<TournamentDTO> result = new EditViewDialog<>(ACTIVE_DTO.get(), CompetitionEditViewController.class).showAndWait();
         if (result.isPresent()) {
@@ -186,7 +180,7 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
 
     @FXML
     public void onCreateTournament(ActionEvent event) {
-        Optional<TournamentDTO> result = new EditViewDialog<>(ACTIVE_DTO.get(), CompetitionEditViewController.class).showAndWait();
+        Optional<TournamentDTO> result = new EditViewDialog<>(null, CompetitionEditViewController.class).showAndWait();
         if (result.isPresent()) {
             loadDTO(result.get());
         }
