@@ -154,7 +154,6 @@ public class MemberReadOnlyViewController extends ConsumerViewController<MemberD
                     Platform.runLater(() ->
                         GUIHelper.showErrorAlert("Error occurred while loading Member data (Departments and Teams).")
                     );
-
                 } catch (NotAuthorisedException e) {
 
                     LOGGER.error("Client load (Departments and Teams) request was rejected. Not enough permissions.", e);

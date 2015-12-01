@@ -6,6 +6,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.apache.logging.log4j.LogManager;
@@ -13,11 +14,13 @@ import org.apache.logging.log4j.Logger;
 
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
+import at.sporty.team1.presentation.dialogs.EditViewDialog;
 import at.sporty.team1.rmi.api.IMemberController;
 import at.sporty.team1.rmi.api.ITournamentController;
 import at.sporty.team1.rmi.dtos.DTOPair;
 import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MatchDTO;
+import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.dtos.TeamDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
 import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
@@ -121,31 +124,25 @@ public class CompetitionReadOnlyViewController  extends ConsumerViewController<T
 
                     ITournamentController tournamentController = CommunicationFacade.lookupForTournamentController();
 
+                    //clear old values
+                    dispose();
                     Platform.runLater(() -> {
-
-                        //clearing old values
-                        dispose();
-
-                        _tournamentDepartmentLabel.setText(tournamentDTO.getDepartment().getSport());
-                        _competitionDateTextField.setText(tournamentDTO.getDate());
-                        _competitionPlaceTextField.setText(tournamentDTO.getLocation());
-                        
-                        //ListView with teams
-                        List<String> temp = null;
-						try {
-							temp = tournamentController.searchAllTournamentTeams(tournamentDTO.getTournamentId());
-						} catch (Exception e) {							
-							LOGGER.error(e);
-						}
-						
+                    	 _tournamentDepartmentLabel.setText(tournamentDTO.getDepartment().getSport());
+                         _competitionDateTextField.setText(tournamentDTO.getDate());
+                         _competitionPlaceTextField.setText(tournamentDTO.getLocation());
+                    });
+                   
+                    
+                    //ListView with teams
+                    List<String> temp = tournamentController.searchAllTournamentTeams(tournamentDTO.getTournamentId());
+                    Platform.runLater(() -> {
                         if(temp != null && !temp.isEmpty()){
                         	ObservableList<String> teams = FXCollections.observableList(temp);
 	                        _competitionTeamsListView.getItems().addAll(teams);
                         }
                     });
-                    
-                    //Matches
 
+                    //Matches
 					List<MatchDTO> matches = tournamentController.searchAllTournamentMatches(tournamentDTO.getTournamentId());
 					
 					if(matches != null && !matches.isEmpty()){
@@ -171,7 +168,10 @@ public class CompetitionReadOnlyViewController  extends ConsumerViewController<T
 	
 	@FXML
 	public void onEditTournament(ActionEvent event){
-		
+		Optional<TournamentDTO> result = new EditViewDialog<>(ACTIVE_DTO.get(), CompetitionEditViewController.class).showAndWait();
+        if (result.isPresent()) {
+            loadDTO(result.get());
+        }
 	}
 	
 	@FXML
