@@ -79,6 +79,30 @@
             <version>7.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.glassfish.main.common</groupId>
+            <artifactId>glassfish-api</artifactId>
+            <version>4.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.mq</groupId>
+            <artifactId>imq</artifactId>
+            <version>5.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.main.common</groupId>
+            <artifactId>glassfish-naming</artifactId>
+            <version>4.1</version>
+        </dependency>
+
+        <!--<dependency>-->
+        <!--<groupId>org.wildfly</groupId>-->
+        <!--<artifactId>wildfly-ee</artifactId>-->
+        <!--<version>9.0.2.Final</version>-->
+        <!--</dependency>-->
+
         <!-- JUnit Dependency -->
         <dependency>
             <groupId>junit</groupId>

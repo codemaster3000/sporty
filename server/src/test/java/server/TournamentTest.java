@@ -54,12 +54,13 @@ public class TournamentTest {
 		departmentDTO.setSport("Soccer");
 		
 		thrown.expect(RemoteException.class);
-		
-		try {
-			tournamentController = new TournamentController();
-			tournamentController.createOrSaveTournament(tournamentDTO, null);
-		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
-			e.printStackTrace();
+
+        try {
+            tournamentController = new TournamentController();
+            tournamentController.createOrSaveTournament(tournamentDTO, null);
+
+        } catch (RemoteException | ValidationException | NotAuthorisedException e) {
+            e.printStackTrace();
 		}
 	}
 	
@@ -69,7 +70,7 @@ public class TournamentTest {
 		List<String> tournamentTeams = null;
 		TournamentController tournamentController = null;
 
-        Integer tournamentId = 1000;
+        Integer tournamentId = 52;
 
 		try {
 			tournamentController = new TournamentController();

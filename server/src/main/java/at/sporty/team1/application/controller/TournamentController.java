@@ -25,6 +25,7 @@ import org.dozer.Mapper;
 import javax.persistence.PersistenceException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -163,7 +164,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
             if (tournament == null) throw new UnknownEntityException(ITournament.class);
 
             PersistenceFacade.forceLoadLazyProperty(tournament, Tournament::getTeams);
-            return tournament.getTeams();
+            return new LinkedList<>(tournament.getTeams());
 
         } catch (PersistenceException e) {
             LOGGER.error(
