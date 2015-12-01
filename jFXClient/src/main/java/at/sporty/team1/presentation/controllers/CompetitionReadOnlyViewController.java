@@ -153,13 +153,14 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
                         _tournamentDepartmentLabel.setText(tournamentDTO.getDepartment().getSport());
                         _competitionDateTextField.setText(tournamentDTO.getDate());
                         _competitionPlaceTextField.setText(tournamentDTO.getLocation());
-
+                   
                         if (teams != null && !teams.isEmpty()) {
                             _competitionTeamsListView.getItems().addAll(FXCollections.observableList(teams));
                         }
 
                         if (matches != null && !matches.isEmpty()) {
-                            _matchTableView.getItems().addAll(FXCollections.observableList(matches));
+                            _matchTableView.setItems(FXCollections.observableList(matches)); 
+                           
                         }
                     });
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
@@ -176,7 +177,7 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
         }
     }
 
-    @FXML
+	@FXML
     public void onEditTournament(ActionEvent event) {
         Optional<TournamentDTO> result = new EditViewDialog<>(ACTIVE_DTO.get(), CompetitionEditViewController.class).showAndWait();
         if (result.isPresent()) {
@@ -186,7 +187,7 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
 
     @FXML
     public void onCreateTournament(ActionEvent event) {
-        Optional<TournamentDTO> result = new EditViewDialog<>(ACTIVE_DTO.get(), CompetitionEditViewController.class).showAndWait();
+        Optional<TournamentDTO> result = new EditViewDialog<>(null, CompetitionEditViewController.class).showAndWait();
         if (result.isPresent()) {
             loadDTO(result.get());
         }
