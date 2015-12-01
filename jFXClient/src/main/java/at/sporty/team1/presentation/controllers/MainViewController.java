@@ -7,6 +7,7 @@ import at.sporty.team1.presentation.controllers.core.IJfxController;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.presentation.controllers.core.SearchViewController;
 import at.sporty.team1.rmi.api.IDTO;
+import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.SecurityException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
@@ -16,10 +17,7 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -49,6 +47,7 @@ public class MainViewController extends JfxController {
     private static final Map<Tab, IJfxController> CONTROLLER_TO_TAB_MAP = new HashMap<>();
 
     @FXML private TextField _searchField;
+    @FXML private Label _userLabel;
     @FXML private Button _loginButton;
     @FXML private Button _logoutButton;
     @FXML private TabPane _tabPanel;
@@ -58,9 +57,15 @@ public class MainViewController extends JfxController {
 	public void initialize(URL location, ResourceBundle resources) {
         _tabPanel.getStyleClass().add(TabPane.STYLE_CLASS_FLOATING);
 
+        //login button
         _loginButton.visibleProperty().bind(LOGIN_BUTTON_VISIBILITY_PROPERTY);
         _loginButton.managedProperty().bind(_loginButton.visibleProperty());
 
+        //username label
+        _userLabel.visibleProperty().bind(_loginButton.visibleProperty().not());
+        _userLabel.managedProperty().bind(_userLabel.visibleProperty());
+
+        //logout button
         _logoutButton.visibleProperty().bind(_loginButton.visibleProperty().not());
         _logoutButton.managedProperty().bind(_logoutButton.visibleProperty());
 
@@ -83,7 +88,10 @@ public class MainViewController extends JfxController {
     @FXML
     private void onLogin() {
         //In case of successful onLogin hide onLogin button
-        if (performLogin()) LOGIN_BUTTON_VISIBILITY_PROPERTY.set(false);
+        if (performLogin()) {
+            LOGIN_BUTTON_VISIBILITY_PROPERTY.set(false);
+            _userLabel.setText(getUserName());
+        }
     }
 
     @FXML
@@ -237,5 +245,16 @@ public class MainViewController extends JfxController {
                 _tabPanel.getSelectionModel().select(t);
             });
         });
+    }
+
+    private String getUserName() {
+        MemberDTO user = CommunicationFacade.getExtendedActiveSession().getUser();
+
+        StringBuilder sb = new StringBuilder();
+        if (user.getLastName() != null) sb.append(user.getLastName());
+        if (user.getFirstName() != null) sb.append(" ").append(user.getFirstName());
+        if (user.getRole() != null) sb.append(" (").append(user.getRole()).append(")");
+
+        return sb.toString().toUpperCase();
     }
 }

@@ -10,6 +10,8 @@
             <Button onAction="#startSearch" prefWidth="105.0" text="GO" HBox.hgrow="NEVER"/>
             <Pane HBox.hgrow="ALWAYS"/>
 
+            <Label fx:id="_userLabel" visible="false" managed="false"/>
+
             <Separator orientation="VERTICAL"/>
 
             <Button fx:id="_loginButton" onAction="#onLogin" text="LOGIN" minWidth="75"/>
