@@ -3,7 +3,9 @@ package at.sporty.team1.presentation.controllers;
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
 import at.sporty.team1.presentation.dialogs.EditViewDialog;
+import at.sporty.team1.presentation.dialogs.ExtendedChoiceDialog;
 import at.sporty.team1.rmi.api.ITournamentController;
+import at.sporty.team1.rmi.dtos.DepartmentDTO;
 import at.sporty.team1.rmi.dtos.MatchDTO;
 import at.sporty.team1.rmi.dtos.TournamentDTO;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
@@ -23,6 +25,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -208,18 +211,45 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
 
 	@FXML
     private void onEditTournament(ActionEvent event) {
-        Optional<TournamentDTO> result = new EditViewDialog<>(ACTIVE_DTO.get(), CompetitionEditViewController.class).showAndWait();
+		
+		Optional<TournamentDTO> result = new EditViewDialog<>(ACTIVE_DTO.get(), CompetitionEditViewController.class).showAndWait();
         if (result.isPresent()) {
             loadDTO(result.get());
         }
+		
     }
 
     @FXML
     private void onCreateTournament(ActionEvent event) {
-        Optional<TournamentDTO> result = new EditViewDialog<>(null, CompetitionEditViewController.class).showAndWait();
-        if (result.isPresent()) {
-            loadDTO(result.get());
-        }
+    	
+    	try {
+			List<DepartmentDTO> departments = CommunicationFacade.lookupForDepartmentController().searchAllDepartments();
+			
+			if(departments != null && !departments.isEmpty()){
+				
+				ExtendedChoiceDialog<DepartmentDTO> dialog = new ExtendedChoiceDialog<>(departments.get(0), departments);
+				dialog.setTitle("Choose Department!");
+				dialog.setHeaderText("Please choose Department!!");
+				dialog.setContentText("Departments: " );
+				
+				Optional<DepartmentDTO> departmentContainer = dialog.showAndWait();
+				if (departmentContainer.isPresent()) {
+					
+					TournamentDTO tournament = new TournamentDTO();
+					tournament.setDepartment(departmentContainer.get());
+					
+			        Optional<TournamentDTO> result = new EditViewDialog<>(tournament, CompetitionEditViewController.class).showAndWait();
+			        if (result.isPresent()) {
+			            loadDTO(result.get());
+			        }
+				}
+			}
+		} catch (RemoteException | MalformedURLException | NotBoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+        
     }
 
     @Override
