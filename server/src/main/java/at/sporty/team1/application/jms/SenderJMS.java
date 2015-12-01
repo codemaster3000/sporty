@@ -18,16 +18,6 @@ public class SenderJMS {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static void main(String[] args) {
-        try {
-            new SenderJMS().sendToQueue("java:jboss/exported/jms/queue/2004", "message");
-        } catch (NamingException e) {
-            e.printStackTrace();
-        } catch (JMSException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * Send a msgObj to a Queue given by String
      * TODO test
