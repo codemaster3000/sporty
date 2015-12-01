@@ -126,7 +126,7 @@ public class CompetitionReadOnlyViewController  extends ConsumerViewController<T
 
                     //clear old values
                     dispose();
-                    Platform.runLater(() -> {
+                    Platform.runLater(() -> {	 
                     	 _tournamentDepartmentLabel.setText(tournamentDTO.getDepartment().getSport());
                          _competitionDateTextField.setText(tournamentDTO.getDate());
                          _competitionPlaceTextField.setText(tournamentDTO.getLocation());
@@ -150,8 +150,6 @@ public class CompetitionReadOnlyViewController  extends ConsumerViewController<T
 							_matchTableView.getItems().addAll(FXCollections.observableList(matches))
 						);
 					}
-
-                    
                 } catch (RemoteException | MalformedURLException | NotBoundException e) {
 
                     LOGGER.error("Error occurred while loading Tournament data.", e);
@@ -176,7 +174,10 @@ public class CompetitionReadOnlyViewController  extends ConsumerViewController<T
 	
 	@FXML
 	public void onCreateTournament(ActionEvent event){
-		
+		Optional<TournamentDTO> result = new EditViewDialog<>(ACTIVE_DTO.get(), CompetitionEditViewController.class).showAndWait();
+        if (result.isPresent()) {
+            loadDTO(result.get());
+        }
 	}
 
 }

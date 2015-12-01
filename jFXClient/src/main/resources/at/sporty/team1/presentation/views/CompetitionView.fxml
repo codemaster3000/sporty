@@ -90,7 +90,6 @@
       </FlowPane>
       <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="8">
          <children>
-            <Button fx:id="_openTournamentResults" mnemonicParsing="false" text="Open Tournament Results" />
             <Button fx:id="_removeSelectedMatch" mnemonicParsing="false" onAction="#removeSelectedMatch" text="Remove selected Match">
                <FlowPane.margin>
                   <Insets left="10.0" />

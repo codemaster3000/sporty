@@ -100,8 +100,6 @@ public class CompetitionEditViewController extends EditViewController<Tournament
     private Button _saveMatchesButton;
     @FXML
     private Button _removeSelectedMatch;
-    @FXML
-    private Button _openTournamentResults;
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -111,6 +109,7 @@ public class CompetitionEditViewController extends EditViewController<Tournament
 
         setVisibleOfTournamentTeamView(false);
         setVisibleOfMatchesView(false);
+        
 
         /**
          * League is not implemented yet
@@ -222,7 +221,6 @@ public class CompetitionEditViewController extends EditViewController<Tournament
         _removeSelectedMatch.setVisible(view);
         _labelMatches.setVisible(view);
         _matchTableView.setVisible(view);
-        _openTournamentResults.setVisible(view);
     }
 
     private void setVisibleOfTournamentTeamView(boolean view) {
@@ -236,10 +234,8 @@ public class CompetitionEditViewController extends EditViewController<Tournament
             try {
 
                 IDepartmentController departmentController = CommunicationFacade.lookupForDepartmentController();
-
-                List<TeamDTO> ownTournamentTeams = departmentController.loadDepartmentTeams(
-                    _tournamentDepartmentComboBox.getSelectionModel().getSelectedItem().getDepartmentId()
-                );
+                DepartmentDTO dept = _tournamentDepartmentComboBox.getSelectionModel().getSelectedItem();
+                List<TeamDTO> ownTournamentTeams = departmentController.loadDepartmentTeams(dept.getDepartmentId());
 
                 ObservableList<TeamDTO> teamObservableList = FXCollections.observableList(ownTournamentTeams);
                 _teamToCompetitionComboBox.setItems(teamObservableList);
