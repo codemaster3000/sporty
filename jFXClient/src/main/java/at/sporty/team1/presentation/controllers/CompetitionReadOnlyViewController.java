@@ -66,8 +66,6 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
     @FXML
     private Label _competitionPlaceTextField;
     @FXML
-    private Label _leagueLabel;
-    @FXML
     private Button _editTournamentButton;
     @FXML
     private Button _createTournamentButton;
@@ -227,8 +225,13 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
 			
 			if(departments != null && !departments.isEmpty()){
 				
-				ExtendedChoiceDialog<DepartmentDTO> dialog = new ExtendedChoiceDialog<>(departments.get(0), departments);
-				dialog.setTitle("Choose Department!");
+				ExtendedChoiceDialog<List<DepartmentDTO>, DepartmentDTO> dialog = new ExtendedChoiceDialog<>(
+                    departments.get(0),
+                    departments,
+                    GUIHelper.getDTOToStringConverter(DepartmentDTO::getSport)
+                );
+
+                dialog.setTitle("Choose Department!");
 				dialog.setHeaderText("Please choose Department!!");
 				dialog.setContentText("Departments: " );
 				
