@@ -1,39 +1,31 @@
 package at.sporty.team1.application.jms;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import at.sporty.team1.rmi.dtos.MessageDTO;
+import com.sun.messaging.Queue;
+import com.sun.messaging.QueueConnectionFactory;
 
-import javax.annotation.Resource;
-import javax.jms.*;
+import javax.jms.JMSContext;
+import javax.jms.JMSException;
+import javax.jms.JMSProducer;
 
 /**
  * Created by sereGkaluv on 30-Nov-15.
  */
 public class ProducerJMS {
+    private static final String DEFAULT_HOST = "localhost";
+    private static final int DEFAULT_PORT = 3700;
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static void sendMessage(MessageDTO messageDTO)
+    throws JMSException {
 
-    @Resource(lookup = "java:comp/DefaultJMSConnectionFactory")
-    private static ConnectionFactory connectionFactory;
-    @Resource(lookup = "sporty")private static Queue queue;
+        QueueConnectionFactory factory = JMSFacade.lookupForQueueConnectionFactory(DEFAULT_HOST, 3700, true);
+        JMSContext jmsContext = factory.createContext();
 
-    public static void main(String[] args) throws Exception {
-        Destination destination = queue;
+        JMSProducer producer = JMSFacade.getJMSProducer(jmsContext);
 
-        Connection connection = connectionFactory.createConnection();
-        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        Queue recipientQueue = JMSFacade.lookupForQueue(messageDTO.getRecipientId());
+        producer.send(recipientQueue, messageDTO);
 
-        MessageProducer producer = session.createProducer(destination);
-        TextMessage message = session.createTextMessage();
-
-        for (int i = 0; i < 5; ++i) {
-            message.setText("This is message #" + (i + 1) + " from producer");
-            System.out.println("Sending message: " + message.getText());
-            producer.send(message);
-        }
-
-        producer.send(session.createMessage());
-
-        connection.close();
+        jmsContext.close();
     }
 }

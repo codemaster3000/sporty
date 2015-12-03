@@ -18,11 +18,12 @@ public interface INotificationController extends IRemoteController {
      *
      * @param messageDTO Message container, contains message type, text and receiver.
      * @param session Session object.
+     * @return status of the execution true on success, false on failure
      * @throws RemoteException
      * @throws ValidationException
      * @throws NotAuthorisedException
      */
-    void sendMessage(MessageDTO messageDTO, SessionDTO session)
+    boolean sendMessage(MessageDTO messageDTO, SessionDTO session)
     throws RemoteException, ValidationException, NotAuthorisedException;
 
     /**
@@ -35,16 +36,4 @@ public interface INotificationController extends IRemoteController {
      */
     List<MessageDTO> pullMessages(SessionDTO session)
     throws RemoteException, NotAuthorisedException;
-
-    /**
-     * Confirms "read" of the message, also may contain reply message in it.
-     *
-     * @param messageDTO Message container, contains message type, text and receiver.
-     * @param session Session object.
-     * @throws RemoteException
-     * @throws ValidationException
-     * @throws NotAuthorisedException
-     */
-    void confirmMessagePoll(MessageDTO messageDTO, SessionDTO session)
-    throws RemoteException, ValidationException, NotAuthorisedException;
 }
