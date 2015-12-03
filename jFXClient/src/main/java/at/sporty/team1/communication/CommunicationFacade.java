@@ -29,7 +29,7 @@ import java.util.Map;
 public class CommunicationFacade {
     public static final SimpleBooleanProperty SESSION_AVAILABLE_PROPERTY = new SimpleBooleanProperty(false);
 
-    private static final String DEFAULT_RMI = "rmi://localhost/%s";
+    private static final String DEFAULT_RMI = "rmi://5.35.247.12/%s";
     private static final Map<Class<? extends IRemoteController>, Remote> CONTROLLER_MAP = new HashMap<>();
     private static PublicKey _activeServerPublicKey;
     private static KeyPair _activeRSAKeyPair;
