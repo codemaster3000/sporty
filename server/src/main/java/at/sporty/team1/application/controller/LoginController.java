@@ -23,6 +23,7 @@ import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.directory.InitialDirContext;
 import javax.persistence.PersistenceException;
+import javax.xml.registry.infomodel.User;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.InvalidKeyException;
@@ -222,30 +223,30 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
     }
 
     public static boolean isInPermissionBound(String isRole, UserRole requiredRoleLevel) {
-        /* Return according to user role */
-        switch (isRole) {
-            case "member": {
-                return UserRole.MEMBER.isInBound(requiredRoleLevel);
-            }
+        UserRole isUserRole = parseUserRole(isRole);
 
-            case "trainer": {
-                return UserRole.TRAINER.isInBound(requiredRoleLevel);
-            }
-
-            case "departmentHead": {
-                return UserRole.DEPARTMENT_HEAD.isInBound(requiredRoleLevel);
-            }
-
-            case "admin": {
-                return UserRole.ADMIN.isInBound(requiredRoleLevel);
-            }
-
-            default: {
-                return UserRole.GUEST.isInBound(requiredRoleLevel);
-            }
-        }
+        return isUserRole.isInBound(requiredRoleLevel);
     }
 
+    public static boolean isNotEscalatedPermissionBound(String newRole, String isRole) {
+        UserRole isUserRole = parseUserRole(isRole);
+        UserRole newUserRole = parseUserRole(newRole);
+
+        return isUserRole.isInBound(newUserRole);
+    }
+
+    private static UserRole parseUserRole(String role) {
+        /* Return according to user role */
+        if (role == null) return UserRole.GUEST;
+
+        switch (role) {
+            case "member": return UserRole.MEMBER;
+            case "trainer": return UserRole.TRAINER;
+            case "departmentHead": return UserRole.DEPARTMENT_HEAD;
+            case "admin": return UserRole.ADMIN;
+            default: return UserRole.GUEST;
+        }
+    }
 
     private static KeyPair getServerKeyPair() throws SecurityException {
         if (_serverKeyPair == null) {

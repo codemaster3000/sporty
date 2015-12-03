@@ -129,7 +129,7 @@ public class MainViewController extends JfxController {
                 } catch (BadPaddingException | IllegalBlockSizeException e) {
                     LOGGER.error("Received data is corrupted.", e);
                 } catch (SecurityException | NotAuthorisedException | UnknownEntityException e) {
-                    LOGGER.error("Error occurs while generating client fingerprint", e);
+                    LOGGER.error("Error occurs while generating client fingerprint.", e);
                 }
             }
 

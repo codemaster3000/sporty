@@ -4,6 +4,7 @@ import at.sporty.team1.application.controller.LoginController;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.persistence.PersistenceFacade;
+import at.sporty.team1.rmi.dtos.MemberDTO;
 import at.sporty.team1.rmi.enums.UserRole;
 
 import java.util.function.BiFunction;
@@ -18,6 +19,13 @@ public class BasicAccessPolicies {
 
     public static <T extends IMember> AccessPolicy<T> isInPermissionBound(UserRole userRole) {
         return AccessPolicy.simplePolicy(user -> LoginController.isInPermissionBound(user, userRole));
+    }
+
+    public static <T extends IMember> AccessPolicy<T> isNotEscalatedPermissionBound(MemberDTO memberDTO) {
+        return AccessPolicy.simplePolicy(user -> LoginController.isNotEscalatedPermissionBound(
+            memberDTO.getRole(),
+            user.getRole()
+        ));
     }
 
     public static <T extends IMember> AccessPolicy<T> isSelf(Integer memberId) {

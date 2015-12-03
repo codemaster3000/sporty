@@ -40,6 +40,13 @@ public class EditViewDialog<T extends IDTO, U extends EditViewController<T>> ext
         ButtonType saveButtonType = new ButtonType(BUTTON_SAVE_CAPTION, ButtonBar.ButtonData.OK_DONE);
         getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
 
+        //disabling save button at the start
+        Node loginButton = getDialogPane().lookupButton(saveButtonType);
+        loginButton.setDisable(true);
+
+        //attaching listener from edit view (e.g. automatically disables save button when load dto is called)
+        loginButton.disableProperty().bind(editViewController.IN_WORK_PROPERTY);
+
         //defining the result converter for dialog return type
         //setting listener for save button -> when button will be pressed
         //saveDTO() method in the child controller will be called

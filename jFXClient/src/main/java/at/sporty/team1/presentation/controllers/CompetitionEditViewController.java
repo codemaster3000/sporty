@@ -12,9 +12,9 @@ import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
 import at.sporty.team1.rmi.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -33,18 +33,18 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class CompetitionEditViewController extends EditViewController<TournamentDTO> {
+    public static final String COLUMN_TIME = "time";
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String VIEW_TEXT_HEADER = "TOURNAMENT EDITING VIEW";
     private static final String SUCCESSFUL_TOURNAMENT_SAVE = "Tournament was saved successfully.";
-    private static final String SUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = " Tournament Teams were saved successfully.";
     private static final String UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = "Error occurred while saving Teams to Tournament.";
+    private static final String UNSUCCESSFUL_MATCH_TO_TOURNAMENT_SAVE = "Error occurred while saving Matches to Tournament.";
+    private static final String COLUMN_PROP_TEAM_1 = "team1";
+    private static final String COLUMN_PROP_TEAM_2 = "team2";
+    private static final String COLUMN_PROP_REFEREE = "referee";
+    private static final String COLUMN_PROP_COURT = "court";
+    private static final String COLUMN_PROP_RESULT = "result";
     private static final Label NO_CONTENT_PLACEHOLDER = new Label("No Content");
-    private static final String SUCCESSFUL_MATCHES_SAVE = "Matches were saved successfully.";
-    private static final String CANNOT_LOAD_TEAMS = "Cannot load Teams.";
-
-
-    private static TournamentDTO _activeCompetition;
-    private ObservableList<MatchDTO> _tableMatchList;
 
     @FXML
     private TextField _competitionDateTextField;
@@ -54,8 +54,6 @@ public class CompetitionEditViewController extends EditViewController<Tournament
     private ListView<String> _competitionTeamsListView;
     @FXML
     private ComboBox<TeamDTO> _teamToCompetitionComboBox;
-    @FXML
-    private ComboBox<DepartmentDTO> _tournamentDepartmentComboBox;
     @FXML
     private ComboBox<DepartmentDTO> _tournamentLeagueComboBox;
     @FXML
@@ -75,7 +73,7 @@ public class CompetitionEditViewController extends EditViewController<Tournament
     @FXML
     private TextField _competitionExternalTeamTextField;
     @FXML
-    private Button _addTeamButton;
+    private Label _competitionDepartmentLabel;
     @FXML
     private Label _labelTeams;
     @FXML
@@ -83,66 +81,33 @@ public class CompetitionEditViewController extends EditViewController<Tournament
     @FXML
     private Label _leagueLabel;
     @FXML
+    private Button _addTeamButton;
+    @FXML
     private Button _buttonRemoveSelectedTeam;
-    @FXML
-    private Button _buttonSaveTeams;
-    @FXML
-    private Button _saveMatchesButton;
     @FXML
     private Button _removeSelectedMatch;
 
+    private static TournamentDTO _activeTournamentDTO;
+
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+        //Preparing (Tournament) Team View
+        _competitionTeamsListView.setPlaceholder(NO_CONTENT_PLACEHOLDER);
+        _matchTableView.setPlaceholder(NO_CONTENT_PLACEHOLDER);
 
-        List<DepartmentDTO> departments = null;
-        LinkedList<MatchDTO> tempList = new LinkedList<>();
+        _matchTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        setVisibleOfTournamentTeamView(false);
-        setVisibleOfMatchesView(false);
-        
-
-        /**
-         * League is not implemented yet
-         */
-        _tournamentLeagueComboBox.setVisible(false);
-        _leagueLabel.setVisible(false);
-
-        /**
-         * TournamentView
-         */
-        try {
-
-            departments = CommunicationFacade.lookupForDepartmentController().searchAllDepartments();
-
-        } catch (RemoteException | MalformedURLException | NotBoundException e) {
-            LOGGER.error("Error occurred while loading all known departments.", e);
-        }
-
-        if (departments != null) {
-            _tournamentDepartmentComboBox.setItems(FXCollections.observableList(departments));
-        }
-
-        /**
-         * Converter from TeamDTO to Team name (String)
-         */
-        StringConverter<DepartmentDTO> deptDTOConverter = GUIHelper.getDTOToStringConverter(DepartmentDTO::getSport);
-        _tournamentDepartmentComboBox.setConverter(deptDTOConverter);
-
-        //TODO: LeagueComboBox
-        
-        /**
-         * addTeamsView
-         */
-        _competitionTeamsListView.setCellFactory(m -> new ListCell<String>() {
+        //Adding Delete Functionality to Teams View
+        _competitionTeamsListView.setCellFactory(t -> new ListCell<String>() {
             @Override
-            protected void updateItem(String teamname, boolean bln) {
-                super.updateItem(teamname, bln);
+            protected void updateItem(String teamName, boolean bln) {
+                super.updateItem(teamName, bln);
 
-                if (teamname != null) {
-                    setText(teamname);
+                if (teamName != null) {
+                    setText(teamName);
 
                     MenuItem deleteItem = new MenuItem();
-                    deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", teamname));
+                    deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", teamName));
                     deleteItem.setOnAction(event -> _competitionTeamsListView.getItems().removeAll(getItem()));
 
                     ContextMenu contextMenu = new ContextMenu();
@@ -162,141 +127,172 @@ public class CompetitionEditViewController extends EditViewController<Tournament
             }
         });
 
-        /**
-         * Matchesview in Tournament
-         */
+        //Converter from TeamDTO to Team name (String)
+        StringConverter<TeamDTO> teamDTOStringConverter = GUIHelper.getDTOToStringConverter(TeamDTO::getTeamName);
+        _teamToCompetitionComboBox.setConverter(teamDTOStringConverter);
+
+        //Cell factories for Match View
         _team1Col.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
-        _team1Col.setCellValueFactory(new PropertyValueFactory<>("team1"));
+        _team1Col.setCellValueFactory(new PropertyValueFactory<>(COLUMN_PROP_TEAM_1));
         _team1Col.setOnEditCommit(cell -> cell.getRowValue().setTeam1(cell.getNewValue()));
 
         _team2Col.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
-        _team2Col.setCellValueFactory(new PropertyValueFactory<>("team2"));
+        _team2Col.setCellValueFactory(new PropertyValueFactory<>(COLUMN_PROP_TEAM_2));
         _team2Col.setOnEditCommit(cell -> cell.getRowValue().setTeam2(cell.getNewValue()));
 
         _timeCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
-        _timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
+        _timeCol.setCellValueFactory(new PropertyValueFactory<>(COLUMN_TIME));
         _timeCol.setOnEditCommit(cell -> cell.getRowValue().setDate(cell.getNewValue()));
 
         _refereeCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
-        _refereeCol.setCellValueFactory(new PropertyValueFactory<>("referee"));
+        _refereeCol.setCellValueFactory(new PropertyValueFactory<>(COLUMN_PROP_REFEREE));
         _refereeCol.setOnEditCommit(cell -> cell.getRowValue().setReferee(cell.getNewValue()));
 
         _courtCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
-        _courtCol.setCellValueFactory(new PropertyValueFactory<>("court"));
+        _courtCol.setCellValueFactory(new PropertyValueFactory<>(COLUMN_PROP_COURT));
         _courtCol.setOnEditCommit(cell -> cell.getRowValue().setLocation(cell.getNewValue()));
 
         _resultCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
-        _resultCol.setCellValueFactory(new PropertyValueFactory<>("result"));
+        _resultCol.setCellValueFactory(new PropertyValueFactory<>(COLUMN_PROP_RESULT));
         _resultCol.setOnEditCommit(cell -> cell.getRowValue().setResult(cell.getNewValue()));
 
-        ObservableList<MatchDTO> _tableMatchList = FXCollections.observableList(tempList);
-        _matchTableView.setItems(FXCollections.observableList(_tableMatchList));
+        //League is not implemented yet
+        //TODO: LeagueComboBox
+        _tournamentLeagueComboBox.setVisible(false);
+        _leagueLabel.setVisible(false);
+    }
+
+    @Override
+    public String getHeaderText() {
+        return VIEW_TEXT_HEADER;
     }
 
     @Override
     public void loadDTO(TournamentDTO dto) {
+        IN_WORK_PROPERTY.set(true);
+
+        _activeTournamentDTO = dto;
         displayTournamentDTO(dto);
     }
 
-    private void setVisibleOfMatchesView(boolean view) {
-        _saveMatchesButton.setVisible(view);
-        _removeSelectedMatch.setVisible(view);
-        _labelMatches.setVisible(view);
-        _matchTableView.setVisible(view);
-    }
+    /**
+     * Pre-loads data into all view fields.
+     * @param tournamentDTO TournamentDTO that will be preloaded.
+     */
+    private void displayTournamentDTO(TournamentDTO tournamentDTO) {
 
-    private void setVisibleOfTournamentTeamView(boolean view) {
+        if (tournamentDTO != null && tournamentDTO.getDepartment() != null) {
 
-        if (view) {
-        	_competitionTeamsListView.setPlaceholder(NO_CONTENT_PLACEHOLDER);
+            new Thread(() -> {
 
-            /**
-             * Fill TeamCombobox in Tournaments
-             */
-            try {
+                try {
+                    //Teams (Fill TeamComboBox in Tournaments)
+                    DepartmentDTO dept = _activeTournamentDTO.getDepartment();
 
-                IDepartmentController departmentController = CommunicationFacade.lookupForDepartmentController();
-                DepartmentDTO dept = _tournamentDepartmentComboBox.getSelectionModel().getSelectedItem();
-                List<TeamDTO> ownTournamentTeams = departmentController.loadDepartmentTeams(dept.getDepartmentId());
+                    IDepartmentController departmentController = CommunicationFacade.lookupForDepartmentController();
+                    List<TeamDTO> ownTournamentTeams = departmentController.loadDepartmentTeams(dept.getDepartmentId());
 
-                ObservableList<TeamDTO> teamObservableList = FXCollections.observableList(ownTournamentTeams);
-                _teamToCompetitionComboBox.setItems(teamObservableList);
+                    if (tournamentDTO.getTournamentId() != null) {
+                        //Loading Tournament Data
+                        ITournamentController tournamentController = CommunicationFacade.lookupForTournamentController();
 
-            } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
-            	LOGGER.error("Error occurred while searching all Teams by Department.", e);
-            }
+                        //Loading tournament Teams
+                        List<String> teams = tournamentController.searchAllTournamentTeams(
+                                _activeTournamentDTO.getTournamentId()
+                        );
 
-            /**
-             * Converter from TeamDTO to Team name (String)
-             */
-            StringConverter<TeamDTO> departmentDTOStringConverter = GUIHelper.getDTOToStringConverter(TeamDTO::getTeamName);
-            _teamToCompetitionComboBox.setConverter(departmentDTOStringConverter);
+                        //Loading tournament Matches
+                        List<MatchDTO> matches = tournamentController.searchAllTournamentMatches(
+                                _activeTournamentDTO.getTournamentId()
+                        );
+
+                        Platform.runLater(() -> {
+                            //Tournament data
+                            _competitionDepartmentLabel.setText(_activeTournamentDTO.getDepartment().getSport());
+                            _competitionDateTextField.setText(_activeTournamentDTO.getDate());
+                            _competitionPlaceTextField.setText(_activeTournamentDTO.getLocation());
+
+                            //Setting department teams
+                            if (ownTournamentTeams != null) {
+                                _teamToCompetitionComboBox.setItems(FXCollections.observableList(ownTournamentTeams));
+                            }
+
+                            //Setting tournament teams
+                            if (teams != null) {
+                                _competitionTeamsListView.getItems().addAll(teams);
+                            } else {
+                                _competitionTeamsListView.setItems(FXCollections.observableList(new LinkedList<>()));
+                            }
+
+                            //Setting tournament matches
+                            if (matches != null) {
+                                _matchTableView.setItems(FXCollections.observableList(matches));
+                            } else {
+                                _matchTableView.setItems(FXCollections.observableList(new LinkedList<>()));
+                            }
+
+                            IN_WORK_PROPERTY.set(false);
+                        });
+
+                    } else {
+
+                        Platform.runLater(() -> {
+                            //Competition
+                            _competitionDepartmentLabel.setText(_activeTournamentDTO.getDepartment().getSport());
+                            _competitionDateTextField.setText(_activeTournamentDTO.getDate());
+                            _competitionPlaceTextField.setText(_activeTournamentDTO.getLocation());
+
+                            //Setting department teams
+                            if (ownTournamentTeams != null) {
+                                _teamToCompetitionComboBox.setItems(FXCollections.observableList(ownTournamentTeams));
+                            }
+
+                            _competitionTeamsListView.setItems(FXCollections.observableList(new LinkedList<>()));
+                            _matchTableView.setItems(FXCollections.observableList(new LinkedList<>()));
+
+                            IN_WORK_PROPERTY.set(false);
+                        });
+                    }
+                } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
+                    LOGGER.error("Error occurred while searching all Teams by Department.", e);
+                }
+            }).start();
         }
-
-        _competitionTeamsListView.setVisible(view);
-        _teamToCompetitionComboBox.setVisible(view);
-        _competitionExternalTeamTextField.setVisible(view);
-        _addTeamButton.setVisible(view);
-        _labelTeams.setVisible(view);
-        _buttonRemoveSelectedTeam.setVisible(view);
-        _buttonSaveTeams.setVisible(view);
-    }
-
-    @FXML
-    private void clearForm(ActionEvent event) {
-        dispose();
     }
 
     @Override
-    public void dispose() {
-    	//Competition
-        _competitionDateTextField.clear();
-        _competitionPlaceTextField.clear();
-        _tournamentDepartmentComboBox.getSelectionModel().clearSelection();
-        _tournamentLeagueComboBox.getSelectionModel().clearSelection();
-        //Team
-        _teamToCompetitionComboBox.getSelectionModel().clearSelection();
-        _competitionExternalTeamTextField.clear();
-        _competitionTeamsListView.getItems().clear();
-        //Matches
-        _matchTableView.getItems().clear();
-    }
+    public TournamentDTO saveDTO() {
 
-    @FXML
-    private void saveCompetition(ActionEvent event) {
+        if (_activeTournamentDTO != null && _activeTournamentDTO.getDepartment() != null && !IN_WORK_PROPERTY.get()) {
 
-        String date = _competitionDateTextField.getText();
-        DepartmentDTO dept = _tournamentDepartmentComboBox.getSelectionModel().getSelectedItem();
-        //TODO: String league = _tournamentLeagueComboBox.getSelectionModel().getSelectedItem().toString();
-        String location = _competitionPlaceTextField.getText();
-
-        if ((date != null) && (dept != null) && (location != null)) {
+            String date = _competitionDateTextField.getText();
+            String location = _competitionPlaceTextField.getText();
+            //TODO: String league = _tournamentLeagueComboBox.getSelectionModel().getSelectedItem().toString();
 
             try {
 
-                //check if we are creating a new or editing an existing Competition
-                if (_activeCompetition == null) {
-                    //this is a new Competition
-                    _activeCompetition = new TournamentDTO();
-                }
-
-                //if it is an already existing competition, changed competition data will be simply updated.
-                _activeCompetition.setDate(date)
-                        .setDepartment(dept)
-                        .setLocation(location);
+                //updating changed competition data.
+                _activeTournamentDTO.setDate(date).setLocation(location);
 
                 ITournamentController imc = CommunicationFacade.lookupForTournamentController();
                 Integer competitionId = imc.createOrSaveTournament(
-                    _activeCompetition,
+                    _activeTournamentDTO,
                     CommunicationFacade.getActiveSession()
                 );
 
-                _activeCompetition.setTournamentId(competitionId);
+                _activeTournamentDTO.setTournamentId(competitionId);
 
+                saveOrUpdateTournamentTeams(competitionId);
+                saveOrUpdateTournamentMatches(competitionId);
+
+                //FIXME we will get success message even if teams and departments will be not assigned
                 GUIHelper.showSuccessAlert(SUCCESSFUL_TOURNAMENT_SAVE);
-                setVisibleOfTournamentTeamView(true);
 
-                LOGGER.info("Tournament \"{} {}\" was successfully saved.", dept.getSport(), date);
+                LOGGER.info(
+                    "Tournament \"{} {}\" was successfully saved.",
+                    _activeTournamentDTO.getDepartment().getSport(),
+                    date
+                );
 
             } catch (RemoteException | MalformedURLException | NotBoundException e) {
                 LOGGER.error("Error occurred while saving the tournament.", e);
@@ -306,99 +302,43 @@ public class CompetitionEditViewController extends EditViewController<Tournament
                 GUIHelper.showValidationAlert(context);
                 LOGGER.error(context, e);
             } catch (NotAuthorisedException e) {
-                LOGGER.error("Client save (Tournament) request was rejected. Not enough permissions.", e);
+                String context = "Client save (Tournament) request was rejected. Not enough permissions.";
+
+                LOGGER.error(context, e);
+                GUIHelper.showErrorAlert(context);
             }
         }
+
+        return null;
     }
 
-    @FXML
-    public void saveMatches(ActionEvent event) {
+    private void saveOrUpdateTournamentTeams(Integer tournamentId) {
 
-        //TODO: save Matches to _activeTournament
-    	ITournamentController imc = null;
-    	int tournamentId = _activeCompetition.getTournamentId();
-    	
-    	try {
-			imc = CommunicationFacade.lookupForTournamentController();
-			
-			List<MatchDTO> matches = _matchTableView.getItems();
-			
-			for(MatchDTO match : matches){
-				try {
-					imc.createNewMatch(tournamentId, match, CommunicationFacade.getActiveSession());
-				} catch (ValidationException e) {
-                    String context = String.format("Validation exception \"%s\" while saving match.", e.getCause());
-
-                    GUIHelper.showValidationAlert(context);
-                    LOGGER.error(context, e);
-				} catch (UnknownEntityException e) {
-                    LOGGER.error("DTO was not saved in Data Storage before assigning Match to Tournament.", e);
-                } catch (NotAuthorisedException e) {
-                    LOGGER.error("Client save (Match) request was rejected. Not enough permissions.", e);
-                }
-            }
-			LOGGER.info("Matches was successfully saved. Size:\"{}, TournamentId: {}\"", matches.size(), tournamentId);
-			GUIHelper.showSuccessAlert(SUCCESSFUL_MATCHES_SAVE);
-			
-		} catch (RemoteException | MalformedURLException | NotBoundException e) {
-			LOGGER.error("Error occurred while saving the matches.", e);
-		}
-    }
-
-    @FXML
-    public void removeSelectedMatch(ActionEvent event) {
-        MatchDTO matchDTO = _matchTableView.getSelectionModel().getSelectedItem();
-        _matchTableView.getItems().remove(matchDTO);
-    }
-
-    @FXML
-    public void addTeamToTeamList(ActionEvent event) {
-
-    	String teamFromTextField = GUIHelper.readNullOrEmpty(_competitionExternalTeamTextField.getText());
-    	  	
-        if (teamFromTextField != null) {
-        	_competitionTeamsListView.getItems().add(_competitionExternalTeamTextField.getText());
-            
-        }else if (_teamToCompetitionComboBox.getSelectionModel().getSelectedItem() != null) {
-        	_competitionTeamsListView.getItems().add(_teamToCompetitionComboBox.getSelectionModel().getSelectedItem().getTeamName());
-            
+        if (tournamentId == null) {
+            GUIHelper.showErrorAlert(UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE);
+            return;
         }
-        _competitionExternalTeamTextField.clear();
-        _teamToCompetitionComboBox.getSelectionModel().clearSelection();
-    }
-
-    @FXML
-    public void saveTeamsToTournament(ActionEvent event) {
-
-        List<String> teams = _competitionTeamsListView.getItems();
 
         try {
+
             ITournamentController tournamentController = CommunicationFacade.lookupForTournamentController();
 
-            if ((_activeCompetition != null) && (teams != null) && (!teams.isEmpty())) {
-
-                int savedTeamsCounter = 0;
-
-                for (String team : teams) {
-                    tournamentController.assignTeamToTournament(
-                        team,
-                        _activeCompetition.getTournamentId(),
-                        CommunicationFacade.getActiveSession()
-                    );
-                    ++savedTeamsCounter;
-                }
-
-                GUIHelper.showSuccessAlert(savedTeamsCounter + SUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE);
-                setVisibleOfMatchesView(true);
+            for (String team : _competitionTeamsListView.getItems()) {
+                tournamentController.assignTeamToTournament(
+                    team,
+                    tournamentId,
+                    CommunicationFacade.getActiveSession()
+                );
             }
+
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
 
-        	GUIHelper.showErrorAlert(UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE);
+            GUIHelper.showErrorAlert(UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE);
             LOGGER.error(UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE + "[Communication problem]", e);
 
         } catch (UnknownEntityException e) {
 
-        	GUIHelper.showErrorAlert(UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE);
+            GUIHelper.showErrorAlert(UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE);
             LOGGER.error(UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE + "[Unknown entity in request]", e);
 
         } catch (ValidationException e) {
@@ -411,65 +351,100 @@ public class CompetitionEditViewController extends EditViewController<Tournament
             );
 
         } catch (NotAuthorisedException e) {
-            LOGGER.error("Client save (Teams to Tournament) request was rejected. Not enough permissions.", e);
+            String context = "Client save (Teams to Tournament) request was rejected. Not enough permissions.";
+
+            LOGGER.error(context, e);
+            GUIHelper.showErrorAlert(context);
+        }
+    }
+
+    @FXML
+    private void addTeamToTeamList(ActionEvent event) {
+
+        //adding team from ComboBox
+        if (_teamToCompetitionComboBox.getSelectionModel().getSelectedItem() != null) {
+            _competitionTeamsListView.getItems().add(
+                _teamToCompetitionComboBox.getSelectionModel().getSelectedItem().getTeamName()
+            );
+
+            _teamToCompetitionComboBox.getSelectionModel().clearSelection();
+        }
+
+        //adding team from TextField
+        String teamFromTextField = GUIHelper.readNullOrEmpty(_competitionExternalTeamTextField.getText());
+        if (teamFromTextField != null && !teamFromTextField.trim().isEmpty()) {
+
+            _competitionTeamsListView.getItems().add(_competitionExternalTeamTextField.getText());
+            _competitionExternalTeamTextField.clear();
         }
     }
 
     @FXML
     private void removeTeamFromTournament(ActionEvent event) {
-        _competitionTeamsListView.getItems().remove(_competitionTeamsListView.getSelectionModel().getSelectedItem());
+        _competitionTeamsListView.getItems().remove(
+            _competitionTeamsListView.getSelectionModel().getSelectedItem()
+        );
     }
 
-    
-    /**
-     * Pre-loads data into all view fields.
-     * @param tournamentDTO TournamentDTO that will be preloaded.
-     */
-    private void displayTournamentDTO(TournamentDTO tournamentDTO) {
+    private void saveOrUpdateTournamentMatches(Integer tournamentId) {
 
-        //clear form
-        dispose();
+        if (tournamentId == null) {
+            GUIHelper.showErrorAlert(UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE);
+            return;
+        }
 
-        if (tournamentDTO != null) {
-            _activeCompetition = tournamentDTO;
+    	try {
 
-            //Competition
-            _competitionDateTextField.setText(_activeCompetition.getDate());
-            _competitionPlaceTextField.setText(_activeCompetition.getLocation());
-            _tournamentDepartmentComboBox.getSelectionModel().select(_activeCompetition.getDepartment());
+            ITournamentController tournamentController = CommunicationFacade.lookupForTournamentController();
 
-           //Teams
-            try {
-				List<String> teams = CommunicationFacade.lookupForTournamentController().searchAllTournamentTeams(_activeCompetition.getTournamentId());
-				_competitionTeamsListView.getItems().addAll(teams);
-			} catch (RemoteException | MalformedURLException | UnknownEntityException | NotBoundException e) {
-				GUIHelper.showErrorAlert(CANNOT_LOAD_TEAMS);
-	            LOGGER.error(CANNOT_LOAD_TEAMS + "[Communication problem]", e);
-			}
-            
-            //Matches
-            try {
-				List<MatchDTO> matches = CommunicationFacade.lookupForTournamentController().searchAllTournamentMatches(_activeCompetition.getTournamentId());
-				
-			} catch (RemoteException | MalformedURLException | UnknownEntityException | NotBoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-       }
+			for(MatchDTO match : _matchTableView.getItems()){
+                tournamentController.createNewMatch(
+                    tournamentId,
+                    match,
+                    CommunicationFacade.getActiveSession()
+                );
+            }
+
+		} catch (RemoteException | MalformedURLException | NotBoundException e) {
+
+            GUIHelper.showErrorAlert(UNSUCCESSFUL_MATCH_TO_TOURNAMENT_SAVE);
+            LOGGER.error(UNSUCCESSFUL_MATCH_TO_TOURNAMENT_SAVE + "[Communication problem]", e);
+
+        } catch (UnknownEntityException e) {
+
+            GUIHelper.showErrorAlert(UNSUCCESSFUL_MATCH_TO_TOURNAMENT_SAVE);
+            LOGGER.error(UNSUCCESSFUL_MATCH_TO_TOURNAMENT_SAVE + "[Unknown entity in request]", e);
+
+        } catch (ValidationException e) {
+
+            GUIHelper.showErrorAlert(UNSUCCESSFUL_MATCH_TO_TOURNAMENT_SAVE);
+            LOGGER.error(
+                UNSUCCESSFUL_MATCH_TO_TOURNAMENT_SAVE + "[Validation problem \"{}\"]",
+                e.getReason(),
+                e
+            );
+
+        } catch (NotAuthorisedException e) {
+            String context = "Client save (Match) request was rejected. Not enough permissions.";
+
+            LOGGER.error(context, e);
+            GUIHelper.showErrorAlert(context);
+        }
     }
-
-	@Override
-	public String getHeaderText() {
-		return VIEW_TEXT_HEADER;
-	}
-
-	@Override
-	public TournamentDTO saveDTO() {
-		return _activeCompetition;
-	}
 
     @FXML
-    private void addNewMatchRowButton() {
+    private void addNewMatchRowButton(ActionEvent event) {
         _matchTableView.getItems().add(new MatchDTO());
+
+        if (!_matchTableView.getItems().isEmpty()) {
+            _matchTableView.getSelectionModel().selectLast();
+            _matchTableView.requestFocus();
+        }
+    }
+
+    @FXML
+    private void removeSelectedMatch(ActionEvent event) {
+        MatchDTO matchDTO = _matchTableView.getSelectionModel().getSelectedItem();
+        _matchTableView.getItems().remove(matchDTO);
     }
 }

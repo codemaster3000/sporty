@@ -209,12 +209,14 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
 
 	@FXML
     private void onEditTournament(ActionEvent event) {
-		
-		Optional<TournamentDTO> result = new EditViewDialog<>(ACTIVE_DTO.get(), CompetitionEditViewController.class).showAndWait();
+		Optional<TournamentDTO> result = new EditViewDialog<>(
+            ACTIVE_DTO.get(),
+            CompetitionEditViewController.class
+        ).showAndWait();
+
         if (result.isPresent()) {
             loadDTO(result.get());
         }
-		
     }
 
     @FXML
@@ -241,18 +243,19 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
 					TournamentDTO tournament = new TournamentDTO();
 					tournament.setDepartment(departmentContainer.get());
 					
-			        Optional<TournamentDTO> result = new EditViewDialog<>(tournament, CompetitionEditViewController.class).showAndWait();
-			        if (result.isPresent()) {
+			        Optional<TournamentDTO> result = new EditViewDialog<>(
+                        tournament,
+                        CompetitionEditViewController.class
+                    ).showAndWait();
+
+                    if (result.isPresent()) {
 			            loadDTO(result.get());
 			        }
 				}
 			}
 		} catch (RemoteException | MalformedURLException | NotBoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
-        
+            LOGGER.error("Error occurred while creating new Tournament.", e);
+        }
     }
 
     @Override

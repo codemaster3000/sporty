@@ -35,6 +35,11 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
     private static final String SPORT_FOOTBALL = "Football";
     private static final String SPORT_BASEBALL = "Baseball";
     private static final String SPORT_SOCCER = "Soccer";
+    private static final String ROLE_MEMBER = "member";
+    private static final String ROLE_TRAINER = "trainer";
+    private static final String ROLE_DEPARTMENT_HEAD = "departmentHead";
+    private static final String ROLE_ADMIN = "admin";
+
     private static final String FEMALE = "F";
     private static final String MALE = "M";
 
@@ -200,6 +205,8 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
 
     @Override
     public void loadDTO(MemberDTO memberDTO) {
+        IN_WORK_PROPERTY.set(true);
+
         _activeMemberDTO = memberDTO;
         displayMemberDTO(memberDTO);
     }
@@ -209,6 +216,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
      * @param memberDTO MemberDTO that will be preloaded.
      */
     private void displayMemberDTO(MemberDTO memberDTO) {
+
         if (memberDTO != null) {
             fNameTextField.setText(_activeMemberDTO.getFirstName());
             lNameTextField.setText(_activeMemberDTO.getLastName());
@@ -323,7 +331,10 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
             } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
                 LOGGER.error("Error occurred while loading Member data (Departments and Teams).", e);
             } catch (NotAuthorisedException e) {
-                LOGGER.error("Client load (Departments and Teams) request was rejected. Not enough permissions.", e);
+                String context = "Client load (Departments and Teams) request was rejected. Not enough permissions.";
+
+                LOGGER.error(context, e);
+                Platform.runLater(() -> GUIHelper.showErrorAlert(context));
             }
 
 
@@ -332,28 +343,30 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
             if (role != null) {
 
 	            switch (role) {
-                    case "Department Head": {
-                        roleComboBox.getSelectionModel().select(RoleType.DEPARTMENT_HEAD);
-                        break;
-                    }
-
-                    case "Member": {
+                    case ROLE_MEMBER: {
                         roleComboBox.getSelectionModel().select(RoleType.MEMBER);
                         break;
                     }
 
-                    case "Trainer": {
+                    case ROLE_TRAINER: {
                         roleComboBox.getSelectionModel().select(RoleType.TRAINER);
                         break;
                     }
 
-                    case "Managing Comittee": {
-                        roleComboBox.getSelectionModel().select(RoleType.MANAGING_COMMITTEE);
+                    case ROLE_DEPARTMENT_HEAD: {
+                        roleComboBox.getSelectionModel().select(RoleType.DEPARTMENT_HEAD);
+                        break;
+                    }
+
+                    case ROLE_ADMIN: {
+                        roleComboBox.getSelectionModel().select(RoleType.ADMIN);
                         break;
                     }
 	            }
             }
         }
+
+        IN_WORK_PROPERTY.set(false);
     }
 
     /**
@@ -362,6 +375,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
      */
     @Override
     public MemberDTO saveDTO() {
+
         String fName = GUIHelper.readNullOrEmpty(fNameTextField.getText());
         String lName = GUIHelper.readNullOrEmpty(lNameTextField.getText());
         String dateOfBirth = GUIHelper.readNullOrEmpty(birthTextField.getText());
@@ -377,7 +391,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
 
         //check if mandatory fields are filled with data,
         //validation was moved to a separate method for refactoring convenience (IDTO)
-        if(isValidForm(fName, lName, dateOfBirth, gender, address)) {
+        if(!IN_WORK_PROPERTY.get() && isValidForm(fName, lName, dateOfBirth, gender, address)) {
 
             //check if we are creating a new or editing an existing Member
             if (_activeMemberDTO == null) {
@@ -395,7 +409,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                         .setEmail(email)
                         .setAddress(address)
                         .setIsFeePaid(false)
-                        .setRole(roleComboBox.getSelectionModel().getSelectedItem().toString());
+                        .setRole(roleComboBox.getSelectionModel().getSelectedItem().getDSValue());
 
                 IMemberController memberController = CommunicationFacade.lookupForMemberController();
                 Integer memberId = memberController.createOrSaveMember(
@@ -424,7 +438,10 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
             	GUIHelper.showValidationAlert(context);
 				LOGGER.error(context, e);
 			} catch (NotAuthorisedException e) {
-                LOGGER.error("Client save (Member) request was rejected. Not enough permissions.", e);
+                String context = "Client save (Member) request was rejected. Not enough permissions.";
+
+                LOGGER.error(context, e);
+                GUIHelper.showErrorAlert(context);
             }
         }
 
@@ -476,7 +493,10 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
         } catch (UnknownEntityException e) {
             LOGGER.error("DTO was not saved in Data Storage before assigning Member to Department.", e);
         } catch (NotAuthorisedException e) {
-            LOGGER.error("Client save (Member Departments) request was rejected. Not enough permissions.", e);
+            String context = "Client save (Member Departments) request was rejected. Not enough permissions.";
+
+            LOGGER.error(context, e);
+            GUIHelper.showErrorAlert(context);
         }
     }
 
@@ -546,7 +566,10 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
         } catch (UnknownEntityException e) {
             LOGGER.error("DTO was not saved in Data Storage before assigning Member to Team.", e);
         } catch (NotAuthorisedException e) {
-            LOGGER.error("Client save (Team Members) request was rejected. Not enough permissions.", e);
+            String context = "Client save (Team Members) request was rejected. Not enough permissions.";
+
+            LOGGER.error(context, e);
+            GUIHelper.showErrorAlert(context);
         }
     }
 
@@ -626,20 +649,26 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
     }
 
     private enum RoleType {
-        MEMBER("Member"),
-    	TRAINER("Trainer"),
-        DEPARTMENT_HEAD("Department Head"),
-        MANAGING_COMMITTEE("Managing Committee");
+        MEMBER(ROLE_MEMBER, "Member"),
+    	TRAINER(ROLE_TRAINER, "Trainer"),
+        DEPARTMENT_HEAD(ROLE_DEPARTMENT_HEAD, "Department Head"),
+        ADMIN(ROLE_ADMIN, "Admin");
 
-        private final String _stringValue;
+        private final String _dsValue;
+        private final String _guiValue;
 
-        RoleType(String stringValue) {
-            _stringValue = stringValue;
+        RoleType(String dsValue, String guiValue) {
+            _dsValue = dsValue;
+            _guiValue = guiValue;
+        }
+
+        public String getDSValue() {
+            return _dsValue;
         }
 
         @Override
         public String toString() {
-            return _stringValue;
+            return _guiValue;
         }
     }
 }

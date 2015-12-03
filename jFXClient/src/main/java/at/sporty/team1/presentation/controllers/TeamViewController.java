@@ -153,7 +153,10 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
             } catch (UnknownEntityException e) {
                 LOGGER.error("DTO was not saved in Data Storage before loading all Members from Team.", e);
             } catch (NotAuthorisedException e) {
-                LOGGER.error("Client load (Team Members) request was rejected. Not enough permissions.", e);
+                String context = "Client load (Team Members) request was rejected. Not enough permissions.";
+
+                LOGGER.error(context, e);
+                GUIHelper.showErrorAlert(context);
             }
         }
     }
@@ -193,7 +196,10 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
         } catch (UnknownEntityException e) {
             LOGGER.error("DTO was not saved in Data Storage before removing Member from Team.", e);
         } catch (NotAuthorisedException e) {
-            LOGGER.error("Client delete (Member) request was rejected. Not enough permissions.", e);
+            String context = "Client delete (Member) request was rejected. Not enough permissions.";
+
+            LOGGER.error(context, e);
+            GUIHelper.showErrorAlert(context);
         }
     }
 
@@ -213,19 +219,11 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
                 );
 
                 for (MemberDTO member : memberList) {
-                    try {
-
-                        CommunicationFacade.lookupForMemberController().assignMemberToTeam(
-                            member.getMemberId(),
-                            _activeTeamDTO.getTeamId(),
-                            CommunicationFacade.getActiveSession()
-                        );
-
-                    } catch (UnknownEntityException e) {
-                        LOGGER.error("Unable to assign Member to Team", e);
-                    } catch (NotAuthorisedException e) {
-                        LOGGER.error("Client assign (Member to Team) request was rejected. Not enough permissions.", e);
-                    }
+                    CommunicationFacade.lookupForMemberController().assignMemberToTeam(
+                        member.getMemberId(),
+                        _activeTeamDTO.getTeamId(),
+                        CommunicationFacade.getActiveSession()
+                    );
                 }
 
                 GUIHelper.showSuccessAlert(SUCCESSFUL_TEAM_SAVE);
@@ -241,8 +239,13 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
 
                 GUIHelper.showValidationAlert(context);
                 LOGGER.error(context, e);
+            } catch (UnknownEntityException e) {
+                LOGGER.error("Unable to assign Member to Team", e);
             } catch (NotAuthorisedException e) {
-                LOGGER.error("Client save (Team) request was rejected. Not enough permissions.", e);
+                String context = "Client save (Team) request was rejected. Not enough permissions.";
+
+                LOGGER.error(context, e);
+                GUIHelper.showErrorAlert(context);
             }
         }
     }

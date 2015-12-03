@@ -37,6 +37,8 @@ import java.util.ResourceBundle;
 public class MemberReadOnlyViewController extends ConsumerViewController<MemberDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String NOT_AVAILABLE = "N/A";
+    private static final String ROLE_DEPARTMENT_HEAD = "departmentHead";
+    private static final String ROLE_ADMIN = "admin";
     private static final SimpleBooleanProperty EDIT_VISIBILITY_PROPERTY = new SimpleBooleanProperty(false);
     private static final SimpleBooleanProperty CREATE_VISIBILITY_PROPERTY = new SimpleBooleanProperty(false);
     private static final SimpleObjectProperty<MemberDTO> ACTIVE_DTO = new SimpleObjectProperty<>();
@@ -73,13 +75,13 @@ public class MemberReadOnlyViewController extends ConsumerViewController<MemberD
 
                 //enabling gui options for specific roles
                 switch (role) {
-                    case "departmentHead": {
+                    case ROLE_DEPARTMENT_HEAD: {
                         EDIT_VISIBILITY_PROPERTY.set(true);
                         CREATE_VISIBILITY_PROPERTY.set(true);
                         break;
                     }
 
-                    case "admin": {
+                    case ROLE_ADMIN: {
                         EDIT_VISIBILITY_PROPERTY.set(true);
                         CREATE_VISIBILITY_PROPERTY.set(true);
                         break;
@@ -150,7 +152,7 @@ public class MemberReadOnlyViewController extends ConsumerViewController<MemberD
                         _gender.setText(readOrNotAvailable(memberDTO.getGender()));
                         _address.setText(readOrNotAvailable(memberDTO.getAddress()));
                         _email.setText(readOrNotAvailable(memberDTO.getEmail()));
-                        _role.setText(readOrNotAvailable(memberDTO.getRole()));
+                        _role.setText(readOrNotAvailable(memberDTO.getRole()).toUpperCase());
 
                         if (fetchedList != null && !fetchedList.isEmpty()) {
                             _departmentTeamTable.setItems(FXCollections.observableList(fetchedList));
@@ -165,7 +167,10 @@ public class MemberReadOnlyViewController extends ConsumerViewController<MemberD
                     );
                 } catch (NotAuthorisedException e) {
 
-                    LOGGER.error("Client load (Departments and Teams) request was rejected. Not enough permissions.", e);
+                    String context = "Client load (Departments and Teams) request was rejected. Not enough permissions.";
+
+                    LOGGER.error(context, e);
+                    Platform.runLater(() -> GUIHelper.showErrorAlert(context));
                 }
 
             }).start();

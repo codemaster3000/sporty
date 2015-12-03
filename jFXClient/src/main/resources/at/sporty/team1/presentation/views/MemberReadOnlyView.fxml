@@ -22,12 +22,10 @@
         <RowConstraints vgrow="NEVER"/>
         <RowConstraints vgrow="SOMETIMES"/>
         <RowConstraints vgrow="NEVER"/>
-        <RowConstraints vgrow="SOMETIMES"/>
-        <RowConstraints vgrow="NEVER"/>
         <RowConstraints vgrow="NEVER"/>
     </rowConstraints>
     <padding>
-        <Insets left="15.0" right="15.0" top="15.0"/>
+        <Insets left="15.0" right="15.0" top="15.0" bottom="15.0"/>
     </padding>
 
     <Label text="First Name" GridPane.valignment="TOP">

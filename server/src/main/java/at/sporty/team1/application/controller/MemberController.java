@@ -119,6 +119,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
                 AccessPolicy.and(
                     BasicAccessPolicies.isInPermissionBound(UserRole.DEPARTMENT_HEAD),
+                    BasicAccessPolicies.isNotEscalatedPermissionBound(memberDTO),
 
                     AccessPolicy.or(
                         //create new member (new members doesn't have id))
