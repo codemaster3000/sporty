@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class CompetitionEditViewController extends EditViewController<TournamentDTO> {
-    public static final String COLUMN_TIME = "time";
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String VIEW_TEXT_HEADER = "TOURNAMENT EDITING VIEW";
     private static final String SUCCESSFUL_TOURNAMENT_SAVE = "Tournament was saved successfully.";
@@ -41,8 +40,9 @@ public class CompetitionEditViewController extends EditViewController<Tournament
     private static final String UNSUCCESSFUL_MATCH_TO_TOURNAMENT_SAVE = "Error occurred while saving Matches to Tournament.";
     private static final String COLUMN_PROP_TEAM_1 = "team1";
     private static final String COLUMN_PROP_TEAM_2 = "team2";
+    private static final String COLUMN_PROP_TIME = "date";
     private static final String COLUMN_PROP_REFEREE = "referee";
-    private static final String COLUMN_PROP_COURT = "court";
+    private static final String COLUMN_PROP_COURT = "location";
     private static final String COLUMN_PROP_RESULT = "result";
     private static final Label NO_CONTENT_PLACEHOLDER = new Label("No Content");
 
@@ -141,7 +141,7 @@ public class CompetitionEditViewController extends EditViewController<Tournament
         _team2Col.setOnEditCommit(cell -> cell.getRowValue().setTeam2(cell.getNewValue()));
 
         _timeCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
-        _timeCol.setCellValueFactory(new PropertyValueFactory<>(COLUMN_TIME));
+        _timeCol.setCellValueFactory(new PropertyValueFactory<>(COLUMN_PROP_TIME));
         _timeCol.setOnEditCommit(cell -> cell.getRowValue().setDate(cell.getNewValue()));
 
         _refereeCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
