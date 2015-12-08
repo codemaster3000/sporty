@@ -34,9 +34,10 @@ public class ViewLoader<T extends IJfxController> {
         _viewPaths.put(CompetitionEditViewController.class, "/at/sporty/team1/presentation/views/CompetitionView.fxml");
         _viewPaths.put(CompetitionReadOnlyViewController.class, "/at/sporty/team1/presentation/views/CompetitionReadOnlyView.fxml");
         _viewPaths.put(LoginMaskViewController.class, "/at/sporty/team1/presentation/views/LoginMaskView.fxml");
-        _viewPaths.put(MemberSearchViewController.class, "/at/sporty/team1/presentation/views/MemberSearchView.fxml");
-        _viewPaths.put(TournamentSearchViewController.class, "/at/sporty/team1/presentation/views/TournamentSearchView.fxml");
-    }
+		_viewPaths.put(MemberSearchViewController.class, "/at/sporty/team1/presentation/views/MemberSearchView.fxml");
+		_viewPaths.put(TournamentSearchViewController.class, "/at/sporty/team1/presentation/views/TournamentSearchView.fxml");
+		_viewPaths.put(MessagesMaskViewController.class, "/at/sporty/team1/presentation/views/MessagesMaskView.fxml");
+	}
 
 	private FXMLLoader _loader;
 

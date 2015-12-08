@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<GridPane hgap="5.0" vgap="5.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="at.sporty.team1.presentation.controllers.MessagesMaskViewController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="NEVER"/>
+        <ColumnConstraints hgrow="ALWAYS"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints vgrow="ALWAYS"/>
+        <RowConstraints vgrow="NEVER"/>
+        <RowConstraints vgrow="NEVER"/>
+    </rowConstraints>
+
+    <ListView fx:id="_messagesListView" minWidth="200.0" GridPane.rowSpan="2"/>
+
+    <GridPane minWidth="400.0" hgap="5.0" vgap="5.0" GridPane.columnIndex="1">
+        <columnConstraints>
+            <ColumnConstraints hgrow="NEVER"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints vgrow="SOMETIMES"/>
+            <RowConstraints vgrow="SOMETIMES"/>
+            <RowConstraints vgrow="NEVER"/>
+            <RowConstraints vgrow="SOMETIMES"/>
+            <RowConstraints vgrow="ALWAYS"/>
+        </rowConstraints>
+        <GridPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </GridPane.margin>
+
+        <Label text="Subject:">
+            <font>
+                <Font name="System Bold"/>
+            </font>
+        </Label>
+        <Label fx:id="_subjectLabel" GridPane.columnIndex="1"/>
+
+        <Label text="From:" GridPane.rowIndex="1">
+            <font>
+                <Font name="System Bold"/>
+            </font>
+        </Label>
+        <Label fx:id="_fromLabel" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+        <Label text="Content:" GridPane.rowIndex="3">
+            <font>
+                <Font name="System Bold"/>
+            </font>
+        </Label>
+        <ScrollPane cache="true" GridPane.columnSpan="2"
+                    GridPane.rowIndex="4">
+            <Label fx:id="_contentLabel" cache="true" textAlignment="JUSTIFY" wrapText="true">
+                <padding>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                </padding>
+            </Label>
+        </ScrollPane>
+        <Separator GridPane.columnSpan="2" GridPane.rowIndex="2"/>
+    </GridPane>
+
+    <!--THIS IS A LEGIT CODE BUT SCENE BUILDER 2.0 DOES NOT SUPPORT IT YET (IT IS A VERY FRESH FEATURE)-->
+    <!--TO EDIT THIS FILE GRAPHICALLY YOU NEED TO USE SCENE BUILDER 8.0 (CUSTOM BUILD OF SB THAT SUPPORTS JAVA FX8)-->
+    <!--DOWNLOAD LINK: http://gluonhq.com/products/downloads/-->
+    <ButtonBar buttonMinWidth="150.0" GridPane.rowIndex="1" GridPane.columnSpan="2">
+        <padding>
+            <Insets right="5.0"/>
+        </padding>
+        <buttons>
+            <!--BUTTON UNIFORM SHOULD BE USED ONLY AFTER ALL SIZE MANIPULATIONS-->
+            <Button fx:id="_confirmReadButton" visible="false" minHeight="30.0" minWidth="75" mnemonicParsing="false"
+                    onAction="#onConfirmRead" text="CONFIRM READ" ButtonBar.buttonData="OK_DONE"
+                    ButtonBar.buttonUniformSize="false"/>
+            <Button fx:id="_acceptRequestButton" visible="false" minHeight="30.0" minWidth="75" mnemonicParsing="false"
+                    onAction="#onAcceptRequest" text="ACCEPT REQUEST" ButtonBar.buttonData="YES"
+                    ButtonBar.buttonUniformSize="false"/>
+            <Button fx:id="_declineRequestButton" visible="false" minHeight="30.0" minWidth="75" mnemonicParsing="false"
+                    onAction="#onDeclineRequest" text="DECLINE REQUEST" ButtonBar.buttonData="NO"
+                    ButtonBar.buttonUniformSize="false"/>
+        </buttons>
+    </ButtonBar>
+
+    <Separator GridPane.columnSpan="2" GridPane.rowIndex="2"/>
+</GridPane>

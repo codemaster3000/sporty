@@ -1,24 +1,32 @@
 package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
+import at.sporty.team1.communication.NotificationPullerTask;
 import at.sporty.team1.presentation.ViewLoader;
 import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
 import at.sporty.team1.presentation.controllers.core.IJfxController;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.presentation.controllers.core.SearchViewController;
+import at.sporty.team1.presentation.dialogs.MessagesDialog;
 import at.sporty.team1.rmi.api.IDTO;
 import at.sporty.team1.rmi.dtos.MemberDTO;
+import at.sporty.team1.rmi.dtos.MessageDTO;
 import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
 import at.sporty.team1.rmi.exceptions.SecurityException;
 import at.sporty.team1.rmi.exceptions.UnknownEntityException;
+import at.sporty.team1.util.DaemonThreadFactory;
 import at.sporty.team1.util.GUIHelper;
 import at.sporty.team1.util.SVGContainer;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,24 +38,32 @@ import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.security.InvalidKeyException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MainViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String TEAM_TAB_CAPTION = "TEAM";
     private static final String MEMBER_TAB_CAPTION = "MEMBER";
     private static final String COMPETITION_TAB_CAPTION = "COMPETITION";
+    private static final String MESSAGE_BOX_IS_EMPTY = "Message Box is empty";
+    private static final int MESSAGE_PULL_INIT_DELAY = 0;
+    private static final int MESSAGE_PULL_PERIOD = 30;
 
     private static final SimpleBooleanProperty LOGIN_BUTTON_VISIBILITY_PROPERTY = new SimpleBooleanProperty(true);
     private static final Map<Tab, IJfxController> CONTROLLER_TO_TAB_MAP = new HashMap<>();
+    private static final ScheduledExecutorService MESSAGE_PULL_SCHEDULER = Executors.newSingleThreadScheduledExecutor(new DaemonThreadFactory());
+    private static final ObservableList<MessageDTO> USER_MESSAGES = FXCollections.emptyObservableList();
+    private static final ContextMenu MESSAGES_MENU = new ContextMenu();
 
     @FXML private TextField _searchField;
+    @FXML private GridPane _userBlock;
     @FXML private Label _userLabel;
+    @FXML private Label _userRoleLabel;
+    @FXML private Label _userMessagesLabel;
     @FXML private Button _loginButton;
     @FXML private Button _logoutButton;
     @FXML private TabPane _tabPanel;
@@ -61,9 +77,21 @@ public class MainViewController extends JfxController {
         _loginButton.visibleProperty().bind(LOGIN_BUTTON_VISIBILITY_PROPERTY);
         _loginButton.managedProperty().bind(_loginButton.visibleProperty());
 
-        //username label
-        _userLabel.visibleProperty().bind(_loginButton.visibleProperty().not());
-        _userLabel.managedProperty().bind(_userLabel.visibleProperty());
+        //user block
+        _userBlock.visibleProperty().bind(_loginButton.visibleProperty().not());
+        _userBlock.managedProperty().bind(_userBlock.visibleProperty());
+
+        //user messages
+        _userMessagesLabel.setGraphic(GUIHelper.loadSVGGraphic(SVGContainer.MESSAGE_ICON));
+        _userMessagesLabel.textProperty().bind(Bindings.size(USER_MESSAGES).asString());
+        _userMessagesLabel.setContextMenu(MESSAGES_MENU);
+        _userMessagesLabel.setOnMouseClicked(e -> {
+            if (!USER_MESSAGES.isEmpty()) {
+                new MessagesDialog(USER_MESSAGES).showAndWait();
+            } else {
+                GUIHelper.showInformationAlert(MESSAGE_BOX_IS_EMPTY);
+            }
+        });
 
         //logout button
         _logoutButton.visibleProperty().bind(_loginButton.visibleProperty().not());
@@ -77,7 +105,6 @@ public class MainViewController extends JfxController {
         });
 
         //Opening un-closable tabs
-
         Executor executor = Executors.newSingleThreadExecutor();
         executor.execute(loadMemberViewTask(false));
         executor.execute(loadTeamViewTask(false));
@@ -91,12 +118,25 @@ public class MainViewController extends JfxController {
         if (performLogin()) {
             LOGIN_BUTTON_VISIBILITY_PROPERTY.set(false);
             _userLabel.setText(getUserName());
+            _userRoleLabel.setText(getUserRole());
+
+            MESSAGE_PULL_SCHEDULER.scheduleAtFixedRate(
+                new NotificationPullerTask(
+                    CommunicationFacade.getActiveSession(),
+                    USER_MESSAGES
+                ),
+                MESSAGE_PULL_INIT_DELAY,
+                MESSAGE_PULL_PERIOD,
+                TimeUnit.SECONDS
+            );
         }
     }
 
     @FXML
     private void onLogout() {
         LOGIN_BUTTON_VISIBILITY_PROPERTY.set(true);
+
+        MESSAGE_PULL_SCHEDULER.shutdownNow();
         CommunicationFacade.logout();
     }
 
@@ -253,8 +293,12 @@ public class MainViewController extends JfxController {
         StringBuilder sb = new StringBuilder();
         if (user.getLastName() != null) sb.append(user.getLastName());
         if (user.getFirstName() != null) sb.append(" ").append(user.getFirstName());
-        if (user.getRole() != null) sb.append(" (").append(user.getRole()).append(")");
 
         return sb.toString().toUpperCase();
+    }
+
+    private String getUserRole() {
+        MemberDTO user = CommunicationFacade.getExtendedActiveSession().getUser();
+        return user.getRole() != null ? user.getRole() : null;
     }
 }
