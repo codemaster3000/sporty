@@ -135,7 +135,7 @@
         <!-- Remote API Dependency -->
         <dependency>
             <groupId>at.fhv.itb13.team1.sporty</groupId>
-            <artifactId>remoteAPI</artifactId>
+            <artifactId>shared</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

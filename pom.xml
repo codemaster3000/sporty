@@ -18,9 +18,10 @@
     </properties>
 
     <modules>
-		<module>server</module>
-		<module>jFXClient</module>
-        <module>remoteAPI</module>
+        <module>shared</module>
+        <module>jfxclient</module>
+		<module>webclient</module>
+        <module>server</module>
 	</modules>
 
     <build>

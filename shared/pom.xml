@@ -11,5 +11,5 @@
     </parent>
 
     <name>Sporty Remote API</name>
-    <artifactId>remoteAPI</artifactId>
+    <artifactId>shared</artifactId>
 </project>
