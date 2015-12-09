@@ -38,11 +38,11 @@ import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.security.InvalidKeyException;
-import java.util.*;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.concurrent.*;
 
 public class MainViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -120,15 +120,19 @@ public class MainViewController extends JfxController {
             _userLabel.setText(getUserName());
             _userRoleLabel.setText(getUserRole());
 
-            MESSAGE_PULL_SCHEDULER.scheduleAtFixedRate(
-                new NotificationPullerTask(
-                    CommunicationFacade.getActiveSession(),
-                    USER_MESSAGES
-                ),
-                MESSAGE_PULL_INIT_DELAY,
-                MESSAGE_PULL_PERIOD,
-                TimeUnit.SECONDS
-            );
+            try {
+                MESSAGE_PULL_SCHEDULER.scheduleAtFixedRate(
+                    new NotificationPullerTask(
+                        CommunicationFacade.getActiveSession(),
+                        USER_MESSAGES
+                    ),
+                    MESSAGE_PULL_INIT_DELAY,
+                    MESSAGE_PULL_PERIOD,
+                    TimeUnit.SECONDS
+                );
+            } catch (RejectedExecutionException e) {
+                LOGGER.error("Message-Pull scheduler was rejected to continue it's work.", e);
+            }
         }
     }
 

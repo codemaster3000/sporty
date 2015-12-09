@@ -20,8 +20,11 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.naming.AuthenticationException;
 import javax.naming.Context;
+import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.InitialDirContext;
+import javax.naming.directory.SearchControls;
+import javax.naming.directory.SearchResult;
 import javax.persistence.PersistenceException;
 import javax.xml.registry.infomodel.User;
 import java.rmi.RemoteException;
@@ -90,39 +93,60 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
             Hashtable<String, String> env = new Hashtable<>();
             env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
             env.put(Context.PROVIDER_URL, "ldaps://ldap.fhv.at:636/dc=uclv,dc=net");
-            env.put(Context.SECURITY_AUTHENTICATION, "simple");
-            env.put(Context.SECURITY_PRINCIPAL, "uid=" + username + ",ou=fhv,ou=People,dc=uclv,dc=net");
-            env.put(Context.SECURITY_CREDENTIALS, password);
-            env.put(Context.SECURITY_PROTOCOL, "ssl");
 
-			//Trying to login via LDAP
-            InitialDirContext context = new InitialDirContext(env);
+            //Searching for user
+            InitialDirContext searchContext = new InitialDirContext(env);
+            NamingEnumeration<SearchResult> searchResults = searchContext.search(
+                "ou=fhv, ou=People",
+                "(&(uid=" + username + ")(cn=*))",
+                new SearchControls()
+            );
 
-            //Successful login
-            LOGGER.info("Successful login of {}.", username);
-            context.close();
+            //Closing context
+            searchContext.close();
 
-            //Receiving member object from db
-            Member member = PersistenceFacade.getNewMemberDAO().findByUsername(username);
+            if (searchResults.hasMoreElements()) {
+                SearchResult searchResult = searchResults.next();
+                String principal = searchResult.getNameInNamespace();
 
-            //If member was not found -> authorize will be declined
-            if (member != null) {
+                if (!searchResults.hasMoreElements()) {
 
-                //Preparing client fingerprint
-                PublicKey clientKey = SecurityModule.getDecodedRSAPublicKey(authorisationDTO.getClientPublicKey());
+                    //Setting environment properties
+                    env.put(Context.SECURITY_AUTHENTICATION, "simple");
+                    env.put(Context.SECURITY_PRINCIPAL, principal);
+                    env.put(Context.SECURITY_CREDENTIALS, password);
+                    env.put(Context.SECURITY_PROTOCOL, "ssl");
 
-                //Generating new session id for client
-                String sessionId = UUID.randomUUID().toString();
-                SESSION_REGISTRY.put(sessionId, member.getMemberId());
+                    //Trying to login via LDAP
+                    InitialDirContext loginContext = new InitialDirContext(env);
 
-                //Encrypting rawFingerprint expressly for target client
-                cipher.init(Cipher.ENCRYPT_MODE, clientKey);
-                byte[] clientFingerprint = cipher.doFinal(sessionId.getBytes());
+                    //Successful login
+                    LOGGER.info("Successful login of {}.", username);
+                    loginContext.close();
 
-                //Sending session object for client
-                return new SessionDTO()
-                        .setUserId(member.getMemberId())
-                        .setClientFingerprint(clientFingerprint);
+                    //Receiving member object from db
+                    Member member = PersistenceFacade.getNewMemberDAO().findByUsername(username);
+
+                    //If member was not found -> authorize will be declined
+                    if (member != null) {
+
+                        //Preparing client fingerprint
+                        PublicKey clientKey = SecurityModule.getDecodedRSAPublicKey(authorisationDTO.getClientPublicKey());
+
+                        //Generating new session id for client
+                        String sessionId = UUID.randomUUID().toString();
+                        SESSION_REGISTRY.put(sessionId, member.getMemberId());
+
+                        //Encrypting rawFingerprint expressly for target client
+                        cipher.init(Cipher.ENCRYPT_MODE, clientKey);
+                        byte[] clientFingerprint = cipher.doFinal(sessionId.getBytes());
+
+                        //Sending session object for client
+                        return new SessionDTO()
+                                .setUserId(member.getMemberId())
+                                .setClientFingerprint(clientFingerprint);
+                    }
+                }
             }
 
         } catch (InvalidKeyException e) {
