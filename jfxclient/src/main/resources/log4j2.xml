@@ -4,8 +4,8 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="[%-4level] | %d{HH:mm:ss.SSS} | [THREAD: %t | CLASS: %c] -> %msg%n"/>
         </Console>
-        <RollingFile name="FileAppender" append="true" fileName="logs/client/lastRun.log"
-                     filePattern="logs/client/old/%d{yyyy-MM-dd}.log">
+        <RollingFile name="FileAppender" append="true" fileName=".logs/jfxclient/today.log"
+                     filePattern=".logs/jfxclient/old/%d{yyyy-MM-dd}.log">
             <PatternLayout pattern="[%-4level] | %d{HH:mm:ss.SSS} | [THREAD: %t | CLASS: %c] -> %msg%n"/>
             <TimeBasedTriggeringPolicy />
             <DefaultRolloverStrategy max="10"/>
