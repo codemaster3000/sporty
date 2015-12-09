@@ -61,7 +61,7 @@
             <artifactId>log4j-core</artifactId>
         </dependency>
 
-        <!-- Remote API Dependency -->
+        <!-- Shared Dependency -->
         <dependency>
             <groupId>at.fhv.itb13.team1.sporty</groupId>
             <artifactId>shared</artifactId>

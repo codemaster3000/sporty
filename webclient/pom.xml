@@ -93,10 +93,16 @@
             <version>2.3.1</version>
         </dependency>
 
-        <!-- Remote API Dependency -->
+        <!-- Shared Dependency -->
         <dependency>
             <groupId>at.fhv.itb13.team1.sporty</groupId>
             <artifactId>shared</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>at.fhv.itb13.team1.sporty</groupId>
+            <artifactId>server</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
