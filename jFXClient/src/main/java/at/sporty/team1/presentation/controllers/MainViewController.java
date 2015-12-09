@@ -137,6 +137,8 @@ public class MainViewController extends JfxController {
         LOGIN_BUTTON_VISIBILITY_PROPERTY.set(true);
 
         MESSAGE_PULL_SCHEDULER.shutdownNow();
+        USER_MESSAGES.clear();
+
         CommunicationFacade.logout();
     }
 
