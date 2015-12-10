@@ -14,7 +14,7 @@ import at.sporty.team1.shared.dtos.MessageDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.SecurityException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
-import at.sporty.team1.communication.util.DaemonThreadFactory;
+import at.sporty.team1.presentation.util.DaemonThreadFactory;
 import at.sporty.team1.presentation.util.GUIHelper;
 import at.sporty.team1.presentation.util.SVGContainer;
 import javafx.application.Platform;

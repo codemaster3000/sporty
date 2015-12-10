@@ -1,4 +1,4 @@
-package at.sporty.team1.communication.util;
+package at.sporty.team1.presentation.util;
 
 import java.util.concurrent.ThreadFactory;
 
