@@ -1,34 +1,31 @@
-package at.sporty.team1.application.controller;
+package at.sporty.team1.application.controller.real.impl;
 
 import at.sporty.team1.application.auth.AccessPolicy;
 import at.sporty.team1.application.auth.BasicAccessPolicies;
+import at.sporty.team1.application.controller.real.api.INotificationController;
 import at.sporty.team1.application.jms.ConsumerJMS;
 import at.sporty.team1.application.jms.ProducerJMS;
-import at.sporty.team1.rmi.api.INotificationController;
-import at.sporty.team1.rmi.dtos.MessageDTO;
-import at.sporty.team1.rmi.dtos.SessionDTO;
-import at.sporty.team1.rmi.enums.UserRole;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.ValidationException;
-import javax.jms.JMSException;
+import at.sporty.team1.shared.dtos.MessageDTO;
+import at.sporty.team1.shared.dtos.SessionDTO;
+import at.sporty.team1.shared.enums.UserRole;
+import at.sporty.team1.shared.exceptions.NotAuthorisedException;
+import at.sporty.team1.shared.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
+import javax.jms.JMSException;
 import java.util.List;
 
-public class NotificationController extends UnicastRemoteObject implements INotificationController {
+public abstract class NotificationController implements INotificationController {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public NotificationController() throws RemoteException {
-        super();
+    protected NotificationController() {
     }
 
     @Override
     public boolean sendMessage(MessageDTO messageDTO, SessionDTO session)
-    throws RemoteException, ValidationException, NotAuthorisedException {
+    throws ValidationException, NotAuthorisedException {
 
         /* Checking access permissions */
         //1 STEP
@@ -64,7 +61,7 @@ public class NotificationController extends UnicastRemoteObject implements INoti
 
     @Override
     public List<MessageDTO> pullMessages(SessionDTO session)
-    throws RemoteException, NotAuthorisedException {
+    throws NotAuthorisedException {
 
         /* Checking access permissions */
         if (!LoginController.hasEnoughPermissions(

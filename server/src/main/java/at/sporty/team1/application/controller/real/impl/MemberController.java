@@ -1,8 +1,9 @@
-package at.sporty.team1.application.controller;
+package at.sporty.team1.application.controller.real.impl;
 
 
 import at.sporty.team1.application.auth.AccessPolicy;
 import at.sporty.team1.application.auth.BasicAccessPolicies;
+import at.sporty.team1.application.controller.real.api.IMemberController;
 import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Team;
@@ -12,21 +13,18 @@ import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.domain.readonly.IRMember;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
-import at.sporty.team1.rmi.api.IMemberController;
-import at.sporty.team1.rmi.dtos.*;
-import at.sporty.team1.rmi.enums.UserRole;
-import at.sporty.team1.rmi.exceptions.DataType;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.UnknownEntityException;
-import at.sporty.team1.rmi.exceptions.ValidationException;
+import at.sporty.team1.shared.dtos.*;
+import at.sporty.team1.shared.enums.DataType;
+import at.sporty.team1.shared.enums.UserRole;
+import at.sporty.team1.shared.exceptions.NotAuthorisedException;
+import at.sporty.team1.shared.exceptions.UnknownEntityException;
+import at.sporty.team1.shared.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
 import javax.persistence.PersistenceException;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -34,19 +32,18 @@ import java.util.stream.Collectors;
 /**
  * Created by f00 on 28.10.15.
  */
-public class MemberController extends UnicastRemoteObject implements IMemberController {
+public abstract class MemberController implements IMemberController {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LogManager.getLogger();
     private static final Mapper MAPPER = new DozerBeanMapper();
 
 
-    public MemberController() throws RemoteException {
-        super();
+    protected MemberController() {
     }
 
     @Override
     public MemberDTO findMemberById(Integer memberId, SessionDTO session)
-    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+    throws UnknownEntityException, NotAuthorisedException {
 
         /* Checking access permissions */
         if (!LoginController.hasEnoughPermissions(
@@ -74,7 +71,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
     @Override
     public List<MemberDTO> searchAllMembers(Boolean isFeePaid, SessionDTO session)
-    throws RemoteException, NotAuthorisedException {
+    throws NotAuthorisedException {
 
         /* Checking access permissions */
         if (!LoginController.hasEnoughPermissions(
@@ -105,7 +102,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
     @Override
     public Integer createOrSaveMember(MemberDTO memberDTO, SessionDTO session)
-    throws RemoteException, ValidationException, NotAuthorisedException {
+    throws ValidationException, NotAuthorisedException {
 
         /* Checking access permissions */
         //1 STEP
@@ -162,7 +159,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
     @Override
     public List<MemberDTO> searchMembersByNameString(String searchString, Boolean isFeePaid, SessionDTO session)
-    throws RemoteException, ValidationException, NotAuthorisedException {
+    throws ValidationException, NotAuthorisedException {
 
         /* Checking access permissions */
         if (!LoginController.hasEnoughPermissions(
@@ -200,7 +197,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
     @Override
     public List<MemberDTO> searchMembersByCommonTeamName(String teamName, Boolean isFeePaid, SessionDTO session)
-    throws RemoteException, ValidationException, NotAuthorisedException {
+    throws ValidationException, NotAuthorisedException {
 
         /* Checking access permissions */
         if (!LoginController.hasEnoughPermissions(
@@ -238,7 +235,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
     @Override
     public List<MemberDTO> searchMembersByTournamentTeamName(String teamName, Boolean isFeePaid, SessionDTO session)
-    throws RemoteException, ValidationException, NotAuthorisedException {
+    throws ValidationException, NotAuthorisedException {
 
         /* Checking access permissions */
         if (!LoginController.hasEnoughPermissions(
@@ -276,7 +273,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
     @Override
     public List<MemberDTO> searchMembersByDateOfBirth(String dateOfBirth, Boolean isFeePaid, SessionDTO session)
-    throws RemoteException, ValidationException, NotAuthorisedException {
+    throws ValidationException, NotAuthorisedException {
 
         /* Checking access permissions */
         if (!LoginController.hasEnoughPermissions(
@@ -314,7 +311,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
     @Override
     public List<DTOPair<DepartmentDTO, TeamDTO>> loadFetchedDepartmentTeamList(Integer memberId, SessionDTO session)
-    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+    throws UnknownEntityException, NotAuthorisedException {
 
         /* Checking access permissions */
         if (!LoginController.hasEnoughPermissions(
@@ -399,7 +396,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
     @Override
     public List<DepartmentDTO> loadMemberDepartments(Integer memberId, SessionDTO session)
-    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+    throws UnknownEntityException, NotAuthorisedException {
 
         /* Checking access permissions */
         if (!LoginController.hasEnoughPermissions(
@@ -442,7 +439,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
     @Override
     public void assignMemberToDepartment(Integer memberId, Integer departmentId, SessionDTO session)
-    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+    throws UnknownEntityException, NotAuthorisedException {
 
         /* Checking access permissions */
         if (!LoginController.hasEnoughPermissions(
@@ -483,7 +480,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
     @Override
     public void removeMemberFromDepartment(Integer memberId, Integer departmentId, SessionDTO session)
-    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+    throws UnknownEntityException, NotAuthorisedException {
 
         /* Checking access permissions */
         if (!LoginController.hasEnoughPermissions(
@@ -524,7 +521,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
     @Override
     public List<TeamDTO> loadMemberTeams(Integer memberId, SessionDTO session)
-    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+    throws UnknownEntityException, NotAuthorisedException {
 
         /* Checking access permissions */
         if (!LoginController.hasEnoughPermissions(
@@ -567,7 +564,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
     @Override
     public void assignMemberToTeam(Integer memberId, Integer teamId, SessionDTO session)
-    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+    throws UnknownEntityException, NotAuthorisedException {
 
         /* Checking access permissions */
         if (!LoginController.hasEnoughPermissions(
@@ -608,7 +605,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
     @Override
     public void removeMemberFromTeam(Integer memberId, Integer teamId, SessionDTO session)
-    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+    throws UnknownEntityException, NotAuthorisedException {
 
         /* Checking access permissions */
         if (!LoginController.hasEnoughPermissions(
@@ -649,7 +646,7 @@ public class MemberController extends UnicastRemoteObject implements IMemberCont
 
     @Override
     public void deleteMember(Integer memberId, SessionDTO session)
-    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+    throws UnknownEntityException, NotAuthorisedException {
 
         /* Checking access permissions */
         if (!LoginController.hasEnoughPermissions(

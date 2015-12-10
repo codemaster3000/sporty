@@ -1,16 +1,16 @@
-package at.sporty.team1.application.controller;
+package at.sporty.team1.application.controller.real.impl;
 
 import at.sporty.team1.application.auth.AccessPolicy;
+import at.sporty.team1.application.controller.real.api.ILoginController;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.persistence.util.TooManyResultsException;
-import at.sporty.team1.rmi.api.ILoginController;
-import at.sporty.team1.rmi.dtos.AuthorisationDTO;
-import at.sporty.team1.rmi.dtos.SessionDTO;
-import at.sporty.team1.rmi.enums.UserRole;
-import at.sporty.team1.rmi.exceptions.SecurityException;
-import at.sporty.team1.rmi.security.SecurityModule;
+import at.sporty.team1.shared.dtos.AuthorisationDTO;
+import at.sporty.team1.shared.dtos.SessionDTO;
+import at.sporty.team1.shared.enums.UserRole;
+import at.sporty.team1.shared.exceptions.SecurityException;
+import at.sporty.team1.shared.security.SecurityModule;
 import org.apache.commons.collections4.map.PassiveExpiringMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,9 +26,6 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 import javax.persistence.PersistenceException;
-import javax.xml.registry.infomodel.User;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.PublicKey;
@@ -39,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Represents a controller to handle the login.
  */
-public class LoginController extends UnicastRemoteObject implements ILoginController {
+public abstract class LoginController implements ILoginController {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LogManager.getLogger();
     private static final PassiveExpiringMap<String, Integer> SESSION_REGISTRY = new PassiveExpiringMap<>(1, TimeUnit.HOURS);
@@ -48,13 +45,12 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
     private static KeyPair _serverKeyPair;
     private static byte[] _encodedPublicServerKey;
 
-	public LoginController() throws RemoteException {
-		super();
+	protected LoginController() {
 	}
 
     @Override
     public byte[] getServerPublicKey()
-    throws RemoteException, SecurityException {
+    throws SecurityException {
         if (_encodedPublicServerKey == null) {
             _encodedPublicServerKey = SecurityModule.getEncodedRSAPublicKey(getServerKeyPair());
         }
@@ -62,11 +58,9 @@ public class LoginController extends UnicastRemoteObject implements ILoginContro
     }
 
 	@Override
-	public SessionDTO authorize(AuthorisationDTO authorisationDTO)
-    throws RemoteException {
-		/*
-		 * Check if username and password are present in authorisationDTO
-		 */
+	public SessionDTO authorize(AuthorisationDTO authorisationDTO) {
+
+        //Check if username and password are present in authorisationDTO
 		if (authorisationDTO == null) return null;
         if (authorisationDTO.getClientPublicKey() == null) return null;
         if (authorisationDTO.getEncryptedUserLogin() == null) return null;

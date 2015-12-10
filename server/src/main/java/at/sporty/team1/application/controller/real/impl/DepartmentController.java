@@ -1,45 +1,41 @@
-package at.sporty.team1.application.controller;
+package at.sporty.team1.application.controller.real.impl;
 
 import at.sporty.team1.application.auth.BasicAccessPolicies;
+import at.sporty.team1.application.controller.real.api.IDepartmentController;
 import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IDepartment;
 import at.sporty.team1.domain.interfaces.ITeam;
 import at.sporty.team1.persistence.PersistenceFacade;
-import at.sporty.team1.rmi.api.IDepartmentController;
-import at.sporty.team1.rmi.dtos.DepartmentDTO;
-import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.dtos.SessionDTO;
-import at.sporty.team1.rmi.dtos.TeamDTO;
-import at.sporty.team1.rmi.enums.UserRole;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.UnknownEntityException;
+import at.sporty.team1.shared.dtos.DepartmentDTO;
+import at.sporty.team1.shared.dtos.MemberDTO;
+import at.sporty.team1.shared.dtos.SessionDTO;
+import at.sporty.team1.shared.dtos.TeamDTO;
+import at.sporty.team1.shared.enums.UserRole;
+import at.sporty.team1.shared.exceptions.NotAuthorisedException;
+import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
 import javax.persistence.PersistenceException;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * Created by f00 on 03.11.15.
  */
-public class DepartmentController extends UnicastRemoteObject implements IDepartmentController {
+public abstract class DepartmentController implements IDepartmentController {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Mapper MAPPER = new DozerBeanMapper();
 
-    public DepartmentController() throws RemoteException {
-        super();
+    protected DepartmentController() {
     }
 
     @Override
-    public List<DepartmentDTO> searchAllDepartments()
-    throws RemoteException {
+    public List<DepartmentDTO> searchAllDepartments() {
 
         try {
             //pulling a DepartmentDAO and searching for all departments
@@ -61,7 +57,7 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
 
     @Override
     public List<TeamDTO> loadDepartmentTeams(Integer departmentId)
-    throws RemoteException, UnknownEntityException {
+    throws UnknownEntityException {
 
         /* Validating Input */
         if (departmentId == null) throw new UnknownEntityException(IDepartment.class);
@@ -96,7 +92,7 @@ public class DepartmentController extends UnicastRemoteObject implements IDepart
 
     @Override
     public MemberDTO loadDepartmentHead(Integer departmentId, SessionDTO session)
-    throws RemoteException, UnknownEntityException, NotAuthorisedException {
+    throws UnknownEntityException, NotAuthorisedException {
 
         /* Checking access permissions */
         if (!LoginController.hasEnoughPermissions(

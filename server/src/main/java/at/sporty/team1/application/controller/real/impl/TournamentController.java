@@ -1,30 +1,28 @@
-package at.sporty.team1.application.controller;
+package at.sporty.team1.application.controller.real.impl;
 
 import at.sporty.team1.application.auth.AccessPolicy;
 import at.sporty.team1.application.auth.BasicAccessPolicies;
+import at.sporty.team1.application.controller.real.api.ITournamentController;
 import at.sporty.team1.domain.Match;
 import at.sporty.team1.domain.Tournament;
 import at.sporty.team1.domain.interfaces.IMatch;
 import at.sporty.team1.domain.interfaces.ITournament;
 import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
-import at.sporty.team1.rmi.api.ITournamentController;
-import at.sporty.team1.rmi.dtos.MatchDTO;
-import at.sporty.team1.rmi.dtos.SessionDTO;
-import at.sporty.team1.rmi.dtos.TournamentDTO;
-import at.sporty.team1.rmi.enums.UserRole;
-import at.sporty.team1.rmi.exceptions.DataType;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.UnknownEntityException;
-import at.sporty.team1.rmi.exceptions.ValidationException;
+import at.sporty.team1.shared.dtos.MatchDTO;
+import at.sporty.team1.shared.dtos.SessionDTO;
+import at.sporty.team1.shared.dtos.TournamentDTO;
+import at.sporty.team1.shared.enums.DataType;
+import at.sporty.team1.shared.enums.UserRole;
+import at.sporty.team1.shared.exceptions.NotAuthorisedException;
+import at.sporty.team1.shared.exceptions.UnknownEntityException;
+import at.sporty.team1.shared.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
 import javax.persistence.PersistenceException;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,18 +30,16 @@ import java.util.stream.Collectors;
 /**
  * TournamentController represents the logic controller for a tournament
  */
-public class TournamentController extends UnicastRemoteObject implements ITournamentController {
+public abstract class TournamentController implements ITournamentController {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LogManager.getLogger();
     private static final Mapper MAPPER = new DozerBeanMapper();
 
-    public TournamentController() throws RemoteException{
-    	super();
+    protected TournamentController() {
     }
 
     @Override
-    public List<TournamentDTO> searchAllTournaments()
-    throws RemoteException {
+    public List<TournamentDTO> searchAllTournaments() {
 
         try {
             /* pulling a TournamentDAO and getting all Tournaments */
@@ -65,7 +61,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
 
     @Override
     public List<TournamentDTO> searchTournamentsBySport(String sport)
-    throws RemoteException, ValidationException {
+    throws ValidationException {
 
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -94,7 +90,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
 
     @Override
     public List<TournamentDTO> searchTournamentsByDate(String eventDate)
-    throws RemoteException, ValidationException {
+    throws ValidationException {
 
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -123,7 +119,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
 
     @Override
     public List<TournamentDTO> searchTournamentsByLocation(String location)
-    throws RemoteException, ValidationException {
+    throws ValidationException {
 
         /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
@@ -152,7 +148,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
 
     @Override
     public List<String> searchAllTournamentTeams(Integer tournamentId)
-    throws RemoteException, UnknownEntityException {
+    throws UnknownEntityException {
 
         if (tournamentId == null) throw new UnknownEntityException(ITournament.class);
 
@@ -178,7 +174,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
 
     @Override
     public List<MatchDTO> searchAllTournamentMatches(Integer tournamentId)
-    throws RemoteException, UnknownEntityException {
+    throws UnknownEntityException {
 
         if (tournamentId == null) throw new UnknownEntityException(ITournament.class);
 
@@ -212,7 +208,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
 
     @Override
     public Integer createOrSaveTournament(TournamentDTO tournamentDTO, SessionDTO session)
-    throws RemoteException, ValidationException, NotAuthorisedException {
+    throws ValidationException, NotAuthorisedException {
 
         /* Checking access permissions */
         //1 STEP
@@ -264,7 +260,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
 
     @Override
     public void createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
-    throws RemoteException, ValidationException, UnknownEntityException, NotAuthorisedException {
+    throws ValidationException, UnknownEntityException, NotAuthorisedException {
 
         /* Checking access permissions */
         //1 STEP
@@ -324,7 +320,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
 
     @Override
     public void assignTeamToTournament(String teamName, Integer tournamentId, SessionDTO session)
-    throws RemoteException, UnknownEntityException, ValidationException, NotAuthorisedException {
+    throws UnknownEntityException, ValidationException, NotAuthorisedException {
 
         /* Checking access permissions */
         if (!LoginController.hasEnoughPermissions(
@@ -367,7 +363,7 @@ public class TournamentController extends UnicastRemoteObject implements ITourna
 
     @Override
     public void removeTeamFromTournament(String teamName, Integer tournamentId, SessionDTO session)
-    throws RemoteException, ValidationException, UnknownEntityException, NotAuthorisedException {
+    throws ValidationException, UnknownEntityException, NotAuthorisedException {
 
         /* Checking access permissions */
         if (!LoginController.hasEnoughPermissions(
