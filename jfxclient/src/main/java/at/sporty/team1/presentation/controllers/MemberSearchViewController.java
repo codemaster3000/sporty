@@ -1,6 +1,6 @@
 package at.sporty.team1.presentation.controllers;
 
-import at.sporty.team1.communication.CommunicationFacade;
+import at.sporty.team1.communication.facades.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.SearchViewController;
 import at.sporty.team1.shared.api.rmi.IMemberControllerRMI;
 import at.sporty.team1.shared.dtos.MemberDTO;

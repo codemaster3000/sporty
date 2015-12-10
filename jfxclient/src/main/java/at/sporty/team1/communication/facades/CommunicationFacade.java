@@ -1,6 +1,6 @@
-package at.sporty.team1.communication;
+package at.sporty.team1.communication.facades;
 
-import at.sporty.team1.shared.enums.RemoteObjectRegistry;
+import at.sporty.team1.communication.util.RemoteObjectRegistry;
 import at.sporty.team1.shared.api.rmi.*;
 import at.sporty.team1.shared.dtos.AuthorisationDTO;
 import at.sporty.team1.shared.dtos.MemberDTO;

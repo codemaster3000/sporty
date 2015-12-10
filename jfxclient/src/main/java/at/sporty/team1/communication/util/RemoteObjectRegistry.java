@@ -1,4 +1,4 @@
-package at.sporty.team1.shared.enums;
+package at.sporty.team1.communication.util;
 
 public enum RemoteObjectRegistry {
     MEMBER_CONTROLLER("MEMBER_CONTROLLER"),

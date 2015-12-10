@@ -1,5 +1,6 @@
-package at.sporty.team1.communication;
+package at.sporty.team1.communication.util;
 
+import at.sporty.team1.communication.facades.CommunicationFacade;
 import at.sporty.team1.shared.api.rmi.INotificationControllerRMI;
 import at.sporty.team1.shared.dtos.MessageDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
