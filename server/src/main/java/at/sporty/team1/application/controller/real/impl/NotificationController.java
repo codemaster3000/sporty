@@ -16,11 +16,11 @@ import org.apache.logging.log4j.Logger;
 import javax.jms.JMSException;
 import java.util.List;
 
-public abstract class NotificationController implements INotificationController {
+public class NotificationController implements INotificationController {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LogManager.getLogger();
 
-    protected NotificationController() {
+    public NotificationController() {
     }
 
     @Override

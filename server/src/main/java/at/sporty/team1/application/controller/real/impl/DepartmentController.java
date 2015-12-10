@@ -26,12 +26,12 @@ import java.util.stream.Collectors;
 /**
  * Created by f00 on 03.11.15.
  */
-public abstract class DepartmentController implements IDepartmentController {
+public class DepartmentController implements IDepartmentController {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Mapper MAPPER = new DozerBeanMapper();
 
-    protected DepartmentController() {
+    public DepartmentController() {
     }
 
     @Override

@@ -30,12 +30,12 @@ import java.util.stream.Collectors;
 /**
  * Created by sereGkaluv on 27-Oct-15.
  */
-public abstract class TeamController implements ITeamController {
+public class TeamController implements ITeamController {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Mapper MAPPER = new DozerBeanMapper();
 
-    protected TeamController() {
+    public TeamController() {
     }
 
     @Override

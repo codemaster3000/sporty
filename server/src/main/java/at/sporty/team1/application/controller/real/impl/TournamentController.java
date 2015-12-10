@@ -30,12 +30,12 @@ import java.util.stream.Collectors;
 /**
  * TournamentController represents the logic controller for a tournament
  */
-public abstract class TournamentController implements ITournamentController {
+public class TournamentController implements ITournamentController {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LogManager.getLogger();
     private static final Mapper MAPPER = new DozerBeanMapper();
 
-    protected TournamentController() {
+    public TournamentController() {
     }
 
     @Override

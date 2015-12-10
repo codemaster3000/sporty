@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Represents a controller to handle the login.
  */
-public abstract class LoginController implements ILoginController {
+public class LoginController implements ILoginController {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LogManager.getLogger();
     private static final PassiveExpiringMap<String, Integer> SESSION_REGISTRY = new PassiveExpiringMap<>(1, TimeUnit.HOURS);
@@ -45,7 +45,7 @@ public abstract class LoginController implements ILoginController {
     private static KeyPair _serverKeyPair;
     private static byte[] _encodedPublicServerKey;
 
-	protected LoginController() {
+	public LoginController() {
 	}
 
     @Override

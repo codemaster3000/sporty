@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by f00 on 03.11.15.
  */
-public interface IDepartmentController extends IRemoteController {
+public interface IDepartmentControllerRMI extends IRemoteControllerRMI {
 
     /**
      * Search for all Departments.

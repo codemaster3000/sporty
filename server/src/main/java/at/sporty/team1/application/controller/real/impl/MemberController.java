@@ -32,13 +32,12 @@ import java.util.stream.Collectors;
 /**
  * Created by f00 on 28.10.15.
  */
-public abstract class MemberController implements IMemberController {
+public class MemberController implements IMemberController {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LogManager.getLogger();
     private static final Mapper MAPPER = new DozerBeanMapper();
 
-
-    protected MemberController() {
+    public MemberController() {
     }
 
     @Override
