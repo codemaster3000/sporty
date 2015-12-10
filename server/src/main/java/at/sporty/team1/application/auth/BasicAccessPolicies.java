@@ -1,11 +1,11 @@
 package at.sporty.team1.application.auth;
 
-import at.sporty.team1.application.controller.LoginController;
+import at.sporty.team1.application.controller.real.impl.LoginController;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.persistence.PersistenceFacade;
-import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.enums.UserRole;
+import at.sporty.team1.shared.dtos.MemberDTO;
+import at.sporty.team1.shared.enums.UserRole;
 
 import java.util.function.BiFunction;
 

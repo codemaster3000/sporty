@@ -1,6 +1,6 @@
 package at.sporty.team1.application.jms;
 
-import at.sporty.team1.rmi.dtos.MessageDTO;
+import at.sporty.team1.shared.dtos.MessageDTO;
 import com.sun.messaging.Queue;
 import com.sun.messaging.QueueConnectionFactory;
 

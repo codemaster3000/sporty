@@ -1,16 +1,16 @@
 package server;
 
-import at.sporty.team1.application.controller.MemberController;
-import at.sporty.team1.application.controller.TournamentController;
+import at.sporty.team1.application.controller.real.impl.MemberController;
+import at.sporty.team1.application.controller.real.impl.TournamentController;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Tournament;
 import at.sporty.team1.persistence.PersistenceFacade;
-import at.sporty.team1.rmi.dtos.DTOPair;
-import at.sporty.team1.rmi.dtos.DepartmentDTO;
-import at.sporty.team1.rmi.dtos.MatchDTO;
-import at.sporty.team1.rmi.dtos.TeamDTO;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.UnknownEntityException;
+import at.sporty.team1.shared.dtos.DTOPair;
+import at.sporty.team1.shared.dtos.DepartmentDTO;
+import at.sporty.team1.shared.dtos.MatchDTO;
+import at.sporty.team1.shared.dtos.TeamDTO;
+import at.sporty.team1.shared.exceptions.NotAuthorisedException;
+import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import org.junit.Test;
 
 import java.rmi.RemoteException;

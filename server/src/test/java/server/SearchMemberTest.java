@@ -1,10 +1,10 @@
 package server;
 
-import at.sporty.team1.application.controller.MemberController;
-import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.dtos.SessionDTO;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.ValidationException;
+import at.sporty.team1.application.controller.real.impl.MemberController;
+import at.sporty.team1.shared.dtos.MemberDTO;
+import at.sporty.team1.shared.dtos.SessionDTO;
+import at.sporty.team1.shared.exceptions.NotAuthorisedException;
+import at.sporty.team1.shared.exceptions.ValidationException;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;

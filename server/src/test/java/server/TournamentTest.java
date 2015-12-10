@@ -1,12 +1,12 @@
 package server;
 
-import at.sporty.team1.application.controller.TournamentController;
-import at.sporty.team1.rmi.dtos.DepartmentDTO;
-import at.sporty.team1.rmi.dtos.MatchDTO;
-import at.sporty.team1.rmi.dtos.TournamentDTO;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.UnknownEntityException;
-import at.sporty.team1.rmi.exceptions.ValidationException;
+import at.sporty.team1.application.controller.real.impl.TournamentController;
+import at.sporty.team1.shared.dtos.DepartmentDTO;
+import at.sporty.team1.shared.dtos.MatchDTO;
+import at.sporty.team1.shared.dtos.TournamentDTO;
+import at.sporty.team1.shared.exceptions.NotAuthorisedException;
+import at.sporty.team1.shared.exceptions.UnknownEntityException;
+import at.sporty.team1.shared.exceptions.ValidationException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

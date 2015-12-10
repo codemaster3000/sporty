@@ -1,9 +1,9 @@
 package at.sporty.team1.executable;
 
-import at.sporty.team1.application.controller.*;
+import at.sporty.team1.application.controller.real.impl.*;
 import at.sporty.team1.persistence.util.HibernateSessionUtil;
-import at.sporty.team1.rmi.RemoteObjectRegistry;
-import at.sporty.team1.rmi.exceptions.SecurityException;
+import at.sporty.team1.shared.enums.RemoteObjectRegistry;
+import at.sporty.team1.shared.exceptions.SecurityException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;

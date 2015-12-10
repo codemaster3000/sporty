@@ -1,12 +1,12 @@
 package server;
 
-import at.sporty.team1.application.controller.MemberController;
+import at.sporty.team1.application.controller.real.impl.MemberController;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.persistence.PersistenceFacade;
-import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.UnknownEntityException;
-import at.sporty.team1.rmi.exceptions.ValidationException;
+import at.sporty.team1.shared.dtos.MemberDTO;
+import at.sporty.team1.shared.exceptions.NotAuthorisedException;
+import at.sporty.team1.shared.exceptions.UnknownEntityException;
+import at.sporty.team1.shared.exceptions.ValidationException;
 import org.dozer.DozerBeanMapper;
 import org.junit.Assert;
 import org.junit.Rule;

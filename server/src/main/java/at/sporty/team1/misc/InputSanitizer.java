@@ -1,7 +1,7 @@
 package at.sporty.team1.misc;
 
-import at.sporty.team1.rmi.exceptions.DataType;
-import at.sporty.team1.rmi.exceptions.ValidationException;
+import at.sporty.team1.shared.enums.DataType;
+import at.sporty.team1.shared.exceptions.ValidationException;
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.RegularExpression;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
