@@ -1,0 +1,57 @@
+<!--Not finished, this is for soap, just a template-->
+<definitions name="resultService"
+             targetNamespace="http://5.35.247.12/wsdl/resultService.wsdl"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="http://5.35.247.12/wsdl/resultService.wsdl"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <!-- request-message -->
+    <message name="ResultForMatchIDRequest">
+        <part name="MatchID" type="xsd:string"/>
+    </message>
+
+    <!-- response-message -->
+    <message name="ResultForMatchIDResponse">
+        <part name="result" type="xsd:string"/>
+    </message>
+
+    <!-- In/Out Definition -->
+    <portType name="ResultForMatchID_PortType">
+        <operation name="getResult">
+            <input message="tns:ResultForMatchIDRequest"/>
+            <output message="tns:ResultForMatchIDResponse"/>
+        </operation>
+    </portType>
+
+    <!-- binding -->
+    <binding name="Result_Binding" type="tns:ResultForMatchID_PortType">
+        <soap:binding style="rpc"
+                      transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="getResult">
+            <soap:operation soapAction="getResult"/>
+            <input>
+                <soap:body
+                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                        namespace="urn:examples:resultservice"
+                        use="encoded"/>
+            </input>
+
+            <output>
+                <soap:body
+                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                        namespace="urn:examples:resultservice"
+                        use="encoded"/>
+            </output>
+        </operation>
+    </binding>
+
+    <!--the Service-->
+    <service name="Result_Service">
+        <documentation>WSDL File for MatchResult Service</documentation>
+        <port binding="tns:Result_Binding" name="Result_Port">
+            <soap:address
+                    location="http://5.35.247.12/result/"/>
+        </port>
+    </service>
+</definitions>
