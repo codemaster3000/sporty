@@ -13,10 +13,8 @@ public interface ILoginController extends IController {
      * Returns server public key required for authorisation.
      *
      * @return byte[] server public key.
-     * @throws SecurityException
      */
-    byte[] getServerPublicKey()
-    throws SecurityException;
+    byte[] getServerPublicKey();
 
     /**
      * Checks if received user credentials are equal to the
@@ -24,6 +22,8 @@ public interface ILoginController extends IController {
      *
      * @param authorisationDTO dto object for user credentials and client's public key in encrypted form.
      * @return session object encrypted with client's public key.
+     * @throws SecurityException
      */
-    SessionDTO authorize(AuthorisationDTO authorisationDTO);
+    SessionDTO authorize(AuthorisationDTO authorisationDTO)
+    throws SecurityException;
 }

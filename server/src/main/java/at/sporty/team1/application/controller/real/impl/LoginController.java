@@ -1,6 +1,7 @@
 package at.sporty.team1.application.controller.real.impl;
 
 import at.sporty.team1.application.auth.AccessPolicy;
+import at.sporty.team1.application.auth.AuthManager;
 import at.sporty.team1.application.controller.real.api.ILoginController;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IMember;
@@ -11,7 +12,6 @@ import at.sporty.team1.shared.dtos.SessionDTO;
 import at.sporty.team1.shared.enums.UserRole;
 import at.sporty.team1.shared.exceptions.SecurityException;
 import at.sporty.team1.shared.security.SecurityModule;
-import org.apache.commons.collections4.map.PassiveExpiringMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,7 +31,6 @@ import java.security.KeyPair;
 import java.security.PublicKey;
 import java.util.Hashtable;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Represents a controller to handle the login.
@@ -39,26 +38,20 @@ import java.util.concurrent.TimeUnit;
 public class LoginController implements ILoginController {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final PassiveExpiringMap<String, Integer> SESSION_REGISTRY = new PassiveExpiringMap<>(1, TimeUnit.HOURS);
 
     private static Cipher _cipher;
-    private static KeyPair _serverKeyPair;
-    private static byte[] _encodedPublicServerKey;
 
 	public LoginController() {
 	}
 
     @Override
-    public byte[] getServerPublicKey()
-    throws SecurityException {
-        if (_encodedPublicServerKey == null) {
-            _encodedPublicServerKey = SecurityModule.getEncodedRSAPublicKey(getServerKeyPair());
-        }
-        return _encodedPublicServerKey;
+    public byte[] getServerPublicKey() {
+        return AuthManager.getInstance().getEncodedPublicServerKey();
     }
 
 	@Override
-	public SessionDTO authorize(AuthorisationDTO authorisationDTO) {
+	public SessionDTO authorize(AuthorisationDTO authorisationDTO)
+    throws SecurityException {
 
         //Check if username and password are present in authorisationDTO
 		if (authorisationDTO == null) return null;
@@ -129,7 +122,7 @@ public class LoginController implements ILoginController {
 
                         //Generating new session id for client
                         String sessionId = UUID.randomUUID().toString();
-                        SESSION_REGISTRY.put(sessionId, member.getMemberId());
+                        AuthManager.getInstance().registerNewSession(sessionId, member.getMemberId());
 
                         //Encrypting rawFingerprint expressly for target client
                         cipher.init(Cipher.ENCRYPT_MODE, clientKey);
@@ -137,8 +130,8 @@ public class LoginController implements ILoginController {
 
                         //Sending session object for client
                         return new SessionDTO()
-                                .setUserId(member.getMemberId())
-                                .setClientFingerprint(clientFingerprint);
+                            .setUserId(member.getMemberId())
+                            .setClientFingerprint(clientFingerprint);
                     }
                 }
             }
@@ -178,7 +171,7 @@ public class LoginController implements ILoginController {
                     cipher.doFinal(session.getClientFingerprint())
                 );
 
-                Integer assignedMemberId = SESSION_REGISTRY.get(decryptedSession);
+                Integer assignedMemberId = AuthManager.getInstance().getSession(decryptedSession);
 
                 //Check if user in session object is assigned to current fingerprint
                 if (assignedMemberId != null && assignedMemberId.equals(session.getUserId())) {
@@ -189,14 +182,14 @@ public class LoginController implements ILoginController {
                     //Check if member fulfill given policies
                     if (member != null && policy.isFollowedBy(member)) {
                         //Resetting session timeout
-                        updateSessionTimeout(decryptedSession, member.getMemberId());
+                        AuthManager.getInstance().restartTimeOut(decryptedSession, member.getMemberId());
                         return true;
                     }
 
                 } else if (assignedMemberId != null) {
 
                     //Auth attempt from not expected member id, session is compromised
-                    SESSION_REGISTRY.remove(decryptedSession);
+                    AuthManager.getInstance().removeSession(decryptedSession);
 
                     LOGGER.warn(
                         "Compromised session \"{}\" was removed. Auth attempt from #{}",
@@ -226,14 +219,6 @@ public class LoginController implements ILoginController {
         }
 
         return false;
-    }
-
-    private static void updateSessionTimeout(String fingerprint, Integer memberId) {
-        //Remove value from registry.
-        SESSION_REGISTRY.remove(fingerprint);
-
-        //Restarting timeout for given session.
-        SESSION_REGISTRY.put(fingerprint, memberId);
     }
 
     public static boolean isInPermissionBound(IMember member, UserRole requiredRoleLevel) {
@@ -267,10 +252,7 @@ public class LoginController implements ILoginController {
     }
 
     private static KeyPair getServerKeyPair() throws SecurityException {
-        if (_serverKeyPair == null) {
-            _serverKeyPair = SecurityModule.generateNewRSAKeyPair(512);
-        }
-        return _serverKeyPair;
+        return AuthManager.getInstance().getServerKeyPair();
     }
 
     private static Cipher getCipher() throws SecurityException {

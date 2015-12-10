@@ -15,26 +15,18 @@ public interface ILoginControllerRMI extends IRemoteControllerRMI {
      * Returns server public key required for authorisation.
      *
      * @return byte[] server public key.
-     * @throws RemoteException
-     * @throws SecurityException
      */
     byte[] getServerPublicKey()
-    throws RemoteException, SecurityException;
+    throws RemoteException;
 
     /**
-     * *************************************************************************
-     * @return Enum to distinguish which default screen to load;
-     *         UNSUCCESSFUL_LOGIN if not authorized *
-     * *************************************************************************
-     * @apiNote  checks if a login is valid by comparing the login information to
-     *           the database if the login is valid it prompts the default screen
-     *           associated with the employees class if the login is invalid it
-     *           logs the failed login attempt and prompts the login screen again
-     *           <p>
-     *           UNSUCCESSFUL_LOGIN false ADMIN MEMBER TRAINER DEPARTMENT_HEAD
-     *           MANAGER .....
-     * @param authorisationDTO Contains user data in encrypted form
+     * Checks if received user credentials are equal to the
+     * credentials that are stored in an auth system.
+     *
+     * @param authorisationDTO dto object for user credentials and client's public key in encrypted form.
+     * @return session object encrypted with client's public key.
+     * @throws SecurityException
      */
     SessionDTO authorize(AuthorisationDTO authorisationDTO)
-    throws RemoteException;
+    throws RemoteException, SecurityException;
 }
