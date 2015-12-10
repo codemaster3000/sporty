@@ -1,6 +1,6 @@
 package at.sporty.team1.application.auth;
 
-import at.sporty.team1.application.controller.real.impl.LoginController;
+import at.sporty.team1.application.controller.real.LoginController;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.persistence.PersistenceFacade;

@@ -1,6 +1,6 @@
 package server;
 
-import at.sporty.team1.application.controller.real.impl.MemberController;
+import at.sporty.team1.application.controller.real.MemberController;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.shared.dtos.MemberDTO;

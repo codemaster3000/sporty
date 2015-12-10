@@ -2,15 +2,15 @@ package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
-import at.sporty.team1.rmi.api.IDepartmentController;
-import at.sporty.team1.rmi.api.IMemberController;
-import at.sporty.team1.rmi.api.ITeamController;
-import at.sporty.team1.rmi.dtos.DepartmentDTO;
-import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.dtos.TeamDTO;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.UnknownEntityException;
-import at.sporty.team1.rmi.exceptions.ValidationException;
+import at.sporty.team1.shared.api.rmi.IDepartmentControllerRMI;
+import at.sporty.team1.shared.api.rmi.IMemberControllerRMI;
+import at.sporty.team1.shared.api.rmi.ITeamControllerRMI;
+import at.sporty.team1.shared.dtos.DepartmentDTO;
+import at.sporty.team1.shared.dtos.MemberDTO;
+import at.sporty.team1.shared.dtos.TeamDTO;
+import at.sporty.team1.shared.exceptions.NotAuthorisedException;
+import at.sporty.team1.shared.exceptions.UnknownEntityException;
+import at.sporty.team1.shared.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -88,7 +88,7 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
 
             try {
 
-                IDepartmentController departmentController = CommunicationFacade.lookupForDepartmentController();
+                IDepartmentControllerRMI departmentController = CommunicationFacade.lookupForDepartmentController();
                 List<DepartmentDTO> departments = departmentController.searchAllDepartments();
 
                 if (departments != null && !departments.isEmpty()) {
@@ -137,7 +137,7 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
 
             try {
 
-                ITeamController teamController = CommunicationFacade.lookupForTeamController();
+                ITeamControllerRMI teamController = CommunicationFacade.lookupForTeamController();
 
                 List<MemberDTO> memberList = teamController.loadTeamMembers(
                     _activeTeamDTO.getTeamId(),
@@ -172,7 +172,7 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
         MemberDTO memberDTO = _membersListView.getSelectionModel().getSelectedItem();
 
         try {
-            IMemberController memberController = CommunicationFacade.lookupForMemberController();
+            IMemberControllerRMI memberController = CommunicationFacade.lookupForMemberController();
 
             if ((_activeTeamDTO != null) && (memberDTO != null)) {
 
@@ -212,7 +212,7 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
 
             try {
 
-                ITeamController teamController = CommunicationFacade.lookupForTeamController();
+                ITeamControllerRMI teamController = CommunicationFacade.lookupForTeamController();
                 teamController.createOrSaveTeam(
                     _activeTeamDTO,
                     CommunicationFacade.getActiveSession()

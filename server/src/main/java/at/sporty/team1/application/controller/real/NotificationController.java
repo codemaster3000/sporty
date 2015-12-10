@@ -1,8 +1,8 @@
-package at.sporty.team1.application.controller.real.impl;
+package at.sporty.team1.application.controller.real;
 
 import at.sporty.team1.application.auth.AccessPolicy;
 import at.sporty.team1.application.auth.BasicAccessPolicies;
-import at.sporty.team1.application.controller.real.api.INotificationController;
+import at.sporty.team1.shared.api.real.INotificationController;
 import at.sporty.team1.application.jms.ConsumerJMS;
 import at.sporty.team1.application.jms.ProducerJMS;
 import at.sporty.team1.shared.dtos.MessageDTO;

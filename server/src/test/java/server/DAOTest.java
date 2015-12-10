@@ -1,7 +1,7 @@
 package server;
 
-import at.sporty.team1.application.controller.real.impl.MemberController;
-import at.sporty.team1.application.controller.real.impl.TournamentController;
+import at.sporty.team1.application.controller.real.MemberController;
+import at.sporty.team1.application.controller.real.TournamentController;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Tournament;
 import at.sporty.team1.persistence.PersistenceFacade;
@@ -28,7 +28,7 @@ public class DAOTest {
         try {
             List<MatchDTO> l = new TournamentController().searchAllTournamentMatches(1);
             System.out.println("Received list of size: " + l.size());
-        } catch (RemoteException | UnknownEntityException e) {
+        } catch (UnknownEntityException e) {
             e.printStackTrace();
         }
     }
@@ -38,7 +38,7 @@ public class DAOTest {
         try {
             List<DTOPair<DepartmentDTO, TeamDTO>> l = new MemberController().loadFetchedDepartmentTeamList(2328, null);
             System.out.println("Received list of size: " + l.size());
-        } catch (RemoteException | UnknownEntityException | NotAuthorisedException e) {
+        } catch (UnknownEntityException | NotAuthorisedException e) {
             e.printStackTrace();
         }
     }

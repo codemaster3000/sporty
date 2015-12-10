@@ -2,7 +2,7 @@ package at.sporty.team1.presentation.dialogs;
 
 import at.sporty.team1.presentation.ViewLoader;
 import at.sporty.team1.presentation.controllers.core.EditViewController;
-import at.sporty.team1.rmi.api.IDTO;
+import at.sporty.team1.shared.api.IDTO;
 import at.sporty.team1.util.GUIHelper;
 import at.sporty.team1.util.SVGContainer;
 import javafx.scene.Node;

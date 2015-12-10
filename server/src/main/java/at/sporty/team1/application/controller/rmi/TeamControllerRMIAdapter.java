@@ -1,7 +1,8 @@
-package at.sporty.team1.application.controller.rmi.impl;
+package at.sporty.team1.application.controller.rmi;
 
-import at.sporty.team1.application.controller.real.api.ITeamController;
-import at.sporty.team1.application.controller.real.impl.TeamController;
+import at.sporty.team1.application.controller.util.RemoteObject;
+import at.sporty.team1.shared.api.real.ITeamController;
+import at.sporty.team1.application.controller.real.TeamController;
 import at.sporty.team1.shared.api.rmi.ITeamControllerRMI;
 import at.sporty.team1.shared.dtos.DepartmentDTO;
 import at.sporty.team1.shared.dtos.MemberDTO;
@@ -18,6 +19,7 @@ import java.util.List;
 /**
  * Created by sereGkaluv on 10-Dec-15.
  */
+@RemoteObject(name = "TEAM_CONTROLLER_RMI")
 public class TeamControllerRMIAdapter extends UnicastRemoteObject implements ITeamControllerRMI {
     private static final long serialVersionUID = 1L;
     private final ITeamController _controller;

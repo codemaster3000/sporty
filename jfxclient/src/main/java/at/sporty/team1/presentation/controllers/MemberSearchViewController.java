@@ -2,10 +2,10 @@ package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.SearchViewController;
-import at.sporty.team1.rmi.api.IMemberController;
-import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.ValidationException;
+import at.sporty.team1.shared.api.rmi.IMemberControllerRMI;
+import at.sporty.team1.shared.dtos.MemberDTO;
+import at.sporty.team1.shared.exceptions.NotAuthorisedException;
+import at.sporty.team1.shared.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -93,7 +93,7 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
             new Thread(() -> {
                 try {
 
-                    IMemberController memberController = CommunicationFacade.lookupForMemberController();
+                    IMemberControllerRMI memberController = CommunicationFacade.lookupForMemberController();
 
                     //Performing search depending on selected search type
                     switch (_searchType.getValue()) {
@@ -172,7 +172,7 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
             new Thread(() -> {
                 try {
 
-                    IMemberController memberController = CommunicationFacade.lookupForMemberController();
+                    IMemberControllerRMI memberController = CommunicationFacade.lookupForMemberController();
                     List<MemberDTO> memberList = memberController.searchAllMembers(
                         readIsFeePaidState(
                             _paidRadioButton.isSelected(),

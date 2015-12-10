@@ -1,9 +1,8 @@
 package at.sporty.team1.presentation.dialogs;
 
 import at.sporty.team1.presentation.ViewLoader;
-import at.sporty.team1.presentation.controllers.LoginMaskViewController;
 import at.sporty.team1.presentation.controllers.MessagesMaskViewController;
-import at.sporty.team1.rmi.dtos.MessageDTO;
+import at.sporty.team1.shared.dtos.MessageDTO;
 import at.sporty.team1.util.GUIHelper;
 import at.sporty.team1.util.SVGContainer;
 import javafx.collections.ObservableList;

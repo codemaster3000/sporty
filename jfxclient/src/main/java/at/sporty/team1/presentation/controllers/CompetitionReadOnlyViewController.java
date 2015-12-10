@@ -4,11 +4,11 @@ import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
 import at.sporty.team1.presentation.dialogs.EditViewDialog;
 import at.sporty.team1.presentation.dialogs.ExtendedChoiceDialog;
-import at.sporty.team1.rmi.api.ITournamentController;
-import at.sporty.team1.rmi.dtos.DepartmentDTO;
-import at.sporty.team1.rmi.dtos.MatchDTO;
-import at.sporty.team1.rmi.dtos.TournamentDTO;
-import at.sporty.team1.rmi.exceptions.UnknownEntityException;
+import at.sporty.team1.shared.api.rmi.ITournamentControllerRMI;
+import at.sporty.team1.shared.dtos.DepartmentDTO;
+import at.sporty.team1.shared.dtos.MatchDTO;
+import at.sporty.team1.shared.dtos.TournamentDTO;
+import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -25,7 +25,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -169,7 +168,7 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
 
                 try {
 
-                    ITournamentController tournamentController = CommunicationFacade.lookupForTournamentController();
+                    ITournamentControllerRMI tournamentController = CommunicationFacade.lookupForTournamentController();
 
                     //Teams
                     List<String> teams = tournamentController.searchAllTournamentTeams(tournamentDTO.getTournamentId());

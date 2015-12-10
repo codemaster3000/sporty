@@ -1,8 +1,8 @@
-package at.sporty.team1.application.controller.real.impl;
+package at.sporty.team1.application.controller.real;
 
 import at.sporty.team1.application.auth.AccessPolicy;
 import at.sporty.team1.application.auth.BasicAccessPolicies;
-import at.sporty.team1.application.controller.real.api.ITeamController;
+import at.sporty.team1.shared.api.real.ITeamController;
 import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.Team;
 import at.sporty.team1.domain.interfaces.IMember;

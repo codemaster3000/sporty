@@ -1,7 +1,8 @@
-package at.sporty.team1.application.controller.rmi.impl;
+package at.sporty.team1.application.controller.rmi;
 
-import at.sporty.team1.application.controller.real.api.ITournamentController;
-import at.sporty.team1.application.controller.real.impl.TournamentController;
+import at.sporty.team1.application.controller.util.RemoteObject;
+import at.sporty.team1.shared.api.real.ITournamentController;
+import at.sporty.team1.application.controller.real.TournamentController;
 import at.sporty.team1.shared.api.rmi.ITournamentControllerRMI;
 import at.sporty.team1.shared.dtos.MatchDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
@@ -17,6 +18,7 @@ import java.util.List;
 /**
  * Created by sereGkaluv on 10-Dec-15.
  */
+@RemoteObject(name = "TOURNAMENT_CONTROLLER_RMI")
 public class TournamentControllerRMIAdapter extends UnicastRemoteObject implements ITournamentControllerRMI {
     private static final long serialVersionUID = 1L;
     private final ITournamentController _controller;

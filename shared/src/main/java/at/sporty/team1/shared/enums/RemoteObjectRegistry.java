@@ -8,13 +8,20 @@ public enum RemoteObjectRegistry {
 	TOURNAMENT_CONTROLLER("TOURNAMENT_CONTROLLER"),
     NOTIFICATION_CONTROLLER("NOTIFICATION_CONTROLLER");
 
+    private static final String RMI_SUFFIX = "_RMI";
+    private static final String EJB_SUFFIX = "_EJB";
+
     private final String _naming;
 
     RemoteObjectRegistry(String naming) {
         _naming = naming;
     }
 
-    public String getNaming() {
-        return _naming;
+    public String getNamingRMI() {
+        return _naming + RMI_SUFFIX;
+    }
+
+    public String getNamingEJB() {
+        return _naming + EJB_SUFFIX;
     }
 }

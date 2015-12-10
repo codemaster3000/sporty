@@ -2,14 +2,11 @@ package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
-import at.sporty.team1.rmi.dtos.MessageDTO;
-import at.sporty.team1.rmi.enums.MessageType;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.ValidationException;
-import at.sporty.team1.util.GUIHelper;
-import javafx.beans.property.SimpleBooleanProperty;
+import at.sporty.team1.shared.dtos.MessageDTO;
+import at.sporty.team1.shared.enums.MessageType;
+import at.sporty.team1.shared.exceptions.NotAuthorisedException;
+import at.sporty.team1.shared.exceptions.ValidationException;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

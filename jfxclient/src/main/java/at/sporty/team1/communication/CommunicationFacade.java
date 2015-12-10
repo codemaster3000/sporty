@@ -1,14 +1,14 @@
 package at.sporty.team1.communication;
 
-import at.sporty.team1.rmi.RemoteObjectRegistry;
-import at.sporty.team1.rmi.api.*;
-import at.sporty.team1.rmi.dtos.AuthorisationDTO;
-import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.dtos.SessionDTO;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.SecurityException;
-import at.sporty.team1.rmi.exceptions.UnknownEntityException;
-import at.sporty.team1.rmi.security.SecurityModule;
+import at.sporty.team1.shared.enums.RemoteObjectRegistry;
+import at.sporty.team1.shared.api.rmi.*;
+import at.sporty.team1.shared.dtos.AuthorisationDTO;
+import at.sporty.team1.shared.dtos.MemberDTO;
+import at.sporty.team1.shared.dtos.SessionDTO;
+import at.sporty.team1.shared.exceptions.NotAuthorisedException;
+import at.sporty.team1.shared.exceptions.SecurityException;
+import at.sporty.team1.shared.exceptions.UnknownEntityException;
+import at.sporty.team1.shared.security.SecurityModule;
 import at.sporty.team1.util.CachedSession;
 import javafx.beans.property.SimpleBooleanProperty;
 
@@ -30,7 +30,7 @@ public class CommunicationFacade {
     public static final SimpleBooleanProperty SESSION_AVAILABLE_PROPERTY = new SimpleBooleanProperty(false);
 
     private static final String DEFAULT_RMI = "rmi://localhost/%s";
-    private static final Map<Class<? extends IRemoteController>, Remote> CONTROLLER_MAP = new HashMap<>();
+    private static final Map<Class<? extends IRemoteControllerRMI>, Remote> CONTROLLER_MAP = new HashMap<>();
     private static PublicKey _activeServerPublicKey;
     private static KeyPair _activeRSAKeyPair;
     private static CachedSession _extendedActiveSession;
@@ -39,70 +39,70 @@ public class CommunicationFacade {
     private CommunicationFacade() {
     }
 
-    public static IMemberController lookupForMemberController()
+    public static IMemberControllerRMI lookupForMemberController()
     throws RemoteException, NotBoundException, MalformedURLException {
-        if (!CONTROLLER_MAP.containsKey(IMemberController.class)) {
-            CONTROLLER_MAP.put(IMemberController.class, Naming.lookup(
-                String.format(DEFAULT_RMI, RemoteObjectRegistry.MEMBER_CONTROLLER.getNaming())
+        if (!CONTROLLER_MAP.containsKey(IMemberControllerRMI.class)) {
+            CONTROLLER_MAP.put(IMemberControllerRMI.class, Naming.lookup(
+                String.format(DEFAULT_RMI, RemoteObjectRegistry.MEMBER_CONTROLLER.getNamingRMI())
             ));
         }
 
-        return (IMemberController) CONTROLLER_MAP.get(IMemberController.class);
+        return (IMemberControllerRMI) CONTROLLER_MAP.get(IMemberControllerRMI.class);
     }
 
-    public static ITeamController lookupForTeamController()
+    public static ITeamControllerRMI lookupForTeamController()
     throws RemoteException, NotBoundException, MalformedURLException {
-        if (!CONTROLLER_MAP.containsKey(ITeamController.class)) {
-            CONTROLLER_MAP.put(ITeamController.class, Naming.lookup(
-                String.format(DEFAULT_RMI, RemoteObjectRegistry.TEAM_CONTROLLER.getNaming())
+        if (!CONTROLLER_MAP.containsKey(ITeamControllerRMI.class)) {
+            CONTROLLER_MAP.put(ITeamControllerRMI.class, Naming.lookup(
+                String.format(DEFAULT_RMI, RemoteObjectRegistry.TEAM_CONTROLLER.getNamingRMI())
             ));
         }
 
-        return (ITeamController) CONTROLLER_MAP.get(ITeamController.class);
+        return (ITeamControllerRMI) CONTROLLER_MAP.get(ITeamControllerRMI.class);
     }
 
-    public static IDepartmentController lookupForDepartmentController()
+    public static IDepartmentControllerRMI lookupForDepartmentController()
     throws RemoteException, NotBoundException, MalformedURLException {
-        if (!CONTROLLER_MAP.containsKey(IDepartmentController.class)) {
-            CONTROLLER_MAP.put(IDepartmentController.class, Naming.lookup(
-                String.format(DEFAULT_RMI, RemoteObjectRegistry.DEPARTMENT_CONTROLLER.getNaming())
+        if (!CONTROLLER_MAP.containsKey(IDepartmentControllerRMI.class)) {
+            CONTROLLER_MAP.put(IDepartmentControllerRMI.class, Naming.lookup(
+                String.format(DEFAULT_RMI, RemoteObjectRegistry.DEPARTMENT_CONTROLLER.getNamingRMI())
             ));
         }
 
-        return (IDepartmentController) CONTROLLER_MAP.get(IDepartmentController.class);
+        return (IDepartmentControllerRMI) CONTROLLER_MAP.get(IDepartmentControllerRMI.class);
     }
 
-    public static ILoginController lookupForLoginController()
+    public static ILoginControllerRMI lookupForLoginController()
     throws  RemoteException, NotBoundException, MalformedURLException {
-        if (!CONTROLLER_MAP.containsKey(ILoginController.class)) {
-            CONTROLLER_MAP.put(ILoginController.class, Naming.lookup(
-                String.format(DEFAULT_RMI, RemoteObjectRegistry.LOGIN_CONTROLLER.getNaming())
+        if (!CONTROLLER_MAP.containsKey(ILoginControllerRMI.class)) {
+            CONTROLLER_MAP.put(ILoginControllerRMI.class, Naming.lookup(
+                String.format(DEFAULT_RMI, RemoteObjectRegistry.LOGIN_CONTROLLER.getNamingRMI())
             ));
         }
 
-        return (ILoginController) CONTROLLER_MAP.get(ILoginController.class);
+        return (ILoginControllerRMI) CONTROLLER_MAP.get(ILoginControllerRMI.class);
     }
 
-	public static ITournamentController lookupForTournamentController() 
+	public static ITournamentControllerRMI lookupForTournamentController()
 	throws  RemoteException, NotBoundException, MalformedURLException {
-        if (!CONTROLLER_MAP.containsKey(ITournamentController.class)) {
-            CONTROLLER_MAP.put(ITournamentController.class, Naming.lookup(
-                String.format(DEFAULT_RMI, RemoteObjectRegistry.TOURNAMENT_CONTROLLER.getNaming())
+        if (!CONTROLLER_MAP.containsKey(ITournamentControllerRMI.class)) {
+            CONTROLLER_MAP.put(ITournamentControllerRMI.class, Naming.lookup(
+                String.format(DEFAULT_RMI, RemoteObjectRegistry.TOURNAMENT_CONTROLLER.getNamingRMI())
             ));
         }
 
-        return (ITournamentController) CONTROLLER_MAP.get(ITournamentController.class);
+        return (ITournamentControllerRMI) CONTROLLER_MAP.get(ITournamentControllerRMI.class);
 	}
 
-    public static INotificationController lookupForNotificationController()
+    public static INotificationControllerRMI lookupForNotificationController()
     throws  RemoteException, NotBoundException, MalformedURLException {
-        if (!CONTROLLER_MAP.containsKey(INotificationController.class)) {
-            CONTROLLER_MAP.put(INotificationController.class, Naming.lookup(
-                String.format(DEFAULT_RMI, RemoteObjectRegistry.NOTIFICATION_CONTROLLER.getNaming())
+        if (!CONTROLLER_MAP.containsKey(INotificationControllerRMI.class)) {
+            CONTROLLER_MAP.put(INotificationControllerRMI.class, Naming.lookup(
+                String.format(DEFAULT_RMI, RemoteObjectRegistry.NOTIFICATION_CONTROLLER.getNamingRMI())
             ));
         }
 
-        return (INotificationController) CONTROLLER_MAP.get(INotificationController.class);
+        return (INotificationControllerRMI) CONTROLLER_MAP.get(INotificationControllerRMI.class);
     }
 
     public static PublicKey getServerPublicKey()

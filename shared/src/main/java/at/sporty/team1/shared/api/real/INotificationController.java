@@ -1,4 +1,4 @@
-package at.sporty.team1.application.controller.real.api;
+package at.sporty.team1.shared.api.real;
 
 import at.sporty.team1.shared.dtos.MessageDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;

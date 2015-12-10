@@ -1,6 +1,6 @@
 package at.sporty.team1.presentation.controllers.core;
 
-import at.sporty.team1.rmi.api.IDTO;
+import at.sporty.team1.shared.api.IDTO;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;

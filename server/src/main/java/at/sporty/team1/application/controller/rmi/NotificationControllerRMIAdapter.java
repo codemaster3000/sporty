@@ -1,7 +1,8 @@
-package at.sporty.team1.application.controller.rmi.impl;
+package at.sporty.team1.application.controller.rmi;
 
-import at.sporty.team1.application.controller.real.api.INotificationController;
-import at.sporty.team1.application.controller.real.impl.NotificationController;
+import at.sporty.team1.application.controller.util.RemoteObject;
+import at.sporty.team1.shared.api.real.INotificationController;
+import at.sporty.team1.application.controller.real.NotificationController;
 import at.sporty.team1.shared.api.rmi.INotificationControllerRMI;
 import at.sporty.team1.shared.dtos.MessageDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
@@ -15,6 +16,7 @@ import java.util.List;
 /**
  * Created by sereGkaluv on 10-Dec-15.
  */
+@RemoteObject(name = "NOTIFICATION_CONTROLLER_RMI")
 public class NotificationControllerRMIAdapter extends UnicastRemoteObject implements INotificationControllerRMI {
     private static final long serialVersionUID = 1L;
     private final INotificationController _controller;

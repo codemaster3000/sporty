@@ -1,7 +1,8 @@
-package at.sporty.team1.application.controller.rmi.impl;
+package at.sporty.team1.application.controller.rmi;
 
-import at.sporty.team1.application.controller.real.api.IMemberController;
-import at.sporty.team1.application.controller.real.impl.MemberController;
+import at.sporty.team1.application.controller.util.RemoteObject;
+import at.sporty.team1.shared.api.real.IMemberController;
+import at.sporty.team1.application.controller.real.MemberController;
 import at.sporty.team1.shared.api.rmi.IMemberControllerRMI;
 import at.sporty.team1.shared.dtos.*;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
@@ -15,6 +16,7 @@ import java.util.List;
 /**
  * Created by sereGkaluv on 10-Dec-15.
  */
+@RemoteObject(name = "MEMBER_CONTROLLER_RMI")
 public class MemberControllerRMIAdapter extends UnicastRemoteObject implements IMemberControllerRMI {
     private static final long serialVersionUID = 1L;
     private final IMemberController _controller;

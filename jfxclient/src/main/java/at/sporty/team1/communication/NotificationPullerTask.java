@@ -1,9 +1,9 @@
 package at.sporty.team1.communication;
 
-import at.sporty.team1.rmi.api.INotificationController;
-import at.sporty.team1.rmi.dtos.MessageDTO;
-import at.sporty.team1.rmi.dtos.SessionDTO;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
+import at.sporty.team1.shared.api.rmi.INotificationControllerRMI;
+import at.sporty.team1.shared.dtos.MessageDTO;
+import at.sporty.team1.shared.dtos.SessionDTO;
+import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,7 +28,7 @@ public class NotificationPullerTask implements Runnable {
 	public void run() {
 		try {
 
-			INotificationController notificationController = CommunicationFacade.lookupForNotificationController();
+			INotificationControllerRMI notificationController = CommunicationFacade.lookupForNotificationController();
 
 			//Pull notifications from server (NotificationController)
 			List<MessageDTO> messageList = notificationController.pullMessages(_currentSession);

@@ -1,4 +1,4 @@
-package at.sporty.team1.application.controller.real.api;
+package at.sporty.team1.shared.api.real;
 
 import at.sporty.team1.shared.dtos.MatchDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
@@ -9,7 +9,9 @@ import at.sporty.team1.shared.exceptions.ValidationException;
 
 import java.util.List;
 
-
+/**
+ * Created by sereGkaluv on 27-Nov-15.
+ */
 public interface ITournamentController extends IController {
 
 	/**

@@ -3,13 +3,13 @@ package at.sporty.team1.presentation.controllers;
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
 import at.sporty.team1.presentation.dialogs.EditViewDialog;
-import at.sporty.team1.rmi.api.IMemberController;
-import at.sporty.team1.rmi.dtos.DTOPair;
-import at.sporty.team1.rmi.dtos.DepartmentDTO;
-import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.dtos.TeamDTO;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.UnknownEntityException;
+import at.sporty.team1.shared.api.rmi.IMemberControllerRMI;
+import at.sporty.team1.shared.dtos.DTOPair;
+import at.sporty.team1.shared.dtos.DepartmentDTO;
+import at.sporty.team1.shared.dtos.MemberDTO;
+import at.sporty.team1.shared.dtos.TeamDTO;
+import at.sporty.team1.shared.exceptions.NotAuthorisedException;
+import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -134,7 +134,7 @@ public class MemberReadOnlyViewController extends ConsumerViewController<MemberD
 
                 try {
 
-                    IMemberController memberController = CommunicationFacade.lookupForMemberController();
+                    IMemberControllerRMI memberController = CommunicationFacade.lookupForMemberController();
 
                     final List<DTOPair<DepartmentDTO, TeamDTO>> fetchedList = memberController.loadFetchedDepartmentTeamList(
                         memberDTO.getMemberId(),

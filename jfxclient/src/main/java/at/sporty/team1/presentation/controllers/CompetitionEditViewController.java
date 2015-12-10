@@ -2,15 +2,15 @@ package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.EditViewController;
-import at.sporty.team1.rmi.api.IDepartmentController;
-import at.sporty.team1.rmi.api.ITournamentController;
-import at.sporty.team1.rmi.dtos.DepartmentDTO;
-import at.sporty.team1.rmi.dtos.MatchDTO;
-import at.sporty.team1.rmi.dtos.TeamDTO;
-import at.sporty.team1.rmi.dtos.TournamentDTO;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.UnknownEntityException;
-import at.sporty.team1.rmi.exceptions.ValidationException;
+import at.sporty.team1.shared.api.rmi.IDepartmentControllerRMI;
+import at.sporty.team1.shared.api.rmi.ITournamentControllerRMI;
+import at.sporty.team1.shared.dtos.DepartmentDTO;
+import at.sporty.team1.shared.dtos.MatchDTO;
+import at.sporty.team1.shared.dtos.TeamDTO;
+import at.sporty.team1.shared.dtos.TournamentDTO;
+import at.sporty.team1.shared.exceptions.NotAuthorisedException;
+import at.sporty.team1.shared.exceptions.UnknownEntityException;
+import at.sporty.team1.shared.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -189,12 +189,12 @@ public class CompetitionEditViewController extends EditViewController<Tournament
                     //Teams (Fill TeamComboBox in Tournaments)
                     DepartmentDTO dept = _activeTournamentDTO.getDepartment();
 
-                    IDepartmentController departmentController = CommunicationFacade.lookupForDepartmentController();
+                    IDepartmentControllerRMI departmentController = CommunicationFacade.lookupForDepartmentController();
                     List<TeamDTO> ownTournamentTeams = departmentController.loadDepartmentTeams(dept.getDepartmentId());
 
                     if (tournamentDTO.getTournamentId() != null) {
                         //Loading Tournament Data
-                        ITournamentController tournamentController = CommunicationFacade.lookupForTournamentController();
+                        ITournamentControllerRMI tournamentController = CommunicationFacade.lookupForTournamentController();
 
                         //Loading tournament Teams
                         List<String> teams = tournamentController.searchAllTournamentTeams(
@@ -274,7 +274,7 @@ public class CompetitionEditViewController extends EditViewController<Tournament
                 //updating changed competition data.
                 _activeTournamentDTO.setDate(date).setLocation(location);
 
-                ITournamentController imc = CommunicationFacade.lookupForTournamentController();
+                ITournamentControllerRMI imc = CommunicationFacade.lookupForTournamentController();
                 Integer competitionId = imc.createOrSaveTournament(
                     _activeTournamentDTO,
                     CommunicationFacade.getActiveSession()
@@ -321,7 +321,7 @@ public class CompetitionEditViewController extends EditViewController<Tournament
 
         try {
 
-            ITournamentController tournamentController = CommunicationFacade.lookupForTournamentController();
+            ITournamentControllerRMI tournamentController = CommunicationFacade.lookupForTournamentController();
 
             for (String team : _competitionTeamsListView.getItems()) {
                 tournamentController.assignTeamToTournament(
@@ -395,7 +395,7 @@ public class CompetitionEditViewController extends EditViewController<Tournament
 
     	try {
 
-            ITournamentController tournamentController = CommunicationFacade.lookupForTournamentController();
+            ITournamentControllerRMI tournamentController = CommunicationFacade.lookupForTournamentController();
 
 			for(MatchDTO match : _matchTableView.getItems()){
                 tournamentController.createNewMatch(

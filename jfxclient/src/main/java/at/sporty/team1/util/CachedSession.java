@@ -1,7 +1,7 @@
 package at.sporty.team1.util;
 
-import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.dtos.SessionDTO;
+import at.sporty.team1.shared.dtos.MemberDTO;
+import at.sporty.team1.shared.dtos.SessionDTO;
 
 /**
  * Created by sereGkaluv on 28-Nov-15.

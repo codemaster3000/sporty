@@ -2,14 +2,14 @@ package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.CommunicationFacade;
 import at.sporty.team1.presentation.controllers.core.EditViewController;
-import at.sporty.team1.rmi.api.IDepartmentController;
-import at.sporty.team1.rmi.api.IMemberController;
-import at.sporty.team1.rmi.dtos.DepartmentDTO;
-import at.sporty.team1.rmi.dtos.MemberDTO;
-import at.sporty.team1.rmi.dtos.TeamDTO;
-import at.sporty.team1.rmi.exceptions.NotAuthorisedException;
-import at.sporty.team1.rmi.exceptions.UnknownEntityException;
-import at.sporty.team1.rmi.exceptions.ValidationException;
+import at.sporty.team1.shared.api.rmi.IDepartmentControllerRMI;
+import at.sporty.team1.shared.api.rmi.IMemberControllerRMI;
+import at.sporty.team1.shared.dtos.DepartmentDTO;
+import at.sporty.team1.shared.dtos.MemberDTO;
+import at.sporty.team1.shared.dtos.TeamDTO;
+import at.sporty.team1.shared.exceptions.NotAuthorisedException;
+import at.sporty.team1.shared.exceptions.UnknownEntityException;
+import at.sporty.team1.shared.exceptions.ValidationException;
 import at.sporty.team1.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -126,7 +126,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
 
             try {
 
-                IDepartmentController departmentController = CommunicationFacade.lookupForDepartmentController();
+                IDepartmentControllerRMI departmentController = CommunicationFacade.lookupForDepartmentController();
                 List<DepartmentDTO> departments = departmentController.searchAllDepartments();
 
                 if (!departments.isEmpty()) {
@@ -233,7 +233,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
 
             try {
 
-                IMemberController memberController = CommunicationFacade.lookupForMemberController();
+                IMemberControllerRMI memberController = CommunicationFacade.lookupForMemberController();
 
                 List<DepartmentDTO> departments = memberController.loadMemberDepartments(
                     _activeMemberDTO.getMemberId(),
@@ -411,7 +411,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                         .setIsFeePaid(false)
                         .setRole(roleComboBox.getSelectionModel().getSelectedItem().getDSValue());
 
-                IMemberController memberController = CommunicationFacade.lookupForMemberController();
+                IMemberControllerRMI memberController = CommunicationFacade.lookupForMemberController();
                 Integer memberId = memberController.createOrSaveMember(
                     _activeMemberDTO,
                     CommunicationFacade.getActiveSession()
@@ -450,7 +450,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
 
     private void saveOrUpdateMemberDepartments(Integer memberId) {
         try {
-            IMemberController memberController = CommunicationFacade.lookupForMemberController();
+            IMemberControllerRMI memberController = CommunicationFacade.lookupForMemberController();
 
             if (memberSportCheckboxBaseball.isSelected()) {
                 //Saving department for member
@@ -503,7 +503,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
     private void saveOrUpdateMemberTeams(Integer memberId) {
         try {
 
-            IMemberController memberController = CommunicationFacade.lookupForMemberController();
+            IMemberControllerRMI memberController = CommunicationFacade.lookupForMemberController();
 
             if (memberSportCheckboxBaseball.isSelected()) {
                 //Baseball team holen

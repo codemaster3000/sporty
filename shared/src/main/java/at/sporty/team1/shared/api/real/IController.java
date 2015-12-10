@@ -1,7 +1,6 @@
-package at.sporty.team1.application.controller.real.api;
+package at.sporty.team1.shared.api.real;
 
 import java.io.Serializable;
-import java.rmi.Remote;
 
 /**
  * Created by sereGkaluv on 21-Nov-15.

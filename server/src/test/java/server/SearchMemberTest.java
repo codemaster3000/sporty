@@ -1,6 +1,6 @@
 package server;
 
-import at.sporty.team1.application.controller.real.impl.MemberController;
+import at.sporty.team1.application.controller.real.MemberController;
 import at.sporty.team1.shared.dtos.MemberDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
@@ -63,7 +63,7 @@ public class SearchMemberTest {
 		try {
 			MemberController mem = new MemberController();
 			members = mem.searchMembersByDateOfBirth(searchString, null, null);
-		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
+		} catch (ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 
@@ -88,7 +88,7 @@ public class SearchMemberTest {
 		try {
 			MemberController mem = new MemberController();
 			members = mem.searchMembersByNameString(searchString, null, null);
-		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
+		} catch (ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 
@@ -108,7 +108,7 @@ public class SearchMemberTest {
 		try {
 			MemberController mem = new MemberController();
 			members = mem.searchMembersByNameString(searchString, true, null);
-		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
+		} catch (ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 
@@ -125,7 +125,7 @@ public class SearchMemberTest {
 		try {
 			MemberController mem = new MemberController();
 			members = mem.searchMembersByNameString(searchString, null, null);
-		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
+		} catch (ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 
@@ -142,7 +142,7 @@ public class SearchMemberTest {
 		try {
 			MemberController mem = new MemberController();
 			members = mem.searchMembersByNameString(searchString, true, null);
-		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
+		} catch (ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 
@@ -159,7 +159,7 @@ public class SearchMemberTest {
 		try {
 			MemberController mem = new MemberController();
 			members = mem.searchMembersByNameString(searchString, false, null);
-		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
+		} catch (ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 
@@ -172,7 +172,7 @@ public class SearchMemberTest {
 		try {
 			MemberController mem = new MemberController();
 			return mem.searchMembersByNameString(searchString, paidFee, session);
-		} catch (RemoteException | ValidationException e) {
+		} catch (ValidationException e) {
 			e.printStackTrace();
 			return null;
 		} catch (NotAuthorisedException e) {
@@ -195,7 +195,7 @@ public class SearchMemberTest {
 		try {
 			MemberController mem = new MemberController();
 			members = mem.searchMembersByCommonTeamName(searchString, null, null);
-		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
+		} catch (ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 
@@ -212,7 +212,7 @@ public class SearchMemberTest {
 		try {
 			MemberController mem = new MemberController();
 			members = mem.searchMembersByCommonTeamName(searchString, false, null);
-		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
+		} catch (ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 
@@ -229,7 +229,7 @@ public class SearchMemberTest {
 		try {
 			MemberController mem = new MemberController();
 			members = mem.searchMembersByCommonTeamName(searchString, true, null);
-		} catch (RemoteException | ValidationException | NotAuthorisedException e) {
+		} catch (ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}
 
