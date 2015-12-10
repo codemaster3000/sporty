@@ -9,7 +9,7 @@ import at.sporty.team1.shared.dtos.DepartmentDTO;
 import at.sporty.team1.shared.dtos.MatchDTO;
 import at.sporty.team1.shared.dtos.TournamentDTO;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
-import at.sporty.team1.util.GUIHelper;
+import at.sporty.team1.presentation.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;

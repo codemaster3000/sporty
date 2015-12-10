@@ -2,8 +2,8 @@ package at.sporty.team1.presentation.dialogs;
 
 import at.sporty.team1.presentation.ViewLoader;
 import at.sporty.team1.presentation.controllers.LoginMaskViewController;
-import at.sporty.team1.util.GUIHelper;
-import at.sporty.team1.util.SVGContainer;
+import at.sporty.team1.presentation.util.GUIHelper;
+import at.sporty.team1.presentation.util.SVGContainer;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;

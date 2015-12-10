@@ -6,7 +6,7 @@ import at.sporty.team1.shared.api.rmi.IMemberControllerRMI;
 import at.sporty.team1.shared.dtos.MemberDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.ValidationException;
-import at.sporty.team1.util.GUIHelper;
+import at.sporty.team1.presentation.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

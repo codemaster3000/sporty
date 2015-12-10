@@ -1,4 +1,4 @@
-package at.sporty.team1.util;
+package at.sporty.team1.presentation.util;
 
 /**
  * Created by sereGkaluv on 18-Nov-15.

@@ -1,4 +1,4 @@
-package at.sporty.team1.util;
+package at.sporty.team1.presentation.util;
 
 import at.sporty.team1.presentation.dialogs.LoginDialog;
 import at.sporty.team1.shared.api.IDTO;

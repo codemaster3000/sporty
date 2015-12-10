@@ -9,7 +9,7 @@ import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.SecurityException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.shared.security.SecurityModule;
-import at.sporty.team1.util.CachedSession;
+import at.sporty.team1.communication.util.CachedSession;
 import javafx.beans.property.SimpleBooleanProperty;
 
 import javax.crypto.BadPaddingException;

@@ -1,4 +1,4 @@
-package at.sporty.team1.util;
+package at.sporty.team1.communication.util;
 
 import at.sporty.team1.shared.dtos.MemberDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
