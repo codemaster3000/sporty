@@ -3,9 +3,11 @@ package at.sporty.team1.application.controller.rmi.impl;
 import at.sporty.team1.application.controller.real.api.IDepartmentController;
 import at.sporty.team1.application.controller.real.impl.DepartmentController;
 import at.sporty.team1.shared.api.rmi.IDepartmentControllerRMI;
-import at.sporty.team1.shared.dtos.*;
+import at.sporty.team1.shared.dtos.DepartmentDTO;
+import at.sporty.team1.shared.dtos.MemberDTO;
+import at.sporty.team1.shared.dtos.SessionDTO;
+import at.sporty.team1.shared.dtos.TeamDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
-import at.sporty.team1.shared.exceptions.SecurityException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 
 import java.rmi.RemoteException;
@@ -29,18 +31,21 @@ public class DepartmentControllerRMIAdapter extends UnicastRemoteObject implemen
     @Override
     public List<DepartmentDTO> searchAllDepartments()
     throws RemoteException {
+
         return _controller.searchAllDepartments();
     }
 
     @Override
     public List<TeamDTO> loadDepartmentTeams(Integer departmentId)
     throws RemoteException, UnknownEntityException {
+
         return _controller.loadDepartmentTeams(departmentId);
     }
 
     @Override
     public MemberDTO loadDepartmentHead(Integer departmentId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException {
+
         return _controller.loadDepartmentHead(departmentId, session);
     }
 }

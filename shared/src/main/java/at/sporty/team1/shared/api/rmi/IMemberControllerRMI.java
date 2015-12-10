@@ -9,7 +9,7 @@ import at.sporty.team1.shared.exceptions.ValidationException;
 import java.rmi.RemoteException;
 import java.util.List;
 
-public interface IMemberController extends IRemoteController {
+public interface IMemberControllerRMI extends IRemoteControllerRMI {
 
     /**
      * Search for Member with a given id.

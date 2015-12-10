@@ -1,6 +1,6 @@
 package at.sporty.team1.executable;
 
-import at.sporty.team1.application.controller.real.impl.*;
+import at.sporty.team1.application.controller.rmi.impl.*;
 import at.sporty.team1.persistence.util.HibernateSessionUtil;
 import at.sporty.team1.shared.enums.RemoteObjectRegistry;
 import at.sporty.team1.shared.exceptions.SecurityException;
@@ -56,12 +56,12 @@ public class Server {
     }
 
     private static void bindRemoteObjects() throws RemoteException, SecurityException {
-        bindName(RemoteObjectRegistry.LOGIN_CONTROLLER, new LoginController());
-        bindName(RemoteObjectRegistry.NOTIFICATION_CONTROLLER, new NotificationController());
-        bindName(RemoteObjectRegistry.MEMBER_CONTROLLER, new MemberController());
-        bindName(RemoteObjectRegistry.TEAM_CONTROLLER, new TeamController());
-        bindName(RemoteObjectRegistry.DEPARTMENT_CONTROLLER, new DepartmentController());
-        bindName(RemoteObjectRegistry.TOURNAMENT_CONTROLLER, new TournamentController());
+        bindName(RemoteObjectRegistry.LOGIN_CONTROLLER, new LoginControllerRMIAdapter());
+        bindName(RemoteObjectRegistry.NOTIFICATION_CONTROLLER, new NotificationControllerRMIAdapter());
+        bindName(RemoteObjectRegistry.MEMBER_CONTROLLER, new MemberControllerRMIAdapter());
+        bindName(RemoteObjectRegistry.TEAM_CONTROLLER, new TeamControllerRMIAdapter());
+        bindName(RemoteObjectRegistry.DEPARTMENT_CONTROLLER, new DepartmentControllerRMIAdapter());
+        bindName(RemoteObjectRegistry.TOURNAMENT_CONTROLLER, new TournamentControllerRMIAdapter());
     }
 
     /**

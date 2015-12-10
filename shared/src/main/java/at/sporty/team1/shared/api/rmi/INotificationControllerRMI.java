@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by sereGkaluv on 27-Nov-15.
  */
-public interface INotificationController extends IRemoteController {
+public interface INotificationControllerRMI extends IRemoteControllerRMI {
 
     /**
      * Sends a message to the predefined queue.

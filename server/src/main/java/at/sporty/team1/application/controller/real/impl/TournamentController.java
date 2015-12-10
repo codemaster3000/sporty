@@ -259,7 +259,7 @@ public class TournamentController implements ITournamentController {
     }
 
     @Override
-    public void createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
+    public Integer createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
     throws ValidationException, UnknownEntityException, NotAuthorisedException {
 
         /* Checking access permissions */
@@ -313,8 +313,11 @@ public class TournamentController implements ITournamentController {
 
             PersistenceFacade.getNewTournamentDAO().saveOrUpdate(tournament);
 
+            return match.getMatchId();
+
         } catch (PersistenceException e) {
             LOGGER.error("An error occurred during adding a new Match to the Tournament: ", e);
+            return null;
         }
     }
 

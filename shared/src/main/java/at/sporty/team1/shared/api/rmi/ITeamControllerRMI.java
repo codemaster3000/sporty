@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by sereGkaluv on 02-Nov-15.
  */
-public interface ITeamController extends IRemoteController  {
+public interface ITeamControllerRMI extends IRemoteControllerRMI {
 
     /**
      * Creates new or saves old team in data storage with data from the DTO.

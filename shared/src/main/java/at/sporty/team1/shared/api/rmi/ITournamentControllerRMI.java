@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 
-public interface ITournamentController extends IRemoteController {
+public interface ITournamentControllerRMI extends IRemoteControllerRMI {
 
 	/**
      * Search for all Tournaments.
@@ -99,12 +99,13 @@ public interface ITournamentController extends IRemoteController {
      * @param tournamentId Id of a tournament for which given match will be created.
      * @param matchDTO DTO for match creation or save.
      * @param session Session object.
+     * @return Integer Id of the updated or saved entity.
      * @throws RemoteException
      * @throws ValidationException
      * @throws UnknownEntityException
      * @throws NotAuthorisedException
      */
-    void createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
+    Integer createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
     throws RemoteException, ValidationException, UnknownEntityException, NotAuthorisedException;
 
 	/**

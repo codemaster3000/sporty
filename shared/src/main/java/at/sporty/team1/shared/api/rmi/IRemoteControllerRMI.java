@@ -8,5 +8,5 @@ import java.rmi.Remote;
  *
  * This is a Marker Interface.
  */
-public interface IRemoteController extends Remote, Serializable {
+public interface IRemoteControllerRMI extends Remote, Serializable {
 }

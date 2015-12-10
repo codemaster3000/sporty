@@ -9,7 +9,7 @@ import java.rmi.RemoteException;
 /**
  * Created by f00 on 10.11.15.
  */
-public interface ILoginController extends IRemoteController {
+public interface ILoginControllerRMI extends IRemoteControllerRMI {
 
     /**
      * Returns server public key required for authorisation.
