@@ -33,7 +33,7 @@
                             </descriptorRefs>
                             <archive>
                                 <manifest>
-                                    <mainClass>at.sporty.team1.presentation.MainApp</mainClass>
+                                    <mainClass>at.sporty.team1.executable.MainApp</mainClass>
                                 </manifest>
                             </archive>
                         </configuration>

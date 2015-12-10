@@ -1,4 +1,4 @@
-package at.sporty.team1.presentation;
+package at.sporty.team1.presentation.util;
 
 import at.sporty.team1.presentation.controllers.*;
 import at.sporty.team1.presentation.controllers.core.IJfxController;

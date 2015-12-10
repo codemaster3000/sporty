@@ -2,7 +2,7 @@ package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.facades.CommunicationFacade;
 import at.sporty.team1.communication.util.NotificationPullerTask;
-import at.sporty.team1.presentation.ViewLoader;
+import at.sporty.team1.presentation.util.ViewLoader;
 import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
 import at.sporty.team1.presentation.controllers.core.IJfxController;
 import at.sporty.team1.presentation.controllers.core.JfxController;

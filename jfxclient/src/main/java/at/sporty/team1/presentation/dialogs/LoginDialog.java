@@ -1,6 +1,6 @@
 package at.sporty.team1.presentation.dialogs;
 
-import at.sporty.team1.presentation.ViewLoader;
+import at.sporty.team1.presentation.util.ViewLoader;
 import at.sporty.team1.presentation.controllers.LoginMaskViewController;
 import at.sporty.team1.presentation.util.GUIHelper;
 import at.sporty.team1.presentation.util.SVGContainer;
