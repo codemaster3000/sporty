@@ -1,7 +1,20 @@
 package at.sporty.team1.communication.facades;
 
-import at.sporty.team1.communication.util.RemoteObjectRegistry;
-import at.sporty.team1.shared.api.rmi.*;
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.security.InvalidKeyException;
+import java.security.KeyPair;
+import java.security.PublicKey;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+
+import at.sporty.team1.communication.facades.rmi.CommunicationFacadeRMI;
+import at.sporty.team1.communication.util.CachedSession;
+import at.sporty.team1.presentation.util.CommunicationType;
+import at.sporty.team1.shared.api.ejb.INotificationControllerEJB;
+import at.sporty.team1.shared.api.rmi.INotificationControllerRMI;
 import at.sporty.team1.shared.dtos.AuthorisationDTO;
 import at.sporty.team1.shared.dtos.MemberDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
@@ -9,108 +22,40 @@ import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.SecurityException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.shared.security.SecurityModule;
-import at.sporty.team1.communication.util.CachedSession;
 import javafx.beans.property.SimpleBooleanProperty;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import java.net.MalformedURLException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
-import java.rmi.Remote;
-import java.rmi.RemoteException;
-import java.security.InvalidKeyException;
-import java.security.KeyPair;
-import java.security.PublicKey;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CommunicationFacade {
     public static final SimpleBooleanProperty SESSION_AVAILABLE_PROPERTY = new SimpleBooleanProperty(false);
-
-    private static final String DEFAULT_RMI = "rmi://localhost/%s";
-    private static final Map<Class<? extends IRemoteControllerRMI>, Remote> CONTROLLER_MAP = new HashMap<>();
+    
     private static PublicKey _activeServerPublicKey;
     private static KeyPair _activeRSAKeyPair;
     private static CachedSession _extendedActiveSession;
-
+    private static CommunicationType _communicationType;
 
     private CommunicationFacade() {
     }
 
-    public static IMemberControllerRMI lookupForMemberController()
-    throws RemoteException, NotBoundException, MalformedURLException {
-        if (!CONTROLLER_MAP.containsKey(IMemberControllerRMI.class)) {
-            CONTROLLER_MAP.put(IMemberControllerRMI.class, Naming.lookup(
-                String.format(DEFAULT_RMI, RemoteObjectRegistry.MEMBER_CONTROLLER.getNamingRMI())
-            ));
-        }
-
-        return (IMemberControllerRMI) CONTROLLER_MAP.get(IMemberControllerRMI.class);
+    /**
+     * sets the type of the Communication RMI or EJB
+     * @param type (CommunicationType - ENUM)
+     */
+    public static void setCommunicationType(CommunicationType type){
+    	_communicationType = type;
     }
-
-    public static ITeamControllerRMI lookupForTeamController()
-    throws RemoteException, NotBoundException, MalformedURLException {
-        if (!CONTROLLER_MAP.containsKey(ITeamControllerRMI.class)) {
-            CONTROLLER_MAP.put(ITeamControllerRMI.class, Naming.lookup(
-                String.format(DEFAULT_RMI, RemoteObjectRegistry.TEAM_CONTROLLER.getNamingRMI())
-            ));
-        }
-
-        return (ITeamControllerRMI) CONTROLLER_MAP.get(ITeamControllerRMI.class);
-    }
-
-    public static IDepartmentControllerRMI lookupForDepartmentController()
-    throws RemoteException, NotBoundException, MalformedURLException {
-        if (!CONTROLLER_MAP.containsKey(IDepartmentControllerRMI.class)) {
-            CONTROLLER_MAP.put(IDepartmentControllerRMI.class, Naming.lookup(
-                String.format(DEFAULT_RMI, RemoteObjectRegistry.DEPARTMENT_CONTROLLER.getNamingRMI())
-            ));
-        }
-
-        return (IDepartmentControllerRMI) CONTROLLER_MAP.get(IDepartmentControllerRMI.class);
-    }
-
-    public static ILoginControllerRMI lookupForLoginController()
-    throws  RemoteException, NotBoundException, MalformedURLException {
-        if (!CONTROLLER_MAP.containsKey(ILoginControllerRMI.class)) {
-            CONTROLLER_MAP.put(ILoginControllerRMI.class, Naming.lookup(
-                String.format(DEFAULT_RMI, RemoteObjectRegistry.LOGIN_CONTROLLER.getNamingRMI())
-            ));
-        }
-
-        return (ILoginControllerRMI) CONTROLLER_MAP.get(ILoginControllerRMI.class);
-    }
-
-	public static ITournamentControllerRMI lookupForTournamentController()
-	throws  RemoteException, NotBoundException, MalformedURLException {
-        if (!CONTROLLER_MAP.containsKey(ITournamentControllerRMI.class)) {
-            CONTROLLER_MAP.put(ITournamentControllerRMI.class, Naming.lookup(
-                String.format(DEFAULT_RMI, RemoteObjectRegistry.TOURNAMENT_CONTROLLER.getNamingRMI())
-            ));
-        }
-
-        return (ITournamentControllerRMI) CONTROLLER_MAP.get(ITournamentControllerRMI.class);
-	}
-
-    public static INotificationControllerRMI lookupForNotificationController()
-    throws  RemoteException, NotBoundException, MalformedURLException {
-        if (!CONTROLLER_MAP.containsKey(INotificationControllerRMI.class)) {
-            CONTROLLER_MAP.put(INotificationControllerRMI.class, Naming.lookup(
-                String.format(DEFAULT_RMI, RemoteObjectRegistry.NOTIFICATION_CONTROLLER.getNamingRMI())
-            ));
-        }
-
-        return (INotificationControllerRMI) CONTROLLER_MAP.get(INotificationControllerRMI.class);
-    }
-
+    
     public static PublicKey getServerPublicKey()
-    throws RemoteException, NotBoundException, MalformedURLException, SecurityException {
+    throws NotBoundException, MalformedURLException, SecurityException {
         if (_activeServerPublicKey == null) {
-            _activeServerPublicKey = SecurityModule.getDecodedRSAPublicKey(
-                lookupForLoginController().getServerPublicKey()
-            );
+        	
+        	if(_communicationType == CommunicationType.RMI){
+	            _activeServerPublicKey = SecurityModule.getDecodedRSAPublicKey(
+	                CommunicationFacadeRMI.lookupForLoginControllerRMI().getServerPublicKey()
+	            );
+        	}else if(_communicationType == CommunicationType.EJB){
+        		//TODO:
+        	}else{
+        		//TODO: exception
+        	}
         }
         return _activeServerPublicKey;
     }
@@ -132,7 +77,7 @@ public class CommunicationFacade {
     }
 
     public static boolean authorize(String username, String password)
-    throws RemoteException, NotBoundException, MalformedURLException, SecurityException, InvalidKeyException,
+    throws NotBoundException, MalformedURLException, SecurityException, InvalidKeyException,
     BadPaddingException, IllegalBlockSizeException, UnknownEntityException, NotAuthorisedException {
         //disposing old session
         _extendedActiveSession = null;
@@ -153,7 +98,7 @@ public class CommunicationFacade {
             ));
 
         //Getting authorisation result
-        SessionDTO session = lookupForLoginController().authorize(authorisationDTO);
+        SessionDTO session = CommunicationFacadeRMI.lookupForLoginControllerRMI().authorize(authorisationDTO);
         if (session != null) {
             //Decrypting client fingerprint for client side
             cipher.init(Cipher.DECRYPT_MODE, getClientRSAKeyPair().getPrivate());
@@ -165,7 +110,7 @@ public class CommunicationFacade {
 
             session.setClientFingerprint(clientFingerprint);
 
-            MemberDTO user = lookupForMemberController().findMemberById(session.getUserId(), session);
+            MemberDTO user = CommunicationFacadeRMI.lookupForMemberControllerRMI().findMemberById(session.getUserId(), session);
             _extendedActiveSession = new CachedSession(user, session);
 
             SESSION_AVAILABLE_PROPERTY.set(true);
@@ -181,5 +126,17 @@ public class CommunicationFacade {
         SESSION_AVAILABLE_PROPERTY.set(false);
         _extendedActiveSession = null;
     }
+
+	public static INotificationControllerRMI lookupForNotificationControllerRMI() 
+	throws MalformedURLException, NotBoundException{
+		
+		return CommunicationFacadeRMI.lookupForNotificationControllerRMI();		
+	}
+	
+	public static INotificationControllerEJB lookupForNotificationControllerEJB() 
+	throws MalformedURLException, NotBoundException{
+		
+		return CommunicationFacadeEJB.lookupForNotificationControllerEJB();		
+	}
 }
 

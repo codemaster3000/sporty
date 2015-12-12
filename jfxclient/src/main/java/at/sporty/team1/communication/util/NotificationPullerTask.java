@@ -1,18 +1,19 @@
 package at.sporty.team1.communication.util;
 
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import at.sporty.team1.communication.facades.CommunicationFacade;
 import at.sporty.team1.shared.api.rmi.INotificationControllerRMI;
 import at.sporty.team1.shared.dtos.MessageDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import javafx.collections.ObservableList;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.net.MalformedURLException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.util.List;
 
 public class NotificationPullerTask implements Runnable {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -29,7 +30,7 @@ public class NotificationPullerTask implements Runnable {
 	public void run() {
 		try {
 
-			INotificationControllerRMI notificationController = CommunicationFacade.lookupForNotificationController();
+			INotificationControllerRMI notificationController = CommunicationFacade.lookupForNotificationControllerRMI();
 
 			//Pull notifications from server (NotificationController)
 			List<MessageDTO> messageList = notificationController.pullMessages(_currentSession);
