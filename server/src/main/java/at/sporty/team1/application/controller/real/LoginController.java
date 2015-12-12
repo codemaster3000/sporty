@@ -2,7 +2,7 @@ package at.sporty.team1.application.controller.real;
 
 import at.sporty.team1.application.auth.AccessPolicy;
 import at.sporty.team1.application.auth.AuthManager;
-import at.sporty.team1.shared.api.real.ILoginController;
+import at.sporty.team1.application.controller.real.api.ILoginController;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.persistence.PersistenceFacade;

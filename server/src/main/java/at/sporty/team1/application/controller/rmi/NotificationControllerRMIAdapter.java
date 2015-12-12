@@ -1,7 +1,7 @@
 package at.sporty.team1.application.controller.rmi;
 
 import at.sporty.team1.application.controller.util.RemoteObject;
-import at.sporty.team1.shared.api.real.INotificationController;
+import at.sporty.team1.application.controller.real.api.INotificationController;
 import at.sporty.team1.application.controller.real.NotificationController;
 import at.sporty.team1.shared.api.rmi.INotificationControllerRMI;
 import at.sporty.team1.shared.dtos.MessageDTO;

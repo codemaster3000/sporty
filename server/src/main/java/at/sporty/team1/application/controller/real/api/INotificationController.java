@@ -1,20 +1,16 @@
-package at.sporty.team1.shared.api.ejb;
+package at.sporty.team1.application.controller.real.api;
 
 import at.sporty.team1.shared.dtos.MessageDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.ValidationException;
 
-import javax.ejb.Local;
-import javax.ejb.Remote;
 import java.util.List;
 
 /**
  * Created by sereGkaluv on 27-Nov-15.
  */
-@Local
-@Remote
-public interface INotificationControllerEJB extends IRemoteControllerEJB {
+public interface INotificationController extends IController {
 
     /**
      * Sends a message to the predefined queue.

@@ -1,18 +1,13 @@
-package at.sporty.team1.shared.api.ejb;
+package at.sporty.team1.application.controller.real.api;
 
 import at.sporty.team1.shared.dtos.AuthorisationDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
 import at.sporty.team1.shared.exceptions.SecurityException;
 
-import javax.ejb.Local;
-import javax.ejb.Remote;
-
 /**
- * Created by f00 on 10.12.15.
+ * Created by f00 on 10.11.15.
  */
-@Local
-@Remote
-public interface ILoginControllerEJB extends IRemoteControllerEJB {
+public interface ILoginController extends IController {
 
     /**
      * Returns server public key required for authorisation.

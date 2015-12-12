@@ -1,4 +1,4 @@
-package at.sporty.team1.shared.api.ejb;
+package at.sporty.team1.application.controller.real.api;
 
 import at.sporty.team1.shared.dtos.MatchDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
@@ -7,18 +7,14 @@ import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.shared.exceptions.ValidationException;
 
-import javax.ejb.Local;
-import javax.ejb.Remote;
 import java.util.List;
 
 /**
  * Created by sereGkaluv on 27-Nov-15.
  */
-@Local
-@Remote
-public interface ITournamentControllerEJB extends IRemoteControllerEJB {
+public interface ITournamentController extends IController {
 
-    /**
+	/**
      * Search for all Tournaments.
      *
      * @return List<TournamentDTO> List of all Tournaments.
@@ -54,7 +50,7 @@ public interface ITournamentControllerEJB extends IRemoteControllerEJB {
      */
     List<TournamentDTO> searchTournamentsByLocation(String location)
     throws ValidationException;
-
+    
     /**
      * Search for all tournament teams.
      *
@@ -75,7 +71,7 @@ public interface ITournamentControllerEJB extends IRemoteControllerEJB {
     List<MatchDTO> searchAllTournamentMatches(Integer tournamentId)
     throws UnknownEntityException;
 
-    /**
+	/**
      * Creates new or saves old tournament in data storage with data from the DTO.
      *
      * @param tournamentDTO DTO for tournament creation or save.
@@ -101,7 +97,7 @@ public interface ITournamentControllerEJB extends IRemoteControllerEJB {
     Integer createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
     throws ValidationException, UnknownEntityException, NotAuthorisedException;
 
-    /**
+	/**
      * Assigns given team by name to the given tournament.
      *
      * @param teamName Name of the team to be assigned to the given tournament.
@@ -111,7 +107,7 @@ public interface ITournamentControllerEJB extends IRemoteControllerEJB {
      * @throws UnknownEntityException
      * @throws NotAuthorisedException
      */
-    void assignTeamToTournament(String teamName, Integer tournamentId, SessionDTO session)
+	void assignTeamToTournament(String teamName, Integer tournamentId, SessionDTO session)
     throws ValidationException, UnknownEntityException, NotAuthorisedException;
 
     /**

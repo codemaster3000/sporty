@@ -1,4 +1,4 @@
-package at.sporty.team1.shared.api.real;
+package at.sporty.team1.communication.facades.api;
 
 import java.io.Serializable;
 
@@ -7,5 +7,5 @@ import java.io.Serializable;
  *
  * This is a Marker Interface.
  */
-public interface IController extends Serializable {
+public interface IControllerUniversal extends Serializable {
 }

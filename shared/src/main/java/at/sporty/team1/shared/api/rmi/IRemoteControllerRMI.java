@@ -1,7 +1,6 @@
 package at.sporty.team1.shared.api.rmi;
 
-import at.sporty.team1.shared.api.real.IController;
-
+import java.io.Serializable;
 import java.rmi.Remote;
 
 /**
@@ -9,5 +8,5 @@ import java.rmi.Remote;
  *
  * This is a Marker Interface.
  */
-public interface IRemoteControllerRMI extends Remote, IController {
+public interface IRemoteControllerRMI extends Remote, Serializable {
 }

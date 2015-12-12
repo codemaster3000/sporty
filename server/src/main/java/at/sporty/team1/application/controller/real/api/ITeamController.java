@@ -1,4 +1,4 @@
-package at.sporty.team1.shared.api.ejb;
+package at.sporty.team1.application.controller.real.api;
 
 import at.sporty.team1.shared.dtos.DepartmentDTO;
 import at.sporty.team1.shared.dtos.MemberDTO;
@@ -8,16 +8,12 @@ import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.shared.exceptions.ValidationException;
 
-import javax.ejb.Local;
-import javax.ejb.Remote;
 import java.util.List;
 
 /**
  * Created by sereGkaluv on 02-Nov-15.
  */
-@Local
-@Remote
-public interface ITeamControllerEJB extends IRemoteControllerEJB {
+public interface ITeamController extends IController {
 
     /**
      * Creates new or saves old team in data storage with data from the DTO.

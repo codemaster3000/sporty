@@ -2,7 +2,7 @@ package at.sporty.team1.application.controller.ejb;
 
 import at.sporty.team1.application.controller.real.DepartmentController;
 import at.sporty.team1.shared.api.ejb.IDepartmentControllerEJB;
-import at.sporty.team1.shared.api.real.IDepartmentController;
+import at.sporty.team1.application.controller.real.api.IDepartmentController;
 import at.sporty.team1.shared.dtos.DepartmentDTO;
 import at.sporty.team1.shared.dtos.MemberDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;

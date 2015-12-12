@@ -21,7 +21,7 @@ public interface IMemberControllerRMI extends IRemoteControllerRMI {
      * @throws NotAuthorisedException
      */
     MemberDTO findMemberById(Integer memberId, SessionDTO session)
-    throws UnknownEntityException, NotAuthorisedException;
+    throws RemoteException, UnknownEntityException, NotAuthorisedException;
 
     /**
      * Search for all Members.

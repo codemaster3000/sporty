@@ -1,4 +1,4 @@
-package at.sporty.team1.shared.api.ejb;
+package at.sporty.team1.application.controller.real.api;
 
 import at.sporty.team1.shared.dtos.DepartmentDTO;
 import at.sporty.team1.shared.dtos.MemberDTO;
@@ -7,16 +7,13 @@ import at.sporty.team1.shared.dtos.TeamDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 
-import javax.ejb.Local;
-import javax.ejb.Remote;
 import java.util.List;
 
 /**
- * Created by f00 on 10.12.15.
+ * Created by f00 on 03.11.15.
  */
-@Local
-@Remote
-public interface IDepartmentControllerEJB extends IRemoteControllerEJB {
+public interface IDepartmentController extends IController {
+
     /**
      * Search for all Departments.
      *

@@ -1,7 +1,7 @@
 package at.sporty.team1.application.controller.rmi;
 
 import at.sporty.team1.application.controller.util.RemoteObject;
-import at.sporty.team1.shared.api.real.IDepartmentController;
+import at.sporty.team1.application.controller.real.api.IDepartmentController;
 import at.sporty.team1.application.controller.real.DepartmentController;
 import at.sporty.team1.shared.api.rmi.IDepartmentControllerRMI;
 import at.sporty.team1.shared.dtos.DepartmentDTO;

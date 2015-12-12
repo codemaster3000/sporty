@@ -2,7 +2,7 @@ package at.sporty.team1.application.controller.real;
 
 import at.sporty.team1.application.auth.AccessPolicy;
 import at.sporty.team1.application.auth.BasicAccessPolicies;
-import at.sporty.team1.shared.api.real.ITournamentController;
+import at.sporty.team1.application.controller.real.api.ITournamentController;
 import at.sporty.team1.domain.Match;
 import at.sporty.team1.domain.Tournament;
 import at.sporty.team1.domain.interfaces.IMatch;
