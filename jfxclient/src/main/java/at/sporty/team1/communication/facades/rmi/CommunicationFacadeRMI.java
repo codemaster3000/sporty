@@ -1,12 +1,7 @@
 package at.sporty.team1.communication.facades.rmi;
 
 import at.sporty.team1.communication.facades.api.*;
-import at.sporty.team1.communication.facades.rmi.adapters.DepartmentControllerRMIAdapter;
-import at.sporty.team1.communication.facades.rmi.adapters.LoginControllerRMIAdapter;
-import at.sporty.team1.communication.facades.rmi.adapters.MemberControllerRMIAdapter;
-import at.sporty.team1.communication.facades.rmi.adapters.NotificationControllerRMIAdapter;
-import at.sporty.team1.communication.facades.rmi.adapters.TeamControllerRMIAdapter;
-import at.sporty.team1.communication.facades.rmi.adapters.TournamentControllerRMIAdapter;
+import at.sporty.team1.communication.facades.rmi.adapters.*;
 import at.sporty.team1.communication.util.RemoteCommunicationException;
 import at.sporty.team1.communication.util.RemoteObjectRegistry;
 import at.sporty.team1.shared.api.rmi.*;

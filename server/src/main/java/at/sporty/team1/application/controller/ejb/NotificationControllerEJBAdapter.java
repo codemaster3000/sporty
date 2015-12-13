@@ -26,12 +26,16 @@ public class NotificationControllerEJBAdapter implements INotificationController
     }
 
     @Override
-    public List<MessageDTO> pullMessages(SessionDTO session) throws NotAuthorisedException {
+    public List<MessageDTO> pullMessages(SessionDTO session)
+    throws NotAuthorisedException {
+
         return _controller.pullMessages(session);
     }
 
     @Override
-    public boolean sendMessage(MessageDTO messageDTO, SessionDTO session) throws ValidationException, NotAuthorisedException {
+    public boolean sendMessage(MessageDTO messageDTO, SessionDTO session)
+    throws ValidationException, NotAuthorisedException {
+
         return _controller.sendMessage(messageDTO,session);
     }
 }

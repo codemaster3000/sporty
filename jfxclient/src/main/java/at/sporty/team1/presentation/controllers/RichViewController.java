@@ -1,9 +1,9 @@
 package at.sporty.team1.presentation.controllers;
 
-import at.sporty.team1.presentation.util.ViewLoader;
 import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
 import at.sporty.team1.presentation.controllers.core.JfxController;
 import at.sporty.team1.presentation.controllers.core.SearchViewController;
+import at.sporty.team1.presentation.util.ViewLoader;
 import at.sporty.team1.shared.api.IDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;

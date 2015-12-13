@@ -26,77 +26,107 @@ public class MemberControllerEJBAdapter implements IMemberControllerEJB {
     }
 
     @Override
-    public void assignMemberToDepartment(Integer memberId, Integer departmentId, SessionDTO session) throws UnknownEntityException, NotAuthorisedException {
+    public void assignMemberToDepartment(Integer memberId, Integer departmentId, SessionDTO session)
+    throws UnknownEntityException, NotAuthorisedException {
+
         _controller.assignMemberToDepartment(memberId, departmentId, session);
     }
 
     @Override
-    public MemberDTO findMemberById(Integer memberId, SessionDTO session) throws UnknownEntityException, NotAuthorisedException {
+    public MemberDTO findMemberById(Integer memberId, SessionDTO session)
+    throws UnknownEntityException, NotAuthorisedException {
+
         return _controller.findMemberById(memberId, session);
     }
 
     @Override
-    public List<MemberDTO> searchAllMembers(Boolean isFeePaid, SessionDTO session) throws NotAuthorisedException {
+    public List<MemberDTO> searchAllMembers(Boolean isFeePaid, SessionDTO session)
+    throws NotAuthorisedException {
+
         return _controller.searchAllMembers(isFeePaid, session);
     }
 
     @Override
-    public Integer createOrSaveMember(MemberDTO memberDTO, SessionDTO session) throws ValidationException, NotAuthorisedException {
+    public Integer createOrSaveMember(MemberDTO memberDTO, SessionDTO session)
+    throws ValidationException, NotAuthorisedException {
+
         return _controller.createOrSaveMember(memberDTO, session);
     }
 
     @Override
-    public List<MemberDTO> searchMembersByNameString(String searchString, Boolean isFeePaid, SessionDTO session) throws ValidationException, NotAuthorisedException {
+    public List<MemberDTO> searchMembersByNameString(String searchString, Boolean isFeePaid, SessionDTO session)
+    throws ValidationException, NotAuthorisedException {
+
         return _controller.searchMembersByNameString(searchString, isFeePaid, session);
     }
 
     @Override
-    public List<MemberDTO> searchMembersByCommonTeamName(String teamName, Boolean isFeePaid, SessionDTO session) throws ValidationException, NotAuthorisedException {
+    public List<MemberDTO> searchMembersByCommonTeamName(String teamName, Boolean isFeePaid, SessionDTO session)
+    throws ValidationException, NotAuthorisedException {
+
         return _controller.searchMembersByCommonTeamName(teamName, isFeePaid, session);
     }
 
     @Override
-    public List<MemberDTO> searchMembersByTournamentTeamName(String teamName, Boolean isFeePaid, SessionDTO session) throws ValidationException, NotAuthorisedException {
+    public List<MemberDTO> searchMembersByTournamentTeamName(String teamName, Boolean isFeePaid, SessionDTO session)
+    throws ValidationException, NotAuthorisedException {
+
         return _controller.searchMembersByTournamentTeamName(teamName, isFeePaid, session);
     }
 
     @Override
-    public List<MemberDTO> searchMembersByDateOfBirth(String dateOfBirth, Boolean isFeePaid, SessionDTO session) throws ValidationException, NotAuthorisedException {
+    public List<MemberDTO> searchMembersByDateOfBirth(String dateOfBirth, Boolean isFeePaid, SessionDTO session)
+    throws ValidationException, NotAuthorisedException {
+
         return _controller.searchMembersByDateOfBirth(dateOfBirth, isFeePaid, session);
     }
 
     @Override
-    public List<DTOPair<DepartmentDTO, TeamDTO>> loadFetchedDepartmentTeamList(Integer memberId, SessionDTO session) throws UnknownEntityException, NotAuthorisedException {
+    public List<DTOPair<DepartmentDTO, TeamDTO>> loadFetchedDepartmentTeamList(Integer memberId, SessionDTO session)
+    throws UnknownEntityException, NotAuthorisedException {
+
         return _controller.loadFetchedDepartmentTeamList(memberId, session);
     }
 
     @Override
-    public List<DepartmentDTO> loadMemberDepartments(Integer memberId, SessionDTO session) throws UnknownEntityException, NotAuthorisedException {
+    public List<DepartmentDTO> loadMemberDepartments(Integer memberId, SessionDTO session)
+    throws UnknownEntityException, NotAuthorisedException {
+
         return _controller.loadMemberDepartments(memberId, session);
     }
 
     @Override
-    public void removeMemberFromDepartment(Integer memberId, Integer departmentId, SessionDTO session) throws UnknownEntityException, NotAuthorisedException {
+    public void removeMemberFromDepartment(Integer memberId, Integer departmentId, SessionDTO session)
+    throws UnknownEntityException, NotAuthorisedException {
+
         _controller.removeMemberFromDepartment(memberId, departmentId, session);
     }
 
     @Override
-    public List<TeamDTO> loadMemberTeams(Integer memberId, SessionDTO session) throws UnknownEntityException, NotAuthorisedException {
+    public List<TeamDTO> loadMemberTeams(Integer memberId, SessionDTO session)
+    throws UnknownEntityException, NotAuthorisedException {
+
         return _controller.loadMemberTeams(memberId, session);
     }
 
     @Override
-    public void assignMemberToTeam(Integer memberId, Integer teamId, SessionDTO session) throws UnknownEntityException, NotAuthorisedException {
+    public void assignMemberToTeam(Integer memberId, Integer teamId, SessionDTO session)
+    throws UnknownEntityException, NotAuthorisedException {
+
         _controller.assignMemberToTeam(memberId, teamId, session);
     }
 
     @Override
-    public void removeMemberFromTeam(Integer memberId, Integer teamId, SessionDTO session) throws UnknownEntityException, NotAuthorisedException {
+    public void removeMemberFromTeam(Integer memberId, Integer teamId, SessionDTO session)
+    throws UnknownEntityException, NotAuthorisedException {
+
         _controller.removeMemberFromTeam(memberId, teamId, session);
     }
 
     @Override
-    public void deleteMember(Integer memberId, SessionDTO session) throws UnknownEntityException, NotAuthorisedException {
+    public void deleteMember(Integer memberId, SessionDTO session)
+    throws UnknownEntityException, NotAuthorisedException {
+
         _controller.deleteMember(memberId, session);
     }
 }

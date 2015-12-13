@@ -1,10 +1,10 @@
 package at.sporty.team1.presentation.dialogs;
 
-import at.sporty.team1.presentation.util.ViewLoader;
 import at.sporty.team1.presentation.controllers.MessagesMaskViewController;
-import at.sporty.team1.shared.dtos.MessageDTO;
 import at.sporty.team1.presentation.util.GUIHelper;
 import at.sporty.team1.presentation.util.SVGContainer;
+import at.sporty.team1.presentation.util.ViewLoader;
+import at.sporty.team1.shared.dtos.MessageDTO;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonType;

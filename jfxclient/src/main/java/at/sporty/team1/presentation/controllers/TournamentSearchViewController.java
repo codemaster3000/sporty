@@ -1,13 +1,5 @@
 package at.sporty.team1.presentation.controllers;
 
-import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import at.sporty.team1.communication.facades.CommunicationFacade;
 import at.sporty.team1.communication.facades.api.ITournamentControllerUniversal;
 import at.sporty.team1.communication.util.RemoteCommunicationException;
@@ -23,6 +15,13 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Created by sereGkaluv on 05-Nov-15.

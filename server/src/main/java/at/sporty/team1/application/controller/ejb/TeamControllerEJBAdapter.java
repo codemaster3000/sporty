@@ -29,22 +29,30 @@ public class TeamControllerEJBAdapter implements ITeamControllerEJB {
     }
 
     @Override
-    public Integer createOrSaveTeam(TeamDTO teamDTO, SessionDTO session) throws ValidationException, NotAuthorisedException {
+    public Integer createOrSaveTeam(TeamDTO teamDTO, SessionDTO session)
+    throws ValidationException, NotAuthorisedException {
+
         return _controller.createOrSaveTeam(teamDTO,session);
     }
 
     @Override
-    public List<TeamDTO> searchTeamsByMember(Integer memberId, SessionDTO session) throws UnknownEntityException, NotAuthorisedException {
+    public List<TeamDTO> searchTeamsByMember(Integer memberId, SessionDTO session)
+    throws UnknownEntityException, NotAuthorisedException {
+
         return _controller.searchTeamsByMember(memberId,session);
     }
 
     @Override
-    public List<MemberDTO> loadTeamMembers(Integer teamId, SessionDTO session) throws UnknownEntityException, NotAuthorisedException {
-        return loadTeamMembers(teamId,session);
+    public List<MemberDTO> loadTeamMembers(Integer teamId, SessionDTO session)
+    throws UnknownEntityException, NotAuthorisedException {
+
+        return _controller.loadTeamMembers(teamId,session);
     }
 
     @Override
-    public DepartmentDTO loadTeamDepartment(Integer teamId, SessionDTO session) throws UnknownEntityException, NotAuthorisedException {
+    public DepartmentDTO loadTeamDepartment(Integer teamId, SessionDTO session)
+    throws UnknownEntityException, NotAuthorisedException {
+
         return _controller.loadTeamDepartment(teamId,session);
     }
 }

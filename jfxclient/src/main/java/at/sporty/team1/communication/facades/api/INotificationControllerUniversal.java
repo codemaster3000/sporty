@@ -1,9 +1,9 @@
 package at.sporty.team1.communication.facades.api;
 
+import at.sporty.team1.communication.util.RemoteCommunicationException;
 import at.sporty.team1.shared.dtos.MessageDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
-import at.sporty.team1.communication.util.RemoteCommunicationException;
 import at.sporty.team1.shared.exceptions.ValidationException;
 
 import java.util.List;

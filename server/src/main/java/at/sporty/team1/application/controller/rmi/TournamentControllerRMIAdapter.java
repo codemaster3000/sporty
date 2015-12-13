@@ -1,8 +1,8 @@
 package at.sporty.team1.application.controller.rmi;
 
-import at.sporty.team1.application.controller.util.RemoteObject;
-import at.sporty.team1.application.controller.real.api.ITournamentController;
 import at.sporty.team1.application.controller.real.TournamentController;
+import at.sporty.team1.application.controller.real.api.ITournamentController;
+import at.sporty.team1.application.controller.util.RemoteObject;
 import at.sporty.team1.shared.api.rmi.ITournamentControllerRMI;
 import at.sporty.team1.shared.dtos.MatchDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;

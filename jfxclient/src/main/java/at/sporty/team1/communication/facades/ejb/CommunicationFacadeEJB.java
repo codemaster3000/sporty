@@ -1,38 +1,20 @@
 package at.sporty.team1.communication.facades.ejb;
 
+import at.sporty.team1.communication.facades.api.*;
+import at.sporty.team1.communication.facades.ejb.adapters.*;
+import at.sporty.team1.communication.util.RemoteCommunicationException;
+import at.sporty.team1.communication.util.RemoteObjectRegistry;
+import at.sporty.team1.shared.api.ejb.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
-
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import at.sporty.team1.communication.facades.api.ICommunicationFacade;
-import at.sporty.team1.communication.facades.api.IDepartmentControllerUniversal;
-import at.sporty.team1.communication.facades.api.ILoginControllerUniversal;
-import at.sporty.team1.communication.facades.api.IMemberControllerUniversal;
-import at.sporty.team1.communication.facades.api.INotificationControllerUniversal;
-import at.sporty.team1.communication.facades.api.ITeamControllerUniversal;
-import at.sporty.team1.communication.facades.api.ITournamentControllerUniversal;
-import at.sporty.team1.communication.facades.ejb.adapters.DepartmentControllerEJBAdapter;
-import at.sporty.team1.communication.facades.ejb.adapters.LoginControllerEJBAdapter;
-import at.sporty.team1.communication.facades.ejb.adapters.MemberControllerEJBAdapter;
-import at.sporty.team1.communication.facades.ejb.adapters.NotificationControllerEJBAdapter;
-import at.sporty.team1.communication.facades.ejb.adapters.TeamControllerEJBAdapter;
-import at.sporty.team1.communication.facades.ejb.adapters.TournamentControllerEJBAdapter;
-import at.sporty.team1.communication.util.RemoteCommunicationException;
-import at.sporty.team1.communication.util.RemoteObjectRegistry;
-import at.sporty.team1.shared.api.ejb.IDepartmentControllerEJB;
-import at.sporty.team1.shared.api.ejb.ILoginControllerEJB;
-import at.sporty.team1.shared.api.ejb.IMemberControllerEJB;
-import at.sporty.team1.shared.api.ejb.INotificationControllerEJB;
-import at.sporty.team1.shared.api.ejb.ITeamControllerEJB;
-import at.sporty.team1.shared.api.ejb.ITournamentControllerEJB;
 
 public class CommunicationFacadeEJB implements ICommunicationFacade {
     private static final Logger LOGGER = LogManager.getLogger();

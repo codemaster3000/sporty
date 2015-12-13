@@ -1,11 +1,5 @@
 package at.sporty.team1.presentation.controllers;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import at.sporty.team1.communication.facades.CommunicationFacade;
 import at.sporty.team1.communication.util.RemoteCommunicationException;
 import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
@@ -21,6 +15,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * Created by sereGkaluv on 08-Dec-15.

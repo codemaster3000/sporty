@@ -1,8 +1,5 @@
 package at.sporty.team1.communication.facades.rmi.adapters;
 
-import java.rmi.RemoteException;
-import java.util.List;
-
 import at.sporty.team1.communication.facades.api.IDepartmentControllerUniversal;
 import at.sporty.team1.communication.util.RemoteCommunicationException;
 import at.sporty.team1.shared.api.rmi.IDepartmentControllerRMI;
@@ -12,6 +9,9 @@ import at.sporty.team1.shared.dtos.SessionDTO;
 import at.sporty.team1.shared.dtos.TeamDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
+
+import java.rmi.RemoteException;
+import java.util.List;
 
 public class DepartmentControllerRMIAdapter implements IDepartmentControllerUniversal {
 

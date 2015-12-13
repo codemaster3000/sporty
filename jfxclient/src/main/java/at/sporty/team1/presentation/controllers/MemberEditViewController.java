@@ -1,15 +1,5 @@
 package at.sporty.team1.presentation.controllers;
 
-import java.net.URL;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import at.sporty.team1.communication.facades.CommunicationFacade;
 import at.sporty.team1.communication.facades.api.IDepartmentControllerUniversal;
 import at.sporty.team1.communication.facades.api.IMemberControllerUniversal;
@@ -25,12 +15,13 @@ import at.sporty.team1.shared.exceptions.ValidationException;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.util.StringConverter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.net.URL;
+import java.util.*;
 
 
 public class MemberEditViewController extends EditViewController<MemberDTO> {

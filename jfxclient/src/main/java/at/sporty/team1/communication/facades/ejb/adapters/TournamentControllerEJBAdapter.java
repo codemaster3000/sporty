@@ -1,7 +1,5 @@
 package at.sporty.team1.communication.facades.ejb.adapters;
 
-import java.util.List;
-
 import at.sporty.team1.communication.facades.api.ITournamentControllerUniversal;
 import at.sporty.team1.communication.util.RemoteCommunicationException;
 import at.sporty.team1.shared.api.ejb.ITournamentControllerEJB;
@@ -11,6 +9,8 @@ import at.sporty.team1.shared.dtos.TournamentDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.shared.exceptions.ValidationException;
+
+import java.util.List;
 
 public class TournamentControllerEJBAdapter implements ITournamentControllerUniversal {
 

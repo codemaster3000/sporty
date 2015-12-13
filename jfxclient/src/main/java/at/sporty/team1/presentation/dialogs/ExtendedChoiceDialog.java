@@ -3,7 +3,10 @@ package at.sporty.team1.presentation.dialogs;
 import at.sporty.team1.presentation.util.GUIHelper;
 import at.sporty.team1.presentation.util.SVGContainer;
 import javafx.collections.FXCollections;
-import javafx.scene.control.*;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 

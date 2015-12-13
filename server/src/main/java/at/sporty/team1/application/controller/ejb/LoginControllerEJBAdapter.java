@@ -29,7 +29,7 @@ public class LoginControllerEJBAdapter implements ILoginControllerEJB {
 
     @Override
     public SessionDTO authorize(AuthorisationDTO authorisationDTO)
-            throws SecurityException {
+    throws SecurityException {
         return _controller.authorize(authorisationDTO);
     }
 }

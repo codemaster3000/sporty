@@ -10,7 +10,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.rmi.RemoteException;
 import java.util.List;
 
 

@@ -1,11 +1,7 @@
 package at.sporty.team1.communication.facades.rmi.adapters;
 
-import java.rmi.RemoteException;
-import java.util.List;
-
 import at.sporty.team1.communication.facades.api.ITournamentControllerUniversal;
 import at.sporty.team1.communication.util.RemoteCommunicationException;
-import at.sporty.team1.shared.api.rmi.INotificationControllerRMI;
 import at.sporty.team1.shared.api.rmi.ITournamentControllerRMI;
 import at.sporty.team1.shared.dtos.MatchDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
@@ -13,6 +9,9 @@ import at.sporty.team1.shared.dtos.TournamentDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.shared.exceptions.ValidationException;
+
+import java.rmi.RemoteException;
+import java.util.List;
 
 public class TournamentControllerRMIAdapter implements ITournamentControllerUniversal {
 

@@ -1,13 +1,5 @@
 package at.sporty.team1.presentation.controllers;
 
-import java.net.URL;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import at.sporty.team1.communication.facades.CommunicationFacade;
 import at.sporty.team1.communication.facades.api.IMemberControllerUniversal;
 import at.sporty.team1.communication.util.RemoteCommunicationException;
@@ -31,6 +23,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.net.URL;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 
 public class MemberReadOnlyViewController extends ConsumerViewController<MemberDTO> {

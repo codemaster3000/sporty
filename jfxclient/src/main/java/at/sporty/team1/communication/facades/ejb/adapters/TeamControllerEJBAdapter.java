@@ -1,7 +1,5 @@
 package at.sporty.team1.communication.facades.ejb.adapters;
 
-import java.util.List;
-
 import at.sporty.team1.communication.facades.api.ITeamControllerUniversal;
 import at.sporty.team1.communication.util.RemoteCommunicationException;
 import at.sporty.team1.shared.api.ejb.ITeamControllerEJB;
@@ -12,6 +10,8 @@ import at.sporty.team1.shared.dtos.TeamDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.shared.exceptions.ValidationException;
+
+import java.util.List;
 
 public class TeamControllerEJBAdapter implements ITeamControllerUniversal {
 

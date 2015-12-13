@@ -28,7 +28,9 @@ public class TournamentControllerEJBAdapter implements ITournamentControllerEJB 
     }
 
     @Override
-    public void assignTeamToTournament(String teamName, Integer tournamentId, SessionDTO session) throws ValidationException, UnknownEntityException, NotAuthorisedException {
+    public void assignTeamToTournament(String teamName, Integer tournamentId, SessionDTO session)
+    throws ValidationException, UnknownEntityException, NotAuthorisedException {
+
         _controller.assignTeamToTournament(teamName, tournamentId, session);
     }
 
@@ -38,42 +40,58 @@ public class TournamentControllerEJBAdapter implements ITournamentControllerEJB 
     }
 
     @Override
-    public List<TournamentDTO> searchTournamentsBySport(String sport) throws ValidationException {
+    public List<TournamentDTO> searchTournamentsBySport(String sport)
+    throws ValidationException {
+
         return _controller.searchTournamentsBySport(sport);
     }
 
     @Override
-    public List<TournamentDTO> searchTournamentsByDate(String eventDate) throws ValidationException {
+    public List<TournamentDTO> searchTournamentsByDate(String eventDate)
+    throws ValidationException {
+
         return _controller.searchTournamentsByDate(eventDate);
     }
 
     @Override
-    public List<TournamentDTO> searchTournamentsByLocation(String location) throws ValidationException {
+    public List<TournamentDTO> searchTournamentsByLocation(String location)
+    throws ValidationException {
+
         return _controller.searchTournamentsByLocation(location);
     }
 
     @Override
-    public List<String> searchAllTournamentTeams(Integer tournamentId) throws UnknownEntityException {
+    public List<String> searchAllTournamentTeams(Integer tournamentId)
+    throws UnknownEntityException {
+
         return _controller.searchAllTournamentTeams(tournamentId);
     }
 
     @Override
-    public List<MatchDTO> searchAllTournamentMatches(Integer tournamentId) throws UnknownEntityException {
+    public List<MatchDTO> searchAllTournamentMatches(Integer tournamentId)
+    throws UnknownEntityException {
+
         return _controller.searchAllTournamentMatches(tournamentId);
     }
 
     @Override
-    public Integer createOrSaveTournament(TournamentDTO tournamentDTO, SessionDTO session) throws ValidationException, NotAuthorisedException {
+    public Integer createOrSaveTournament(TournamentDTO tournamentDTO, SessionDTO session)
+    throws ValidationException, NotAuthorisedException {
+
         return _controller.createOrSaveTournament(tournamentDTO, session);
     }
 
     @Override
-    public Integer createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session) throws ValidationException, UnknownEntityException, NotAuthorisedException {
+    public Integer createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
+    throws ValidationException, UnknownEntityException, NotAuthorisedException {
+
         return _controller.createNewMatch(tournamentId, matchDTO, session);
     }
 
     @Override
-    public void removeTeamFromTournament(String teamName, Integer tournamentId, SessionDTO session) throws ValidationException, UnknownEntityException, NotAuthorisedException {
+    public void removeTeamFromTournament(String teamName, Integer tournamentId, SessionDTO session)
+    throws ValidationException, UnknownEntityException, NotAuthorisedException {
+
         _controller.removeTeamFromTournament(teamName, tournamentId, session);
     }
 }

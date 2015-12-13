@@ -1,23 +1,5 @@
 package at.sporty.team1.presentation.controllers;
 
-import java.net.URL;
-import java.security.InvalidKeyException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import at.sporty.team1.communication.facades.CommunicationFacade;
 import at.sporty.team1.communication.util.NotificationPullerTask;
 import at.sporty.team1.communication.util.RemoteCommunicationException;
@@ -43,15 +25,22 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import java.net.URL;
+import java.security.InvalidKeyException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.concurrent.*;
 
 public class MainViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();

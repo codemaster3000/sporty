@@ -1,18 +1,14 @@
 package at.sporty.team1.communication.facades.ejb.adapters;
 
-import java.util.List;
-
 import at.sporty.team1.communication.facades.api.IMemberControllerUniversal;
 import at.sporty.team1.communication.util.RemoteCommunicationException;
 import at.sporty.team1.shared.api.ejb.IMemberControllerEJB;
-import at.sporty.team1.shared.dtos.DTOPair;
-import at.sporty.team1.shared.dtos.DepartmentDTO;
-import at.sporty.team1.shared.dtos.MemberDTO;
-import at.sporty.team1.shared.dtos.SessionDTO;
-import at.sporty.team1.shared.dtos.TeamDTO;
+import at.sporty.team1.shared.dtos.*;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.shared.exceptions.ValidationException;
+
+import java.util.List;
 
 public class MemberControllerEJBAdapter implements IMemberControllerUniversal {
 

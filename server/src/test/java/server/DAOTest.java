@@ -13,7 +13,6 @@ import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import org.junit.Test;
 
-import java.rmi.RemoteException;
 import java.util.List;
 
 /**

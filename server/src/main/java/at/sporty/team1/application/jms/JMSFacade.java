@@ -4,7 +4,10 @@ import com.sun.messaging.ConnectionConfiguration;
 import com.sun.messaging.Queue;
 import com.sun.messaging.QueueConnectionFactory;
 
-import javax.jms.*;
+import javax.jms.JMSConsumer;
+import javax.jms.JMSContext;
+import javax.jms.JMSException;
+import javax.jms.JMSProducer;
 
 /**
  * Created by sereGkaluv on 03-Dec-15.
