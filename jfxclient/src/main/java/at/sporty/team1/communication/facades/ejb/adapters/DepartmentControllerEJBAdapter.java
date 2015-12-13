@@ -21,19 +21,20 @@ public class DepartmentControllerEJBAdapter implements IDepartmentControllerUniv
 	}
 
 	@Override
-	public List<DepartmentDTO> searchAllDepartments() throws RemoteCommunicationException {
+	public List<DepartmentDTO> searchAllDepartments()
+	throws RemoteCommunicationException {
 		return _iDepartmentController.searchAllDepartments();
 	}
 
 	@Override
 	public List<TeamDTO> loadDepartmentTeams(Integer departmentId)
-			throws RemoteCommunicationException, UnknownEntityException {
+	throws RemoteCommunicationException, UnknownEntityException {
 		return _iDepartmentController.loadDepartmentTeams(departmentId);
 	}
 
 	@Override
 	public MemberDTO loadDepartmentHead(Integer departmentId, SessionDTO session)
-			throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
+	throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
 		return _iDepartmentController.loadDepartmentHead(departmentId, session);
 	}
 

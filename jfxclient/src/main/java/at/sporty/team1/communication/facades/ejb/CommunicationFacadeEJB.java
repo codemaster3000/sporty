@@ -1,7 +1,9 @@
 package at.sporty.team1.communication.facades.ejb;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Properties;
 
 import javax.naming.InitialContext;
@@ -40,11 +42,18 @@ public class CommunicationFacadeEJB implements ICommunicationFacade {
 
     private InitialContext _context;
 
-    public CommunicationFacadeEJB(){
+    public CommunicationFacadeEJB() {
         try {
 
-            PROPERTIES.load(new FileInputStream(PROPERTY_FILE));
-            _context = new InitialContext(PROPERTIES);
+            URL propertyURL = getClass().getClassLoader().getResource(PROPERTY_FILE);
+            if (propertyURL != null) {
+
+                PROPERTIES.load(new FileInputStream(propertyURL.getFile()));
+                _context = new InitialContext(PROPERTIES);
+
+            } else {
+                throw new FileNotFoundException(PROPERTY_FILE + " was not found");
+            }
 
         } catch (IOException e) {
             LOGGER.error("An error occurs while loading EJB properties from {}.", PROPERTY_FILE, e);

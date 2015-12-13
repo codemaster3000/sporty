@@ -49,6 +49,7 @@ public class MainApp extends Application {
 
 		} else {
 			LOGGER.error("Error occurred while starting thr client. Security policies were not found.");
+			System.exit(1);
 		}
 	}
 

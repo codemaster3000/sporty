@@ -16,14 +16,14 @@ public class LoginControllerEJBAdapter implements ILoginControllerUniversal {
 	}
 
 	@Override
-	public byte[] getServerPublicKey() throws RemoteCommunicationException {
+	public byte[] getServerPublicKey()
+	throws RemoteCommunicationException {
 		return _iLoginController.getServerPublicKey();
 	}
 
 	@Override
 	public SessionDTO authorize(AuthorisationDTO authorisationDTO)
-			throws RemoteCommunicationException, SecurityException {
+	throws RemoteCommunicationException, SecurityException {
 		return _iLoginController.authorize(authorisationDTO);
 	}
-
 }

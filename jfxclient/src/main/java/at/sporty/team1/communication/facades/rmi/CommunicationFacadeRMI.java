@@ -14,8 +14,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -30,7 +32,14 @@ public class CommunicationFacadeRMI implements ICommunicationFacade {
     public CommunicationFacadeRMI() {
         try {
 
-            PROPERTIES.load(new FileInputStream(PROPERTY_FILE));
+            URL propertyURL = getClass().getClassLoader().getResource(PROPERTY_FILE);
+            if (propertyURL != null) {
+
+                PROPERTIES.load(new FileInputStream(propertyURL.getFile()));
+
+            } else {
+                throw new FileNotFoundException(PROPERTY_FILE + " was not found");
+            }
 
         } catch (IOException e) {
             LOGGER.error("An error occurs while loading RMI properties from {}.", PROPERTY_FILE, e);

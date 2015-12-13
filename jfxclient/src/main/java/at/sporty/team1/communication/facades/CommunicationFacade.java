@@ -1,26 +1,6 @@
 package at.sporty.team1.communication.facades;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.KeyPair;
-import java.security.PublicKey;
-import java.util.Properties;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import at.sporty.team1.communication.facades.api.ICommunicationFacade;
-import at.sporty.team1.communication.facades.api.IDepartmentControllerUniversal;
-import at.sporty.team1.communication.facades.api.ILoginControllerUniversal;
-import at.sporty.team1.communication.facades.api.IMemberControllerUniversal;
-import at.sporty.team1.communication.facades.api.INotificationControllerUniversal;
-import at.sporty.team1.communication.facades.api.ITeamControllerUniversal;
-import at.sporty.team1.communication.facades.api.ITournamentControllerUniversal;
+import at.sporty.team1.communication.facades.api.*;
 import at.sporty.team1.communication.facades.ejb.CommunicationFacadeEJB;
 import at.sporty.team1.communication.facades.rmi.CommunicationFacadeRMI;
 import at.sporty.team1.communication.util.CachedSession;
@@ -34,6 +14,20 @@ import at.sporty.team1.shared.exceptions.SecurityException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.shared.security.SecurityModule;
 import javafx.beans.property.SimpleBooleanProperty;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
+import java.security.InvalidKeyException;
+import java.security.KeyPair;
+import java.security.PublicKey;
+import java.util.Properties;
 
 public class CommunicationFacade implements ICommunicationFacade {
     public static final SimpleBooleanProperty SESSION_AVAILABLE_PROPERTY = new SimpleBooleanProperty(false);
@@ -48,7 +42,6 @@ public class CommunicationFacade implements ICommunicationFacade {
     private KeyPair _activeRSAKeyPair;
     private CachedSession _extendedActiveSession;
 
-    private final CommunicationType _communicationType;
     private final ICommunicationFacade _subjectCommunicationFacade;
 
     /**
@@ -58,9 +51,7 @@ public class CommunicationFacade implements ICommunicationFacade {
      * @param communicationType CommunicationType - ENUM, defines which subject will be used.
      */
     private CommunicationFacade(CommunicationType communicationType) {
-        _communicationType = communicationType;
-
-        switch (_communicationType) {
+        switch (communicationType) {
             case RMI: {
                 _subjectCommunicationFacade = new CommunicationFacadeRMI();
                 break;
@@ -82,12 +73,21 @@ public class CommunicationFacade implements ICommunicationFacade {
         if (_instance == null) {
             try {
 
-                PROPERTIES.load(new FileInputStream(PROPERTY_FILE));
-                CommunicationType communicationType = CommunicationType.valueOf(
-                    PROPERTIES.getProperty(COMMUNICATION_TYPE)
-                );
+                ClassLoader classLoader = CommunicationFacade.class.getClassLoader();
 
-                _instance = new CommunicationFacade(communicationType);
+                URL propertyURL = classLoader.getResource(PROPERTY_FILE);
+                if (propertyURL != null) {
+
+                    PROPERTIES.load(new FileInputStream(propertyURL.getFile()));
+                    CommunicationType communicationType = CommunicationType.valueOf(
+                            PROPERTIES.getProperty(COMMUNICATION_TYPE)
+                    );
+
+                    _instance = new CommunicationFacade(communicationType);
+
+                } else {
+                    throw new FileNotFoundException(PROPERTY_FILE + " was not found.");
+                }
 
             } catch (IOException e) {
                 LOGGER.error(

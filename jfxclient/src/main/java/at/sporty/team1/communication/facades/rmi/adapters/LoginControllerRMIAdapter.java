@@ -7,6 +7,8 @@ import at.sporty.team1.shared.dtos.AuthorisationDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
 import at.sporty.team1.shared.exceptions.SecurityException;
 
+import java.rmi.RemoteException;
+
 public class LoginControllerRMIAdapter implements ILoginControllerUniversal {
 
 	private final ILoginControllerRMI _iLoginControllerRMI;
@@ -14,15 +16,24 @@ public class LoginControllerRMIAdapter implements ILoginControllerUniversal {
 	public LoginControllerRMIAdapter(ILoginControllerRMI iLoginControllerRMI) {
 		_iLoginControllerRMI = iLoginControllerRMI;
 	}
+
 	@Override
-	public byte[] getServerPublicKey() throws RemoteCommunicationException {
-		
-		return _iLoginControllerRMI.getServerPublicKey();
+	public byte[] getServerPublicKey()
+    throws RemoteCommunicationException {
+		try{
+		    return _iLoginControllerRMI.getServerPublicKey();
+        } catch (RemoteException e) {
+            throw new RemoteCommunicationException(e);
+        }
 	}
 
 	@Override
 	public SessionDTO authorize(AuthorisationDTO authorisationDTO)
-			throws RemoteCommunicationException, SecurityException {
-		return _iLoginControllerRMI.authorize(authorisationDTO);
+    throws RemoteCommunicationException, SecurityException {
+        try{
+		    return _iLoginControllerRMI.authorize(authorisationDTO);
+        } catch (RemoteException e) {
+            throw new RemoteCommunicationException(e);
+        }
 	}
 }

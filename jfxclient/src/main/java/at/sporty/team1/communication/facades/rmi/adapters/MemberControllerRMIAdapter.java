@@ -25,7 +25,7 @@ public class MemberControllerRMIAdapter implements IMemberControllerUniversal {
 	
 	@Override
 	public MemberDTO findMemberById(Integer memberId, SessionDTO session)
-			throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
+	throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
 		try {
 			return _iMemberControllerRMI.findMemberById(memberId, session);
 		} catch (RemoteException e) {
@@ -35,7 +35,7 @@ public class MemberControllerRMIAdapter implements IMemberControllerUniversal {
 
 	@Override
 	public List<MemberDTO> searchAllMembers(Boolean isFeePaid, SessionDTO session)
-			throws RemoteCommunicationException, NotAuthorisedException {
+	throws RemoteCommunicationException, NotAuthorisedException {
 		try {
 			return _iMemberControllerRMI.searchAllMembers(isFeePaid, session);
 		} catch (RemoteException e) {
@@ -45,7 +45,7 @@ public class MemberControllerRMIAdapter implements IMemberControllerUniversal {
 
 	@Override
 	public Integer createOrSaveMember(MemberDTO memberDTO, SessionDTO session)
-			throws RemoteCommunicationException, ValidationException, NotAuthorisedException {
+	throws RemoteCommunicationException, ValidationException, NotAuthorisedException {
 		try {
 			return _iMemberControllerRMI.createOrSaveMember(memberDTO, session);
 		} catch (RemoteException e) {
@@ -55,7 +55,7 @@ public class MemberControllerRMIAdapter implements IMemberControllerUniversal {
 
 	@Override
 	public List<MemberDTO> searchMembersByNameString(String searchString, Boolean isFeePaid, SessionDTO session)
-			throws RemoteCommunicationException, ValidationException, NotAuthorisedException {
+	throws RemoteCommunicationException, ValidationException, NotAuthorisedException {
 		try {
 			return _iMemberControllerRMI.searchMembersByNameString(searchString, isFeePaid, session);
 		} catch (RemoteException e) {
@@ -75,7 +75,7 @@ public class MemberControllerRMIAdapter implements IMemberControllerUniversal {
 
 	@Override
 	public List<MemberDTO> searchMembersByTournamentTeamName(String teamName, Boolean isFeePaid, SessionDTO session)
-			throws RemoteCommunicationException, ValidationException, NotAuthorisedException {
+	throws RemoteCommunicationException, ValidationException, NotAuthorisedException {
 		try {
 			return _iMemberControllerRMI.searchMembersByTournamentTeamName(teamName, isFeePaid, session);
 		} catch (RemoteException e) {
@@ -95,7 +95,7 @@ public class MemberControllerRMIAdapter implements IMemberControllerUniversal {
 
 	@Override
 	public List<DTOPair<DepartmentDTO, TeamDTO>> loadFetchedDepartmentTeamList(Integer memberId, SessionDTO session)
-			throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
+	throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
 		try {
 			return _iMemberControllerRMI.loadFetchedDepartmentTeamList(memberId, session);
 		} catch (RemoteException e) {
@@ -105,7 +105,7 @@ public class MemberControllerRMIAdapter implements IMemberControllerUniversal {
 
 	@Override
 	public List<DepartmentDTO> loadMemberDepartments(Integer memberId, SessionDTO session)
-			throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
+	throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
 		try {
 			return _iMemberControllerRMI.loadMemberDepartments(memberId, session);
 		} catch (RemoteException e) {
@@ -115,7 +115,7 @@ public class MemberControllerRMIAdapter implements IMemberControllerUniversal {
 
 	@Override
 	public void assignMemberToDepartment(Integer memberId, Integer departmentId, SessionDTO session)
-			throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
+	throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
 		try {
 			_iMemberControllerRMI.assignMemberToDepartment(memberId, departmentId, session);
 		} catch (RemoteException e) {
@@ -132,7 +132,7 @@ public class MemberControllerRMIAdapter implements IMemberControllerUniversal {
 
 	@Override
 	public List<TeamDTO> loadMemberTeams(Integer memberId, SessionDTO session)
-			throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
+	throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
 		try {
 			return _iMemberControllerRMI.loadMemberTeams(memberId, session);
 		} catch (RemoteException e) {
@@ -152,7 +152,7 @@ public class MemberControllerRMIAdapter implements IMemberControllerUniversal {
 
 	@Override
 	public void removeMemberFromTeam(Integer memberId, Integer teamId, SessionDTO session)
-			throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
+	throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
 		try {
 			_iMemberControllerRMI.removeMemberFromTeam(memberId, teamId, session);
 		} catch (RemoteException e) {
@@ -162,7 +162,7 @@ public class MemberControllerRMIAdapter implements IMemberControllerUniversal {
 
 	@Override
 	public void deleteMember(Integer memberId, SessionDTO session)
-			throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
+	throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
 		try {
 			_iMemberControllerRMI.deleteMember(memberId, session);
 		} catch (RemoteException e) {
