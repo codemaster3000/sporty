@@ -33,7 +33,7 @@ public class NotificationPullerTask implements Runnable {
 			List<MessageDTO> messageList = notificationController.pullMessages(_currentSession);
 			if (messageList != null && !messageList.isEmpty()) _userMessages.addAll(messageList);
 
-		} catch (NotAuthorisedException e) {
+		} catch (NotAuthorisedException | RemoteCommunicationException e) {
 			LOGGER.error("Message pull request was rejected. Not enough permissions.", e);
 		}
 	}
