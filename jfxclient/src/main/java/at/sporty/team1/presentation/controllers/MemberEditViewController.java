@@ -1,29 +1,36 @@
 package at.sporty.team1.presentation.controllers;
 
+import java.net.URL;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import at.sporty.team1.communication.facades.CommunicationFacade;
+import at.sporty.team1.communication.facades.api.IDepartmentControllerUniversal;
+import at.sporty.team1.communication.facades.api.IMemberControllerUniversal;
+import at.sporty.team1.communication.util.RemoteCommunicationException;
 import at.sporty.team1.presentation.controllers.core.EditViewController;
-import at.sporty.team1.shared.api.rmi.IDepartmentControllerRMI;
-import at.sporty.team1.shared.api.rmi.IMemberControllerRMI;
+import at.sporty.team1.presentation.util.GUIHelper;
 import at.sporty.team1.shared.dtos.DepartmentDTO;
 import at.sporty.team1.shared.dtos.MemberDTO;
 import at.sporty.team1.shared.dtos.TeamDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.shared.exceptions.ValidationException;
-import at.sporty.team1.presentation.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.util.StringConverter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.util.*;
 
 
 public class MemberEditViewController extends EditViewController<MemberDTO> {
@@ -126,7 +133,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
 
             try {
 
-                IDepartmentControllerRMI departmentController = CommunicationFacade.lookupForDepartmentController();
+                IDepartmentControllerUniversal departmentController = CommunicationFacade.getInstance().lookupForDepartmentController();
                 List<DepartmentDTO> departments = departmentController.searchAllDepartments();
 
                 if (!departments.isEmpty()) {
@@ -197,7 +204,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                         }
                     }
                 }
-            } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
+            } catch (RemoteCommunicationException | UnknownEntityException e) {
                 LOGGER.error("Error occurred while loading all Departments and their Teams.", e);
             }
         }).start();
@@ -233,11 +240,11 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
 
             try {
 
-                IMemberControllerRMI memberController = CommunicationFacade.lookupForMemberController();
+                IMemberControllerUniversal memberController = CommunicationFacade.getInstance().lookupForMemberController();
 
                 List<DepartmentDTO> departments = memberController.loadMemberDepartments(
                     _activeMemberDTO.getMemberId(),
-                    CommunicationFacade.getActiveSession()
+                    CommunicationFacade.getInstance().getActiveSession()
                 );
 
                 if (departments != null) {
@@ -270,16 +277,16 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
 
                 List<TeamDTO> teams = memberController.loadMemberTeams(
                     _activeMemberDTO.getMemberId(),
-                    CommunicationFacade.getActiveSession()
+                    CommunicationFacade.getInstance().getActiveSession()
                 );
 
                 if (teams != null) {
 
                     for (TeamDTO team : teams) {
 
-                        DepartmentDTO department = CommunicationFacade.lookupForTeamController().loadTeamDepartment(
+                        DepartmentDTO department = CommunicationFacade.getInstance().lookupForTeamController().loadTeamDepartment(
                             team.getTeamId(),
-                            CommunicationFacade.getActiveSession()
+                            CommunicationFacade.getInstance().getActiveSession()
                         );
 
                         if (department != null) {
@@ -328,7 +335,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                     }
                 }
 
-            } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
+            } catch (RemoteCommunicationException | UnknownEntityException e) {
                 LOGGER.error("Error occurred while loading Member data (Departments and Teams).", e);
             } catch (NotAuthorisedException e) {
                 String context = "Client load (Departments and Teams) request was rejected. Not enough permissions.";
@@ -411,10 +418,10 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                         .setIsFeePaid(false)
                         .setRole(roleComboBox.getSelectionModel().getSelectedItem().getDSValue());
 
-                IMemberControllerRMI memberController = CommunicationFacade.lookupForMemberController();
+                IMemberControllerUniversal memberController = CommunicationFacade.getInstance().lookupForMemberController();
                 Integer memberId = memberController.createOrSaveMember(
                     _activeMemberDTO,
-                    CommunicationFacade.getActiveSession()
+                    CommunicationFacade.getInstance().getActiveSession()
                 );
 
                 _activeMemberDTO.setMemberId(memberId);
@@ -430,7 +437,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
 
                 return _activeMemberDTO;
 
-            } catch (RemoteException | MalformedURLException | NotBoundException e) {
+            } catch (RemoteCommunicationException e) {
                 LOGGER.error("Error occurred while saving the member.", e);
             } catch (ValidationException e) {
             	String context = String.format("Validation exception \"%s\" while saving member.", e.getCause());
@@ -450,14 +457,14 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
 
     private void saveOrUpdateMemberDepartments(Integer memberId) {
         try {
-            IMemberControllerRMI memberController = CommunicationFacade.lookupForMemberController();
+            IMemberControllerUniversal memberController = CommunicationFacade.getInstance().lookupForMemberController();
 
             if (memberSportCheckboxBaseball.isSelected()) {
                 //Saving department for member
                 memberController.assignMemberToDepartment(
                     memberId,
                     SPORT_MAP.get(SPORT_BASEBALL).getDepartmentId(),
-                    CommunicationFacade.getActiveSession()
+                    CommunicationFacade.getInstance().getActiveSession()
                 );
             }
 
@@ -466,7 +473,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                 memberController.assignMemberToDepartment(
                     memberId,
                     SPORT_MAP.get(SPORT_FOOTBALL).getDepartmentId(),
-                    CommunicationFacade.getActiveSession()
+                    CommunicationFacade.getInstance().getActiveSession()
                 );
             }
 
@@ -475,7 +482,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                 memberController.assignMemberToDepartment(
                     memberId,
                     SPORT_MAP.get(SPORT_SOCCER).getDepartmentId(),
-                    CommunicationFacade.getActiveSession()
+                    CommunicationFacade.getInstance().getActiveSession()
                 );
             }
 
@@ -484,11 +491,11 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                 memberController.assignMemberToDepartment(
                     memberId,
                     SPORT_MAP.get(SPORT_VOLLEYBALL).getDepartmentId(),
-                    CommunicationFacade.getActiveSession()
+                    CommunicationFacade.getInstance().getActiveSession()
                 );
             }
 
-        } catch (RemoteException | MalformedURLException | NotBoundException e) {
+        } catch (RemoteCommunicationException e) {
             LOGGER.error("Error occurred while assigning Member to Department.", e);
         } catch (UnknownEntityException e) {
             LOGGER.error("DTO was not saved in Data Storage before assigning Member to Department.", e);
@@ -503,7 +510,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
     private void saveOrUpdateMemberTeams(Integer memberId) {
         try {
 
-            IMemberControllerRMI memberController = CommunicationFacade.lookupForMemberController();
+            IMemberControllerUniversal memberController = CommunicationFacade.getInstance().lookupForMemberController();
 
             if (memberSportCheckboxBaseball.isSelected()) {
                 //Baseball team holen
@@ -514,7 +521,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                     memberController.assignMemberToTeam(
                         memberId,
                         teamDTO.getTeamId(),
-                        CommunicationFacade.getActiveSession()
+                        CommunicationFacade.getInstance().getActiveSession()
                     );
                 }
             }
@@ -528,7 +535,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                     memberController.assignMemberToTeam(
                         memberId,
                         teamDTO.getTeamId(),
-                        CommunicationFacade.getActiveSession()
+                        CommunicationFacade.getInstance().getActiveSession()
                     );
                 }
             }
@@ -542,7 +549,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                     memberController.assignMemberToTeam(
                         memberId,
                         teamDTO.getTeamId(),
-                        CommunicationFacade.getActiveSession()
+                        CommunicationFacade.getInstance().getActiveSession()
                     );
                 }
             }
@@ -556,12 +563,12 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                     memberController.assignMemberToTeam(
                         memberId,
                         teamDTO.getTeamId(),
-                        CommunicationFacade.getActiveSession()
+                        CommunicationFacade.getInstance().getActiveSession()
                     );
                 }
             }
 
-        } catch (RemoteException | MalformedURLException | NotBoundException e) {
+        } catch (RemoteCommunicationException e) {
             LOGGER.error("Error occurred while assigning Member to Team.", e);
         } catch (UnknownEntityException e) {
             LOGGER.error("DTO was not saved in Data Storage before assigning Member to Team.", e);

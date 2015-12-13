@@ -1,11 +1,20 @@
 package at.sporty.team1.presentation.controllers;
 
+import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import at.sporty.team1.communication.facades.CommunicationFacade;
+import at.sporty.team1.communication.facades.api.ITournamentControllerUniversal;
+import at.sporty.team1.communication.util.RemoteCommunicationException;
 import at.sporty.team1.presentation.controllers.core.SearchViewController;
-import at.sporty.team1.shared.api.rmi.ITournamentControllerRMI;
+import at.sporty.team1.presentation.util.GUIHelper;
 import at.sporty.team1.shared.dtos.TournamentDTO;
 import at.sporty.team1.shared.exceptions.ValidationException;
-import at.sporty.team1.presentation.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -14,16 +23,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * Created by sereGkaluv on 05-Nov-15.
@@ -78,7 +77,7 @@ public class TournamentSearchViewController extends SearchViewController<Tournam
             new Thread(() -> {
                 try {
 
-                    ITournamentControllerRMI tournamentController = CommunicationFacade.lookupForTournamentController();
+                    ITournamentControllerUniversal tournamentController = CommunicationFacade.getInstance().lookupForTournamentController();
 
                     //Performing search depending on selected search type
                     switch (_searchType.getValue()) {
@@ -110,7 +109,7 @@ public class TournamentSearchViewController extends SearchViewController<Tournam
                         }
                     }
 
-                } catch (RemoteException | MalformedURLException | NotBoundException e) {
+                } catch (RemoteCommunicationException e) {
                     LOGGER.error("Error occurred while searching.", e);
                     displayNoResults();
                 } catch (ValidationException e) {
@@ -125,10 +124,10 @@ public class TournamentSearchViewController extends SearchViewController<Tournam
             new Thread(() -> {
                 try {
 
-                    ITournamentControllerRMI tournamentController = CommunicationFacade.lookupForTournamentController();
+                    ITournamentControllerUniversal tournamentController = CommunicationFacade.getInstance().lookupForTournamentController();
                     handleReceivedResults(tournamentController.searchAllTournaments());
 
-                } catch (RemoteException | MalformedURLException | NotBoundException e) {
+                } catch (RemoteCommunicationException e) {
                     LOGGER.error("Error occurred while searching.", e);
                     displayNoResults();
                 }

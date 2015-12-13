@@ -1,16 +1,25 @@
 package at.sporty.team1.presentation.controllers;
 
+import java.net.URL;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import at.sporty.team1.communication.facades.CommunicationFacade;
+import at.sporty.team1.communication.facades.api.IMemberControllerUniversal;
+import at.sporty.team1.communication.util.RemoteCommunicationException;
 import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
 import at.sporty.team1.presentation.dialogs.EditViewDialog;
-import at.sporty.team1.shared.api.rmi.IMemberControllerRMI;
+import at.sporty.team1.presentation.util.GUIHelper;
 import at.sporty.team1.shared.dtos.DTOPair;
 import at.sporty.team1.shared.dtos.DepartmentDTO;
 import at.sporty.team1.shared.dtos.MemberDTO;
 import at.sporty.team1.shared.dtos.TeamDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
-import at.sporty.team1.presentation.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -22,16 +31,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
 
 
 public class MemberReadOnlyViewController extends ConsumerViewController<MemberDTO> {
@@ -70,8 +69,8 @@ public class MemberReadOnlyViewController extends ConsumerViewController<MemberD
         );
 
         CommunicationFacade.SESSION_AVAILABLE_PROPERTY.addListener((p, newValue, oldValue) -> {
-            if (CommunicationFacade.getExtendedActiveSession() != null) {
-                String role = CommunicationFacade.getExtendedActiveSession().getUser().getRole();
+            if (CommunicationFacade.getInstance().getExtendedActiveSession() != null) {
+                String role = CommunicationFacade.getInstance().getExtendedActiveSession().getUser().getRole();
 
                 //enabling gui options for specific roles
                 switch (role) {
@@ -134,11 +133,11 @@ public class MemberReadOnlyViewController extends ConsumerViewController<MemberD
 
                 try {
 
-                    IMemberControllerRMI memberController = CommunicationFacade.lookupForMemberController();
+                    IMemberControllerUniversal memberController = CommunicationFacade.getInstance().lookupForMemberController();
 
                     final List<DTOPair<DepartmentDTO, TeamDTO>> fetchedList = memberController.loadFetchedDepartmentTeamList(
                         memberDTO.getMemberId(),
-                        CommunicationFacade.getActiveSession()
+                        CommunicationFacade.getInstance().getActiveSession()
                     );
 
                     Platform.runLater(() -> {
@@ -159,7 +158,7 @@ public class MemberReadOnlyViewController extends ConsumerViewController<MemberD
                         }
                     });
 
-                } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
+                } catch (RemoteCommunicationException | UnknownEntityException e) {
 
                     LOGGER.error("Error occurred while loading Member data (Departments and Teams).", e);
                     Platform.runLater(() ->

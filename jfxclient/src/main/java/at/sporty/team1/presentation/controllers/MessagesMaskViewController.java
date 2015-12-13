@@ -1,6 +1,13 @@
 package at.sporty.team1.presentation.controllers;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import at.sporty.team1.communication.facades.CommunicationFacade;
+import at.sporty.team1.communication.util.RemoteCommunicationException;
 import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
 import at.sporty.team1.shared.dtos.MessageDTO;
 import at.sporty.team1.shared.enums.MessageType;
@@ -14,14 +21,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.util.ResourceBundle;
 
 /**
  * Created by sereGkaluv on 08-Dec-15.
@@ -110,7 +109,7 @@ public class MessagesMaskViewController extends ConsumerViewController<MessageDT
             sendRequestAnswerMessage(readMessage, AnswerType.ACCEPT);
             _messagesListView.getItems().remove(readMessage);
 
-        } catch (RemoteException | NotBoundException | MalformedURLException e) {
+        } catch (RemoteCommunicationException e) {
             LOGGER.error("Error occurred while sending a confirmation Message.", e);
         } catch (NotAuthorisedException e) {
             LOGGER.error("Message send request was rejected. Not enough permissions.", e);
@@ -128,7 +127,7 @@ public class MessagesMaskViewController extends ConsumerViewController<MessageDT
             sendRequestAnswerMessage(readMessage, AnswerType.DECLINE);
             _messagesListView.getItems().remove(readMessage);
 
-        } catch (RemoteException | NotBoundException | MalformedURLException e) {
+        } catch (RemoteCommunicationException e) {
             LOGGER.error("Error occurred while sending a decline Message.", e);
         } catch (NotAuthorisedException e) {
             LOGGER.error("Message send request was rejected. Not enough permissions.", e);
@@ -138,7 +137,8 @@ public class MessagesMaskViewController extends ConsumerViewController<MessageDT
     }
 
     private void sendRequestAnswerMessage(MessageDTO sourceMessage, AnswerType answerType)
-    throws RemoteException, NotBoundException, MalformedURLException, ValidationException, NotAuthorisedException {
+    throws RemoteCommunicationException, ValidationException, NotAuthorisedException {
+    	
         String answerSubject = String.format(sourceMessage.getMessageSubject() + " %s.", answerType);
         String answerContent = String.format("Request was %s by %s.", answerType, sourceMessage.getRecipientId());
 
@@ -149,9 +149,9 @@ public class MessagesMaskViewController extends ConsumerViewController<MessageDT
             .setMessageSubject(answerSubject)
             .setMessageContent(answerContent);
 
-        CommunicationFacade.lookupForNotificationController().sendMessage(
+        CommunicationFacade.getInstance().lookupForNotificationController().sendMessage(
             returnMessage,
-            CommunicationFacade.getActiveSession()
+            CommunicationFacade.getInstance().getActiveSession()
         );
     }
 

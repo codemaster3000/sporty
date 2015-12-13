@@ -1,35 +1,38 @@
 package at.sporty.team1.presentation.controllers;
 
+import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import at.sporty.team1.communication.facades.CommunicationFacade;
+import at.sporty.team1.communication.facades.api.IDepartmentControllerUniversal;
+import at.sporty.team1.communication.facades.api.IMemberControllerUniversal;
+import at.sporty.team1.communication.facades.api.ITeamControllerUniversal;
+import at.sporty.team1.communication.util.RemoteCommunicationException;
 import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
-import at.sporty.team1.shared.api.rmi.IDepartmentControllerRMI;
-import at.sporty.team1.shared.api.rmi.IMemberControllerRMI;
-import at.sporty.team1.shared.api.rmi.ITeamControllerRMI;
+import at.sporty.team1.presentation.util.GUIHelper;
 import at.sporty.team1.shared.dtos.DepartmentDTO;
 import at.sporty.team1.shared.dtos.MemberDTO;
 import at.sporty.team1.shared.dtos.TeamDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.shared.exceptions.ValidationException;
-import at.sporty.team1.presentation.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.util.StringConverter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * Represents the View of a Team (Mannschaft)
@@ -88,7 +91,7 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
 
             try {
 
-                IDepartmentControllerRMI departmentController = CommunicationFacade.lookupForDepartmentController();
+                IDepartmentControllerUniversal departmentController = CommunicationFacade.getInstance().lookupForDepartmentController();
                 List<DepartmentDTO> departments = departmentController.searchAllDepartments();
 
                 if (departments != null && !departments.isEmpty()) {
@@ -108,7 +111,7 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
                         }
                     }
                 }
-            } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
+            } catch (RemoteCommunicationException | UnknownEntityException e) {
                 LOGGER.error("Error occurred while loading all Departments and their Teams.", e);
             }
         }).start();
@@ -137,18 +140,18 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
 
             try {
 
-                ITeamControllerRMI teamController = CommunicationFacade.lookupForTeamController();
+                ITeamControllerUniversal teamController = CommunicationFacade.getInstance().lookupForTeamController();
 
                 List<MemberDTO> memberList = teamController.loadTeamMembers(
                     _activeTeamDTO.getTeamId(),
-                    CommunicationFacade.getActiveSession()
+                    CommunicationFacade.getInstance().getActiveSession()
                 );
 
                 if (memberList != null && !memberList.isEmpty()) {
                     _membersListView.setItems(FXCollections.observableList(memberList));
                 }
 
-            } catch (RemoteException | NotBoundException | MalformedURLException e) {
+            } catch (RemoteCommunicationException e) {
                 LOGGER.error("Error occurred while displaying team data.", e);
             } catch (UnknownEntityException e) {
                 LOGGER.error("DTO was not saved in Data Storage before loading all Members from Team.", e);
@@ -172,14 +175,14 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
         MemberDTO memberDTO = _membersListView.getSelectionModel().getSelectedItem();
 
         try {
-            IMemberControllerRMI memberController = CommunicationFacade.lookupForMemberController();
+            IMemberControllerUniversal memberController = CommunicationFacade.getInstance().lookupForMemberController();
 
             if ((_activeTeamDTO != null) && (memberDTO != null)) {
 
                 memberController.removeMemberFromTeam(
                     memberDTO.getMemberId(),
                     _activeTeamDTO.getTeamId(),
-                    CommunicationFacade.getActiveSession()
+                    CommunicationFacade.getInstance().getActiveSession()
                 );
 
                 _membersListView.getItems().remove(memberDTO);
@@ -191,7 +194,7 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
                 _membersListView.getItems().remove(memberDTO);
 
             }
-        } catch (RemoteException | NotBoundException | MalformedURLException e) {
+        } catch (RemoteCommunicationException e) {
             LOGGER.error("Error occurred while removing member from the team.", e);
         } catch (UnknownEntityException e) {
             LOGGER.error("DTO was not saved in Data Storage before removing Member from Team.", e);
@@ -212,17 +215,17 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
 
             try {
 
-                ITeamControllerRMI teamController = CommunicationFacade.lookupForTeamController();
+                ITeamControllerUniversal teamController = CommunicationFacade.getInstance().lookupForTeamController();
                 teamController.createOrSaveTeam(
                     _activeTeamDTO,
-                    CommunicationFacade.getActiveSession()
+                    CommunicationFacade.getInstance().getActiveSession()
                 );
 
                 for (MemberDTO member : memberList) {
-                    CommunicationFacade.lookupForMemberController().assignMemberToTeam(
+                    CommunicationFacade.getInstance().lookupForMemberController().assignMemberToTeam(
                         member.getMemberId(),
                         _activeTeamDTO.getTeamId(),
-                        CommunicationFacade.getActiveSession()
+                        CommunicationFacade.getInstance().getActiveSession()
                     );
                 }
 
@@ -232,7 +235,7 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
                 LOGGER.info("Team \"{}\" was successfully saved.", _activeTeamDTO.getTeamName());
                 dispose();
 
-            } catch (RemoteException | MalformedURLException | NotBoundException e) {
+            } catch (RemoteCommunicationException e) {
                 LOGGER.error("Error occurred while saving the team.", e);
             } catch (ValidationException e) {
                 String context = String.format("Validation exception %s while saving team.", e.getCause());

@@ -1,28 +1,31 @@
 package at.sporty.team1.presentation.controllers;
 
+import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import at.sporty.team1.communication.facades.CommunicationFacade;
+import at.sporty.team1.communication.facades.api.IMemberControllerUniversal;
+import at.sporty.team1.communication.util.RemoteCommunicationException;
 import at.sporty.team1.presentation.controllers.core.SearchViewController;
-import at.sporty.team1.shared.api.rmi.IMemberControllerRMI;
+import at.sporty.team1.presentation.util.GUIHelper;
 import at.sporty.team1.shared.dtos.MemberDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.ValidationException;
-import at.sporty.team1.presentation.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * Created by sereGkaluv on 05-Nov-15.
@@ -93,7 +96,7 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
             new Thread(() -> {
                 try {
 
-                    IMemberControllerRMI memberController = CommunicationFacade.lookupForMemberController();
+                    IMemberControllerUniversal memberController = CommunicationFacade.getInstance().lookupForMemberController();
 
                     //Performing search depending on selected search type
                     switch (_searchType.getValue()) {
@@ -104,7 +107,7 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
                                     _paidRadioButton.isSelected(),
                                     _notPaidRadioButton.isSelected()
                                 ),
-                                CommunicationFacade.getActiveSession()
+                                CommunicationFacade.getInstance().getActiveSession()
                             );
 
                             handleReceivedResults(memberList);
@@ -118,7 +121,7 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
                                     _paidRadioButton.isSelected(),
                                     _notPaidRadioButton.isSelected()
                                 ),
-                                CommunicationFacade.getActiveSession()
+                                CommunicationFacade.getInstance().getActiveSession()
                             );
 
                             handleReceivedResults(memberList);
@@ -132,7 +135,7 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
                                     _paidRadioButton.isSelected(),
                                     _notPaidRadioButton.isSelected()
                                 ),
-                                CommunicationFacade.getActiveSession()
+                                CommunicationFacade.getInstance().getActiveSession()
                             );
 
                             handleReceivedResults(memberList);
@@ -146,7 +149,7 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
                                     _paidRadioButton.isSelected(),
                                     _notPaidRadioButton.isSelected()
                                 ),
-                                CommunicationFacade.getActiveSession()
+                                CommunicationFacade.getInstance().getActiveSession()
                             );
 
                             handleReceivedResults(memberList);
@@ -154,7 +157,7 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
                         }
                     }
 
-                } catch (RemoteException | MalformedURLException | NotBoundException e) {
+                } catch (RemoteCommunicationException e) {
                     LOGGER.error("Error occurred while searching for members.", e);
                     displayNoResults();
                 } catch (ValidationException e) {
@@ -172,18 +175,18 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
             new Thread(() -> {
                 try {
 
-                    IMemberControllerRMI memberController = CommunicationFacade.lookupForMemberController();
+                    IMemberControllerUniversal memberController = CommunicationFacade.getInstance().lookupForMemberController();
                     List<MemberDTO> memberList = memberController.searchAllMembers(
                         readIsFeePaidState(
                             _paidRadioButton.isSelected(),
                             _notPaidRadioButton.isSelected()
                         ),
-                        CommunicationFacade.getActiveSession()
+                        CommunicationFacade.getInstance().getActiveSession()
                     );
 
                     handleReceivedResults(memberList);
 
-                } catch (RemoteException | MalformedURLException | NotBoundException e) {
+                } catch (RemoteCommunicationException e) {
                     LOGGER.error("Error occurred while searching for members.", e);
                     displayNoResults();
                 } catch (NotAuthorisedException e) {

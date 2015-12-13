@@ -1,9 +1,19 @@
 package at.sporty.team1.presentation.controllers;
 
+import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import at.sporty.team1.communication.facades.CommunicationFacade;
+import at.sporty.team1.communication.facades.api.IDepartmentControllerUniversal;
+import at.sporty.team1.communication.facades.api.ITournamentControllerUniversal;
+import at.sporty.team1.communication.util.RemoteCommunicationException;
 import at.sporty.team1.presentation.controllers.core.EditViewController;
-import at.sporty.team1.shared.api.rmi.IDepartmentControllerRMI;
-import at.sporty.team1.shared.api.rmi.ITournamentControllerRMI;
+import at.sporty.team1.presentation.util.GUIHelper;
 import at.sporty.team1.shared.dtos.DepartmentDTO;
 import at.sporty.team1.shared.dtos.MatchDTO;
 import at.sporty.team1.shared.dtos.TeamDTO;
@@ -11,26 +21,24 @@ import at.sporty.team1.shared.dtos.TournamentDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.shared.exceptions.ValidationException;
-import at.sporty.team1.presentation.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.StringConverter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
 
 public class CompetitionEditViewController extends EditViewController<TournamentDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -189,22 +197,22 @@ public class CompetitionEditViewController extends EditViewController<Tournament
                     //Teams (Fill TeamComboBox in Tournaments)
                     DepartmentDTO dept = _activeTournamentDTO.getDepartment();
 
-                    IDepartmentControllerRMI departmentController = CommunicationFacade.lookupForDepartmentController();
-                    List<TeamDTO> ownTournamentTeams = departmentController.loadDepartmentTeams(dept.getDepartmentId());
-
+                    IDepartmentControllerUniversal departmentController = CommunicationFacade.getInstance().lookupForDepartmentController();
+					List<TeamDTO>  ownTournamentTeams = departmentController.loadDepartmentTeams(dept.getDepartmentId());
+				
                     if (tournamentDTO.getTournamentId() != null) {
-                        //Loading Tournament Data
-                        ITournamentControllerRMI tournamentController = CommunicationFacade.lookupForTournamentController();
-
-                        //Loading tournament Teams
-                        List<String> teams = tournamentController.searchAllTournamentTeams(
+                        //Loading Tournament Data                  
+                        ITournamentControllerUniversal tournamentController = CommunicationFacade.getInstance().lookupForTournamentController();
+						//Loading tournament Teams
+						List<String> teams = tournamentController.searchAllTournamentTeams(
                                 _activeTournamentDTO.getTournamentId()
                         );
-
-                        //Loading tournament Matches
-                        List<MatchDTO> matches = tournamentController.searchAllTournamentMatches(
+                        
+                      //Loading tournament Matches
+						List<MatchDTO>  matches = tournamentController.searchAllTournamentMatches(
                                 _activeTournamentDTO.getTournamentId()
                         );
+						
 
                         Platform.runLater(() -> {
                             //Tournament data
@@ -253,7 +261,7 @@ public class CompetitionEditViewController extends EditViewController<Tournament
                             IN_WORK_PROPERTY.set(false);
                         });
                     }
-                } catch (RemoteException | MalformedURLException | NotBoundException | UnknownEntityException e) {
+                } catch (RemoteCommunicationException | UnknownEntityException e) {
                     LOGGER.error("Error occurred while searching all Teams by Department.", e);
                 }
             }).start();
@@ -273,12 +281,13 @@ public class CompetitionEditViewController extends EditViewController<Tournament
 
                 //updating changed competition data.
                 _activeTournamentDTO.setDate(date).setLocation(location);
-
-                ITournamentControllerRMI imc = CommunicationFacade.lookupForTournamentController();
+                 
+                ITournamentControllerUniversal imc = CommunicationFacade.getInstance().lookupForTournamentController();
                 Integer competitionId = imc.createOrSaveTournament(
-                    _activeTournamentDTO,
-                    CommunicationFacade.getActiveSession()
-                );
+				    _activeTournamentDTO,
+				    CommunicationFacade.getInstance().getActiveSession()
+				);
+				
 
                 _activeTournamentDTO.setTournamentId(competitionId);
 
@@ -294,8 +303,6 @@ public class CompetitionEditViewController extends EditViewController<Tournament
                     date
                 );
 
-            } catch (RemoteException | MalformedURLException | NotBoundException e) {
-                LOGGER.error("Error occurred while saving the tournament.", e);
             } catch (ValidationException e) {
                 String context = String.format("Validation exception \"%s\" while saving tournament.", e.getCause());
 
@@ -306,7 +313,9 @@ public class CompetitionEditViewController extends EditViewController<Tournament
 
                 LOGGER.error(context, e);
                 GUIHelper.showErrorAlert(context);
-            }
+            } catch (RemoteCommunicationException e) {
+				LOGGER.error("Error occurs when saving TournamentDTO");
+			}
         }
 
         return null;
@@ -321,17 +330,17 @@ public class CompetitionEditViewController extends EditViewController<Tournament
 
         try {
 
-            ITournamentControllerRMI tournamentController = CommunicationFacade.lookupForTournamentController();
+            ITournamentControllerUniversal tournamentController = CommunicationFacade.getInstance().lookupForTournamentController();
 
             for (String team : _competitionTeamsListView.getItems()) {
                 tournamentController.assignTeamToTournament(
                     team,
                     tournamentId,
-                    CommunicationFacade.getActiveSession()
+                    CommunicationFacade.getInstance().getActiveSession()
                 );
             }
 
-        } catch (RemoteException | MalformedURLException | NotBoundException e) {
+        } catch (RemoteCommunicationException e) {
 
             GUIHelper.showErrorAlert(UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE);
             LOGGER.error(UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE + "[Communication problem]", e);
@@ -395,17 +404,17 @@ public class CompetitionEditViewController extends EditViewController<Tournament
 
     	try {
 
-            ITournamentControllerRMI tournamentController = CommunicationFacade.lookupForTournamentController();
+            ITournamentControllerUniversal tournamentController = CommunicationFacade.getInstance().lookupForTournamentController();
 
 			for(MatchDTO match : _matchTableView.getItems()){
                 tournamentController.createNewMatch(
                     tournamentId,
                     match,
-                    CommunicationFacade.getActiveSession()
+                    CommunicationFacade.getInstance().getActiveSession()
                 );
             }
 
-		} catch (RemoteException | MalformedURLException | NotBoundException e) {
+		} catch (RemoteCommunicationException e) {
 
             GUIHelper.showErrorAlert(UNSUCCESSFUL_MATCH_TO_TOURNAMENT_SAVE);
             LOGGER.error(UNSUCCESSFUL_MATCH_TO_TOURNAMENT_SAVE + "[Communication problem]", e);

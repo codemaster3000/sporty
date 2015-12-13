@@ -1,15 +1,24 @@
 package at.sporty.team1.presentation.controllers;
 
+import java.net.URL;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import at.sporty.team1.communication.facades.CommunicationFacade;
+import at.sporty.team1.communication.facades.api.ITournamentControllerUniversal;
+import at.sporty.team1.communication.util.RemoteCommunicationException;
 import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
 import at.sporty.team1.presentation.dialogs.EditViewDialog;
 import at.sporty.team1.presentation.dialogs.ExtendedChoiceDialog;
-import at.sporty.team1.shared.api.rmi.ITournamentControllerRMI;
+import at.sporty.team1.presentation.util.GUIHelper;
 import at.sporty.team1.shared.dtos.DepartmentDTO;
 import at.sporty.team1.shared.dtos.MatchDTO;
 import at.sporty.team1.shared.dtos.TournamentDTO;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
-import at.sporty.team1.presentation.util.GUIHelper;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -17,17 +26,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 public class CompetitionReadOnlyViewController extends ConsumerViewController<TournamentDTO> {
 
@@ -84,8 +87,8 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
         );
 
         CommunicationFacade.SESSION_AVAILABLE_PROPERTY.addListener((p, newValue, oldValue) -> {
-            if (CommunicationFacade.getExtendedActiveSession() != null) {
-                String role = CommunicationFacade.getExtendedActiveSession().getUser().getRole();
+            if (CommunicationFacade.getInstance().getExtendedActiveSession() != null) {
+                String role = CommunicationFacade.getInstance().getExtendedActiveSession().getUser().getRole();
 
                 //enabling gui options for specific roles
                 switch (role) {
@@ -168,7 +171,7 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
 
                 try {
 
-                    ITournamentControllerRMI tournamentController = CommunicationFacade.lookupForTournamentController();
+                    ITournamentControllerUniversal tournamentController = CommunicationFacade.getInstance().lookupForTournamentController();
 
                     //Teams
                     List<String> teams = tournamentController.searchAllTournamentTeams(tournamentDTO.getTournamentId());
@@ -192,7 +195,7 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
                             _matchTableView.setItems(FXCollections.observableList(matches));
                         }
                     });
-                } catch (RemoteException | MalformedURLException | NotBoundException e) {
+                } catch (RemoteCommunicationException e) {
 
                     LOGGER.error("Error occurred while loading Tournament data.", e);
                     Platform.runLater(() ->
@@ -222,7 +225,7 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
     private void onCreateTournament(ActionEvent event) {
     	
     	try {
-			List<DepartmentDTO> departments = CommunicationFacade.lookupForDepartmentController().searchAllDepartments();
+			List<DepartmentDTO> departments = CommunicationFacade.getInstance().lookupForDepartmentController().searchAllDepartments();
 			
 			if(departments != null && !departments.isEmpty()){
 				
@@ -252,7 +255,7 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
 			        }
 				}
 			}
-		} catch (RemoteException | MalformedURLException | NotBoundException e) {
+		} catch (RemoteCommunicationException e) {
             LOGGER.error("Error occurred while creating new Tournament.", e);
         }
     }
