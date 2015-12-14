@@ -1,0 +1,12 @@
+<web-service>
+    <display-name>EJB Web Services Demo</display-name>
+    <destination-path>tmp/ResultService.ear</destination-path>
+    <temporary-directory>tmp</temporary-directory>
+    <context>/sejb_webservices</context>
+
+    <stateless-session-ejb-service>
+        <path>tmp/Hello.jar</path>
+        <uri>/HelloService</uri>
+        <ejb-name>HelloService</ejb-name>
+    </stateless-session-ejb-service>
+</web-service>
