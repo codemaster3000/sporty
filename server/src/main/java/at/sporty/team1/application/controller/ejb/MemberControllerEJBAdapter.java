@@ -17,11 +17,9 @@ import java.util.List;
 @Stateless(name = "MEMBER_CONTROLLER_EJB")
 public class MemberControllerEJBAdapter implements IMemberControllerEJB {
     private static final long serialVersionUID = 1L;
-    private final IMemberController _controller;
+    private transient final IMemberController _controller;
 
     public MemberControllerEJBAdapter() {
-        super();
-
         _controller = new MemberController();
     }
 

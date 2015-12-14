@@ -21,7 +21,7 @@ public class ConsumerJMS {
     public static List<MessageDTO> pullMessages(Integer memberId)
     throws JMSException {
 
-        QueueConnectionFactory factory = JMSFacade.lookupForQueueConnectionFactory(DEFAULT_HOST, 3700, true);
+        QueueConnectionFactory factory = JMSFacade.lookupForQueueConnectionFactory(DEFAULT_HOST, DEFAULT_PORT, true);
         JMSContext jmsContext = factory.createContext();
 
         Queue consumerQueue = JMSFacade.lookupForQueue(memberId);

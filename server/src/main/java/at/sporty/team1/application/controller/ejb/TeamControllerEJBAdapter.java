@@ -12,6 +12,7 @@ import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.shared.exceptions.ValidationException;
 
 import javax.ejb.Stateless;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -20,11 +21,9 @@ import java.util.List;
 @Stateless(name ="TEAM_CONTROLLER_EJB")
 public class TeamControllerEJBAdapter implements ITeamControllerEJB {
     private static final long serialVersionUID = 1L;
-    private final ITeamController _controller;
+    private transient final ITeamController _controller;
 
     public TeamControllerEJBAdapter() {
-        super();
-
         _controller = new TeamController();
     }
 

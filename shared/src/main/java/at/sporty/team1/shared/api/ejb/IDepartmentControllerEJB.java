@@ -14,7 +14,6 @@ import java.util.List;
 /**
  * Created by f00 on 10.12.15.
  */
-@Local
 @Remote
 public interface IDepartmentControllerEJB extends IRemoteControllerEJB {
     /**

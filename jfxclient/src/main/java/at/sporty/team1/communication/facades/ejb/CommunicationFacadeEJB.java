@@ -18,27 +18,18 @@ import java.util.Properties;
 
 public class CommunicationFacadeEJB implements ICommunicationFacade {
     private static final Logger LOGGER = LogManager.getLogger();
-    //FIXME (property file does not exist - I need to check how this should be implemented)
-    private static final String PROPERTY_FILE = "ejb.properties";
-    private static final Properties PROPERTIES = new Properties();
-
+    private static final String EJB_TARGET = "EJB_TARGET";
+    private final Properties _properties;
     private InitialContext _context;
 
-    public CommunicationFacadeEJB() {
+    public CommunicationFacadeEJB(Properties properties) {
+
+        _properties = properties;
+
         try {
 
-            URL propertyURL = getClass().getClassLoader().getResource(PROPERTY_FILE);
-            if (propertyURL != null) {
+            _context = new InitialContext();
 
-                PROPERTIES.load(new FileInputStream(propertyURL.getFile()));
-                _context = new InitialContext(PROPERTIES);
-
-            } else {
-                throw new FileNotFoundException(PROPERTY_FILE + " was not found");
-            }
-
-        } catch (IOException e) {
-            LOGGER.error("An error occurs while loading EJB properties from {}.", PROPERTY_FILE, e);
         } catch (NamingException e) {
             LOGGER.error("An error occurs while initializing context.", e);
         }
@@ -49,9 +40,11 @@ public class CommunicationFacadeEJB implements ICommunicationFacade {
     throws RemoteCommunicationException {
         
     	try {
-			IMemberControllerEJB iMemberControllerEJB = (IMemberControllerEJB) _context.lookup(
-				RemoteObjectRegistry.LOGIN_CONTROLLER.getNamingEJB()	
-				);
+
+			IMemberControllerEJB iMemberControllerEJB = (IMemberControllerEJB) _context.lookup(String.format(
+                _properties.getProperty(EJB_TARGET),
+                getEJBNaming(RemoteObjectRegistry.MEMBER_CONTROLLER, IMemberControllerEJB.class)
+            ));
 			return new MemberControllerEJBAdapter(iMemberControllerEJB);
 			
 		} catch (NamingException e) {
@@ -64,9 +57,11 @@ public class CommunicationFacadeEJB implements ICommunicationFacade {
     throws RemoteCommunicationException {
         
     	try {
-			ITeamControllerEJB iTeamControllerEJB = (ITeamControllerEJB) _context.lookup(
-				RemoteObjectRegistry.LOGIN_CONTROLLER.getNamingEJB()	
-				);
+
+			ITeamControllerEJB iTeamControllerEJB = (ITeamControllerEJB) _context.lookup(String.format(
+                _properties.getProperty(EJB_TARGET),
+                getEJBNaming(RemoteObjectRegistry.TEAM_CONTROLLER, ITeamControllerEJB.class)
+            ));
 			return new TeamControllerEJBAdapter(iTeamControllerEJB);
 			
 		} catch (NamingException e) {
@@ -79,9 +74,11 @@ public class CommunicationFacadeEJB implements ICommunicationFacade {
     throws RemoteCommunicationException {
     	
     	try {
-			IDepartmentControllerEJB iDepartmentControllerEJB = (IDepartmentControllerEJB) _context.lookup(
-				RemoteObjectRegistry.LOGIN_CONTROLLER.getNamingEJB()	
-				);
+
+			IDepartmentControllerEJB iDepartmentControllerEJB = (IDepartmentControllerEJB) _context.lookup(String.format(
+                _properties.getProperty(EJB_TARGET),
+                getEJBNaming(RemoteObjectRegistry.DEPARTMENT_CONTROLLER, IDepartmentControllerEJB.class)
+            ));
 			return new DepartmentControllerEJBAdapter(iDepartmentControllerEJB);
 			
 		} catch (NamingException e) {
@@ -94,9 +91,11 @@ public class CommunicationFacadeEJB implements ICommunicationFacade {
     throws RemoteCommunicationException {
         
     	try {
-			ILoginControllerEJB iLoginControllerEJB = (ILoginControllerEJB) _context.lookup(
-				RemoteObjectRegistry.LOGIN_CONTROLLER.getNamingEJB()	
-				);
+
+			ILoginControllerEJB iLoginControllerEJB = (ILoginControllerEJB) _context.lookup(String.format(
+                _properties.getProperty(EJB_TARGET),
+                getEJBNaming(RemoteObjectRegistry.LOGIN_CONTROLLER, ILoginControllerEJB.class)
+            ));
 			return new LoginControllerEJBAdapter(iLoginControllerEJB);
 			
 		} catch (NamingException e) {
@@ -107,11 +106,13 @@ public class CommunicationFacadeEJB implements ICommunicationFacade {
     @Override
     public ITournamentControllerUniversal lookupForTournamentController()
     throws RemoteCommunicationException {
+
         try {
-        	ITournamentControllerEJB iTournamentControllerEJB = (ITournamentControllerEJB) _context.lookup(
-        		RemoteObjectRegistry.TOURNAMENT_CONTROLLER.getNamingEJB()	
-        	);
-        	
+
+        	ITournamentControllerEJB iTournamentControllerEJB = (ITournamentControllerEJB) _context.lookup(String.format(
+                _properties.getProperty(EJB_TARGET),
+                getEJBNaming(RemoteObjectRegistry.TOURNAMENT_CONTROLLER, ITournamentControllerEJB.class)
+            ));
         	return new TournamentControllerEJBAdapter(iTournamentControllerEJB);
         	
         }catch(NamingException e){
@@ -124,14 +125,25 @@ public class CommunicationFacadeEJB implements ICommunicationFacade {
     throws RemoteCommunicationException {
         try {
 
-            INotificationControllerEJB controllerEJB = (INotificationControllerEJB) _context.lookup(
-                RemoteObjectRegistry.NOTIFICATION_CONTROLLER.getNamingEJB()
-            );
-
+            INotificationControllerEJB controllerEJB = (INotificationControllerEJB) _context.lookup(String.format(
+                _properties.getProperty(EJB_TARGET),
+                getEJBNaming(RemoteObjectRegistry.NOTIFICATION_CONTROLLER, INotificationControllerEJB.class)
+            ));
             return new NotificationControllerEJBAdapter(controllerEJB);
 
         } catch (NamingException e) {
             throw new RemoteCommunicationException(e);
         }
+    }
+
+    /**
+     * Generates Naming string for given EJB.
+     *
+     * @param remoteObject Universal naming that will be used to generate ejb binding name.
+     * @param remoteInterface Remote interface of the lookup-ed EJB.
+     * @return Naming string for given EJB.
+     */
+    private String getEJBNaming(RemoteObjectRegistry remoteObject, Class<? extends IRemoteControllerEJB> remoteInterface) {
+        return remoteObject.getNamingEJB() + "!" + remoteInterface.getName();
     }
 }

@@ -18,7 +18,7 @@ public class ProducerJMS {
     public static void sendMessage(MessageDTO messageDTO)
     throws JMSException {
 
-        QueueConnectionFactory factory = JMSFacade.lookupForQueueConnectionFactory(DEFAULT_HOST, 3700, true);
+        QueueConnectionFactory factory = JMSFacade.lookupForQueueConnectionFactory(DEFAULT_HOST, DEFAULT_PORT, true);
         JMSContext jmsContext = factory.createContext();
 
         JMSProducer producer = JMSFacade.getJMSProducer(jmsContext);

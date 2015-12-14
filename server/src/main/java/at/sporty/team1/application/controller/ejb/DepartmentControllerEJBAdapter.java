@@ -11,6 +11,7 @@ import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 
 import javax.ejb.Stateless;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -19,11 +20,9 @@ import java.util.List;
 @Stateless(name = "DEPARTMENT_CONTROLLER_EJB")
 public class DepartmentControllerEJBAdapter implements IDepartmentControllerEJB {
     private static final long serialVersionUID = 1L;
-    private final IDepartmentController _controller;
+    private transient final IDepartmentController _controller;
 
     public DepartmentControllerEJBAdapter() {
-        super();
-
         _controller = new DepartmentController();
     }
 

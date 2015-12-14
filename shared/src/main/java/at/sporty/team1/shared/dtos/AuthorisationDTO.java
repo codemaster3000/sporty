@@ -20,7 +20,7 @@ public class AuthorisationDTO implements IDTO {
     }
 
     public AuthorisationDTO setClientPublicKey(byte[] clientPublicKey) {
-        this._clientPublicKey = clientPublicKey;
+        _clientPublicKey = clientPublicKey;
         return this;
     }
 

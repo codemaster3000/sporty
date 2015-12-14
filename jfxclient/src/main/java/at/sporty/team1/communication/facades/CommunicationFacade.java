@@ -49,20 +49,20 @@ public class CommunicationFacade implements ICommunicationFacade {
      *
      * @param communicationType CommunicationType - ENUM, defines which subject will be used.
      */
-    private CommunicationFacade(CommunicationType communicationType) {
+    private CommunicationFacade(CommunicationType communicationType, Properties properties) {
         switch (communicationType) {
             case RMI: {
-                _subjectCommunicationFacade = new CommunicationFacadeRMI();
+                _subjectCommunicationFacade = new CommunicationFacadeRMI(properties);
                 break;
             }
 
             case EJB: {
-                _subjectCommunicationFacade = new CommunicationFacadeEJB();
+                _subjectCommunicationFacade = new CommunicationFacadeEJB(properties);
                 break;
             }
 
             default: {
-                _subjectCommunicationFacade = new CommunicationFacadeEJB();
+                _subjectCommunicationFacade = new CommunicationFacadeEJB(properties);
                 break;
             }
         }
@@ -83,10 +83,10 @@ public class CommunicationFacade implements ICommunicationFacade {
 
                             PROPERTIES.load(new FileInputStream(propertyURL.getFile()));
                             CommunicationType communicationType = CommunicationType.valueOf(
-                                    PROPERTIES.getProperty(COMMUNICATION_TYPE)
+                                PROPERTIES.getProperty(COMMUNICATION_TYPE)
                             );
 
-                            _instance = new CommunicationFacade(communicationType);
+                            _instance = new CommunicationFacade(communicationType, PROPERTIES);
 
                         } else {
                             throw new FileNotFoundException(PROPERTY_FILE + " was not found.");
@@ -94,17 +94,17 @@ public class CommunicationFacade implements ICommunicationFacade {
 
                     } catch (IOException e) {
                         LOGGER.error(
-                                "An error occurs while loading client properties from {}. Execution is terminated.",
-                                PROPERTY_FILE,
-                                e
+                            "An error occurs while loading client properties from {}. Execution is terminated.",
+                            PROPERTY_FILE,
+                            e
                         );
 
                         System.exit(1);
                     } catch (IllegalArgumentException e) {
                         LOGGER.error(
-                                "Unknown communication type received. Check your property file.",
-                                PROPERTY_FILE,
-                                e
+                            "Unknown communication type received. Check your property file.",
+                            PROPERTY_FILE,
+                            e
                         );
 
                         System.exit(1);
@@ -205,7 +205,7 @@ public class CommunicationFacade implements ICommunicationFacade {
     throws RemoteCommunicationException, SecurityException {
         if (_activeServerPublicKey == null) {
             _activeServerPublicKey = SecurityModule.getDecodedRSAPublicKey(
-                    lookupForLoginController().getServerPublicKey()
+                lookupForLoginController().getServerPublicKey()
             );
         }
         return _activeServerPublicKey;

@@ -15,7 +15,6 @@ import java.util.List;
 /**
  * Created by sereGkaluv on 02-Nov-15.
  */
-@Local
 @Remote
 public interface ITeamControllerEJB extends IRemoteControllerEJB {
 

@@ -16,7 +16,7 @@ public class UnknownEntityException extends Exception {
         super();
     }
 
-    public UnknownEntityException(Class entityClass) {
+    public UnknownEntityException(Class<?> entityClass) {
         super(String.format(MESSAGE, entityClass.getCanonicalName()));
     }
 }

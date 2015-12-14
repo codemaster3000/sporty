@@ -14,10 +14,10 @@ import javax.ejb.Startup;
  */
 @Local
 @Startup
-@Singleton
+@Singleton(name = "INITIALIZATION_CONTROLLER_EJB")
 public class InitializationControllerEJBAdapter implements IController {
     private static final long serialVersionUID = 1L;
-    private InitializationController _initializationController;
+    private transient InitializationController _initializationController;
 
     @PostConstruct
     public void initialize() {

@@ -10,7 +10,6 @@ import javax.ejb.Remote;
 /**
  * Created by f00 on 10.12.15.
  */
-@Local
 @Remote
 public interface ILoginControllerEJB extends IRemoteControllerEJB {
 

@@ -17,11 +17,9 @@ import java.util.List;
 @Stateless(name = "NOTIFICATION_CONTROLLER_EJB")
 public class NotificationControllerEJBAdapter implements INotificationControllerEJB {
     private static final long serialVersionUID = 1L;
-    private final INotificationController _controller;
+    private transient final INotificationController _controller;
 
     public NotificationControllerEJBAdapter() {
-        super();
-
         _controller = new NotificationController();
     }
 

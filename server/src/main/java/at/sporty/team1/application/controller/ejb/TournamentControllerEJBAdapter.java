@@ -19,11 +19,9 @@ import java.util.List;
 @Stateless(name = "TOURNAMENT_CONTROLLER_EJB")
 public class TournamentControllerEJBAdapter implements ITournamentControllerEJB {
     private static final long serialVersionUID = 1L;
-    private final ITournamentController _controller;
+    private transient final ITournamentController _controller;
 
     public TournamentControllerEJBAdapter() {
-        super();
-
         _controller = new TournamentController();
     }
 

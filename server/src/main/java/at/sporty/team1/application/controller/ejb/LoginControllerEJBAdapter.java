@@ -15,10 +15,9 @@ import javax.ejb.Stateless;
 @Stateless(name = "LOGIN_CONTROLLER_EJB")
 public class LoginControllerEJBAdapter implements ILoginControllerEJB {
     private static final long serialVersionUID = 1L;
-    private final ILoginController _controller;
+    private transient final ILoginController _controller;
 
     public LoginControllerEJBAdapter() {
-        super();
         _controller = new LoginController();
     }
 

@@ -10,7 +10,7 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <name>Sporty Remote API</name>
+    <name>Sporty Shared</name>
     <artifactId>shared</artifactId>
 
     <dependencies>

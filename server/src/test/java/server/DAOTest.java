@@ -21,17 +21,6 @@ import java.util.List;
 public class DAOTest {
 
     //This is a fast and dirty implementation of test for DAO methods
-
-    @Test
-    public void MatchLoadTest() {
-        try {
-            List<MatchDTO> l = new TournamentController().searchAllTournamentMatches(1);
-            System.out.println("Received list of size: " + l.size());
-        } catch (UnknownEntityException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Test
     public void departmentTeamFetchedListTest() {
         try {
