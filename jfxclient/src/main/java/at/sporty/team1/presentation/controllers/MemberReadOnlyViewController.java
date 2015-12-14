@@ -34,6 +34,7 @@ import java.util.ResourceBundle;
 
 public class MemberReadOnlyViewController extends ConsumerViewController<MemberDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final CommunicationFacade COMMUNICATION_FACADE = CommunicationFacade.getInstance();
     private static final String NOT_AVAILABLE = "N/A";
     private static final String ROLE_DEPARTMENT_HEAD = "departmentHead";
     private static final String ROLE_ADMIN = "admin";
@@ -57,19 +58,19 @@ public class MemberReadOnlyViewController extends ConsumerViewController<MemberD
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     	_createMemberButton.visibleProperty().bind(
-            CommunicationFacade.SESSION_AVAILABLE_PROPERTY.and(
+            COMMUNICATION_FACADE.getSessionAvailableProperty().and(
             CREATE_VISIBILITY_PROPERTY)
         );
 
         _editMemberButton.visibleProperty().bind(
-            CommunicationFacade.SESSION_AVAILABLE_PROPERTY.and(
+            COMMUNICATION_FACADE.getSessionAvailableProperty().and(
             EDIT_VISIBILITY_PROPERTY.and(
             ACTIVE_DTO.isNotNull()))
         );
 
-        CommunicationFacade.SESSION_AVAILABLE_PROPERTY.addListener((p, newValue, oldValue) -> {
-            if (CommunicationFacade.getInstance().getExtendedActiveSession() != null) {
-                String role = CommunicationFacade.getInstance().getExtendedActiveSession().getUser().getRole();
+        COMMUNICATION_FACADE.getSessionAvailableProperty().addListener((p, newValue, oldValue) -> {
+            if (COMMUNICATION_FACADE.getExtendedActiveSession() != null) {
+                String role = COMMUNICATION_FACADE.getExtendedActiveSession().getUser().getRole();
 
                 //enabling gui options for specific roles
                 switch (role) {
@@ -132,11 +133,11 @@ public class MemberReadOnlyViewController extends ConsumerViewController<MemberD
 
                 try {
 
-                    IMemberControllerUniversal memberController = CommunicationFacade.getInstance().lookupForMemberController();
+                    IMemberControllerUniversal memberController = COMMUNICATION_FACADE.lookupForMemberController();
 
                     final List<DTOPair<DepartmentDTO, TeamDTO>> fetchedList = memberController.loadFetchedDepartmentTeamList(
                         memberDTO.getMemberId(),
-                        CommunicationFacade.getInstance().getActiveSession()
+                        COMMUNICATION_FACADE.getActiveSession()
                     );
 
                     Platform.runLater(() -> {

@@ -34,6 +34,7 @@ import java.util.ResourceBundle;
  */
 public class TeamViewController extends ConsumerViewController<MemberDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final CommunicationFacade COMMUNICATION_FACADE = CommunicationFacade.getInstance();
     private static final String SUCCESSFUL_TEAM_SAVE = "Team was successfully saved.";
 
     @FXML
@@ -86,7 +87,7 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
 
             try {
 
-                IDepartmentControllerUniversal departmentController = CommunicationFacade.getInstance().lookupForDepartmentController();
+                IDepartmentControllerUniversal departmentController = COMMUNICATION_FACADE.lookupForDepartmentController();
                 List<DepartmentDTO> departments = departmentController.searchAllDepartments();
 
                 if (departments != null && !departments.isEmpty()) {
@@ -135,11 +136,11 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
 
             try {
 
-                ITeamControllerUniversal teamController = CommunicationFacade.getInstance().lookupForTeamController();
+                ITeamControllerUniversal teamController = COMMUNICATION_FACADE.lookupForTeamController();
 
                 List<MemberDTO> memberList = teamController.loadTeamMembers(
                     _activeTeamDTO.getTeamId(),
-                    CommunicationFacade.getInstance().getActiveSession()
+                    COMMUNICATION_FACADE.getActiveSession()
                 );
 
                 if (memberList != null && !memberList.isEmpty()) {
@@ -170,14 +171,14 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
         MemberDTO memberDTO = _membersListView.getSelectionModel().getSelectedItem();
 
         try {
-            IMemberControllerUniversal memberController = CommunicationFacade.getInstance().lookupForMemberController();
+            IMemberControllerUniversal memberController = COMMUNICATION_FACADE.lookupForMemberController();
 
             if ((_activeTeamDTO != null) && (memberDTO != null)) {
 
                 memberController.removeMemberFromTeam(
                     memberDTO.getMemberId(),
                     _activeTeamDTO.getTeamId(),
-                    CommunicationFacade.getInstance().getActiveSession()
+                    COMMUNICATION_FACADE.getActiveSession()
                 );
 
                 _membersListView.getItems().remove(memberDTO);
@@ -210,17 +211,17 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
 
             try {
 
-                ITeamControllerUniversal teamController = CommunicationFacade.getInstance().lookupForTeamController();
+                ITeamControllerUniversal teamController = COMMUNICATION_FACADE.lookupForTeamController();
                 teamController.createOrSaveTeam(
                     _activeTeamDTO,
-                    CommunicationFacade.getInstance().getActiveSession()
+                    COMMUNICATION_FACADE.getActiveSession()
                 );
 
                 for (MemberDTO member : memberList) {
-                    CommunicationFacade.getInstance().lookupForMemberController().assignMemberToTeam(
+                    COMMUNICATION_FACADE.lookupForMemberController().assignMemberToTeam(
                         member.getMemberId(),
                         _activeTeamDTO.getTeamId(),
-                        CommunicationFacade.getInstance().getActiveSession()
+                        COMMUNICATION_FACADE.getActiveSession()
                     );
                 }
 

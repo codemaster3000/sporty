@@ -28,6 +28,7 @@ import java.util.ResourceBundle;
  */
 public class TournamentSearchViewController extends SearchViewController<TournamentDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final CommunicationFacade COMMUNICATION_FACADE = CommunicationFacade.getInstance();
     private static final String TOURNAMENT_SPORT_COLUMN = "SPORT";
     private static final String TOURNAMENT_DATE_COLUMN = "EVENT DATE";
     private static final String TOURNAMENT_PLACE_COLUMN = "LOCATION";
@@ -76,7 +77,7 @@ public class TournamentSearchViewController extends SearchViewController<Tournam
             new Thread(() -> {
                 try {
 
-                    ITournamentControllerUniversal tournamentController = CommunicationFacade.getInstance().lookupForTournamentController();
+                    ITournamentControllerUniversal tournamentController = COMMUNICATION_FACADE.lookupForTournamentController();
 
                     //Performing search depending on selected search type
                     switch (_searchType.getValue()) {
@@ -123,7 +124,7 @@ public class TournamentSearchViewController extends SearchViewController<Tournam
             new Thread(() -> {
                 try {
 
-                    ITournamentControllerUniversal tournamentController = CommunicationFacade.getInstance().lookupForTournamentController();
+                    ITournamentControllerUniversal tournamentController = COMMUNICATION_FACADE.lookupForTournamentController();
                     handleReceivedResults(tournamentController.searchAllTournaments());
 
                 } catch (RemoteCommunicationException e) {

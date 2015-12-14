@@ -30,12 +30,11 @@ import java.security.PublicKey;
 import java.util.Properties;
 
 public class CommunicationFacade implements ICommunicationFacade {
-    public static final SimpleBooleanProperty SESSION_AVAILABLE_PROPERTY = new SimpleBooleanProperty(false);
-
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String COMMUNICATION_TYPE = "COMMUNICATION_TYPE";
     private static final String PROPERTY_FILE = "client.properties";
     private static final Properties PROPERTIES = new Properties();
+    private static final SimpleBooleanProperty SESSION_AVAILABLE_PROPERTY = new SimpleBooleanProperty(false);
     private static CommunicationFacade _instance;
 
     private PublicKey _activeServerPublicKey;
@@ -71,40 +70,46 @@ public class CommunicationFacade implements ICommunicationFacade {
 
     public static CommunicationFacade getInstance() {
         if (_instance == null) {
-            try {
 
-                ClassLoader classLoader = CommunicationFacade.class.getClassLoader();
+            synchronized (CommunicationFacade.class) {
 
-                URL propertyURL = classLoader.getResource(PROPERTY_FILE);
-                if (propertyURL != null) {
+                if (_instance == null) {
+                    try {
 
-                    PROPERTIES.load(new FileInputStream(propertyURL.getFile()));
-                    CommunicationType communicationType = CommunicationType.valueOf(
-                            PROPERTIES.getProperty(COMMUNICATION_TYPE)
-                    );
+                        ClassLoader classLoader = CommunicationFacade.class.getClassLoader();
 
-                    _instance = new CommunicationFacade(communicationType);
+                        URL propertyURL = classLoader.getResource(PROPERTY_FILE);
+                        if (propertyURL != null) {
 
-                } else {
-                    throw new FileNotFoundException(PROPERTY_FILE + " was not found.");
+                            PROPERTIES.load(new FileInputStream(propertyURL.getFile()));
+                            CommunicationType communicationType = CommunicationType.valueOf(
+                                    PROPERTIES.getProperty(COMMUNICATION_TYPE)
+                            );
+
+                            _instance = new CommunicationFacade(communicationType);
+
+                        } else {
+                            throw new FileNotFoundException(PROPERTY_FILE + " was not found.");
+                        }
+
+                    } catch (IOException e) {
+                        LOGGER.error(
+                                "An error occurs while loading client properties from {}. Execution is terminated.",
+                                PROPERTY_FILE,
+                                e
+                        );
+
+                        System.exit(1);
+                    } catch (IllegalArgumentException e) {
+                        LOGGER.error(
+                                "Unknown communication type received. Check your property file.",
+                                PROPERTY_FILE,
+                                e
+                        );
+
+                        System.exit(1);
+                    }
                 }
-
-            } catch (IOException e) {
-                LOGGER.error(
-                    "An error occurs while loading client properties from {}. Execution is terminated.",
-                    PROPERTY_FILE,
-                    e
-                );
-
-                System.exit(1);
-            } catch (IllegalArgumentException e) {
-                LOGGER.error(
-                    "Unknown communication type received. Check your property file.",
-                    PROPERTY_FILE,
-                    e
-                );
-
-                System.exit(1);
             }
         }
 
@@ -147,7 +152,7 @@ public class CommunicationFacade implements ICommunicationFacade {
         return _subjectCommunicationFacade.lookupForNotificationController();
     }
 
-    public boolean authorize(String username, String password)
+    public synchronized boolean authorize(String username, String password)
     throws RemoteCommunicationException, SecurityException, InvalidKeyException, BadPaddingException,
     IllegalBlockSizeException, UnknownEntityException, NotAuthorisedException {
         //disposing old session
@@ -191,12 +196,12 @@ public class CommunicationFacade implements ICommunicationFacade {
         }
     }
 
-    public void logout() {
+    public synchronized void logout() {
         SESSION_AVAILABLE_PROPERTY.set(false);
         _extendedActiveSession = null;
     }
 
-    public PublicKey getServerPublicKey()
+    public synchronized PublicKey getServerPublicKey()
     throws RemoteCommunicationException, SecurityException {
         if (_activeServerPublicKey == null) {
             _activeServerPublicKey = SecurityModule.getDecodedRSAPublicKey(
@@ -206,7 +211,7 @@ public class CommunicationFacade implements ICommunicationFacade {
         return _activeServerPublicKey;
     }
 
-    public KeyPair getClientRSAKeyPair()
+    public synchronized KeyPair getClientRSAKeyPair()
     throws SecurityException {
         if (_activeRSAKeyPair == null) {
             _activeRSAKeyPair = SecurityModule.generateNewRSAKeyPair(512);
@@ -214,12 +219,16 @@ public class CommunicationFacade implements ICommunicationFacade {
         return _activeRSAKeyPair;
     }
 
-    public SessionDTO getActiveSession() {
+    public synchronized SessionDTO getActiveSession() {
         return _extendedActiveSession != null ? _extendedActiveSession.getSessionDTO() : null;
     }
 
-    public CachedSession getExtendedActiveSession() {
+    public synchronized CachedSession getExtendedActiveSession() {
         return _extendedActiveSession;
+    }
+
+    public SimpleBooleanProperty getSessionAvailableProperty() {
+        return SESSION_AVAILABLE_PROPERTY;
     }
 }
 

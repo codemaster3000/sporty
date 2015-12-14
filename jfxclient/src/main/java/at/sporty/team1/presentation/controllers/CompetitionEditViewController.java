@@ -32,6 +32,7 @@ import java.util.ResourceBundle;
 
 public class CompetitionEditViewController extends EditViewController<TournamentDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final CommunicationFacade COMMUNICATION_FACADE = CommunicationFacade.getInstance();
     private static final String VIEW_TEXT_HEADER = "TOURNAMENT EDITING VIEW";
     private static final String SUCCESSFUL_TOURNAMENT_SAVE = "Tournament was saved successfully.";
     private static final String UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = "Error occurred while saving Teams to Tournament.";
@@ -187,12 +188,12 @@ public class CompetitionEditViewController extends EditViewController<Tournament
                     //Teams (Fill TeamComboBox in Tournaments)
                     DepartmentDTO dept = _activeTournamentDTO.getDepartment();
 
-                    IDepartmentControllerUniversal departmentController = CommunicationFacade.getInstance().lookupForDepartmentController();
+                    IDepartmentControllerUniversal departmentController = COMMUNICATION_FACADE.lookupForDepartmentController();
 					List<TeamDTO>  ownTournamentTeams = departmentController.loadDepartmentTeams(dept.getDepartmentId());
 				
                     if (tournamentDTO.getTournamentId() != null) {
                         //Loading Tournament Data                  
-                        ITournamentControllerUniversal tournamentController = CommunicationFacade.getInstance().lookupForTournamentController();
+                        ITournamentControllerUniversal tournamentController = COMMUNICATION_FACADE.lookupForTournamentController();
 						//Loading tournament Teams
 						List<String> teams = tournamentController.searchAllTournamentTeams(
                                 _activeTournamentDTO.getTournamentId()
@@ -272,10 +273,10 @@ public class CompetitionEditViewController extends EditViewController<Tournament
                 //updating changed competition data.
                 _activeTournamentDTO.setDate(date).setLocation(location);
                  
-                ITournamentControllerUniversal imc = CommunicationFacade.getInstance().lookupForTournamentController();
+                ITournamentControllerUniversal imc = COMMUNICATION_FACADE.lookupForTournamentController();
                 Integer competitionId = imc.createOrSaveTournament(
 				    _activeTournamentDTO,
-				    CommunicationFacade.getInstance().getActiveSession()
+                    COMMUNICATION_FACADE.getActiveSession()
 				);
 				
 
@@ -320,13 +321,13 @@ public class CompetitionEditViewController extends EditViewController<Tournament
 
         try {
 
-            ITournamentControllerUniversal tournamentController = CommunicationFacade.getInstance().lookupForTournamentController();
+            ITournamentControllerUniversal tournamentController = COMMUNICATION_FACADE.lookupForTournamentController();
 
             for (String team : _competitionTeamsListView.getItems()) {
                 tournamentController.assignTeamToTournament(
                     team,
                     tournamentId,
-                    CommunicationFacade.getInstance().getActiveSession()
+                    COMMUNICATION_FACADE.getActiveSession()
                 );
             }
 
@@ -394,13 +395,13 @@ public class CompetitionEditViewController extends EditViewController<Tournament
 
     	try {
 
-            ITournamentControllerUniversal tournamentController = CommunicationFacade.getInstance().lookupForTournamentController();
+            ITournamentControllerUniversal tournamentController = COMMUNICATION_FACADE.lookupForTournamentController();
 
 			for(MatchDTO match : _matchTableView.getItems()){
                 tournamentController.createNewMatch(
                     tournamentId,
                     match,
-                    CommunicationFacade.getInstance().getActiveSession()
+                    COMMUNICATION_FACADE.getActiveSession()
                 );
             }
 

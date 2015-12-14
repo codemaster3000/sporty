@@ -26,6 +26,7 @@ import java.util.ResourceBundle;
  */
 public class MessagesMaskViewController extends ConsumerViewController<MessageDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final CommunicationFacade COMMUNICATION_FACADE = CommunicationFacade.getInstance();
     private static final String NOT_AVAILABLE = "N/A";
     private static final SimpleObjectProperty<MessageType> MESSAGE_TYPE_PROPERTY = new SimpleObjectProperty<>(
         MessageType.PLAIN_TEXT
@@ -148,9 +149,9 @@ public class MessagesMaskViewController extends ConsumerViewController<MessageDT
             .setMessageSubject(answerSubject)
             .setMessageContent(answerContent);
 
-        CommunicationFacade.getInstance().lookupForNotificationController().sendMessage(
+        COMMUNICATION_FACADE.lookupForNotificationController().sendMessage(
             returnMessage,
-            CommunicationFacade.getInstance().getActiveSession()
+            COMMUNICATION_FACADE.getActiveSession()
         );
     }
 
