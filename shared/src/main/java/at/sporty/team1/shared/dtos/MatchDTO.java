@@ -11,7 +11,8 @@ public class MatchDTO implements IDTO {
     private String _referee;
     private String _location;
 	private String _date;
-    private String _result;
+    private String _resultTeam1;
+    private String _resultTeam2;
    
     public MatchDTO() {   	
     }
@@ -70,12 +71,21 @@ public class MatchDTO implements IDTO {
         return this;
     }
 
-	public String getResult() {
-		return _result;
+	public String getResultTeam1() {
+		return _resultTeam1;
 	}
 
-	public MatchDTO setResult(String result) {
-		_result = result;
+	public MatchDTO setResultTeam1(String resultTeam1) {
+		_resultTeam1 = resultTeam1;
 		return this;
 	}
+
+    public String getResultTeam2() {
+        return _resultTeam2;
+    }
+
+    public MatchDTO setResultTeam2(String resultTeam2) {
+        _resultTeam2 = resultTeam2;
+        return this;
+    }
 }

@@ -18,7 +18,9 @@ public interface IMatch extends IRMatch {
 
     void setTeam2(String team2);
 
-    void setResult(String matchResult);
+    void setResultTeam1(String resultTeam1);
+
+    void setResultTeam2(String resultTeam2);
 
     void setReferee(String referee);
 

@@ -42,7 +42,8 @@ public class CompetitionEditViewController extends EditViewController<Tournament
     private static final String COLUMN_PROP_TIME = "date";
     private static final String COLUMN_PROP_REFEREE = "referee";
     private static final String COLUMN_PROP_COURT = "location";
-    private static final String COLUMN_PROP_RESULT = "result";
+    private static final String COLUMN_PROP_RESULT_1 = "resultTeam1";
+    private static final String COLUMN_PROP_RESULT_2 = "resultTeam2";
     private static final Label NO_CONTENT_PLACEHOLDER = new Label("No Content");
 
     @FXML
@@ -68,7 +69,9 @@ public class CompetitionEditViewController extends EditViewController<Tournament
     @FXML
     private TableColumn<MatchDTO, String> _courtCol;
     @FXML
-    private TableColumn<MatchDTO, String> _resultCol;
+    private TableColumn<MatchDTO, String> _resultTeam1Col;
+    @FXML
+    private TableColumn<MatchDTO, String> _resultTeam2Col;
     @FXML
     private TextField _competitionExternalTeamTextField;
     @FXML
@@ -151,9 +154,13 @@ public class CompetitionEditViewController extends EditViewController<Tournament
         _courtCol.setCellValueFactory(new PropertyValueFactory<>(COLUMN_PROP_COURT));
         _courtCol.setOnEditCommit(cell -> cell.getRowValue().setLocation(cell.getNewValue()));
 
-        _resultCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
-        _resultCol.setCellValueFactory(new PropertyValueFactory<>(COLUMN_PROP_RESULT));
-        _resultCol.setOnEditCommit(cell -> cell.getRowValue().setResult(cell.getNewValue()));
+        _resultTeam1Col.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
+        _resultTeam1Col.setCellValueFactory(new PropertyValueFactory<>(COLUMN_PROP_RESULT_1));
+        _resultTeam1Col.setOnEditCommit(cell -> cell.getRowValue().setResultTeam1(cell.getNewValue()));
+
+        _resultTeam2Col.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
+        _resultTeam2Col.setCellValueFactory(new PropertyValueFactory<>(COLUMN_PROP_RESULT_2));
+        _resultTeam2Col.setOnEditCommit(cell -> cell.getRowValue().setResultTeam2(cell.getNewValue()));
 
         //League is not implemented yet
         //TODO: LeagueComboBox
@@ -196,12 +203,12 @@ public class CompetitionEditViewController extends EditViewController<Tournament
                         ITournamentControllerUniversal tournamentController = COMMUNICATION_FACADE.lookupForTournamentController();
 						//Loading tournament Teams
 						List<String> teams = tournamentController.searchAllTournamentTeams(
-                                _activeTournamentDTO.getTournamentId()
+                            _activeTournamentDTO.getTournamentId()
                         );
                         
                       //Loading tournament Matches
 						List<MatchDTO>  matches = tournamentController.searchAllTournamentMatches(
-                                _activeTournamentDTO.getTournamentId()
+                            _activeTournamentDTO.getTournamentId()
                         );
 						
 
@@ -278,7 +285,6 @@ public class CompetitionEditViewController extends EditViewController<Tournament
 				    _activeTournamentDTO,
                     COMMUNICATION_FACADE.getActiveSession()
 				);
-				
 
                 _activeTournamentDTO.setTournamentId(competitionId);
 
@@ -293,6 +299,8 @@ public class CompetitionEditViewController extends EditViewController<Tournament
                     _activeTournamentDTO.getDepartment().getSport(),
                     date
                 );
+
+                return _activeTournamentDTO;
 
             } catch (ValidationException e) {
                 String context = String.format("Validation exception \"%s\" while saving tournament.", e.getCause());
@@ -398,11 +406,14 @@ public class CompetitionEditViewController extends EditViewController<Tournament
             ITournamentControllerUniversal tournamentController = COMMUNICATION_FACADE.lookupForTournamentController();
 
 			for(MatchDTO match : _matchTableView.getItems()){
-                tournamentController.createNewMatch(
+
+                Integer matchId = tournamentController.createNewMatch(
                     tournamentId,
                     match,
                     COMMUNICATION_FACADE.getActiveSession()
                 );
+
+                match.setMatchId(matchId);
             }
 
 		} catch (RemoteCommunicationException e) {

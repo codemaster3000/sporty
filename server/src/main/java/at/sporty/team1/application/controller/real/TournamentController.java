@@ -289,9 +289,10 @@ public class TournamentController implements ITournamentController {
         if (
             !inputSanitizer.isValid(matchDTO.getLocation(), DataType.TEXT) ||
             !inputSanitizer.isValid(matchDTO.getReferee(), DataType.TEXT) ||
-            !inputSanitizer.isValid(matchDTO.getResult(), DataType.TEXT) ||
             !inputSanitizer.isValid(matchDTO.getTeam1(), DataType.TEXT) ||
             !inputSanitizer.isValid(matchDTO.getTeam2(), DataType.TEXT) ||
+            !inputSanitizer.isValid(matchDTO.getResultTeam1(), DataType.TEXT) ||
+            !inputSanitizer.isValid(matchDTO.getResultTeam2(), DataType.TEXT) ||
             !inputSanitizer.isValid(matchDTO.getDate(), DataType.TEXT)
         ) {
             throw inputSanitizer.getPreparedValidationException();

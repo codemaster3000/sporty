@@ -19,7 +19,9 @@ public interface IRMatch {
 
     String getReferee();
 
-    String getResult();
+    String getResultTeam1();
+
+    String getResultTeam2();
 
     Tournament getTournament();
 }

@@ -14,7 +14,8 @@ public class Match implements IMatch {
     private String team1;
     private String team2;
     private String referee;
-    private String matchResult;
+    private String resultTeam1;
+    private String resultTeam2;
     private Tournament tournament;
 
     public Match() {
@@ -96,14 +97,26 @@ public class Match implements IMatch {
 
     @Override
     @Basic
-    @Column(name = "matchResult")
-    public String getResult() {
-        return matchResult;
+    @Column(name = "resultTeam1")
+    public String getResultTeam1() {
+        return resultTeam1;
     }
 
     @Override
-    public void setResult(String matchResult) {
-        this.matchResult = matchResult;
+    public void setResultTeam1(String resultTeam1) {
+        this.resultTeam1 = resultTeam1;
+    }
+
+    @Override
+    @Basic
+    @Column(name = "resultTeam2")
+    public String getResultTeam2() {
+        return resultTeam2;
+    }
+
+    @Override
+    public void setResultTeam2(String resultTeam2) {
+        this.resultTeam2 = resultTeam2;
     }
 
     @Override
@@ -131,7 +144,8 @@ public class Match implements IMatch {
         if (team1 != null ? !team1.equals(match.team1) : match.team1 != null) return false;
         if (team2 != null ? !team2.equals(match.team2) : match.team2 != null) return false;
         if (referee != null ? !referee.equals(match.referee) : match.referee != null) return false;
-        if (matchResult != null ? !matchResult.equals(match.matchResult) : match.matchResult != null) return false;
+        if (resultTeam1 != null ? !resultTeam1.equals(match.resultTeam1) : match.resultTeam1 != null) return false;
+        if (resultTeam2 != null ? !resultTeam2.equals(match.resultTeam2) : match.resultTeam2 != null) return false;
         return true;
     }
 
@@ -143,7 +157,8 @@ public class Match implements IMatch {
         result = 31 * result + (team1 != null ? team1.hashCode() : 0);
         result = 31 * result + (team2 != null ? team2.hashCode() : 0);
         result = 31 * result + (referee != null ? referee.hashCode() : 0);
-        result = 31 * result + (matchResult != null ? matchResult.hashCode() : 0);
+        result = 31 * result + (resultTeam1 != null ? resultTeam1.hashCode() : 0);
+        result = 31 * result + (resultTeam2 != null ? resultTeam2.hashCode() : 0);
         return result;
     }
 }

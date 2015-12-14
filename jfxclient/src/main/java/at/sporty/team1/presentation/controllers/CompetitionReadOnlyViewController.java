@@ -51,7 +51,9 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
     @FXML
     private TableColumn<MatchDTO, String> _courtCol;
     @FXML
-    private TableColumn<MatchDTO, String> _resultCol;
+    private TableColumn<MatchDTO, String> _resultTeam1Col;
+    @FXML
+    private TableColumn<MatchDTO, String> _resultTeam2Col;
     @FXML
     private Label _labelTeams;
     @FXML
@@ -139,10 +141,17 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
             return new SimpleStringProperty(NOT_AVAILABLE);
         });
 
-        _resultCol.setCellValueFactory(dto -> {
+        _resultTeam1Col.setCellValueFactory(dto -> {
             MatchDTO matchDTO = dto.getValue();
 
-            if (matchDTO != null && matchDTO.getResult() != null) return new SimpleStringProperty(matchDTO.getResult());
+            if (matchDTO != null && matchDTO.getResultTeam1() != null) return new SimpleStringProperty(matchDTO.getResultTeam1());
+            return new SimpleStringProperty(NOT_AVAILABLE);
+        });
+
+        _resultTeam2Col.setCellValueFactory(dto -> {
+            MatchDTO matchDTO = dto.getValue();
+
+            if (matchDTO != null && matchDTO.getResultTeam2() != null) return new SimpleStringProperty(matchDTO.getResultTeam2());
             return new SimpleStringProperty(NOT_AVAILABLE);
         });
     }
