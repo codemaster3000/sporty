@@ -72,10 +72,6 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
             return new SimpleStringProperty(FEE_NOT_PAID_SYMBOL);
         });
 
-        lastNameColumn.setPrefWidth(110);
-        firstNameColumn.setPrefWidth(110);
-        feePaidColumn.setPrefWidth(90);
-
         _resultTable.getColumns().add(lastNameColumn);
         _resultTable.getColumns().add(firstNameColumn);
         _resultTable.getColumns().add(feePaidColumn);

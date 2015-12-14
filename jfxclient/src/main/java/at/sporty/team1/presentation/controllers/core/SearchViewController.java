@@ -105,6 +105,8 @@ public abstract class SearchViewController<T extends IDTO> extends JfxController
         _resultTable = new TableView<>();
         _resultTable.setPlaceholder(NO_CONTENT_PLACEHOLDER);
 
+        _resultTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         //Mouse listener for search table
         _resultTable.setOnMouseClicked(e -> {
             if (isDoubleClick(e, MouseButton.PRIMARY)) {

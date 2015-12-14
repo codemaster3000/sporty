@@ -57,10 +57,6 @@ public class TournamentSearchViewController extends SearchViewController<Tournam
         dateColumn.setCellValueFactory(dto -> new SimpleStringProperty(dto.getValue().getDate()));
         placeColumn.setCellValueFactory(dto -> new SimpleStringProperty(dto.getValue().getLocation()));
 
-        sportColumn.setPrefWidth(110);
-        dateColumn.setPrefWidth(90);
-        placeColumn.setPrefWidth(110);
-
         _resultTable.getColumns().add(sportColumn);
         _resultTable.getColumns().add(dateColumn);
         _resultTable.getColumns().add(placeColumn);
