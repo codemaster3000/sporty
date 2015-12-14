@@ -27,6 +27,7 @@ import java.util.ResourceBundle;
  */
 public class MemberSearchViewController extends SearchViewController<MemberDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final CommunicationFacade COMMUNICATION_FACADE = CommunicationFacade.getInstance();
     private static final String MEMBER_LAST_NAME_COLUMN = "LAST NAME";
     private static final String MEMBER_FIRST_NAME_COLUMN = "FIRST NAME";
     private static final String MEMBER_FEE_PAID_COLUMN = "FEE PAID";
@@ -91,7 +92,7 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
             new Thread(() -> {
                 try {
 
-                    IMemberControllerUniversal memberController = CommunicationFacade.getInstance().lookupForMemberController();
+                    IMemberControllerUniversal memberController = COMMUNICATION_FACADE.lookupForMemberController();
 
                     //Performing search depending on selected search type
                     switch (_searchType.getValue()) {
@@ -102,7 +103,7 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
                                     _paidRadioButton.isSelected(),
                                     _notPaidRadioButton.isSelected()
                                 ),
-                                CommunicationFacade.getInstance().getActiveSession()
+                                COMMUNICATION_FACADE.getActiveSession()
                             );
 
                             handleReceivedResults(memberList);
@@ -116,7 +117,7 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
                                     _paidRadioButton.isSelected(),
                                     _notPaidRadioButton.isSelected()
                                 ),
-                                CommunicationFacade.getInstance().getActiveSession()
+                                COMMUNICATION_FACADE.getActiveSession()
                             );
 
                             handleReceivedResults(memberList);
@@ -130,7 +131,7 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
                                     _paidRadioButton.isSelected(),
                                     _notPaidRadioButton.isSelected()
                                 ),
-                                CommunicationFacade.getInstance().getActiveSession()
+                                COMMUNICATION_FACADE.getActiveSession()
                             );
 
                             handleReceivedResults(memberList);
@@ -144,7 +145,7 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
                                     _paidRadioButton.isSelected(),
                                     _notPaidRadioButton.isSelected()
                                 ),
-                                CommunicationFacade.getInstance().getActiveSession()
+                                COMMUNICATION_FACADE.getActiveSession()
                             );
 
                             handleReceivedResults(memberList);
@@ -170,13 +171,13 @@ public class MemberSearchViewController extends SearchViewController<MemberDTO> 
             new Thread(() -> {
                 try {
 
-                    IMemberControllerUniversal memberController = CommunicationFacade.getInstance().lookupForMemberController();
+                    IMemberControllerUniversal memberController = COMMUNICATION_FACADE.lookupForMemberController();
                     List<MemberDTO> memberList = memberController.searchAllMembers(
                         readIsFeePaidState(
                             _paidRadioButton.isSelected(),
                             _notPaidRadioButton.isSelected()
                         ),
-                        CommunicationFacade.getInstance().getActiveSession()
+                        COMMUNICATION_FACADE.getActiveSession()
                     );
 
                     handleReceivedResults(memberList);

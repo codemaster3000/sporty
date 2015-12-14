@@ -44,6 +44,7 @@ import java.util.concurrent.*;
 
 public class MainViewController extends JfxController {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final CommunicationFacade COMMUNICATION_FACADE = CommunicationFacade.getInstance();
     private static final String TEAM_TAB_CAPTION = "TEAM";
     private static final String MEMBER_TAB_CAPTION = "MEMBER";
     private static final String COMPETITION_TAB_CAPTION = "COMPETITION";
@@ -121,7 +122,7 @@ public class MainViewController extends JfxController {
             try {
                 MESSAGE_PULL_SCHEDULER.scheduleAtFixedRate(
                     new NotificationPullerTask(
-                        CommunicationFacade.getInstance().getActiveSession(),
+                        COMMUNICATION_FACADE.getActiveSession(),
                         USER_MESSAGES
                     ),
                     MESSAGE_PULL_INIT_DELAY,
@@ -141,7 +142,7 @@ public class MainViewController extends JfxController {
         MESSAGE_PULL_SCHEDULER.shutdownNow();
         USER_MESSAGES.clear();
 
-        CommunicationFacade.getInstance().logout();
+        COMMUNICATION_FACADE.logout();
     }
 
     private boolean performLogin() {
@@ -153,7 +154,7 @@ public class MainViewController extends JfxController {
 
                 try {
                     //Authorising
-                    boolean isSuccessful = CommunicationFacade.getInstance().authorize(
+                    boolean isSuccessful = COMMUNICATION_FACADE.authorize(
                         loginData.getKey(),
                         loginData.getValue()
                     );
@@ -292,7 +293,7 @@ public class MainViewController extends JfxController {
     }
 
     private String getUserName() {
-        MemberDTO user = CommunicationFacade.getInstance().getExtendedActiveSession().getUser();
+        MemberDTO user = COMMUNICATION_FACADE.getExtendedActiveSession().getUser();
 
         StringBuilder sb = new StringBuilder();
         if (user.getLastName() != null) sb.append(user.getLastName());
@@ -302,7 +303,7 @@ public class MainViewController extends JfxController {
     }
 
     private String getUserRole() {
-        MemberDTO user = CommunicationFacade.getInstance().getExtendedActiveSession().getUser();
+        MemberDTO user = COMMUNICATION_FACADE.getExtendedActiveSession().getUser();
         return user.getRole() != null ? user.getRole() : null;
     }
 }

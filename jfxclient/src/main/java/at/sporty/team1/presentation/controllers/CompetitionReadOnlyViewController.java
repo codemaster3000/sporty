@@ -28,8 +28,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CompetitionReadOnlyViewController extends ConsumerViewController<TournamentDTO> {
-
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final CommunicationFacade COMMUNICATION_FACADE = CommunicationFacade.getInstance();
     private static final String NOT_AVAILABLE = "N/A";
     private static final SimpleBooleanProperty EDIT_VISIBILITY_PROPERTY = new SimpleBooleanProperty(false);
     private static final SimpleBooleanProperty CREATE_VISIBILITY_PROPERTY = new SimpleBooleanProperty(false);
@@ -71,19 +71,19 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         _createTournamentButton.visibleProperty().bind(
-            CommunicationFacade.SESSION_AVAILABLE_PROPERTY.and(
+            COMMUNICATION_FACADE.getSessionAvailableProperty().and(
             CREATE_VISIBILITY_PROPERTY)
         );
 
         _editTournamentButton.visibleProperty().bind(
-            CommunicationFacade.SESSION_AVAILABLE_PROPERTY.and(
+            COMMUNICATION_FACADE.getSessionAvailableProperty().and(
             EDIT_VISIBILITY_PROPERTY.and(
             ACTIVE_DTO.isNotNull()))
         );
 
-        CommunicationFacade.SESSION_AVAILABLE_PROPERTY.addListener((p, newValue, oldValue) -> {
-            if (CommunicationFacade.getInstance().getExtendedActiveSession() != null) {
-                String role = CommunicationFacade.getInstance().getExtendedActiveSession().getUser().getRole();
+        COMMUNICATION_FACADE.getSessionAvailableProperty().addListener((p, newValue, oldValue) -> {
+            if (COMMUNICATION_FACADE.getExtendedActiveSession() != null) {
+                String role = COMMUNICATION_FACADE.getExtendedActiveSession().getUser().getRole();
 
                 //enabling gui options for specific roles
                 switch (role) {
@@ -166,7 +166,7 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
 
                 try {
 
-                    ITournamentControllerUniversal tournamentController = CommunicationFacade.getInstance().lookupForTournamentController();
+                    ITournamentControllerUniversal tournamentController = COMMUNICATION_FACADE.lookupForTournamentController();
 
                     //Teams
                     List<String> teams = tournamentController.searchAllTournamentTeams(tournamentDTO.getTournamentId());
@@ -220,7 +220,7 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
     private void onCreateTournament(ActionEvent event) {
     	
     	try {
-			List<DepartmentDTO> departments = CommunicationFacade.getInstance().lookupForDepartmentController().searchAllDepartments();
+			List<DepartmentDTO> departments = COMMUNICATION_FACADE.lookupForDepartmentController().searchAllDepartments();
 			
 			if(departments != null && !departments.isEmpty()){
 				

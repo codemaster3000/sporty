@@ -13,6 +13,7 @@ import java.util.List;
 
 public class NotificationPullerTask implements Runnable {
 	private static final Logger LOGGER = LogManager.getLogger();
+	private static final CommunicationFacade COMMUNICATION_FACADE = CommunicationFacade.getInstance();
 
     private final ObservableList<MessageDTO> _userMessages;
     private final SessionDTO _currentSession;
@@ -26,8 +27,7 @@ public class NotificationPullerTask implements Runnable {
 	public void run() {
 		try {
 
-			CommunicationFacade communicationFacade = CommunicationFacade.getInstance();
-			INotificationControllerUniversal notificationController = communicationFacade.lookupForNotificationController();
+			INotificationControllerUniversal notificationController = COMMUNICATION_FACADE.lookupForNotificationController();
 
 			//Pull notifications from server (NotificationController)
 			List<MessageDTO> messageList = notificationController.pullMessages(_currentSession);

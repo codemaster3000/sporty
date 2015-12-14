@@ -26,6 +26,7 @@ import java.util.*;
 
 public class MemberEditViewController extends EditViewController<MemberDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final CommunicationFacade COMMUNICATION_FACADE = CommunicationFacade.getInstance();
     private static final Map<String, DepartmentDTO> SPORT_MAP = new HashMap<>();
     private static final String VIEW_TEXT_HEADER = "MEMBER EDITING VIEW";
     private static final String SUCCESSFUL_MEMBER_SAVE = "Member was successfully saved.";
@@ -124,7 +125,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
 
             try {
 
-                IDepartmentControllerUniversal departmentController = CommunicationFacade.getInstance().lookupForDepartmentController();
+                IDepartmentControllerUniversal departmentController = COMMUNICATION_FACADE.lookupForDepartmentController();
                 List<DepartmentDTO> departments = departmentController.searchAllDepartments();
 
                 if (!departments.isEmpty()) {
@@ -231,11 +232,11 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
 
             try {
 
-                IMemberControllerUniversal memberController = CommunicationFacade.getInstance().lookupForMemberController();
+                IMemberControllerUniversal memberController = COMMUNICATION_FACADE.lookupForMemberController();
 
                 List<DepartmentDTO> departments = memberController.loadMemberDepartments(
                     _activeMemberDTO.getMemberId(),
-                    CommunicationFacade.getInstance().getActiveSession()
+                    COMMUNICATION_FACADE.getActiveSession()
                 );
 
                 if (departments != null) {
@@ -268,16 +269,16 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
 
                 List<TeamDTO> teams = memberController.loadMemberTeams(
                     _activeMemberDTO.getMemberId(),
-                    CommunicationFacade.getInstance().getActiveSession()
+                    COMMUNICATION_FACADE.getActiveSession()
                 );
 
                 if (teams != null) {
 
                     for (TeamDTO team : teams) {
 
-                        DepartmentDTO department = CommunicationFacade.getInstance().lookupForTeamController().loadTeamDepartment(
+                        DepartmentDTO department = COMMUNICATION_FACADE.lookupForTeamController().loadTeamDepartment(
                             team.getTeamId(),
-                            CommunicationFacade.getInstance().getActiveSession()
+                            COMMUNICATION_FACADE.getActiveSession()
                         );
 
                         if (department != null) {
@@ -409,10 +410,10 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                         .setIsFeePaid(false)
                         .setRole(roleComboBox.getSelectionModel().getSelectedItem().getDSValue());
 
-                IMemberControllerUniversal memberController = CommunicationFacade.getInstance().lookupForMemberController();
+                IMemberControllerUniversal memberController = COMMUNICATION_FACADE.lookupForMemberController();
                 Integer memberId = memberController.createOrSaveMember(
                     _activeMemberDTO,
-                    CommunicationFacade.getInstance().getActiveSession()
+                    COMMUNICATION_FACADE.getActiveSession()
                 );
 
                 _activeMemberDTO.setMemberId(memberId);
@@ -448,14 +449,14 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
 
     private void saveOrUpdateMemberDepartments(Integer memberId) {
         try {
-            IMemberControllerUniversal memberController = CommunicationFacade.getInstance().lookupForMemberController();
+            IMemberControllerUniversal memberController = COMMUNICATION_FACADE.lookupForMemberController();
 
             if (memberSportCheckboxBaseball.isSelected()) {
                 //Saving department for member
                 memberController.assignMemberToDepartment(
                     memberId,
                     SPORT_MAP.get(SPORT_BASEBALL).getDepartmentId(),
-                    CommunicationFacade.getInstance().getActiveSession()
+                    COMMUNICATION_FACADE.getActiveSession()
                 );
             }
 
@@ -464,7 +465,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                 memberController.assignMemberToDepartment(
                     memberId,
                     SPORT_MAP.get(SPORT_FOOTBALL).getDepartmentId(),
-                    CommunicationFacade.getInstance().getActiveSession()
+                    COMMUNICATION_FACADE.getActiveSession()
                 );
             }
 
@@ -473,7 +474,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                 memberController.assignMemberToDepartment(
                     memberId,
                     SPORT_MAP.get(SPORT_SOCCER).getDepartmentId(),
-                    CommunicationFacade.getInstance().getActiveSession()
+                    COMMUNICATION_FACADE.getActiveSession()
                 );
             }
 
@@ -482,7 +483,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                 memberController.assignMemberToDepartment(
                     memberId,
                     SPORT_MAP.get(SPORT_VOLLEYBALL).getDepartmentId(),
-                    CommunicationFacade.getInstance().getActiveSession()
+                    COMMUNICATION_FACADE.getActiveSession()
                 );
             }
 
@@ -501,7 +502,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
     private void saveOrUpdateMemberTeams(Integer memberId) {
         try {
 
-            IMemberControllerUniversal memberController = CommunicationFacade.getInstance().lookupForMemberController();
+            IMemberControllerUniversal memberController = COMMUNICATION_FACADE.lookupForMemberController();
 
             if (memberSportCheckboxBaseball.isSelected()) {
                 //Baseball team holen
@@ -512,7 +513,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                     memberController.assignMemberToTeam(
                         memberId,
                         teamDTO.getTeamId(),
-                        CommunicationFacade.getInstance().getActiveSession()
+                        COMMUNICATION_FACADE.getActiveSession()
                     );
                 }
             }
@@ -526,7 +527,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                     memberController.assignMemberToTeam(
                         memberId,
                         teamDTO.getTeamId(),
-                        CommunicationFacade.getInstance().getActiveSession()
+                        COMMUNICATION_FACADE.getActiveSession()
                     );
                 }
             }
@@ -540,7 +541,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                     memberController.assignMemberToTeam(
                         memberId,
                         teamDTO.getTeamId(),
-                        CommunicationFacade.getInstance().getActiveSession()
+                        COMMUNICATION_FACADE.getActiveSession()
                     );
                 }
             }
@@ -554,7 +555,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
                     memberController.assignMemberToTeam(
                         memberId,
                         teamDTO.getTeamId(),
-                        CommunicationFacade.getInstance().getActiveSession()
+                        COMMUNICATION_FACADE.getActiveSession()
                     );
                 }
             }
