@@ -11,13 +11,12 @@ import javax.jws.WebService;
  * Created by f00 on 14.12.15.
  */
 @Stateless
-@WebService(serviceName="ResultService")
+@WebService(serviceName="resultService")
 public class ResultPersistentBean /*implements ResultPersistentBeanRemote*/ {
 
 
     @WebMethod(operationName="getResult")
     public String getResult(String matchId)  {
-        //return entityManager.createQuery("From Books").getResultList();
 
         Match match = PersistenceFacade.getNewGenericDAO(Match.class).findById(matchId);
 
