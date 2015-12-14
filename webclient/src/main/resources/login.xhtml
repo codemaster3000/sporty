@@ -1,0 +1,32 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:jsf="http://xmlns.jcp.org/jsf"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        template="WEB-INF/template.xhtml">
+    <ui:define name="title">Login</ui:define>
+
+    <ui:define name="content">
+        <div class="contentContainer">
+            <div class="login-card animated fadeIn">
+                <div class="login-cardLeftCell">
+                    <h1 class="logo">SPORTY</h1>
+                    <div class="hSeparator"></div>
+                </div>
+                <form jsf:rendered="${empty user}" class="login-cardRightCell">
+                    <input type="userName" placeholder="User-Name" jsf:id="userName" jsf:value="#{loginController.userName}"/>
+                    <input type="password" placeholder="Password" jsf:id="password"  jsf:value="#{loginController.password}"/>
+                    <input type="submit" class="login-submit" value="login" jsf:action="#{loginController.login}"/>
+                </form>
+                <div jsf:rendered="${not empty user}" class="userContainer">
+                    <!-- TODO foward instead of this vvvv -->
+                    <div class="userInitialsCircle">#{userOptionsController.userInitials}</div>
+                    <div class="userName">${user}</div>
+                    <h:form>
+                        <h:commandButton type="submit" class="logout-button" value="logout" action="#{loginController.logout}"/>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
