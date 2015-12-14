@@ -100,4 +100,13 @@ public interface IMemberDAO extends IGenericDAO<Member> {
      */
     List<Member> findByTournamentTeamName(String teamName)
     throws PersistenceException;
+
+    /**
+     * Returns all department heads of all departments to which given member is assigned.
+     *
+     * @param memberId member to be checked
+     * @return List<Member> of all department heads of the given members.
+     */
+    List<Member> findDepartmentHeadsOfMember(Integer memberId)
+    throws PersistenceException;
 }

@@ -36,6 +36,7 @@ public class NotificationController implements INotificationController {
             session,
             AccessPolicy.or(
                 BasicAccessPolicies.isInPermissionBound(UserRole.ADMIN),
+                BasicAccessPolicies.isUnassignedMember(messageDTO.getRecipientId()),
                 BasicAccessPolicies.isTrainerOfMember(messageDTO.getRecipientId()),
                 BasicAccessPolicies.isDepartmentHeadOfMember(messageDTO.getRecipientId())
             )

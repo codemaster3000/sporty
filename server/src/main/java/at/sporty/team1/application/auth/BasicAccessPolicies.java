@@ -7,6 +7,7 @@ import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.shared.dtos.MemberDTO;
 import at.sporty.team1.shared.enums.UserRole;
 
+import java.util.List;
 import java.util.function.BiFunction;
 
 /**
@@ -32,6 +33,17 @@ public class BasicAccessPolicies {
         return AccessPolicy.and(
             isInPermissionBound(UserRole.MEMBER),
             AccessPolicy.simplePolicy(user -> user.getMemberId().equals(memberId))
+        );
+    }
+
+
+    public static <T extends IMember> AccessPolicy<T> isUnassignedMember(Integer memberId) {
+        return AccessPolicy.and(
+            isInPermissionBound(UserRole.DEPARTMENT_HEAD),
+            AccessPolicy.simplePolicy(user -> {
+                List<? extends IMember> departmentHeads = PersistenceFacade.getNewMemberDAO().findDepartmentHeadsOfMember(memberId);
+                return departmentHeads == null || departmentHeads.isEmpty();
+            })
         );
     }
 

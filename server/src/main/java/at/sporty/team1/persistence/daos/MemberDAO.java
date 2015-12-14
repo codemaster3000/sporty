@@ -1,6 +1,9 @@
 package at.sporty.team1.persistence.daos;
 
+import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.Member;
+import at.sporty.team1.domain.interfaces.IMember;
+import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.persistence.api.IMemberDAO;
 import at.sporty.team1.persistence.util.PropertyPair;
 import at.sporty.team1.persistence.util.TooManyResultsException;
@@ -13,6 +16,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Represents a concrete DAO for Members
@@ -27,6 +31,8 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
     private static final String DELIMITER = " ";
     private static final String IS_TOURNAMENT_SQUAD = "isTournamentSquad";
     private static final String PROP_TEAM_NAME = "teamName";
+    private static final String PROP_DEPARTMENTS = "departments";
+    private static final String PROP_DEPARTMENT_HEAD = "departmentHead";
 
     /**
      * Creates a new patient DAO.
@@ -159,5 +165,24 @@ public class MemberDAO extends HibernateGenericDAO<Member> implements IMemberDAO
             rawQuery,
             new PropertyPair<>(PROP_TEAM_NAME, Util.wrapInWildcard(teamName))
         );
+    }
+
+    @Override
+    public List<Member> findDepartmentHeadsOfMember(Integer memberId)
+    throws PersistenceException {
+
+        if (memberId == null) return null;
+
+        Member member = findById(memberId);
+        if (member == null) return null;
+
+        PersistenceFacade.forceLoadLazyProperty(member, Member::getDepartments);
+
+        return member.getDepartments().stream()
+            .map(department -> {
+                PersistenceFacade.forceLoadLazyProperty(department, Department::getDepartmentHead);
+                return department.getDepartmentHead();
+            })
+            .collect(Collectors.toList());
     }
 }

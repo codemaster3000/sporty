@@ -18,5 +18,6 @@ public interface IMatchDAO extends IGenericDAO<Match>{
      * @return List<Match> List of all Matches that are assigned to the given tournament.
      * @throws PersistenceException
      */
-    List<Match> findByTournament(Tournament tournament) throws PersistenceException;
+    List<Match> findByTournament(Tournament tournament)
+    throws PersistenceException;
 }

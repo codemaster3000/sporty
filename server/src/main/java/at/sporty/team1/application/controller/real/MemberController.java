@@ -15,6 +15,7 @@ import at.sporty.team1.misc.InputSanitizer;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.shared.dtos.*;
 import at.sporty.team1.shared.enums.DataType;
+import at.sporty.team1.shared.enums.MessageType;
 import at.sporty.team1.shared.enums.UserRole;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
@@ -149,6 +150,9 @@ public class MemberController implements IMemberController {
             PersistenceFacade.getNewMemberDAO().saveOrUpdate(member);
 
             LOGGER.info("Member \"{} {}\" was successfully saved.", memberDTO.getFirstName(), memberDTO.getLastName());
+
+            sendNewMemberCreatedMessage(member.getMemberId(), session);
+
             return member.getMemberId();
         } catch (PersistenceException e) {
             LOGGER.error("Error occurred while communicating with DB.", e);
@@ -592,6 +596,8 @@ public class MemberController implements IMemberController {
 
             PersistenceFacade.getNewMemberDAO().saveOrUpdate(member);
 
+            sendNewMemberInTeamMessage(memberId, team.getTeamName(), session);
+
         } catch (PersistenceException e) {
             LOGGER.error(
                 "An error occurred while assigning \"Member #{} to Team #{}\".",
@@ -711,6 +717,83 @@ public class MemberController implements IMemberController {
 
             //filter for members who didn't pay their Fee
             return rawResults.stream().filter(notPaidPredicate).collect(Collectors.toList());
+        }
+    }
+
+    /**
+     * Sends a notification message about newly created Member to all department heads
+     * dependent on assigned to member departments.
+     *
+     * @param memberId Newly created Member.
+     * @param session Session object.
+     */
+    private void sendNewMemberCreatedMessage(Integer memberId, SessionDTO session) {
+        try {
+
+            MessageDTO newMemberMessage = new MessageDTO();
+            newMemberMessage.setMessageSubject("New member in Department.");
+            newMemberMessage.setMessageContent("New member was created. (id:" + memberId + ")");
+            newMemberMessage.setMessageType(MessageType.PLAIN_TEXT);
+            newMemberMessage.setSenderId(memberId);
+
+            NotificationController notificationController = new NotificationController();
+
+            List<? extends IMember> departmentHeads = PersistenceFacade.getNewMemberDAO().findDepartmentHeadsOfMember(memberId);
+
+            if (departmentHeads != null && !departmentHeads.isEmpty()) {
+
+                for (IMember departmentHead : departmentHeads) {
+                    newMemberMessage.setRecipientId(departmentHead.getMemberId());
+                    notificationController.sendMessage(newMemberMessage, session);
+                }
+            }
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurred while loading Member #{}.",
+                memberId,
+                e
+            );
+        } catch (ValidationException | NotAuthorisedException e) {
+            LOGGER.error(
+                "Unexpected exception occurred while sending a notification about new Member #{}",
+                memberId,
+                e
+            );
+        }
+    }
+
+    /**
+     * Sends a message to the given Member to notify him about new participation in team.
+     *
+     * @param memberId Member to be notified.
+     * @param teamName Name of the team to which given member will be assigned.
+     * @param session Session object.
+     */
+    private void sendNewMemberInTeamMessage(Integer memberId, String teamName, SessionDTO session) {
+        try {
+
+            MessageDTO newMemberMessage = new MessageDTO();
+            newMemberMessage.setMessageSubject("New participation request.");
+            newMemberMessage.setMessageContent("You was assigned to team " + teamName + ".");
+            newMemberMessage.setMessageType(MessageType.CONFIRMATION_REQUEST);
+            newMemberMessage.setRecipientId(memberId);
+            newMemberMessage.setSenderId(session.getUserId());
+
+            new NotificationController().sendMessage(newMemberMessage, session);
+
+        } catch (PersistenceException e) {
+            LOGGER.error(
+                "An error occurred while loading Member #{}.",
+                memberId,
+                e
+            );
+        } catch (ValidationException | NotAuthorisedException e) {
+            LOGGER.error(
+                "Unexpected exception occurred while sending a notification about new Member #{}",
+                memberId,
+                e
+            );
         }
     }
 }
