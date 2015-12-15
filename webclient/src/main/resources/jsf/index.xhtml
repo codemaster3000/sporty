@@ -45,11 +45,11 @@
                         Test: List of tournaments
                         <br />
 					<!-- show selected evaluation entries -->
-					<h:dataTable value="#{tournamentPOJO.tournamentList}"
+					<h:dataTable value="#{tournamentWebController.allTournaments}"
 						var="tournaments">
 						<h:column>
 							<f:facet name="header">Tournaments</f:facet> ${tournaments}
-                            </h:column>
+						</h:column>
 					</h:dataTable>
 					<!--  include your content file or uncomment the include below and create content.xhtml in this directory -->
 					<!-- <div> -->

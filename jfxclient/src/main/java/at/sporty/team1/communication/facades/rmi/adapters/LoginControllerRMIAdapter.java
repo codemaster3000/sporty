@@ -20,12 +20,20 @@ public class LoginControllerRMIAdapter implements ILoginControllerUniversal {
 	@Override
 	public byte[] getServerPublicKey()
     throws RemoteCommunicationException {
-		return _iLoginControllerRMI.getServerPublicKey();
+		try {
+			return _iLoginControllerRMI.getServerPublicKey();
+		} catch (RemoteException e) {
+			throw new RemoteCommunicationException(e);
+		}
 	}
 
 	@Override
 	public SessionDTO authorize(AuthorisationDTO authorisationDTO)
-    throws RemoteCommunicationException, SecurityException {
-		return _iLoginControllerRMI.authorize(authorisationDTO);
+	throws RemoteCommunicationException, SecurityException {
+		try {
+			return _iLoginControllerRMI.authorize(authorisationDTO);
+		} catch (RemoteException e) {
+			throw new RemoteCommunicationException(e);
+		}
 	}
 }
