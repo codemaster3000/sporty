@@ -20,9 +20,10 @@ public class ResultPersistentBean /*implements ResultPersistentBeanRemote*/ {
 
     @WebMethod(operationName="getResult")
     public String getResult(String matchId)  {
+
         try {
 
-            //TODO replace with real JSON
+            //TODO replace with real JSON -> import com.google.gson;
 
             /* Validating Input */
             if (matchId == null) return "{\"response\":\"unknown entity\"}";
@@ -42,11 +43,12 @@ public class ResultPersistentBean /*implements ResultPersistentBeanRemote*/ {
 
             return sb.toString();
 
+
         } catch (PersistenceException e) {
             LOGGER.error(
-                "An error occurred while searching Match by id #{}.",
-                matchId,
-                e
+                    "An error occurred while searching Match by id #{}.",
+                    matchId,
+                    e
             );
             return null;
         }
