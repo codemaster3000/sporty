@@ -1,9 +1,7 @@
 package at.sporty.team1.webservice;
 
 import at.sporty.team1.domain.Match;
-import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.persistence.PersistenceFacade;
-import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

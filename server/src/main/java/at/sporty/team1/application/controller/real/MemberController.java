@@ -150,10 +150,8 @@ public class MemberController implements IMemberController {
             PersistenceFacade.getNewMemberDAO().saveOrUpdate(member);
 
             LOGGER.info("Member \"{} {}\" was successfully saved.", memberDTO.getFirstName(), memberDTO.getLastName());
-
-            sendNewMemberCreatedMessage(member.getMemberId(), session);
-
             return member.getMemberId();
+
         } catch (PersistenceException e) {
             LOGGER.error("Error occurred while communicating with DB.", e);
             return null;
@@ -471,6 +469,8 @@ public class MemberController implements IMemberController {
 
             PersistenceFacade.getNewMemberDAO().saveOrUpdate(member);
 
+            sendNewMemberInDepartmentMessage(memberId, department, session);
+
         } catch (PersistenceException e) {
             LOGGER.error(
                 "An error occurred while assigning \"Member #{} to Department #{}\".",
@@ -596,7 +596,7 @@ public class MemberController implements IMemberController {
 
             PersistenceFacade.getNewMemberDAO().saveOrUpdate(member);
 
-            sendNewMemberInTeamMessage(memberId, team.getTeamName(), session);
+            sendNewMemberInTeamMessage(memberId, team, session);
 
         } catch (PersistenceException e) {
             LOGGER.error(
@@ -721,32 +721,28 @@ public class MemberController implements IMemberController {
     }
 
     /**
-     * Sends a notification message about newly created Member to all department heads
-     * dependent on assigned to member departments.
+     * Sends a message to the given Member to notify him/her about new participation in department.
      *
-     * @param memberId Newly created Member.
+     * @param memberId Member to be notified.
+     * @param department Department to which given member will be assigned.
      * @param session Session object.
      */
-    private void sendNewMemberCreatedMessage(Integer memberId, SessionDTO session) {
+    private void sendNewMemberInDepartmentMessage(Integer memberId, Department department, SessionDTO session) {
         try {
 
             MessageDTO newMemberMessage = new MessageDTO();
             newMemberMessage.setMessageSubject("New member in Department.");
-            newMemberMessage.setMessageContent("New member was created. (id:" + memberId + ")");
+            newMemberMessage.setMessageContent("New member was assigned. (id:" + memberId + ")");
             newMemberMessage.setMessageType(MessageType.PLAIN_TEXT);
             newMemberMessage.setSenderId(memberId);
 
             NotificationController notificationController = new NotificationController();
 
-            List<? extends IMember> departmentHeads = PersistenceFacade.getNewMemberDAO().findDepartmentHeadsOfMember(memberId);
+            //loading all departments for the given member
+            PersistenceFacade.forceLoadLazyProperty(department, Department::getDepartmentHead);
 
-            if (departmentHeads != null && !departmentHeads.isEmpty()) {
-
-                for (IMember departmentHead : departmentHeads) {
-                    newMemberMessage.setRecipientId(departmentHead.getMemberId());
-                    notificationController.sendMessage(newMemberMessage, session);
-                }
-            }
+            newMemberMessage.setRecipientId(department.getDepartmentHead().getMemberId());
+            notificationController.sendMessage(newMemberMessage, session);
 
         } catch (PersistenceException e) {
             LOGGER.error(
@@ -764,18 +760,18 @@ public class MemberController implements IMemberController {
     }
 
     /**
-     * Sends a message to the given Member to notify him about new participation in team.
+     * Sends a message to the given Member to notify him/her about new participation in team.
      *
      * @param memberId Member to be notified.
-     * @param teamName Name of the team to which given member will be assigned.
+     * @param team Team to which given member will be assigned.
      * @param session Session object.
      */
-    private void sendNewMemberInTeamMessage(Integer memberId, String teamName, SessionDTO session) {
+    private void sendNewMemberInTeamMessage(Integer memberId, Team team, SessionDTO session) {
         try {
 
             MessageDTO newMemberMessage = new MessageDTO();
             newMemberMessage.setMessageSubject("New participation request.");
-            newMemberMessage.setMessageContent("You was assigned to team " + teamName + ".");
+            newMemberMessage.setMessageContent("You was assigned to team " + team.getTeamName() + ".");
             newMemberMessage.setMessageType(MessageType.CONFIRMATION_REQUEST);
             newMemberMessage.setRecipientId(memberId);
             newMemberMessage.setSenderId(session.getUserId());

@@ -4,7 +4,6 @@ import at.sporty.team1.shared.dtos.AuthorisationDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
 import at.sporty.team1.shared.exceptions.SecurityException;
 
-import javax.ejb.Local;
 import javax.ejb.Remote;
 
 /**

@@ -1,45 +1,36 @@
 package at.sporty.team1.application.jms;
 
 import at.sporty.team1.shared.dtos.MessageDTO;
+import com.sun.messaging.ConnectionFactory;
 import com.sun.messaging.Queue;
-import com.sun.messaging.QueueConnectionFactory;
 
-import javax.jms.JMSConsumer;
-import javax.jms.JMSContext;
-import javax.jms.JMSException;
-import javax.jms.ObjectMessage;
-import java.util.LinkedList;
-import java.util.List;
+import javax.jms.*;
+import javax.naming.NamingException;
 
 /**
  * Created by sereGkaluv on 30-Nov-15.
  */
 public class ConsumerJMS {
     private static final String DEFAULT_HOST = "localhost";
-    private static final int DEFAULT_PORT = 3700;
+    private static final int DEFAULT_PORT = 7676;
+    private static final int TIMEOUT = 5000;
 
-    public static List<MessageDTO> pullMessages(Integer memberId)
-    throws JMSException {
+    public static MessageDTO pullMessage(Integer memberId)
+    throws JMSException, NamingException {
 
-        QueueConnectionFactory factory = JMSFacade.lookupForQueueConnectionFactory(DEFAULT_HOST, DEFAULT_PORT, true);
-        JMSContext jmsContext = factory.createContext();
-
+        ConnectionFactory factory = JMSFacade.lookupForConnectionFactory(DEFAULT_HOST, DEFAULT_PORT, true);
         Queue consumerQueue = JMSFacade.lookupForQueue(memberId);
 
-        JMSConsumer consumer = JMSFacade.getJMSConsumer(consumerQueue, jmsContext);
+        Connection connection = factory.createConnection();
 
-        List<MessageDTO> messages = new LinkedList<>();
-        MessageDTO tempMessage;
+        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        connection.start();
 
-        do {
+        MessageConsumer consumer = session.createConsumer(consumerQueue);
 
-            tempMessage = (MessageDTO) ((ObjectMessage) consumer.receive()).getObject();
-            if (tempMessage != null) messages.add(tempMessage);
+        ObjectMessage message  = (ObjectMessage) consumer.receive(TIMEOUT);
+        connection.close();
 
-        } while (tempMessage != null);
-
-        jmsContext.close();
-
-        return messages;
+        return message != null ? (MessageDTO) message.getObject() : null;
     }
 }

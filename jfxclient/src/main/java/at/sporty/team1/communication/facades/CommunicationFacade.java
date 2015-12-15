@@ -53,16 +53,22 @@ public class CommunicationFacade implements ICommunicationFacade {
         switch (communicationType) {
             case RMI: {
                 _subjectCommunicationFacade = new CommunicationFacadeRMI(properties);
+
+                LOGGER.info("Starting client in RMI mode.");
                 break;
             }
 
             case EJB: {
                 _subjectCommunicationFacade = new CommunicationFacadeEJB(properties);
+
+                LOGGER.info("Starting client in EJB mode.");
                 break;
             }
 
             default: {
                 _subjectCommunicationFacade = new CommunicationFacadeEJB(properties);
+
+                LOGGER.info("Starting client in Default(RMI) mode.");
                 break;
             }
         }

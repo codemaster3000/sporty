@@ -1,31 +1,35 @@
 package at.sporty.team1.application.jms;
 
 import at.sporty.team1.shared.dtos.MessageDTO;
+import com.sun.messaging.ConnectionFactory;
 import com.sun.messaging.Queue;
-import com.sun.messaging.QueueConnectionFactory;
 
-import javax.jms.JMSContext;
-import javax.jms.JMSException;
-import javax.jms.JMSProducer;
+import javax.jms.*;
+import javax.naming.NamingException;
 
 /**
  * Created by sereGkaluv on 30-Nov-15.
  */
 public class ProducerJMS {
     private static final String DEFAULT_HOST = "localhost";
-    private static final int DEFAULT_PORT = 3700;
+    private static final int DEFAULT_PORT = 7676;
 
     public static void sendMessage(MessageDTO messageDTO)
-    throws JMSException {
+    throws JMSException, NamingException {
 
-        QueueConnectionFactory factory = JMSFacade.lookupForQueueConnectionFactory(DEFAULT_HOST, DEFAULT_PORT, true);
-        JMSContext jmsContext = factory.createContext();
+        ConnectionFactory factory = JMSFacade.lookupForConnectionFactory(DEFAULT_HOST, DEFAULT_PORT, true);
+        Queue producerQueue = JMSFacade.lookupForQueue(messageDTO.getRecipientId());
 
-        JMSProducer producer = JMSFacade.getJMSProducer(jmsContext);
+        Connection connection = factory.createConnection();
 
-        Queue recipientQueue = JMSFacade.lookupForQueue(messageDTO.getRecipientId());
-        producer.send(recipientQueue, messageDTO);
+        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        connection.start();
 
-        jmsContext.close();
+        MessageProducer producer = session.createProducer(producerQueue);
+
+        ObjectMessage message = session.createObjectMessage(messageDTO);
+        producer.send(message, DeliveryMode.NON_PERSISTENT, 4, 0);
+
+        connection.close();
     }
 }

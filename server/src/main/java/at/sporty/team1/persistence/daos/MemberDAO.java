@@ -2,7 +2,6 @@ package at.sporty.team1.persistence.daos;
 
 import at.sporty.team1.domain.Department;
 import at.sporty.team1.domain.Member;
-import at.sporty.team1.domain.interfaces.IMember;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.persistence.api.IMemberDAO;
 import at.sporty.team1.persistence.util.PropertyPair;

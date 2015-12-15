@@ -5,21 +5,22 @@ import at.sporty.team1.communication.facades.api.INotificationControllerUniversa
 import at.sporty.team1.shared.dtos.MessageDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
-import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class NotificationPullerTask implements Runnable {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final CommunicationFacade COMMUNICATION_FACADE = CommunicationFacade.getInstance();
 
-    private final ObservableList<MessageDTO> _userMessages;
+    private final Consumer<Collection<MessageDTO>> _messageConsumer;
     private final SessionDTO _currentSession;
 
-    public NotificationPullerTask(SessionDTO currentSession, ObservableList<MessageDTO> userMessages) {
-        _userMessages = userMessages;
+    public NotificationPullerTask(SessionDTO currentSession, Consumer<Collection<MessageDTO>> messageConsumer) {
+        _messageConsumer = messageConsumer;
         _currentSession = currentSession;
     }
 
@@ -31,9 +32,11 @@ public class NotificationPullerTask implements Runnable {
 
 			//Pull notifications from server (NotificationController)
 			List<MessageDTO> messageList = notificationController.pullMessages(_currentSession);
-			if (messageList != null && !messageList.isEmpty()) _userMessages.addAll(messageList);
+			if (messageList != null && !messageList.isEmpty()) _messageConsumer.accept(messageList);
 
-		} catch (NotAuthorisedException | RemoteCommunicationException e) {
+		} catch (RemoteCommunicationException e) {
+			LOGGER.error("Error occurs while pulling messages from notification puller thread.", e);
+		} catch (NotAuthorisedException e) {
 			LOGGER.error("Message pull request was rejected. Not enough permissions.", e);
 		}
 	}

@@ -1,13 +1,11 @@
 package server;
 
 import at.sporty.team1.application.controller.real.MemberController;
-import at.sporty.team1.application.controller.real.TournamentController;
 import at.sporty.team1.domain.Member;
 import at.sporty.team1.domain.Tournament;
 import at.sporty.team1.persistence.PersistenceFacade;
 import at.sporty.team1.shared.dtos.DTOPair;
 import at.sporty.team1.shared.dtos.DepartmentDTO;
-import at.sporty.team1.shared.dtos.MatchDTO;
 import at.sporty.team1.shared.dtos.TeamDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;

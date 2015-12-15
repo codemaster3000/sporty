@@ -10,10 +10,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
 import java.util.Properties;
 
 public class CommunicationFacadeEJB implements ICommunicationFacade {

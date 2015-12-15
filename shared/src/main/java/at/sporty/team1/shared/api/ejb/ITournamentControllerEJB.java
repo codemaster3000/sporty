@@ -7,7 +7,6 @@ import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.shared.exceptions.ValidationException;
 
-import javax.ejb.Local;
 import javax.ejb.Remote;
 import java.util.List;
 

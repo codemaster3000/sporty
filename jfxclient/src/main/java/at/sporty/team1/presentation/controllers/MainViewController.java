@@ -36,10 +36,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import java.net.URL;
 import java.security.InvalidKeyException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.*;
 
 public class MainViewController extends JfxController {
@@ -55,7 +52,7 @@ public class MainViewController extends JfxController {
     private static final SimpleBooleanProperty LOGIN_BUTTON_VISIBILITY_PROPERTY = new SimpleBooleanProperty(true);
     private static final Map<Tab, IJfxController> CONTROLLER_TO_TAB_MAP = new HashMap<>();
     private static final ScheduledExecutorService MESSAGE_PULL_SCHEDULER = Executors.newSingleThreadScheduledExecutor(new DaemonThreadFactory());
-    private static final ObservableList<MessageDTO> USER_MESSAGES = FXCollections.emptyObservableList();
+    private static final ObservableList<MessageDTO> USER_MESSAGES = FXCollections.observableList(new LinkedList<>());
     private static final ContextMenu MESSAGES_MENU = new ContextMenu();
 
     @FXML private TextField _searchField;
@@ -123,7 +120,7 @@ public class MainViewController extends JfxController {
                 MESSAGE_PULL_SCHEDULER.scheduleAtFixedRate(
                     new NotificationPullerTask(
                         COMMUNICATION_FACADE.getActiveSession(),
-                        USER_MESSAGES
+                        this::addNewMessagesToList
                     ),
                     MESSAGE_PULL_INIT_DELAY,
                     MESSAGE_PULL_PERIOD,
@@ -290,6 +287,10 @@ public class MainViewController extends JfxController {
                 _tabPanel.getSelectionModel().select(t);
             });
         });
+    }
+
+    private synchronized void addNewMessagesToList(Collection<MessageDTO> messages) {
+        Platform.runLater(() -> USER_MESSAGES.addAll(messages));
     }
 
     private String getUserName() {

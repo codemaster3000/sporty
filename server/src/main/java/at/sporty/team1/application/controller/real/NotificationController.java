@@ -14,6 +14,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.jms.JMSException;
+import javax.naming.NamingException;
+import java.util.LinkedList;
 import java.util.List;
 
 public class NotificationController implements INotificationController {
@@ -47,7 +49,7 @@ public class NotificationController implements INotificationController {
             ProducerJMS.sendMessage(messageDTO);
             return true;
 
-        } catch (JMSException e) {
+        } catch (JMSException | NamingException e) {
 
             LOGGER.error(
                 "Error occurs while sending message from Member #{} to Member #{}.",
@@ -72,9 +74,19 @@ public class NotificationController implements INotificationController {
 
         try {
 
-            return ConsumerJMS.pullMessages(session.getUserId());
+            List<MessageDTO> messageList = new LinkedList<>();
+            MessageDTO tempMessage;
 
-        } catch (JMSException e) {
+            do {
+
+                tempMessage = ConsumerJMS.pullMessage(session.getUserId());
+                if(tempMessage != null) messageList.add(tempMessage);
+
+            } while (tempMessage != null);
+
+            return !messageList.isEmpty() ? messageList : null;
+
+        } catch (JMSException | NamingException e) {
 
             LOGGER.error(
                 "Error occurs while pulling messages for Member #{}.",

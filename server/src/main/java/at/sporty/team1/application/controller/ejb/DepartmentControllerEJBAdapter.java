@@ -11,7 +11,6 @@ import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 
 import javax.ejb.Stateless;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
