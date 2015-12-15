@@ -1,65 +1,74 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    <head>
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="bootstrap/css/bootstrap.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="bootstrap/js/bootstrap.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+<head>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+<!-- Latest compiled and minified JavaScript -->
+<script src="bootstrap/js/bootstrap.js" ></script>
 
-        <title><ui:insert name="title">Sporty Web</ui:insert></title>
-    </head>
+<title><ui:insert name="title">Sporty Web</ui:insert></title>
+</head>
 
-    <body>
-        <div class="container" style="padding-top: 10px">
-            <div class="row">
-                <ui:debug hotkey="x"
-                          rendered="#{initParam['javax.faces.FACELETS_DEVELOPMENT']}" />
+<body>
+	<div class="container" style="padding-top: 10px">
+		<div class="row">
+			<ui:debug hotkey="x"
+				rendered="#{initParam['javax.faces.FACELETS_DEVELOPMENT']}" />
 
-                <div class="col-sm-2 col-xs-12" id="main_menu">
+			<div class="col-sm-2 col-xs-12" id="main_menu">
 
-                    <ui:insert name="main_menu">
+				<ui:insert name="main_menu">
 
-                        <!--  include your header file or uncomment the include below and create header.xhtml in this directory -->
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                Sporty
-                            </div>
-                            <div class="panel-body">
-                                <ul class="nav nav-pills nav-stacked">
-                                    <li role="presentation"><a href="#">Home</a></li>
-                                    <li role="presentation"><a href="#">Tournaments</a></li>
-                                </ul>
-                            </div>
+					<!--  include your header file or uncomment the include below and create header.xhtml in this directory -->
+					<div class="panel panel-info">
+						<div class="panel-heading">Sporty</div>
+						<div class="panel-body">
+							<ul class="nav nav-pills nav-stacked">
+								<li role="presentation"><a href="#">Home</a></li>
+								<li role="presentation"><a href="#">Tournaments</a></li>
+							</ul>
+						</div>
 
-                        </div>
+					</div>
 
-                    </ui:insert>
-                </div>
+				</ui:insert>
+			</div>
 
 
-                <div  class="col-sm-9 col-xs-12 text-left"  id="main_content">
-                    <ui:insert name="main_content">
+			<div class="col-sm-9 col-xs-12 text-left" id="main_content">
+				<ui:insert name="main_content">
                         Content area.  See comments below this line in the source.
-                        <!--  include your content file or uncomment the include below and create content.xhtml in this directory -->
-                        <!-- <div> -->
-                        <!--<ui:include src="content.xhtml"/> -->
-                        <!-- </div> -->
-                    </ui:insert>
-                </div>
+                        Test: List of tournaments
+                        <br />
+					<!-- show selected evaluation entries -->
+					<h:dataTable value="#{tournamentPOJO.tournamentList}"
+						var="tournaments">
+						<h:column>
+							<f:facet name="header">Tournaments</f:facet> ${tournaments}
+                            </h:column>
+					</h:dataTable>
+					<!--  include your content file or uncomment the include below and create content.xhtml in this directory -->
+					<!-- <div> -->
+					<!--<ui:include src="content.xhtml"/> -->
+					<!-- </div> -->
+				</ui:insert>
+			</div>
 
-                <div class="col-xs-12 text-center" id="footer">
-                    <ui:insert name="footer">
-                        <!--  include your header file or uncomment the include below and create footer.xhtml in this directory -->
-                        <!--<ui:include src="footer.xhtml"/>  -->
+			<div class="col-xs-12 text-center" id="footer">
+				<ui:insert name="footer">
+					<!--  include your header file or uncomment the include below and create footer.xhtml in this directory -->
+					<!--<ui:include src="footer.xhtml"/>  -->
                         Sporty Team A, ITB13 5_1, FHV 2015
                     </ui:insert>
-                </div>
-            </div>
+			</div>
+		</div>
 
-        </div>
+	</div>
 
-    </body>
+</body>
 
 </html>
