@@ -138,5 +138,14 @@
             <artifactId>shared</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
+
+        <!-- Google Gson for JSON -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.4</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
 </project>
