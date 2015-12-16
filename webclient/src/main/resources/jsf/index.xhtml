@@ -8,7 +8,7 @@
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
 <!-- Latest compiled and minified JavaScript -->
-<script src="bootstrap/js/bootstrap.js" ></script>
+<script src="bootstrap/js/bootstrap.js"></script>
 
 <title><ui:insert name="title">Sporty Web</ui:insert></title>
 </head>
@@ -24,12 +24,13 @@
 				<ui:insert name="main_menu">
 
 					<!--  include your header file or uncomment the include below and create header.xhtml in this directory -->
-					<div class="panel panel-info">
+					<div class="panel panel-default">
 						<div class="panel-heading">Sporty</div>
 						<div class="panel-body">
 							<ul class="nav nav-pills nav-stacked">
-								<li role="presentation"><a href="#">Home</a></li>
 								<li role="presentation"><a href="#">Tournaments</a></li>
+								<li role="presentation"><a href="#">Thing</a></li>
+								<li role="presentation"><a href="#">Other thing</a></li>
 							</ul>
 						</div>
 
@@ -43,18 +44,26 @@
 				<ui:insert name="main_content">
                         Content area.  See comments below this line in the source.
                         Test: List of tournaments
-                        <br />
-					<!-- show selected evaluation entries -->
-					<h:dataTable value="#{tournamentWebController.allTournaments}"
-						var="tournaments">
-						<h:column>
-							<f:facet name="header">Tournaments</f:facet> ${tournaments}
-						</h:column>
-					</h:dataTable>
-					<!--  include your content file or uncomment the include below and create content.xhtml in this directory -->
-					<!-- <div> -->
-					<!--<ui:include src="content.xhtml"/> -->
-					<!-- </div> -->
+                        
+                       <div class="panel panel-info">
+						<div class="panel-heading">Tournament overview</div>
+						<div class="panel-body">
+
+							<!-- show selected evaluation entries -->
+							<h:dataTable value="#{tournamentWebController.allTournaments}"
+								var="tournaments">
+								<h:column>
+									<f:facet name="header">Tournaments</f:facet> ${tournaments}
+								</h:column>
+							</h:dataTable>
+							<!--  include your content file or uncomment the include below and create content.xhtml in this directory -->
+							<!-- <div> -->
+							<!--<ui:include src="content.xhtml"/> -->
+							<!-- </div> -->
+
+						</div>
+					</div>
+
 				</ui:insert>
 			</div>
 
