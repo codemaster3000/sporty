@@ -20,6 +20,7 @@ public class DepartmentControllerRMIAdapter implements IDepartmentControllerUniv
 	public DepartmentControllerRMIAdapter(IDepartmentControllerRMI iDepartmentControllerRMI) {
 		_iDepartmentControllerRMI = iDepartmentControllerRMI;
 	}
+
 	@Override
 	public List<DepartmentDTO> searchAllDepartments()
 	throws RemoteCommunicationException {
@@ -49,5 +50,4 @@ public class DepartmentControllerRMIAdapter implements IDepartmentControllerUniv
 			throw new RemoteCommunicationException(e);
 		}
 	}
-
 }

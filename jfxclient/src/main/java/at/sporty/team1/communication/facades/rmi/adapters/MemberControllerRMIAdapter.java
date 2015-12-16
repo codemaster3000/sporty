@@ -121,9 +121,12 @@ public class MemberControllerRMIAdapter implements IMemberControllerUniversal {
 
 	@Override
 	public void removeMemberFromDepartment(Integer memberId, Integer departmentId, SessionDTO session)
-			throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
-		// TODO Auto-generated method stub
-
+	throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
+		try {
+			_iMemberControllerRMI.removeMemberFromDepartment(memberId, departmentId, session);
+		} catch (RemoteException e) {
+			throw new RemoteCommunicationException(e);
+		}
 	}
 
 	@Override
