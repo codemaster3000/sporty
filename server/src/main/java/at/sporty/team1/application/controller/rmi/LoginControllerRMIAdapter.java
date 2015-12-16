@@ -27,15 +27,14 @@ public class LoginControllerRMIAdapter extends UnicastRemoteObject implements IL
     }
 
     @Override
-    public byte[] getServerPublicKey() {
-
+    public byte[] getServerPublicKey()
+    throws RemoteException {
         return _controller.getServerPublicKey();
     }
 
     @Override
     public SessionDTO authorize(AuthorisationDTO authorisationDTO)
-    throws SecurityException {
-
+    throws SecurityException, RemoteException {
         return _controller.authorize(authorisationDTO);
     }
 }

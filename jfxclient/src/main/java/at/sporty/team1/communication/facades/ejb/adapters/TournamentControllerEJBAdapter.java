@@ -21,7 +21,8 @@ public class TournamentControllerEJBAdapter implements ITournamentControllerUniv
 	}
 
 	@Override
-	public List<TournamentDTO> searchAllTournaments() throws RemoteCommunicationException {
+	public List<TournamentDTO> searchAllTournaments()
+	throws RemoteCommunicationException {
 		return _iTournamentControllerEJB.searchAllTournaments();
 	}
 

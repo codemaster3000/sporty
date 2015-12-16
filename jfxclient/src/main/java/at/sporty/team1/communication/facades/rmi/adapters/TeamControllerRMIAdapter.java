@@ -34,7 +34,7 @@ public class TeamControllerRMIAdapter implements ITeamControllerUniversal {
 
 	@Override
 	public List<TeamDTO> searchTeamsByMember(Integer memberId, SessionDTO session)
-			throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
+	throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
 		try {
 			return _iTeamControllerRMI.searchTeamsByMember(memberId, session);
 		} catch (RemoteException e) {

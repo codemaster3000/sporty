@@ -50,7 +50,7 @@ public class MemberControllerEJBAdapter implements IMemberControllerUniversal {
 
 	@Override
 	public List<MemberDTO> searchMembersByTournamentTeamName(String teamName, Boolean isFeePaid, SessionDTO session)
-			throws RemoteCommunicationException, ValidationException, NotAuthorisedException {
+	throws RemoteCommunicationException, ValidationException, NotAuthorisedException {
 		return _iMemberController.searchMembersByTournamentTeamName(teamName, isFeePaid, session);
 	}
 
@@ -62,7 +62,7 @@ public class MemberControllerEJBAdapter implements IMemberControllerUniversal {
 
 	@Override
 	public List<DTOPair<DepartmentDTO, TeamDTO>> loadFetchedDepartmentTeamList(Integer memberId, SessionDTO session)
-			throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
+	throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
 		return _iMemberController.loadFetchedDepartmentTeamList(memberId, session);
 	}
 
@@ -80,7 +80,7 @@ public class MemberControllerEJBAdapter implements IMemberControllerUniversal {
 
 	@Override
 	public void removeMemberFromDepartment(Integer memberId, Integer departmentId, SessionDTO session)
-			throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
+	throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
 		_iMemberController.removeMemberFromDepartment(memberId, departmentId, session);
 	}
 

@@ -30,7 +30,7 @@ public class MemberControllerRMIAdapter extends UnicastRemoteObject implements I
 
     @Override
     public MemberDTO findMemberById(Integer memberId, SessionDTO session)
-    throws UnknownEntityException, NotAuthorisedException {
+    throws RemoteException, UnknownEntityException, NotAuthorisedException {
 
         return _controller.findMemberById(memberId, session);
     }

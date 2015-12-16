@@ -62,7 +62,6 @@ public interface IMemberControllerRMI extends IRemoteControllerRMI {
     List<MemberDTO> searchMembersByNameString(String searchString, Boolean isFeePaid, SessionDTO session)
     throws RemoteException, ValidationException, NotAuthorisedException;
 
-
     /**
      * Search for memberList by common team name.
      *

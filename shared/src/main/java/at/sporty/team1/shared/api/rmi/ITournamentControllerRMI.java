@@ -22,7 +22,6 @@ public interface ITournamentControllerRMI extends IRemoteControllerRMI {
     List<TournamentDTO> searchAllTournaments()
     throws RemoteException;
 
-
     /**
      * Search for tournamentList by sport.
      *
@@ -34,7 +33,6 @@ public interface ITournamentControllerRMI extends IRemoteControllerRMI {
     List<TournamentDTO> searchTournamentsBySport(String sport)
     throws RemoteException, ValidationException;
 
-
     /**
      * Search for all Tournaments.
      *
@@ -45,7 +43,6 @@ public interface ITournamentControllerRMI extends IRemoteControllerRMI {
      */
     List<TournamentDTO> searchTournamentsByDate(String eventDate)
     throws RemoteException, ValidationException;
-
 
     /**
      * Search for all Tournaments.
