@@ -28,9 +28,7 @@ public class MessagesMaskViewController extends ConsumerViewController<MessageDT
     private static final Logger LOGGER = LogManager.getLogger();
     private static final CommunicationFacade COMMUNICATION_FACADE = CommunicationFacade.getInstance();
     private static final String NOT_AVAILABLE = "N/A";
-    private static final SimpleObjectProperty<MessageType> MESSAGE_TYPE_PROPERTY = new SimpleObjectProperty<>(
-        MessageType.PLAIN_TEXT
-    );
+    private static final SimpleObjectProperty<MessageType> MESSAGE_TYPE_PROPERTY = new SimpleObjectProperty<>(null);
 
     @FXML private ListView<MessageDTO> _messagesListView;
     @FXML private Label _subjectLabel;
@@ -68,13 +66,22 @@ public class MessagesMaskViewController extends ConsumerViewController<MessageDT
             (observable, oldValue, newValue) -> loadDTO(newValue)
         );
 
-        _confirmReadButton.visibleProperty().bind(MESSAGE_TYPE_PROPERTY.isEqualTo(MessageType.PLAIN_TEXT));
+        _confirmReadButton.visibleProperty().bind(
+            MESSAGE_TYPE_PROPERTY.isNotNull().and(
+            MESSAGE_TYPE_PROPERTY.isEqualTo(MessageType.PLAIN_TEXT))
+        );
         _confirmReadButton.managedProperty().bind(_confirmReadButton.visibleProperty());
 
-        _acceptRequestButton.visibleProperty().bind(MESSAGE_TYPE_PROPERTY.isEqualTo(MessageType.CONFIRMATION_REQUEST));
+        _acceptRequestButton.visibleProperty().bind(
+            MESSAGE_TYPE_PROPERTY.isNotNull().and(
+            MESSAGE_TYPE_PROPERTY.isEqualTo(MessageType.CONFIRMATION_REQUEST))
+        );
         _acceptRequestButton.managedProperty().bind(_acceptRequestButton.visibleProperty());
 
-        _declineRequestButton.visibleProperty().bind(MESSAGE_TYPE_PROPERTY.isEqualTo(MessageType.CONFIRMATION_REQUEST));
+        _declineRequestButton.visibleProperty().bind(
+            MESSAGE_TYPE_PROPERTY.isNotNull().and(
+            MESSAGE_TYPE_PROPERTY.isEqualTo(MessageType.CONFIRMATION_REQUEST))
+        );
         _declineRequestButton.managedProperty().bind(_declineRequestButton.visibleProperty());
     }
 
@@ -89,6 +96,14 @@ public class MessagesMaskViewController extends ConsumerViewController<MessageDT
         }
     }
 
+    @Override
+    public void dispose() {
+        _fromLabel.setText(NOT_AVAILABLE);
+        _subjectLabel.setText(NOT_AVAILABLE);
+        _contentLabel.setText(NOT_AVAILABLE);
+
+        MESSAGE_TYPE_PROPERTY.set(null);
+    }
 
     public void setMessageList(ObservableList<MessageDTO> messageList) {
         _messagesListView.setItems(messageList);
@@ -98,6 +113,8 @@ public class MessagesMaskViewController extends ConsumerViewController<MessageDT
     private void onConfirmRead(ActionEvent actionEvent) {
         MessageDTO readMessage = _messagesListView.getSelectionModel().getSelectedItem();
         _messagesListView.getItems().remove(readMessage);
+
+        dispose();
     }
 
     @FXML
@@ -108,6 +125,8 @@ public class MessagesMaskViewController extends ConsumerViewController<MessageDT
 
             sendRequestAnswerMessage(readMessage, AnswerType.ACCEPT);
             _messagesListView.getItems().remove(readMessage);
+
+            dispose();
 
         } catch (RemoteCommunicationException e) {
             LOGGER.error("Error occurred while sending a confirmation Message.", e);
@@ -126,6 +145,8 @@ public class MessagesMaskViewController extends ConsumerViewController<MessageDT
 
             sendRequestAnswerMessage(readMessage, AnswerType.DECLINE);
             _messagesListView.getItems().remove(readMessage);
+
+            dispose();
 
         } catch (RemoteCommunicationException e) {
             LOGGER.error("Error occurred while sending a decline Message.", e);
