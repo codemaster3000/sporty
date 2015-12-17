@@ -44,12 +44,6 @@
     </build>
 
     <dependencies>
-        <!-- JUnit Dependency -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-
         <!-- Log4J2 Dependencies -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -61,10 +55,9 @@
             <artifactId>log4j-core</artifactId>
         </dependency>
 
-        <!-- Glassfish Dependencies -->
         <dependency>
             <groupId>org.glassfish.main.appclient</groupId>
-            <artifactId>gf-client-module</artifactId>
+            <artifactId>gf-client</artifactId>
             <version>4.1.1</version>
         </dependency>
 

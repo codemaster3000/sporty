@@ -82,21 +82,22 @@ public class CommunicationFacade implements ICommunicationFacade {
                 if (_instance == null) {
                     try {
 
-                        ClassLoader classLoader = CommunicationFacade.class.getClassLoader();
+                        PROPERTIES.load(getPropertySource(PROPERTY_FILE));
 
-                        URL propertyURL = classLoader.getResource(PROPERTY_FILE);
-                        if (propertyURL != null) {
+                        CommunicationType communicationType = CommunicationType.valueOf(
+                            PROPERTIES.getProperty(COMMUNICATION_TYPE)
+                        );
 
-                            PROPERTIES.load(new FileInputStream(propertyURL.getFile()));
-                            CommunicationType communicationType = CommunicationType.valueOf(
-                                PROPERTIES.getProperty(COMMUNICATION_TYPE)
-                            );
+                        _instance = new CommunicationFacade(communicationType, PROPERTIES);
 
-                            _instance = new CommunicationFacade(communicationType, PROPERTIES);
+                    } catch (FileNotFoundException e) {
+                        LOGGER.error(
+                            "Could not find config files. Both external and from classpath {}. Execution is terminated.",
+                            PROPERTY_FILE,
+                            e
+                        );
 
-                        } else {
-                            throw new FileNotFoundException(PROPERTY_FILE + " was not found.");
-                        }
+                        System.exit(1);
 
                     } catch (IOException e) {
                         LOGGER.error(
@@ -236,6 +237,34 @@ public class CommunicationFacade implements ICommunicationFacade {
 
     public SimpleBooleanProperty getSessionAvailableProperty() {
         return SESSION_AVAILABLE_PROPERTY;
+    }
+
+    private static FileInputStream getPropertySource(String propertyFile)
+    throws FileNotFoundException {
+        try {
+            //looking up for external config
+            return getExternalPropertySource(propertyFile);
+        } catch (FileNotFoundException e) {
+            //looking up for integrated config
+            return getClassPathPropertySource(propertyFile);
+        }
+    }
+
+    private static FileInputStream getExternalPropertySource(String propertyFile)
+    throws FileNotFoundException {
+        return new FileInputStream(propertyFile);
+    }
+
+    private static FileInputStream getClassPathPropertySource(String propertyFile)
+    throws FileNotFoundException {
+        ClassLoader classLoader = CommunicationFacade.class.getClassLoader();
+
+        URL propertyURL = classLoader.getResource(propertyFile);
+        if (propertyURL != null) {
+            return new FileInputStream(propertyURL.getFile());
+        } else {
+            throw new FileNotFoundException(propertyFile + " was not found.");
+        }
     }
 }
 
