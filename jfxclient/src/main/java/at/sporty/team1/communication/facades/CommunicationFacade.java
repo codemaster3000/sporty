@@ -205,6 +205,7 @@ public class CommunicationFacade implements ICommunicationFacade {
     public synchronized void logout() {
         SESSION_AVAILABLE_PROPERTY.set(false);
         _extendedActiveSession = null;
+        _activeServerPublicKey = null;
     }
 
     public synchronized PublicKey getServerPublicKey()

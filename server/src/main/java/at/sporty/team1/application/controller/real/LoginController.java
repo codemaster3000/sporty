@@ -22,15 +22,13 @@ import javax.naming.AuthenticationException;
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
-import javax.naming.directory.InitialDirContext;
-import javax.naming.directory.SearchControls;
-import javax.naming.directory.SearchResult;
+import javax.naming.directory.*;
 import javax.persistence.PersistenceException;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.PublicKey;
-import java.util.Hashtable;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * Represents a controller to handle the login.
@@ -38,6 +36,14 @@ import java.util.UUID;
 public class LoginController implements ILoginController {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LogManager.getLogger();
+
+    private static final String DEFAULT_CONTEXT_FACTORY = "com.sun.jndi.ldap.LdapCtxFactory";
+    private static final String DEFAULT_PROVIDER_URL = "ldaps://ldap.fhv.at:636/";
+    private static final String DEFAULT_CONTEXT_NAME = "dc=uclv,dc=net";
+    private static final String DEFAULT_SEARCH_FILTER_PATTERN = "(&(uid=%s)(objectClass=person))";
+    private static final String DEFAULT_SECURITY_AUTHENTICATION = "simple";
+    private static final String DEFAULT_SECURITY_PROTOCOL = "ssl";
+    private static final String[] NO_RETURNING_ATTRIBUTES = new String[0];
 
     private static Cipher _cipher;
 
@@ -78,61 +84,70 @@ public class LoginController implements ILoginController {
 
             //Preparing environment for LDAP
             Hashtable<String, String> env = new Hashtable<>();
-            env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-            env.put(Context.PROVIDER_URL, "ldaps://ldap.fhv.at:636/dc=uclv,dc=net");
+            env.put(Context.INITIAL_CONTEXT_FACTORY, DEFAULT_CONTEXT_FACTORY);
+            env.put(Context.PROVIDER_URL, DEFAULT_PROVIDER_URL);
 
             //Searching for user
             InitialDirContext searchContext = new InitialDirContext(env);
-            NamingEnumeration<SearchResult> searchResults = searchContext.search(
-                "ou=fhv, ou=People",
-                "(&(uid=" + username + ")(cn=*))",
-                new SearchControls()
+
+            //Preparing filter string
+            String filter = String.format(DEFAULT_SEARCH_FILTER_PATTERN, username);
+
+            //Defining search controls (parameters)
+            SearchControls searchControls = new SearchControls();
+            searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+            searchControls.setReturningAttributes(NO_RETURNING_ATTRIBUTES);
+
+            //Performing search according to the given data
+            NamingEnumeration<SearchResult> rawSearchResults = searchContext.search(
+                DEFAULT_CONTEXT_NAME,
+                filter,
+                searchControls
             );
 
             //Closing context
             searchContext.close();
 
-            if (searchResults.hasMoreElements()) {
-                SearchResult searchResult = searchResults.next();
-                String principal = searchResult.getNameInNamespace();
+            ArrayList<SearchResult> searchResults = Collections.list(rawSearchResults);
 
-                if (!searchResults.hasMoreElements()) {
+            //Check if unique value was found
+            if (searchResults.size() == 1) {
+                String principal = searchResults.get(0).getNameInNamespace();
 
-                    //Setting environment properties
-                    env.put(Context.SECURITY_AUTHENTICATION, "simple");
-                    env.put(Context.SECURITY_PRINCIPAL, principal);
-                    env.put(Context.SECURITY_CREDENTIALS, password);
-                    env.put(Context.SECURITY_PROTOCOL, "ssl");
+                //Setting environment properties
+                env.put(Context.SECURITY_AUTHENTICATION, DEFAULT_SECURITY_AUTHENTICATION);
+                env.put(Context.SECURITY_PRINCIPAL, principal);
+                env.put(Context.SECURITY_CREDENTIALS, password);
+                env.put(Context.SECURITY_PROTOCOL, DEFAULT_SECURITY_PROTOCOL);
 
-                    //Trying to login via LDAP
-                    InitialDirContext loginContext = new InitialDirContext(env);
+                //Trying to login via LDAP
+                InitialDirContext loginContext = new InitialDirContext(env);
 
-                    //Successful login
-                    LOGGER.info("Successful login of {}.", username);
-                    loginContext.close();
+                //Successful login
+                LOGGER.info("Successful login of {}.", username);
+                loginContext.close();
 
-                    //Receiving member object from db
-                    Member member = PersistenceFacade.getNewMemberDAO().findByUsername(username);
+                //Receiving member object from db
+                Member member = PersistenceFacade.getNewMemberDAO().findByUsername(username);
 
-                    //If member was not found -> authorize will be declined
-                    if (member != null) {
+                //If member was not found -> authorize will be declined
+                if (member != null) {
 
-                        //Preparing client fingerprint
-                        PublicKey clientKey = SecurityModule.getDecodedRSAPublicKey(authorisationDTO.getClientPublicKey());
+                    //Preparing client fingerprint
+                    PublicKey clientKey = SecurityModule.getDecodedRSAPublicKey(authorisationDTO.getClientPublicKey());
 
-                        //Generating new session id for client
-                        String sessionId = UUID.randomUUID().toString();
-                        AuthManager.getInstance().registerNewSession(sessionId, member.getMemberId());
+                    //Generating new session id for client
+                    String sessionId = UUID.randomUUID().toString();
+                    AuthManager.getInstance().registerNewSession(sessionId, member.getMemberId());
 
-                        //Encrypting rawFingerprint expressly for target client
-                        cipher.init(Cipher.ENCRYPT_MODE, clientKey);
-                        byte[] clientFingerprint = cipher.doFinal(sessionId.getBytes());
+                    //Encrypting rawFingerprint expressly for target client
+                    cipher.init(Cipher.ENCRYPT_MODE, clientKey);
+                    byte[] clientFingerprint = cipher.doFinal(sessionId.getBytes());
 
-                        //Sending session object for client
-                        return new SessionDTO()
-                            .setUserId(member.getMemberId())
-                            .setClientFingerprint(clientFingerprint);
-                    }
+                    //Sending session object for client
+                    return new SessionDTO()
+                        .setUserId(member.getMemberId())
+                        .setClientFingerprint(clientFingerprint);
                 }
             }
 
@@ -143,7 +158,7 @@ public class LoginController implements ILoginController {
         } catch (AuthenticationException e) {
 			LOGGER.error("Not successful login attempt detected.", e);
 		} catch (NamingException e) {
-			LOGGER.error("LDAP protocol communication error.");
+			LOGGER.error("LDAP protocol communication error.", e);
 			LOGGER.debug("LDAP protocol communication error.", e);
 		} catch (PersistenceException e) {
             LOGGER.error("Error occurred while getting member from data store.", e);
