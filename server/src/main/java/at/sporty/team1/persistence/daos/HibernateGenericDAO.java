@@ -41,13 +41,14 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
     @Override
     public T findSingleResultByCriteria(Criterion... criterion)
     throws TooManyResultsException {
+
         List<T> list = findByCriteria(criterion);
-        if (list.isEmpty()) {
-            return null;
-        } else if (list.size() > 1) {
+
+        if (list.size() == 1) return list.get(0);
+        else if (list.size() > 1) {
             throw new TooManyResultsException();
         }
-        return list.get(0);
+        return null;
     }
 
     @SuppressWarnings("unchecked") //NON Generic Hibernate method.
@@ -68,6 +69,7 @@ public class HibernateGenericDAO<T> implements IGenericDAO<T> {
     @Override
     public List<T> findByCriteriaWithAlias(Consumer<Criteria> aliasApplier, Criterion... criterion)
     throws PersistenceException {
+
         return (List<T>) HibernateSessionUtil.getInstance().makeSimpleTransaction(session -> {
             Criteria criteria = session.createCriteria(_domainClass);
             aliasApplier.accept(criteria);

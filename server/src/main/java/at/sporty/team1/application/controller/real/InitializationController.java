@@ -100,7 +100,6 @@ public class InitializationController implements IController {
     private void start() throws Exception {
         Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown, "Shutdown-thread"));
 
-        HibernateSessionUtil.getInstance().openSession();
         _rmiRegistry = LocateRegistry.createRegistry(DEFAULT_PORT);
     }
 

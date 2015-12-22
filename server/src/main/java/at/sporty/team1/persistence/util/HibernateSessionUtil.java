@@ -17,13 +17,13 @@ public class HibernateSessionUtil {
     private static final Logger LOGGER = LogManager.getLogger();
     public static final String HIBERNATE_CONFIG_FILE = "/hibernate.cfg.xml";
     private final SessionFactory SESSION_FACTORY;
-    private static HibernateSessionUtil instance;
+    private static HibernateSessionUtil _instance;
 
     public static HibernateSessionUtil getInstance() {
-        if (instance == null) {
-            instance = new HibernateSessionUtil();
+        if (_instance == null) {
+            _instance = new HibernateSessionUtil();
         }
-        return instance;
+        return _instance;
     }
 
     public Session openSession() throws HibernateException {
@@ -31,6 +31,7 @@ public class HibernateSessionUtil {
     }
 
     public Session getCurrentSession() throws HibernateException {
+        if (!SESSION_FACTORY.getCurrentSession().isOpen()) openSession();
         return SESSION_FACTORY.getCurrentSession();
     }
 
@@ -70,18 +71,20 @@ public class HibernateSessionUtil {
 
     private HibernateSessionUtil() {
         try {
+
             Configuration configuration = new Configuration().configure(getClass().getResource(HIBERNATE_CONFIG_FILE));
             Properties properties = configuration.getProperties();
 
             SESSION_FACTORY = configuration.buildSessionFactory(
                 new StandardServiceRegistryBuilder().applySettings(properties).build()
             );
-        } catch (Throwable ex) {
+
+        } catch (Throwable e) {
+
             LOGGER.fatal(
                 "Something went wrong by initializing hibernate. Check config files for errors and DB availability."
             );
-
-            throw new ExceptionInInitializerError(ex);
+            throw new ExceptionInInitializerError(e);
         }
     }
 }
