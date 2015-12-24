@@ -12,39 +12,55 @@
 
     <name>Sporty Web Client</name>
     <artifactId>webclient</artifactId>
-	
-	<build>
+    <packaging>war</packaging>
+
+    <properties>
+        <glassfish.host>localhost</glassfish.host>
+        <glassfish.user>admin</glassfish.user>
+        <glassfish.password>admin</glassfish.password>
+    </properties>
+
+    <build>
         <plugins>
-            <!-- Build an executable JAR -->
             <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.2</version>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
+                <version>1.4.16</version>
                 <configuration>
-                    <url>http://83.212.82.6:8080/manager/text</url>
-                    <username>teamE</username>
-                    <password>itb13teamE</password>
-                    <path>/oculus</path>
+                    <container>
+                        <containerId>glassfish4x</containerId>
+                        <type>remote</type>
+                    </container>
+                    <configuration>
+                        <type>runtime</type>
+                        <properties>
+                            <cargo.hostname>${glassfish.host}</cargo.hostname>
+                            <cargo.remote.username>${glassfish.user}</cargo.remote.username>
+                            <cargo.remote.password>${glassfish.password}</cargo.remote.password>
+                        </properties>
+                    </configuration>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>redeploy</goal>
-                        </goals>
-                        <phase>install</phase>
-                    </execution>
-                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.glassfish.main.deployment</groupId>
+                        <artifactId>deployment-client</artifactId>
+                        <version>4.1.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <webXml>src\main\resources\WEB-INF\web.xml</webXml>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
             </plugin>
         </plugins>
     </build>
 
     <dependencies>
-        <!-- JUnit Dependency -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-
         <!-- Log4J2 Dependencies -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -56,11 +72,48 @@
             <artifactId>log4j-core</artifactId>
         </dependency>
 
-        <!-- JSF Dependencies -->
+        <!-- Java EE Dependency -->
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- JSF and Servlet Dependencies -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet.jsp.jstl</groupId>
+            <artifactId>jstl-api</artifactId>
+            <version>1.2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+            <version>3.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+            <version>2.3.1</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.sun.faces</groupId>
             <artifactId>jsf-api</artifactId>
             <version>2.2.11</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -69,40 +122,10 @@
             <version>2.2.11</version>
         </dependency>
 
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.servlet.jsp.jstl</groupId>
-            <artifactId>jstl-api</artifactId>
-            <version>1.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.el</groupId>
-            <artifactId>javax.el-api</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.servlet.jsp</groupId>
-            <artifactId>javax.servlet.jsp-api</artifactId>
-            <version>2.3.1</version>
-        </dependency>
-
         <!-- Shared Dependency -->
         <dependency>
             <groupId>at.fhv.itb13.team1.sporty</groupId>
             <artifactId>shared</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>at.fhv.itb13.team1.sporty</groupId>
-            <artifactId>server</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

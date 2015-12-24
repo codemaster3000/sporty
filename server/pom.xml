@@ -101,7 +101,7 @@
             <version>4.0</version>
         </dependency>
 
-        <!-- Glassfish Dependency -->
+        <!-- Java EE Dependency -->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
@@ -109,6 +109,7 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Glassfish Dependencies -->
         <dependency>
             <groupId>org.glassfish.main.appclient</groupId>
             <artifactId>gf-client</artifactId>
@@ -127,12 +128,6 @@
             <version>4.6-b01</version>
         </dependency>
 
-        <!-- JUnit Dependency -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-
         <!-- Google Gson for JSON -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -145,6 +140,13 @@
             <groupId>at.fhv.itb13.team1.sporty</groupId>
             <artifactId>shared</artifactId>
             <version>0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- JUnit Dependency -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

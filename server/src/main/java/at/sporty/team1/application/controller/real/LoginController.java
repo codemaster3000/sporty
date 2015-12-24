@@ -158,7 +158,6 @@ public class LoginController implements ILoginController {
 			LOGGER.error("Not successful login attempt detected.", e);
 		} catch (NamingException e) {
 			LOGGER.error("LDAP protocol communication error.", e);
-			LOGGER.debug("LDAP protocol communication error.", e);
 		} catch (PersistenceException e) {
             LOGGER.error("Error occurred while getting member from data store.", e);
         } catch (TooManyResultsException e) {
