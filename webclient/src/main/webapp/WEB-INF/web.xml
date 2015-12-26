@@ -6,7 +6,7 @@
     <display-name>Sporty Tournament</display-name>
 
     <welcome-file-list>
-        <welcome-file>index.at.sporty.team1.web.resources.jsf</welcome-file>
+        <welcome-file>index.jsf</welcome-file>
     </welcome-file-list>
 
 	<context-param>

@@ -1,4 +1,4 @@
-package at.sporty.team1.web;
+package at.sporty.team1.webapp;
 
 import java.util.List;
 
