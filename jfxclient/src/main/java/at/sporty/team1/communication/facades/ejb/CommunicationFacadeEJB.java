@@ -8,7 +8,6 @@ import at.sporty.team1.shared.api.ejb.*;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.util.Hashtable;
 import java.util.Properties;
 
 public class CommunicationFacadeEJB implements ICommunicationFacade {
@@ -155,7 +154,7 @@ public class CommunicationFacadeEJB implements ICommunicationFacade {
     throws NamingException {
 
         if (_context == null) {
-            Hashtable<String, String> env = new Hashtable<>();
+            Properties env = new Properties();
 
             String targetServer = _properties.getProperty(TARGET_SERVER);
             if (!isNullOrEmpty(targetServer)) env.put(CONTEXT_PROP_HOST, targetServer);

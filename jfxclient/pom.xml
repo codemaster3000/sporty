@@ -57,8 +57,8 @@
 
         <!-- Glassfish Dependency -->
         <dependency>
-            <groupId>org.glassfish.main.appclient</groupId>
-            <artifactId>gf-client-module</artifactId>
+            <groupId>org.glassfish.main.extras</groupId>
+            <artifactId>glassfish-embedded-all</artifactId>
             <version>4.1.1</version>
         </dependency>
 
