@@ -1,4 +1,4 @@
-package at.sporty.team1.webservice.soap.client;
+package at.sporty.team1.webservice.client;
 
 import at.sporty.team1.webservice.soap.IResultService;
 
