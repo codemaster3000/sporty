@@ -85,7 +85,7 @@ public class TournamentWebController implements Serializable {
                 return getTournamentsByDate(query);
             case LOCATION:
                 //search by location
-                return getTournamentsByDate(query);
+                return getTournamentsByLocation(query);
             case DEPARTMENT:
                 //search by sport
                 return getTournamentsBySport(query);
