@@ -1,7 +1,5 @@
 package at.sporty.team1.webservice.old;
 
-import at.sporty.team1.webservice.old.ResultPersistentBean;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
