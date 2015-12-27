@@ -22,6 +22,7 @@
         <module>jfxclient</module>
 		<module>webclient</module>
         <module>server</module>
+        <module>webserviceclient</module>
 	</modules>
 
     <build>

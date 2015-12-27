@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      >
+    <h:body>
+
+        <ui:composition template="template_layout.xhtml">
+
+            <ui:define name="content">
+                <h2>List of Tournaments</h2>
+
+                Trying to display the list of current tournaments. 
+                You should be able to see them all here. An edit button will be added in the next step.
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">Tournament overview</div>
+                    <div class="panel-body">
+
+                        <!-- TODO: define columns!
+                        
+                        example from mkyong: http://www.mkyong.com/jsf2/jsf-2-datatable-example/
+                        
+                        <h:dataTable value="#{order.orderList}" var="o"
+    			styleClass="order-table"
+    			headerClass="order-table-header"
+    			rowClasses="order-table-odd-row,order-table-even-row"
+                        >
+                        
+                        <h:column>
+    				
+    				<f:facet name="header">Order No</f:facet>
+    				
+    				#{o.orderNo}
+    			</h:column>
+    			
+    			<h:column>
+    				<f:facet name="header">Product Name</f:facet>
+    				#{o.productName}
+    			</h:column>
+                        
+                        </h:dataTable>
+                        -->
+                        <h:dataTable value="#{tournamentWebController.allTournaments}"
+                                     var="tournaments">
+                            <h:column>
+                                <f:facet name="header">Tournaments</f:facet> ${tournaments}
+                            </h:column>
+                            
+                        </h:dataTable>
+
+                    </div>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </h:body>
+
+</html>

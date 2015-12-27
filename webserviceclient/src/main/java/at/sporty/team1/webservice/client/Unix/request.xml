@@ -1,0 +1,8 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://schemas.conversesolutions.com/xsd/dmticta/v1">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <v1:GetMatchResult>
+            <v1:matchId>?</v1:matchId>
+        </v1:GetMatchResult>
+    </soapenv:Body>
+</soapenv:Envelope>
