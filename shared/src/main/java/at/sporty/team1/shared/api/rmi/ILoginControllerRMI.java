@@ -15,8 +15,10 @@ public interface ILoginControllerRMI extends IRemoteControllerRMI {
      * Returns server public key required for authorisation.
      *
      * @return byte[] server public key.
+     * @throws RemoteException
      */
-    byte[] getServerPublicKey();
+    byte[] getServerPublicKey()
+    throws RemoteException;
 
     /**
      * Checks if received user credentials are equal to the
@@ -24,8 +26,9 @@ public interface ILoginControllerRMI extends IRemoteControllerRMI {
      *
      * @param authorisationDTO dto object for user credentials and client's public key in encrypted form.
      * @return session object encrypted with client's public key.
+     * @throws RemoteException
      * @throws SecurityException
      */
     SessionDTO authorize(AuthorisationDTO authorisationDTO)
-    throws SecurityException;
+    throws RemoteException, SecurityException;
 }
