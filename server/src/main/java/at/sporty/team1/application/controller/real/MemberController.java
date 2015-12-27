@@ -771,7 +771,7 @@ public class MemberController implements IMemberController {
 
             MessageDTO newMemberMessage = new MessageDTO();
             newMemberMessage.setMessageSubject("New participation request.");
-            newMemberMessage.setMessageContent("You was assigned to team " + team.getTeamName() + ".");
+            newMemberMessage.setMessageContent("You were assigned to team " + team.getTeamName() + ".");
             newMemberMessage.setMessageType(MessageType.CONFIRMATION_REQUEST);
             newMemberMessage.setRecipientId(memberId);
             newMemberMessage.setSenderId(session.getUserId());
