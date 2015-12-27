@@ -1,4 +1,4 @@
-package at.sporty.team1.webservice;
+package at.sporty.team1.webservice.old;
 
 /**
  * Created by f00 on 14.12.15.

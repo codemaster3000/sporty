@@ -1,4 +1,4 @@
-package at.sporty.team1.webservice;
+package at.sporty.team1.webservice.old;
 
 import javax.ws.rs.*;
 
@@ -17,8 +17,8 @@ public class JaxRsResultService {
     @Path("/getMatchResult")
     @Produces("text/plain")
     @Consumes("text/plain")
-    public String getMatchResult(@QueryParam("matchId") String matchid) {
-        return _resultPersistentBean.getResult(matchid);
+    public String getMatchResult(@QueryParam("matchId") String matchId) {
+        return _resultPersistentBean.getResult(matchId);
     }
 
 //    @GET

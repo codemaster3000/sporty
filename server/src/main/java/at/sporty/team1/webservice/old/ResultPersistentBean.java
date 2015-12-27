@@ -1,4 +1,4 @@
-package at.sporty.team1.webservice;
+package at.sporty.team1.webservice.old;
 
 import at.sporty.team1.domain.Match;
 import at.sporty.team1.persistence.PersistenceFacade;
