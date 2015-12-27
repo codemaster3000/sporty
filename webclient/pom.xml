@@ -15,9 +15,9 @@
     <packaging>war</packaging>
 
     <properties>
-        <glassfish.host>localhost</glassfish.host>
+        <glassfish.host>5.35.247.12</glassfish.host>
         <glassfish.user>admin</glassfish.user>
-        <glassfish.password></glassfish.password>
+        <glassfish.password>sporty123</glassfish.password>
     </properties>
 
     <build>
@@ -26,13 +26,6 @@
                 <groupId>org.codehaus.cargo</groupId>
                 <artifactId>cargo-maven2-plugin</artifactId>
                 <version>1.4.16</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
                 <configuration>
                     <container>
                         <containerId>glassfish4x</containerId>
