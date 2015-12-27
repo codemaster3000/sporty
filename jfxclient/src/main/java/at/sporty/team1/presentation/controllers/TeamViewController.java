@@ -4,7 +4,7 @@ import at.sporty.team1.communication.facades.CommunicationFacade;
 import at.sporty.team1.communication.facades.api.IDepartmentControllerUniversal;
 import at.sporty.team1.communication.facades.api.IMemberControllerUniversal;
 import at.sporty.team1.communication.facades.api.ITeamControllerUniversal;
-import at.sporty.team1.communication.util.RemoteCommunicationException;
+import at.sporty.team1.shared.exceptions.RemoteCommunicationException;
 import at.sporty.team1.presentation.controllers.core.ConsumerViewController;
 import at.sporty.team1.presentation.util.GUIHelper;
 import at.sporty.team1.shared.dtos.DepartmentDTO;

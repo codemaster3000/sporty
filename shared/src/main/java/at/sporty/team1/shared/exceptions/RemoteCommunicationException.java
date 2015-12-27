@@ -1,4 +1,4 @@
-package at.sporty.team1.communication.util;
+package at.sporty.team1.shared.exceptions;
 
 /**
  * Created by sereGkaluv on 12-Dec-15.

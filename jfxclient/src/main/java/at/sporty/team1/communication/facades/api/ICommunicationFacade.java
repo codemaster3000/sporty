@@ -1,6 +1,6 @@
 package at.sporty.team1.communication.facades.api;
 
-import at.sporty.team1.communication.util.RemoteCommunicationException;
+import at.sporty.team1.shared.exceptions.RemoteCommunicationException;
 
 /**
  * Created by sereGkaluv on 12-Dec-15.

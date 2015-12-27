@@ -1,7 +1,7 @@
 package at.sporty.team1.communication.facades.ejb.adapters;
 
 import at.sporty.team1.communication.facades.api.ITournamentControllerUniversal;
-import at.sporty.team1.communication.util.RemoteCommunicationException;
+import at.sporty.team1.shared.exceptions.RemoteCommunicationException;
 import at.sporty.team1.shared.api.ejb.ITournamentControllerEJB;
 import at.sporty.team1.shared.dtos.MatchDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;

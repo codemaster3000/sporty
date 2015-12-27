@@ -1,7 +1,7 @@
 package at.sporty.team1.communication.facades.rmi.adapters;
 
 import at.sporty.team1.communication.facades.api.INotificationControllerUniversal;
-import at.sporty.team1.communication.util.RemoteCommunicationException;
+import at.sporty.team1.shared.exceptions.RemoteCommunicationException;
 import at.sporty.team1.shared.api.rmi.INotificationControllerRMI;
 import at.sporty.team1.shared.dtos.MessageDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;

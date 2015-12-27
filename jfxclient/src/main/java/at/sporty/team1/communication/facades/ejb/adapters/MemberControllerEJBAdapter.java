@@ -1,7 +1,7 @@
 package at.sporty.team1.communication.facades.ejb.adapters;
 
 import at.sporty.team1.communication.facades.api.IMemberControllerUniversal;
-import at.sporty.team1.communication.util.RemoteCommunicationException;
+import at.sporty.team1.shared.exceptions.RemoteCommunicationException;
 import at.sporty.team1.shared.api.ejb.IMemberControllerEJB;
 import at.sporty.team1.shared.dtos.*;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;

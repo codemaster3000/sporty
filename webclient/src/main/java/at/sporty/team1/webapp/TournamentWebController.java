@@ -14,6 +14,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 @ManagedBean
 @RequestScoped
@@ -21,13 +22,45 @@ public class TournamentWebController implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String SESSION_OBJECT = "SESSION_OBJECT";
-    public SearchType searchType;
+
+    private SearchType _searchType;
 
     @EJB
     private ITournamentControllerEJB _tournamentController;
 
     public TournamentWebController() {
+    }
+
+    /* Getter and Setter */
+    public SearchType getSearchType() {
+        return _searchType;
+    }
+
+    public void setSearchType(SearchType searchType) {
+        _searchType = searchType;
+    }
+
+    public boolean isUserLoggedIn() {
+        return getSessionMap().containsKey(SessionConstants.ACTIVE_SESSION.getConstant());
+    }
+
+    /**
+     * Wrapper-methode for Searching
+     * @return List<TournamentDTO> or null
+     */
+    public List<TournamentDTO> searchTournaments(String searchQuery) {
+        switch (getSearchType()) {
+            //search by event date
+            case EVENT_DATE: return getTournamentsByDate(searchQuery);
+
+            //search by location
+            case LOCATION: return getTournamentsByLocation(searchQuery);
+
+            //search by sport
+            case DEPARTMENT: return getTournamentsBySport(searchQuery);
+
+            default: return getAllTournaments();
+        }
     }
 
     public List<TournamentDTO> getAllTournaments() {
@@ -36,71 +69,45 @@ public class TournamentWebController implements Serializable {
 
     public List<TournamentDTO> getTournamentsBySport(String sport) {
         try {
-            return _tournamentController.searchTournamentsBySport(sport);
-        } catch (ValidationException e) {
-            LOGGER.error("Validationexception while search Tournaments by Sport", e);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
-        }
 
-        return null;
+            return _tournamentController.searchTournamentsBySport(sport);
+
+        } catch (ValidationException e) {
+            LOGGER.error("Validation Exception while search Tournaments by Sport", e);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
+
+            return null;
+        }
     }
 
     public List<TournamentDTO> getTournamentsByLocation(String location){
-
         try {
-            return _tournamentController.searchTournamentsByLocation(location);
-        } catch (ValidationException e) {
-            LOGGER.error("Validationexception while search Tournaments by Location", e);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
-        }
 
-        return null;
+            return _tournamentController.searchTournamentsByLocation(location);
+
+        } catch (ValidationException e) {
+            LOGGER.error("Validation Exception while search Tournaments by Location", e);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
+
+            return null;
+        }
     }
 
     public List<TournamentDTO> getTournamentsByDate(String date){
-
         try {
+
             return _tournamentController.searchTournamentsByDate(date);
+
         } catch (ValidationException e) {
-            LOGGER.error("Validationexception while search Tournaments by Date", e);
+            LOGGER.error("Validation Exception while search Tournaments by Date", e);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
-        }
 
-        return null;
-    }
-
-    public boolean isUserLoggedIn(MemberDTO member){
-
-        return FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(SESSION_OBJECT) != null;
-    }
-
-    /**
-     * Wrapper-methode for Searching
-     * @return List<TournamentDTO> or null
-     */
-    public List<TournamentDTO> getAllTournaments(String query) {
-        switch (searchType) {
-            case EVENT_DATE:
-                //search by birthdate
-                return getTournamentsByDate(query);
-            case LOCATION:
-                //search by location
-                return getTournamentsByLocation(query);
-            case DEPARTMENT:
-                //search by sport
-                return getTournamentsBySport(query);
-            default:
-                return null;
+            return null;
         }
     }
 
-    /* Getter and Setter */
-    public SearchType getSearchType() {
-        return searchType;
-    }
-
-    public void setSearchType(SearchType searchType) {
-        this.searchType = searchType;
+    private Map<String, Object> getSessionMap() {
+        return FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
     }
 
     /* private enum*/

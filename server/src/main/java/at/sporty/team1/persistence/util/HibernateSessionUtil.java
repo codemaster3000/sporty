@@ -1,7 +1,7 @@
 package at.sporty.team1.persistence.util;
 
-import at.sporty.team1.misc.functional.ThrowingConsumer;
-import at.sporty.team1.misc.functional.ThrowingFunction;
+import at.sporty.team1.shared.api.entity.IThrowingConsumer;
+import at.sporty.team1.shared.api.entity.IThrowingFunction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.HibernateException;
@@ -39,7 +39,7 @@ public class HibernateSessionUtil {
         SESSION_FACTORY.close();
     }
 
-    public <T> T makeSimpleTransaction(ThrowingFunction<Session, T, PersistenceException> transactionFunction)
+    public <T> T makeSimpleTransaction(IThrowingFunction<Session, T, PersistenceException> transactionFunction)
     throws HibernateException, PersistenceException {
         Session session = getCurrentSession();
         try {
@@ -55,7 +55,7 @@ public class HibernateSessionUtil {
         }
     }
 
-    public void makeSimpleTransaction(ThrowingConsumer<Session, PersistenceException> transactionFunction)
+    public void makeSimpleTransaction(IThrowingConsumer<Session, PersistenceException> transactionFunction)
     throws HibernateException, PersistenceException {
         Session session = getCurrentSession();
         try {

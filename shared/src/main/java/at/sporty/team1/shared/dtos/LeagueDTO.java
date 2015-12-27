@@ -1,6 +1,6 @@
 package at.sporty.team1.shared.dtos;
 
-import at.sporty.team1.shared.api.IDTO;
+import at.sporty.team1.shared.api.entity.IDTO;
 
 /**
  * Created by f00 on 03.11.15.

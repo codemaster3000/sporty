@@ -25,3 +25,6 @@ logs/
 #idea ignore
 .idea/
 *.iml
+
+#netbeans ignore
+/webclient/nb-configuration.xml

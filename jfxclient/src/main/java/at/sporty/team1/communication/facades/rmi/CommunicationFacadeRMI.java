@@ -2,7 +2,7 @@ package at.sporty.team1.communication.facades.rmi;
 
 import at.sporty.team1.communication.facades.api.*;
 import at.sporty.team1.communication.facades.rmi.adapters.*;
-import at.sporty.team1.communication.util.RemoteCommunicationException;
+import at.sporty.team1.shared.exceptions.RemoteCommunicationException;
 import at.sporty.team1.communication.util.RemoteObjectRegistry;
 import at.sporty.team1.shared.api.rmi.*;
 

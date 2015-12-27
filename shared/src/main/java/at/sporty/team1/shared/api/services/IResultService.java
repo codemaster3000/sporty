@@ -1,4 +1,4 @@
-package at.sporty.team1.webservice.soap;
+package at.sporty.team1.shared.api.services;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;

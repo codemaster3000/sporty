@@ -1,4 +1,4 @@
-package at.sporty.team1.shared.api;
+package at.sporty.team1.shared.api.entity;
 
 import java.io.Serializable;
 

@@ -1,6 +1,6 @@
 package at.sporty.team1.shared.dtos;
 
-import at.sporty.team1.shared.api.IDTO;
+import at.sporty.team1.shared.api.entity.IDTO;
 
 public class MatchDTO implements IDTO {
 	private static final long serialVersionUID = 1L;

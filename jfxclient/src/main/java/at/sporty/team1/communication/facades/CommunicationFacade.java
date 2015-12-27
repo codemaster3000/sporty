@@ -4,12 +4,11 @@ import at.sporty.team1.communication.facades.api.*;
 import at.sporty.team1.communication.facades.ejb.CommunicationFacadeEJB;
 import at.sporty.team1.communication.facades.rmi.CommunicationFacadeRMI;
 import at.sporty.team1.communication.util.CachedSession;
-import at.sporty.team1.communication.util.RemoteCommunicationException;
 import at.sporty.team1.presentation.util.CommunicationType;
-import at.sporty.team1.shared.dtos.AuthorisationDTO;
 import at.sporty.team1.shared.dtos.MemberDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
+import at.sporty.team1.shared.exceptions.RemoteCommunicationException;
 import at.sporty.team1.shared.exceptions.SecurityException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.shared.security.SecurityModule;
@@ -18,7 +17,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -165,32 +163,17 @@ public class CommunicationFacade implements ICommunicationFacade {
         //disposing old session
         _extendedActiveSession = null;
 
-        //Reading username and password
-        byte[] rawUsername = username.getBytes();
-        byte[] rawPassword = password.getBytes();
+        ILoginControllerUniversal loginController = lookupForLoginController();
 
-        //Preparing for data encryption
-        Cipher cipher = SecurityModule.getNewRSACipher();
-        cipher.init(Cipher.ENCRYPT_MODE, getServerPublicKey());
+        SessionDTO session = SecurityModule.authorize(
+            username,
+            password,
+            getClientRSAKeyPair(),
+            getServerPublicKey(),
+            loginController::authorize
+        );
 
-        AuthorisationDTO authorisationDTO = new AuthorisationDTO()
-            .setEncryptedUserLogin(cipher.doFinal(rawUsername))
-            .setEncryptedUserPassword(cipher.doFinal(rawPassword))
-            .setClientPublicKey(SecurityModule.getEncodedRSAPublicKey(getClientRSAKeyPair()));
-
-        //Getting authorisation result
-        SessionDTO session = lookupForLoginController().authorize(authorisationDTO);
         if (session != null) {
-            //Decrypting client fingerprint for client side
-            cipher.init(Cipher.DECRYPT_MODE, getClientRSAKeyPair().getPrivate());
-            byte[] decodedFingerprint = cipher.doFinal(session.getClientFingerprint());
-
-            //Encrypting client fingerprint for server side
-            cipher.init(Cipher.ENCRYPT_MODE, getServerPublicKey());
-            byte[] clientFingerprint = cipher.doFinal(decodedFingerprint);
-
-            session.setClientFingerprint(clientFingerprint);
-
             MemberDTO user = lookupForMemberController().findMemberById(session.getUserId(), session);
             _extendedActiveSession = new CachedSession(user, session);
 

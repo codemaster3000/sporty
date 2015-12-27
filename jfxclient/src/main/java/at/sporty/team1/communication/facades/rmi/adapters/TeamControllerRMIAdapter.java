@@ -1,7 +1,7 @@
 package at.sporty.team1.communication.facades.rmi.adapters;
 
 import at.sporty.team1.communication.facades.api.ITeamControllerUniversal;
-import at.sporty.team1.communication.util.RemoteCommunicationException;
+import at.sporty.team1.shared.exceptions.RemoteCommunicationException;
 import at.sporty.team1.shared.api.rmi.ITeamControllerRMI;
 import at.sporty.team1.shared.dtos.DepartmentDTO;
 import at.sporty.team1.shared.dtos.MemberDTO;

@@ -2,7 +2,7 @@ package at.sporty.team1.presentation.controllers;
 
 import at.sporty.team1.communication.facades.CommunicationFacade;
 import at.sporty.team1.communication.facades.api.ITournamentControllerUniversal;
-import at.sporty.team1.communication.util.RemoteCommunicationException;
+import at.sporty.team1.shared.exceptions.RemoteCommunicationException;
 import at.sporty.team1.presentation.controllers.core.SearchViewController;
 import at.sporty.team1.presentation.util.GUIHelper;
 import at.sporty.team1.shared.dtos.TournamentDTO;

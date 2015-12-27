@@ -4,7 +4,7 @@ import at.sporty.team1.presentation.controllers.core.EditViewController;
 import at.sporty.team1.presentation.util.GUIHelper;
 import at.sporty.team1.presentation.util.SVGContainer;
 import at.sporty.team1.presentation.util.ViewLoader;
-import at.sporty.team1.shared.api.IDTO;
+import at.sporty.team1.shared.api.entity.IDTO;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;

@@ -1,6 +1,7 @@
 package at.sporty.team1.webservice.client;
 
-import at.sporty.team1.webservice.soap.IResultService;
+
+import at.sporty.team1.shared.api.services.IResultService;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
@@ -25,7 +26,5 @@ public class ResultClientJava {
 
         //TODO enter a valid matchId here (15 is valid)
         System.out.println(resultService.getResult("15"));
-
     }
-
 }
