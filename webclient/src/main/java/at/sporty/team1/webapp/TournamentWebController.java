@@ -1,22 +1,19 @@
 package at.sporty.team1.webapp;
 
-import java.util.List;
-
-import javax.ejb.EJB;
-
 import at.sporty.team1.shared.api.ejb.ITournamentControllerEJB;
 import at.sporty.team1.shared.dtos.MemberDTO;
-import at.sporty.team1.shared.dtos.SessionDTO;
 import at.sporty.team1.shared.dtos.TournamentDTO;
 import at.sporty.team1.shared.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.Serializable;
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import java.io.Serializable;
+import java.util.List;
 
 @ManagedBean
 @RequestScoped
@@ -25,6 +22,7 @@ public class TournamentWebController implements Serializable {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SESSION_OBJECT = "SESSION_OBJECT";
+    public SearchType searchType;
 
     @EJB
     private ITournamentControllerEJB _tournamentController;
@@ -71,10 +69,55 @@ public class TournamentWebController implements Serializable {
         return null;
     }
 
-
-
     public boolean isUserLoggedIn(MemberDTO member){
 
         return FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(SESSION_OBJECT) != null;
+    }
+
+    /**
+     * Wrapper-methode for Searching
+     * @return List<TournamentDTO> or null
+     */
+    public List<TournamentDTO> getAllTournaments(String query) {
+        switch (searchType) {
+            case EVENT_DATE:
+                //search by birthdate
+                return getTournamentsByDate(query);
+            case LOCATION:
+                //search by location
+                return getTournamentsByDate(query);
+            case DEPARTMENT:
+                //search by sport
+                return getTournamentsBySport(query);
+            default:
+                return null;
+        }
+    }
+
+    /* Getter and Setter */
+    public SearchType getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(SearchType searchType) {
+        this.searchType = searchType;
+    }
+
+    /* private enum*/
+    private enum SearchType {
+        DEPARTMENT("sport"),
+        EVENT_DATE("date of the event"),
+        LOCATION("location");
+
+        private final String _stringValue;
+
+        SearchType(String stringValue) {
+            _stringValue = stringValue;
+        }
+
+        @Override
+        public String toString() {
+            return _stringValue;
+        }
     }
 }
