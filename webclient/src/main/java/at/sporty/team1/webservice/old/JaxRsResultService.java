@@ -1,10 +1,13 @@
+/*
 package at.sporty.team1.webservice.old;
 
 import javax.ws.rs.*;
 
+*/
 /**
  * Created by f00 on 15.12.15.
- */
+ *//*
+
 @Path("/API")
 public class JaxRsResultService {
 
@@ -30,3 +33,4 @@ public class JaxRsResultService {
 //                code + "</b></body></html>";
 //    }
 }
+*/

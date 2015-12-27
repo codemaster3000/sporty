@@ -1,3 +1,4 @@
+/*
 package at.sporty.team1.webapp;
 
 import at.sporty.team1.shared.api.ejb.ILoginControllerEJB;
@@ -11,9 +12,11 @@ import javax.faces.bean.RequestScoped;
 import java.io.Serializable;
 import java.security.CryptoPrimitive;
 
+*/
 /**
  * Created by f00 on 27.12.15.
- */
+ *//*
+
 @ManagedBean
 @RequestScoped
 public class LoginWebController implements Serializable {
@@ -28,18 +31,22 @@ public class LoginWebController implements Serializable {
     public LoginWebController() {
     }
 
-    /*
+    */
+/*
     Getter + Setter for Login / Password.
 Authorize method. (Delegates request to the LoginControllerEJBAdapter. On suceesfull
 login stores OUR session object in Java "SessionStorage". Not in the web browser's
 session storage!!)
-     */
+     *//*
 
-    /**
+
+    */
+/**
      * Authorize delegation method
      * @param username
      * @param pw
-     */
+     *//*
+
     public void authorize(String username, String pw) {
         //TODO encrypt with pubkey
 
@@ -57,7 +64,9 @@ session storage!!)
         }
     }
 
-    /* getter and setter */
+    */
+/* getter and setter *//*
+
     public String getPw() {
         return pw;
     }
@@ -74,3 +83,4 @@ session storage!!)
         this.user = user;
     }
 }
+*/

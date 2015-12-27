@@ -1,3 +1,4 @@
+/*
 package at.sporty.team1.webservice.old;
 
 import javax.servlet.ServletException;
@@ -8,9 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+*/
 /**
  * Created by f00 on 15.12.15.
- */
+ *//*
+
 @WebServlet(urlPatterns = {"/resultService"})
 public class ResultServlet extends HttpServlet {
 
@@ -30,3 +33,4 @@ public class ResultServlet extends HttpServlet {
 //        out.println("</ns:sayHelloResponse>");
     }
 }
+*/
