@@ -7,6 +7,7 @@ import at.sporty.team1.misc.converters.SQLDateConverter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -27,8 +28,8 @@ public class Member implements IMember {
     private String role;
     private String username;
     private Boolean isFeePaid;
-    private List<Department> departmentList;
-    private List<Team> teamList;
+    private Set<Department> departmentList;
+    private Set<Team> teamList;
 
     public Member() {
     }
@@ -173,11 +174,11 @@ public class Member implements IMember {
         joinColumns = @JoinColumn(name = "memberId"),
         inverseJoinColumns = @JoinColumn(name = "departmentId")
     )
-    public List<Department> getDepartments() {
+    public Set<Department> getDepartments() {
         return departmentList;
     }
 
-    public void setDepartments(List<Department> departmentList) {
+    public void setDepartments(Set<Department> departmentList) {
         this.departmentList = departmentList;
     }
 
@@ -211,11 +212,11 @@ public class Member implements IMember {
         joinColumns = @JoinColumn(name = "memberId"),
         inverseJoinColumns = @JoinColumn(name = "teamId")
     )
-    public List<Team> getTeams() {
+    public Set<Team> getTeams() {
         return teamList;
     }
 
-    public void setTeams(List<Team> teamList) {
+    public void setTeams(Set<Team> teamList) {
         this.teamList = teamList;
     }
 

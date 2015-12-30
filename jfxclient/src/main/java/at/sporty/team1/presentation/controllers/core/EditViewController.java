@@ -1,6 +1,6 @@
 package at.sporty.team1.presentation.controllers.core;
 
-import at.sporty.team1.shared.api.entity.IDTO;
+import at.sporty.team1.shared.api.IDTO;
 import javafx.beans.property.SimpleBooleanProperty;
 
 /**

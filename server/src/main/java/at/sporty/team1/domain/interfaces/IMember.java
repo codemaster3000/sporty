@@ -6,6 +6,7 @@ import at.sporty.team1.domain.Team;
 import at.sporty.team1.domain.readonly.IRMember;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by sereGkaluv on 27-Oct-15.
@@ -34,13 +35,13 @@ public interface IMember extends IRMember {
 
     void setIsFeePaid(Boolean isFeePaid);
 
-    void setDepartments(List<Department> departmentList);
+    void setDepartments(Set<Department> departmentList);
 
     void addDepartment(IDepartment department);
 
     void removeDepartment(IDepartment department);
 
-    void setTeams(List<Team> teamList);
+    void setTeams(Set<Team> teamList);
 
     void addTeam(ITeam team);
 

@@ -19,14 +19,8 @@
         <!-- Shared Dependency -->
         <dependency>
             <groupId>at.fhv.itb13.team1.sporty</groupId>
-            <artifactId>shared</artifactId>
+            <artifactId>webservice-api</artifactId>
             <version>0.1-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.ejb</groupId>
-                    <artifactId>javax.ejb-api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
 </project>

@@ -18,7 +18,7 @@
 //    @Produces("text/plain")
 //    @Consumes("text/plain")
 //    public String getMatchResult(@QueryParam("matchId") String matchId) {
-//        return _resultPersistentBean.getResult(matchId);
+//        return _resultPersistentBean.getTournamentResult(matchId);
 //    }
 //
 ////    @GET

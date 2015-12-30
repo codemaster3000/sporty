@@ -259,6 +259,28 @@ public class TournamentController implements ITournamentController {
     }
 
     @Override
+    public MatchDTO findMatchById(Integer matchId)
+    throws UnknownEntityException {
+
+        /* Validating Input */
+        if (matchId == null) throw new UnknownEntityException(IMatch.class);
+
+        /* Is valid, moving forward */
+        try {
+
+            Match match = PersistenceFacade.getNewGenericDAO(Match.class).findById(matchId);
+            if (match == null) throw new UnknownEntityException(IMatch.class);
+
+            //converting match to match DTO
+            return MAPPER.map(match, MatchDTO.class);
+
+        } catch (PersistenceException e) {
+            LOGGER.error("An error occurred while searching for Match #{}.", matchId, e);
+            return null;
+        }
+    }
+
+    @Override
     public Integer createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
     throws ValidationException, UnknownEntityException, NotAuthorisedException {
 

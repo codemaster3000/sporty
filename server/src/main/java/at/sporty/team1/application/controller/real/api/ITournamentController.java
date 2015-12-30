@@ -84,6 +84,16 @@ public interface ITournamentController extends IController {
     throws ValidationException, NotAuthorisedException;
 
     /**
+     * Search for Match with a given id.
+     *
+     * @param matchId target match (will be used for search).
+     * @return MatchDTO searched match.
+     * @throws UnknownEntityException
+     */
+    MatchDTO findMatchById(Integer matchId)
+    throws UnknownEntityException;
+
+    /**
      * Creates new match for a given tournament.
      *
      * @param tournamentId Id of a tournament for which given match will be created.

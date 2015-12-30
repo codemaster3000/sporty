@@ -92,6 +92,16 @@ public class TournamentControllerRMIAdapter implements ITournamentControllerUniv
 	}
 
 	@Override
+	public MatchDTO findMatchById(Integer matchId)
+	throws RemoteCommunicationException, UnknownEntityException {
+		try {
+			return _iTournamentControllerRMI.findMatchById(matchId);
+		} catch (RemoteException e) {
+			throw new RemoteCommunicationException(e);
+		}
+	}
+
+	@Override
 	public Integer createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
     throws RemoteCommunicationException, ValidationException, UnknownEntityException, NotAuthorisedException {
 		try {

@@ -80,6 +80,13 @@ public class TournamentControllerEJBAdapter implements ITournamentControllerEJB 
     }
 
     @Override
+    public MatchDTO findMatchById(Integer matchId)
+    throws UnknownEntityException {
+
+        return _controller.findMatchById(matchId);
+    }
+
+    @Override
     public Integer createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
     throws ValidationException, UnknownEntityException, NotAuthorisedException {
 

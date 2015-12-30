@@ -63,6 +63,12 @@ public class TournamentControllerEJBAdapter implements ITournamentControllerUniv
 	}
 
 	@Override
+	public MatchDTO findMatchById(Integer matchId)
+	throws RemoteCommunicationException, UnknownEntityException {
+		return _iTournamentControllerEJB.findMatchById(matchId);
+	}
+
+	@Override
 	public Integer createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
 	throws RemoteCommunicationException, ValidationException, UnknownEntityException, NotAuthorisedException {
 		return _iTournamentControllerEJB.createNewMatch(tournamentId, matchDTO, session);

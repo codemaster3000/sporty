@@ -15,10 +15,10 @@
 // */
 //@Stateless
 //@WebService(serviceName="resultService")
-//public class ResultPersistentBean /*implements ResultPersistentBeanRemote*/ {
+//public class ResultPersistentBean {
 //    private static final Logger LOGGER = LogManager.getLogger();
 //
-//    @WebMethod(operationName="getResult")
+//    @WebMethod(operationName="getTournamentResult")
 //    public String getResult(String matchId)  {
 //
 //        try {

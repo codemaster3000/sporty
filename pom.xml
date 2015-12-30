@@ -23,7 +23,7 @@
 		<module>webclient</module>
         <module>server</module>
         <module>webserviceclient</module>
-	</modules>
+    </modules>
 
     <build>
 		<plugins>

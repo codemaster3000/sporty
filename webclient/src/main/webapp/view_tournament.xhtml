@@ -19,39 +19,27 @@
                 <div class="panel panel-info">
                     <div class="panel-heading">Tournament overview</div>
                     <div class="panel-body">
-
-                        <!-- TODO: define columns!
-                        
-                        example from mkyong: http://www.mkyong.com/jsf2/jsf-2-datatable-example/
-                        
-                        <h:dataTable value="#{order.orderList}" var="o"
-    			styleClass="order-table"
-    			headerClass="order-table-header"
-    			rowClasses="order-table-odd-row,order-table-even-row"
-                        >
-                        
-                        <h:column>
-    				
-    				<f:facet name="header">Order No</f:facet>
-    				
-    				#{o.orderNo}
-    			</h:column>
-    			
-    			<h:column>
-    				<f:facet name="header">Product Name</f:facet>
-    				#{o.productName}
-    			</h:column>
-                        
-                        </h:dataTable>
-                        -->
-                        <h:dataTable value="#{tournamentWebController.allTournaments}"
-                                     var="tournaments">
+                        <h:dataTable value="#{tournamentWebController.allTournaments}" var="tournament">
                             <h:column>
-                                <f:facet name="header">Tournaments</f:facet> ${tournaments}
+                                <f:facet name="header">DATE</f:facet>
+                                #{tournament.date}
                             </h:column>
-                            
-                        </h:dataTable>
 
+                            <h:column>
+                                <f:facet name="header">LOCATION</f:facet>
+                                #{tournament.location}
+                            </h:column>
+
+                            <h:column>
+                                <f:facet name="header">DEPARTMENT</f:facet>
+                                #{tournament.department.sport}
+                            </h:column>
+
+                            <h:column>
+                                <f:facet name="header">EDIT</f:facet>
+                                edit tournament
+                            </h:column>
+                        </h:dataTable>
                     </div>
                 </div>
             </ui:define>

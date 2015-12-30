@@ -72,33 +72,32 @@
             <artifactId>log4j-core</artifactId>
         </dependency>
 
-        <!-- Java EE Dependency -->
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- JSF and Servlet Dependencies -->
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
+            <groupId>com.sun.faces</groupId>
+            <artifactId>jsf-api</artifactId>
+            <version>2.2.12</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>javax.servlet.jsp.jstl</groupId>
-            <artifactId>jstl-api</artifactId>
+            <groupId>com.sun.faces</groupId>
+            <artifactId>jsf-impl</artifactId>
+            <version>2.2.12</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
             <version>1.2</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>javax.el</groupId>
-            <artifactId>javax.el-api</artifactId>
-            <version>3.0.0</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
 
@@ -109,20 +108,19 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Shared Dependencies -->
         <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-api</artifactId>
-            <version>2.2.11</version>
-            <scope>provided</scope>
+            <groupId>at.fhv.itb13.team1.sporty</groupId>
+            <artifactId>ejb-api</artifactId>
+            <version>0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-impl</artifactId>
-            <version>2.2.11</version>
+            <groupId>at.fhv.itb13.team1.sporty</groupId>
+            <artifactId>webservice-api</artifactId>
+            <version>0.1-SNAPSHOT</version>
         </dependency>
 
-        <!-- Shared Dependency -->
         <dependency>
             <groupId>at.fhv.itb13.team1.sporty</groupId>
             <artifactId>shared</artifactId>

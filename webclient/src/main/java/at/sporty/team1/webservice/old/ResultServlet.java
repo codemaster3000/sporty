@@ -21,7 +21,7 @@
 //
 //        ResultPersistentBean resultPersistentBean = new ResultPersistentBean();
 //
-//        out.println(resultPersistentBean.getResult(req.getQueryString()));
+//        out.println(resultPersistentBean.getTournamentResult(req.getQueryString()));
 //
 //
 ////        out.println("<ns:sayHelloResponse xmlns:ns=\"http://hellosrv\">");

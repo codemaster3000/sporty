@@ -1,7 +1,7 @@
 package at.sporty.team1.presentation.util;
 
 import at.sporty.team1.presentation.dialogs.LoginDialog;
-import at.sporty.team1.shared.api.entity.IDTO;
+import at.sporty.team1.shared.api.IDTO;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;

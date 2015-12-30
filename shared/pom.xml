@@ -3,6 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>util</module>
+        <module>ejb-api</module>
+        <module>rmi-api</module>
+        <module>webservice-api</module>
+    </modules>
 
     <parent>
         <artifactId>sporty-project</artifactId>
@@ -12,12 +20,4 @@
 
     <name>Sporty Shared</name>
     <artifactId>shared</artifactId>
-
-    <dependencies>
-        <dependency>
-            <groupId>javax.ejb</groupId>
-            <artifactId>javax.ejb-api</artifactId>
-            <version>3.2</version>
-        </dependency>
-    </dependencies>
 </project>

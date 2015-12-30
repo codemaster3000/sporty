@@ -1,7 +1,7 @@
 package at.sporty.team1.persistence.util;
 
-import at.sporty.team1.shared.api.entity.IThrowingConsumer;
-import at.sporty.team1.shared.api.entity.IThrowingFunction;
+import at.sporty.team1.shared.api.IThrowingConsumer;
+import at.sporty.team1.shared.api.IThrowingFunction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.HibernateException;

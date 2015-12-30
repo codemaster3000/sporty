@@ -11,7 +11,7 @@
 ////        }
 //    }
 //
-//    private static String getResult(String matchId) {
+//    private static String getTournamentResult(String matchId) {
 //
 ////
 ////        com.tutorialspoint.stateless.LibraryService service =

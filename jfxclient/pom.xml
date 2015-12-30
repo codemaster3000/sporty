@@ -62,10 +62,22 @@
             <version>4.1.1</version>
         </dependency>
 
-        <!-- Shared Dependency -->
+        <!-- Shared Dependencies -->
         <dependency>
             <groupId>at.fhv.itb13.team1.sporty</groupId>
-            <artifactId>shared</artifactId>
+            <artifactId>ejb-api</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>at.fhv.itb13.team1.sporty</groupId>
+            <artifactId>rmi-api</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>at.fhv.itb13.team1.sporty</groupId>
+            <artifactId>util</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

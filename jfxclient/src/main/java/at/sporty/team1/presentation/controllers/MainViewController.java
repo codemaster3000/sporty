@@ -12,7 +12,7 @@ import at.sporty.team1.presentation.util.DaemonThreadFactory;
 import at.sporty.team1.presentation.util.GUIHelper;
 import at.sporty.team1.presentation.util.SVGContainer;
 import at.sporty.team1.presentation.util.ViewLoader;
-import at.sporty.team1.shared.api.entity.IDTO;
+import at.sporty.team1.shared.api.IDTO;
 import at.sporty.team1.shared.dtos.MemberDTO;
 import at.sporty.team1.shared.dtos.MessageDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;

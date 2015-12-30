@@ -337,7 +337,7 @@ public class MemberController implements IMemberController {
 
             //Getting all teams for this entity
             PersistenceFacade.forceLoadLazyProperty(member, Member::getTeams);
-            List<? extends ITeam> rawResultsTeam = member.getTeams();
+            Set<? extends ITeam> rawResultsTeam = member.getTeams();
 
             List<DTOPair<DepartmentDTO, TeamDTO>> precookedResults = new LinkedList<>();
 
@@ -418,7 +418,7 @@ public class MemberController implements IMemberController {
 
             //getting all departments for this entity
             PersistenceFacade.forceLoadLazyProperty(member, Member::getDepartments);
-            List<? extends IDepartment> rawResults = member.getDepartments();
+            Set<? extends IDepartment> rawResults = member.getDepartments();
 
             //checking if there are any results
             if (rawResults == null || rawResults.isEmpty()) return null;
@@ -463,13 +463,16 @@ public class MemberController implements IMemberController {
             Department department = PersistenceFacade.getNewDepartmentDAO().findById(departmentId);
             if (department == null) throw new UnknownEntityException(IDepartment.class);
 
-            //loading all departments for the given member
+            //Loading all departments for the given member
             PersistenceFacade.forceLoadLazyProperty(member, Member::getDepartments);
-            member.addDepartment(department);
 
-            PersistenceFacade.getNewMemberDAO().saveOrUpdate(member);
+            //Check if this department should be added to the collection
+            if (!member.getDepartments().contains(department)) {
+                member.addDepartment(department);
 
-            sendNewMemberInDepartmentMessage(memberId, department, session);
+                PersistenceFacade.getNewMemberDAO().saveOrUpdate(member);
+                sendNewMemberInDepartmentMessage(memberId, department, session);
+            }
 
         } catch (PersistenceException e) {
             LOGGER.error(
@@ -545,7 +548,7 @@ public class MemberController implements IMemberController {
 
             //getting all teams for this entity
             PersistenceFacade.forceLoadLazyProperty(member, Member::getTeams);
-            List<? extends ITeam> rawResults = member.getTeams();
+            Set<? extends ITeam> rawResults = member.getTeams();
 
             //checking if there are any results
             if (rawResults == null || rawResults.isEmpty()) return null;
@@ -592,11 +595,14 @@ public class MemberController implements IMemberController {
             if (team == null) throw new UnknownEntityException(ITeam.class);
 
             PersistenceFacade.forceLoadLazyProperty(member, Member::getTeams);
-            member.addTeam(team);
 
-            PersistenceFacade.getNewMemberDAO().saveOrUpdate(member);
+            //Check if this team should be added to the collection
+            if (!member.getTeams().contains(team)) {
+                member.addTeam(team);
 
-            sendNewMemberInTeamMessage(memberId, team, session);
+                PersistenceFacade.getNewMemberDAO().saveOrUpdate(member);
+                sendNewMemberInTeamMessage(memberId, team, session);
+            }
 
         } catch (PersistenceException e) {
             LOGGER.error(

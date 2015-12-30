@@ -80,6 +80,13 @@ public class TournamentControllerRMIAdapter extends UnicastRemoteObject implemen
     }
 
     @Override
+    public MatchDTO findMatchById(Integer matchId)
+    throws RemoteException, UnknownEntityException {
+
+        return _controller.findMatchById(matchId);
+    }
+
+    @Override
     public Integer createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
     throws RemoteException, ValidationException, UnknownEntityException, NotAuthorisedException {
 

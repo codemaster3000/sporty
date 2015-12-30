@@ -5,6 +5,7 @@ import at.sporty.team1.domain.Gender;
 import at.sporty.team1.domain.Team;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by sereGkaluv on 27-Oct-15.
@@ -33,7 +34,7 @@ public interface IRMember {
 
     Boolean getIsFeePaid();
 
-    List<Department> getDepartments();
+    Set<Department> getDepartments();
 
-    List<Team> getTeams();
+    Set<Team> getTeams();
 }
