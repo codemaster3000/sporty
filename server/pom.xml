@@ -143,7 +143,7 @@
 
         <dependency>
             <groupId>at.fhv.itb13.team1.sporty</groupId>
-            <artifactId>shared</artifactId>
+            <artifactId>util</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
 
