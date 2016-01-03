@@ -13,6 +13,17 @@ import java.util.List;
 
 public interface ITournamentControllerRMI extends IRemoteControllerRMI {
 
+    /**
+     * Search for Tournament with a given id.
+     *
+     * @param tournamentId target tournament (will be used for search).
+     * @return TournamentDTO searched match.
+     * @throws RemoteException
+     * @throws UnknownEntityException
+     */
+    TournamentDTO findTournamentById(Integer tournamentId)
+    throws RemoteException, UnknownEntityException;
+
 	/**
      * Search for all Tournaments.
      *

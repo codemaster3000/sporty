@@ -31,6 +31,13 @@ public class TournamentControllerRMIAdapter extends UnicastRemoteObject implemen
     }
 
     @Override
+    public TournamentDTO findTournamentById(Integer tournamentId)
+    throws RemoteException, UnknownEntityException {
+
+        return _controller.findTournamentById(tournamentId);
+    }
+
+    @Override
     public List<TournamentDTO> searchAllTournaments()
     throws RemoteException {
 

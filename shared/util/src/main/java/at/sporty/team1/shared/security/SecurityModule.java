@@ -19,6 +19,7 @@ import java.security.spec.X509EncodedKeySpec;
  * Created by sereGkaluv on 25-Nov-15.
  */
 public class SecurityModule {
+    public static final int DEFAULT_KEY_SIZE = 512;
 
     public static SessionDTO authorize(
         String username,

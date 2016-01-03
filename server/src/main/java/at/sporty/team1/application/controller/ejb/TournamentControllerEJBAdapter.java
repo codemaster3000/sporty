@@ -33,7 +33,15 @@ public class TournamentControllerEJBAdapter implements ITournamentControllerEJB 
     }
 
     @Override
+    public TournamentDTO findTournamentById(Integer tournamentId)
+    throws UnknownEntityException {
+
+        return _controller.findTournamentById(tournamentId);
+    }
+
+    @Override
     public List<TournamentDTO> searchAllTournaments() {
+
         return _controller.searchAllTournaments();
     }
 

@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="WEB-INF/template/template.xhtml">
+    <ui:define name="title">SPORTY TOURNAMENTS</ui:define>
+
+    <ui:define name="menu"><ui:include src="menu.xhtml" /></ui:define>
+
+    <ui:define name="content">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong>TOURNAMENT OVERVIEW PANEL</strong></div>
+
+                <div class="panel-body">
+                    <h:panelGroup>
+                        <h:outputText>DATE: #{}</h:outputText>
+                        <h:outputText>LOCATION:</h:outputText>
+                        <h:outputText>DEPARTMENT:</h:outputText>
+                    </h:panelGroup>
+
+
+
+
+                    <h:panelGroup  layout="block" styleClass="alert alert-warning"
+                                   rendered="#{not empty facesContext.messageList}">
+                        <h:message for="searchForm:searchQuery" />
+                    </h:panelGroup>
+                    <h:form id="searchForm" styleClass="form-inline">
+                        <h:inputText id="searchQuery" value="#{tournamentViewWebController.searchQuery}"
+                                     a:placeholder="SEARCH" styleClass="form-control"/>
+                        <h:selectOneMenu value="#{tournamentViewWebController.searchType}" styleClass="form-control"
+                                         style="margin-left: 1em;">
+                            <f:selectItems value="#{tournamentViewWebController.allSearchTypes}" var="searchType"
+                                           itemValue="#{searchType}" itemLabel="#{searchType.stringValue}" />
+                        </h:selectOneMenu>
+                        <h:commandButton value="SEARCH" action="tournamnets" styleClass="btn btn-default"
+                                         style="margin-left: 1em;"/>
+                    </h:form>
+                    <hr/>
+                    <h:dataTable value="#{tournamentViewWebController.searchResults}" var="tournament"
+                                 styleClass="table table-striped">
+                        <h:column>
+                            <f:facet name="header">DATE</f:facet>
+                            #{tournament.date}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">LOCATION</f:facet>
+                            #{tournament.location}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">DEPARTMENT</f:facet>
+                            #{tournament.department.sport}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">RESULTS</f:facet>
+                            <h:button value="view" outcome="tournament_readview" styleClass="btn btn-primary btn-xs">
+                                <f:param name="tournamentId" value="#{tournament.tournamentId}" />
+                            </h:button>
+                        </h:column>
+                    </h:dataTable>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

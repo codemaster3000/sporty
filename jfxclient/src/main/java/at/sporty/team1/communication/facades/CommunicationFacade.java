@@ -205,7 +205,7 @@ public class CommunicationFacade implements ICommunicationFacade {
     public synchronized KeyPair getClientRSAKeyPair()
     throws SecurityException {
         if (_activeRSAKeyPair == null) {
-            _activeRSAKeyPair = SecurityModule.generateNewRSAKeyPair(512);
+            _activeRSAKeyPair = SecurityModule.generateNewRSAKeyPair(SecurityModule.DEFAULT_KEY_SIZE);
         }
         return _activeRSAKeyPair;
     }

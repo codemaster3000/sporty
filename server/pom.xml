@@ -101,14 +101,6 @@
             <version>4.0</version>
         </dependency>
 
-        <!-- Java EE Dependency -->
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- Glassfish Dependencies -->
         <dependency>
             <groupId>org.glassfish.main.appclient</groupId>

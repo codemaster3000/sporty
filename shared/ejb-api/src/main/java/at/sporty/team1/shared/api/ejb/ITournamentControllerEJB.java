@@ -17,6 +17,16 @@ import java.util.List;
 public interface ITournamentControllerEJB extends IRemoteControllerEJB {
 
     /**
+     * Search for Tournament with a given id.
+     *
+     * @param tournamentId target tournament (will be used for search).
+     * @return TournamentDTO searched match.
+     * @throws UnknownEntityException
+     */
+    TournamentDTO findTournamentById(Integer tournamentId)
+    throws UnknownEntityException;
+
+    /**
      * Search for all Tournaments.
      *
      * @return List<TournamentDTO> List of all Tournaments.

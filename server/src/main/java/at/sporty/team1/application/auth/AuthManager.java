@@ -24,7 +24,7 @@ public final class AuthManager {
     private AuthManager() {
         try {
 
-            _serverKeyPair = SecurityModule.generateNewRSAKeyPair(512);
+            _serverKeyPair = SecurityModule.generateNewRSAKeyPair(SecurityModule.DEFAULT_KEY_SIZE);
             _encodedPublicServerKey = SecurityModule.getEncodedRSAPublicKey(_serverKeyPair);
 
         } catch (SecurityException e) {

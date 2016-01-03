@@ -39,11 +39,33 @@ public class TournamentController implements ITournamentController {
     }
 
     @Override
+    public TournamentDTO findTournamentById(Integer tournamentId)
+    throws UnknownEntityException {
+
+        /* Validating Input */
+        if (tournamentId == null) throw new UnknownEntityException(ITournament.class);
+
+        /* Is valid, moving forward */
+        try {
+
+            Tournament tournament = PersistenceFacade.getNewTournamentDAO().findById(tournamentId);
+            if (tournament == null) throw new UnknownEntityException(ITournament.class);
+
+            //converting tournament to tournament DTO
+            return MAPPER.map(tournament, TournamentDTO.class);
+
+        } catch (PersistenceException e) {
+            LOGGER.error("An error occurred while searching for Match #{}.", tournamentId, e);
+            return null;
+        }
+    }
+
+    @Override
     public List<TournamentDTO> searchAllTournaments() {
 
         try {
             /* pulling a TournamentDAO and getting all Tournaments */
-            List<Tournament> tournaments = PersistenceFacade.getNewGenericDAO(Tournament.class).findAll();
+            List<Tournament> tournaments = PersistenceFacade.getNewTournamentDAO().findAll();
 
             //checking if there are any results
             if (tournaments.isEmpty()) return null;
