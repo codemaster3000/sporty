@@ -1,0 +1,29 @@
+.auth-body {
+    text-align: center;
+}
+
+.userInitialsCircle {
+    margin: 0 auto;
+    width: 2.5em;
+    height: 2.5em;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 2em;
+    line-height: 2.5em;
+    color: #fff;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+    background-image: -webkit-linear-gradient(top, #337ab7 0%, #265a88 100%);
+    background-image: -o-linear-gradient(top, #337ab7 0%, #265a88 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#337ab7), to(#265a88));
+    background-image: linear-gradient(to bottom, #337ab7 0%, #265a88 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff337ab7', endColorstr='#ff265a88', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+    background-repeat: repeat-x;
+    border-color: #245580;
+}
+
+.userFullName {
+    text-align: center;
+    padding-top: 0.5em;
+    font-size: 1.25em;
+}

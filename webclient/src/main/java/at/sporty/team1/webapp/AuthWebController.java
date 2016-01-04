@@ -85,12 +85,8 @@ public class AuthWebController implements Serializable {
         }
     }
 
-    public String logout() {
+    public void logout() {
         getSessionMap().clear();
-
-        //should be handled like this otherwise we will get an exception
-        //because of reference to not existing object
-        return "auth";
     }
 
     public boolean getIsAuthorized() {
@@ -142,7 +138,7 @@ public class AuthWebController implements Serializable {
 
     private KeyPair getClientRSAKeyPair()
     throws SecurityException {
-        if (getSessionMap().containsKey(SessionConstants.CLIENT_KEY_PAIR.getConstant())) {
+        if (!getSessionMap().containsKey(SessionConstants.CLIENT_KEY_PAIR.getConstant())) {
             getSessionMap().put(
                 SessionConstants.CLIENT_KEY_PAIR.getConstant(),
                 SecurityModule.generateNewRSAKeyPair(SecurityModule.DEFAULT_KEY_SIZE)

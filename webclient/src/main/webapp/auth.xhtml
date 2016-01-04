@@ -1,28 +1,30 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="WEB-INF/template/template.xhtml">
-    <ui:define name="title">SPORTY LOGIN</ui:define>
-
-    <ui:define name="menu"><ui:include src="menu.xhtml" /></ui:define>
-
-    <ui:define name="content">
-        <form jsf:rendered="#{!authWebController.isAuthorized}" class="login-cardRightCell">
-            <h:inputText id="username" value="#{authWebController.username}"
-                         a:placeholder="USERNAME" styleClass="form-control"/>
-            <h:inputText id="password" value="#{authWebController.password}"
-                         a:placeholder="PASSWORD" styleClass="form-control"/>
-            <h:commandButton value="SEARCH" action="#{authWebController.authorize}" styleClass="btn btn-default"
-                             style="margin-left: 1em;"/>
-        </form>
-        <div jsf:rendered="#{authWebController.isAuthorized}" class="userContainer">
-            <div class="userInitialsCircle">#{authWebController.userInitials}</div>
-            <div class="userFullName">#{authWebController.userFullName}</div>
-            <h:form>
-                <h:commandButton type="submit" class="logout-button" value="logout" action="#{authWebController.logout}"/>
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>SPORTY LOGIN</strong></div>
+        <div class="panel-body">
+            <h:form rendered="#{!authWebController.isAuthorized}">
+                <div class="form-group">
+                    <h:outputLabel for="username" value="USERNAME:" />
+                    <h:inputText id="username" value="#{authWebController.username}"
+                                 a:placeholder="Enter username" styleClass="form-control"/>
+                </div>
+                <div class="form-group">
+                    <h:outputLabel for="password" value="PASSWORD:" />
+                    <h:inputSecret id="password" value="#{authWebController.password}"
+                                   a:placeholder="Enter password" styleClass="form-control"/>
+                </div>
+                <h:commandButton value="LOG-IN" action="#{authWebController.authorize}" styleClass="btn btn-primary"/>
+            </h:form>
+            <h:form rendered="#{authWebController.isAuthorized}" styleClass="auth-body">
+                <div class="form-group">
+                    <div class="userInitialsCircle">#{authWebController.userInitials}</div>
+                    <div class="userFullName">#{authWebController.userFullName}</div>
+                </div>
+                <h:commandButton value="LOG-OUT" action="#{authWebController.logout}" styleClass="logoutBtn btn btn-primary"/>
             </h:form>
         </div>
-    </ui:define>
+    </div>
 </ui:composition>

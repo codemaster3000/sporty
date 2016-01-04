@@ -19,8 +19,9 @@
                         <h:message for="searchForm:searchQuery" />
                     </h:panelGroup>
                     <h:form id="searchForm" styleClass="form-inline">
+                        <h:outputLabel for="searchQuery" value="SEARCH:" />
                         <h:inputText id="searchQuery" value="#{tournamentSearchWebController.searchQuery}"
-                                     a:placeholder="SEARCH" styleClass="form-control"/>
+                                     a:placeholder="Enter search request" styleClass="form-control" style="margin-left: 1em;"/>
                         <h:selectOneMenu value="#{tournamentSearchWebController.searchType}" styleClass="form-control"
                                          style="margin-left: 1em;">
                             <f:selectItems value="#{tournamentSearchWebController.allSearchTypes}" var="searchType"
@@ -49,7 +50,7 @@
 
                         <h:column>
                             <f:facet name="header">RESULTS</f:facet>
-                            <h:button value="view" outcome="tournament_readview" styleClass="btn btn-primary btn-xs">
+                            <h:button value="view" outcome="tournament_overview" styleClass="btn btn-primary btn-xs">
                                 <f:param name="tournamentId" value="#{tournament.tournamentId}" />
                             </h:button>
                         </h:column>

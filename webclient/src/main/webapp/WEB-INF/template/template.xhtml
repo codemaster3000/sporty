@@ -5,6 +5,7 @@
 <h:head>
     <title><ui:insert name="title"/></title>
     <link href="#{resource['img/favicon.ico']}" rel="shortcut icon" type="image/x-icon" />
+    <h:outputStylesheet library="css" name="main.css" />
     <h:outputStylesheet library="css" name="bootstrap.css" />
     <h:outputStylesheet library="css" name="bootstrap-theme.css" />
 </h:head>
@@ -13,9 +14,16 @@
         <!-- MAIN BLOCK -->
         <h:panelGroup layout="block" styleClass="row">
 
-            <!-- MAIN MENU -->
-            <h:panelGroup layout="block" styleClass="col-sm-2 col-xs-12" id="main_menu">
-                <ui:insert name="menu" />
+            <h:panelGroup layout="block" styleClass="col-sm-3 col-xs-12 container">
+                <!-- AUTH BLOCK -->
+                <h:panelGroup layout="block" id="auth">
+                    <ui:insert name="auth"><ui:include src="../../auth.xhtml" /></ui:insert>
+                </h:panelGroup>
+
+                <!-- MAIN MENU -->
+                <h:panelGroup layout="block" id="main_menu">
+                    <ui:insert name="menu" />
+                </h:panelGroup>
             </h:panelGroup>
 
             <!-- MAIN CONTENT OF THE PAGE -->
