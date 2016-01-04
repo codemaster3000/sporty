@@ -2,7 +2,6 @@ package at.sporty.team1.webapp;
 
 import at.sporty.team1.shared.api.ejb.ITournamentControllerEJB;
 import at.sporty.team1.shared.dtos.MatchDTO;
-import at.sporty.team1.shared.dtos.SessionDTO;
 import at.sporty.team1.shared.dtos.TournamentDTO;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.util.SessionConstants;
@@ -13,7 +12,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
@@ -24,7 +23,7 @@ import java.util.Map;
  * Created by sereGkaluv on 03.01.16.
  */
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class TournamentViewWebController implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LogManager.getLogger();
@@ -36,6 +35,7 @@ public class TournamentViewWebController implements Serializable {
 
     private Integer _tournamentId;
     private TournamentDTO _activeTournament;
+    private MatchDTO _activeMatch;
 
     @PostConstruct
     public void init() {
@@ -53,12 +53,6 @@ public class TournamentViewWebController implements Serializable {
     }
 
     public TournamentViewWebController() {
-    }
-
-    public boolean isAbleToPerformChanges() {
-        Object activeSession = getSessionMap().get(SessionConstants.ACTIVE_SESSION.getConstant());
-
-        return true;
     }
 
     public TournamentDTO getActiveTournament() {
@@ -80,6 +74,14 @@ public class TournamentViewWebController implements Serializable {
         return _activeTournament;
     }
 
+    public MatchDTO getActiveMatch() {
+        return _activeMatch;
+    }
+
+    public void setActiveMatch(MatchDTO activeMatch) {
+        _activeMatch = activeMatch;
+    }
+
     public List<MatchDTO> getTournamentMatches() {
         try {
 
@@ -93,6 +95,12 @@ public class TournamentViewWebController implements Serializable {
 
             return null;
         }
+    }
+
+    public boolean isAbleToPerformChanges() {
+        Object activeSession = getSessionMap().get(SessionConstants.ACTIVE_SESSION.getConstant());
+
+        return false;
     }
 
     private static Map<String, String> getRequestParameterMap() {

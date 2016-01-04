@@ -2,29 +2,29 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
-    <div class="panel panel-default">
-        <div class="panel-heading"><strong>SPORTY LOGIN</strong></div>
-        <div class="panel-body">
+    <h:panelGroup layout="block" styleClass="panel panel-default">
+        <h:panelGroup layout="block" styleClass="panel-heading"><strong>SPORTY LOGIN</strong></h:panelGroup>
+        <h:panelGroup layout="block" styleClass="panel-body">
             <h:form rendered="#{!authWebController.isAuthorized}">
-                <div class="form-group">
+                <h:panelGroup layout="block" styleClass="form-group">
                     <h:outputLabel for="username" value="USERNAME:" />
                     <h:inputText id="username" value="#{authWebController.username}"
                                  a:placeholder="Enter username" styleClass="form-control"/>
-                </div>
-                <div class="form-group">
+                </h:panelGroup>
+                <h:panelGroup layout="block" styleClass="form-group">
                     <h:outputLabel for="password" value="PASSWORD:" />
                     <h:inputSecret id="password" value="#{authWebController.password}"
                                    a:placeholder="Enter password" styleClass="form-control"/>
-                </div>
+                </h:panelGroup>
                 <h:commandButton value="LOG-IN" action="#{authWebController.authorize}" styleClass="btn btn-primary"/>
             </h:form>
             <h:form rendered="#{authWebController.isAuthorized}" styleClass="auth-body">
-                <div class="form-group">
-                    <div class="userInitialsCircle">#{authWebController.userInitials}</div>
-                    <div class="userFullName">#{authWebController.userFullName}</div>
-                </div>
+                <h:panelGroup layout="block" styleClass="form-group">
+                    <h:panelGroup layout="block" styleClass="userInitialsCircle">#{authWebController.userInitials}</h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="userFullName">#{authWebController.userFullName}</h:panelGroup>
+                </h:panelGroup>
                 <h:commandButton value="LOG-OUT" action="#{authWebController.logout}" styleClass="logoutBtn btn btn-primary"/>
             </h:form>
-        </div>
-    </div>
+        </h:panelGroup>
+    </h:panelGroup>
 </ui:composition>

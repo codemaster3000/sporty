@@ -1,3 +1,7 @@
+body {
+    background: url("#{resource['img/sos.png']}") fixed;
+}
+
 .auth-body {
     text-align: center;
 }

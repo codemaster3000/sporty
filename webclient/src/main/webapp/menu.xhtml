@@ -1,12 +1,12 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
-    <div class="panel panel-default">
-        <div class="panel-heading"><strong>NAVIGATION</strong></div>
-        <div class="panel-body">
+    <h:panelGroup layout="block" styleClass="panel panel-default">
+        <h:panelGroup layout="block" styleClass="panel-heading"><strong>NAVIGATION</strong></h:panelGroup>
+        <h:panelGroup layout="block" styleClass="panel-body">
             <ul class="nav nav-pills nav-stacked">
                 <li><h:link value="Tournamets" outcome="tournaments" /></li>
             </ul>
-        </div>
-    </div>
+        </h:panelGroup>
+    </h:panelGroup>
 </ui:composition>
