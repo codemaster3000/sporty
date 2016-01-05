@@ -20,6 +20,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import java.io.IOException;
 import java.io.Serializable;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
@@ -33,6 +34,7 @@ import java.util.Map;
 public class AuthWebController implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final String TOURNAMENT_SEARCH_PAGE = "tournaments.jsf";
 
     @EJB
     private ILoginControllerEJB _loginController;
@@ -86,7 +88,19 @@ public class AuthWebController implements Serializable {
     }
 
     public void logout() {
-        getSessionMap().clear();
+        try {
+
+            getSessionMap().clear();
+
+            FacesContext.getCurrentInstance().getExternalContext().redirect(TOURNAMENT_SEARCH_PAGE);
+
+        } catch (IOException e) {
+            LOGGER.error(
+                "Unable to redirect to {} page.",
+                TOURNAMENT_SEARCH_PAGE,
+                e
+            );
+        }
     }
 
     public boolean getIsAuthorized() {

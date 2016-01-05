@@ -353,16 +353,16 @@ public class TournamentController implements ITournamentController {
         /* Is valid, moving forward */
         try {
 
-            /* pulling a TournamentDAO and save the Tournament */
+            /* pulling a TournamentDAO and searching for the Tournament */
             Tournament tournament = PersistenceFacade.getNewTournamentDAO().findById(tournamentId);
             if (tournament == null) throw new UnknownEntityException(ITournament.class);
 
-            IMatch match = MAPPER.map(matchDTO, Match.class);
+            /* assigning match to tournament */
+            Match match = MAPPER.map(matchDTO, Match.class);
+            match.setTournament(tournament);
 
-            PersistenceFacade.forceLoadLazyProperty(tournament, Tournament::getMatches);
-            tournament.addMatch(match);
-
-            PersistenceFacade.getNewTournamentDAO().saveOrUpdate(tournament);
+            /* saving match with help of generic dao */
+            PersistenceFacade.getNewGenericDAO(Match.class).saveOrUpdate(match);
 
             return match.getMatchId();
 

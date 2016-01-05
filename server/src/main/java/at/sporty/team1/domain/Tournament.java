@@ -168,7 +168,7 @@ public class Tournament implements ITournament {
 
     @Override
     public int hashCode() {
-        int result = tournamentId != null ? tournamentId.hashCode() :0;
+        int result = tournamentId != null ? tournamentId.hashCode() : 0;
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (location != null ? location.hashCode() : 0);
         return result;

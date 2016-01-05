@@ -261,7 +261,7 @@ public class Member implements IMember {
         if (squad != null ? !squad.equals(member.squad) : member.squad != null) return false;
         if (role != null ? !role.equals(member.role) : member.role != null) return false;
         if (username != null ? !username.equals(member.username) : member.username != null) return false;
-        if (isFeePaid != null ? isFeePaid.equals(member.isFeePaid) : member.isFeePaid != null) return false;
+        if (isFeePaid != null ? !isFeePaid.equals(member.isFeePaid) : member.isFeePaid != null) return false;
         return true;
     }
 

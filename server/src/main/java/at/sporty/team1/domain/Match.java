@@ -166,7 +166,7 @@ public class Match implements IMatch {
 
     @Override
     public int hashCode() {
-        int result = matchId != null ? matchId.hashCode() :0;
+        int result = matchId != null ? matchId.hashCode() : 0;
         result = 31 * result + (location != null ? location.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (team1 != null ? team1.hashCode() : 0);
@@ -174,7 +174,7 @@ public class Match implements IMatch {
         result = 31 * result + (referee != null ? referee.hashCode() : 0);
         result = 31 * result + (resultTeam1 != null ? resultTeam1.hashCode() : 0);
         result = 31 * result + (resultTeam2 != null ? resultTeam2.hashCode() : 0);
-        result = 32 * result + (isFinalResults != null ? isFinalResults.hashCode() : 0);
+        result = 31 * result + (isFinalResults != null ? isFinalResults.hashCode() : 0);
         return result;
     }
 }

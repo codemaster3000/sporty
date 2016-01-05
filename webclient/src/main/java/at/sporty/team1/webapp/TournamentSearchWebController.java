@@ -92,7 +92,7 @@ public class TournamentSearchWebController implements Serializable {
             sessionMap.remove(SessionConstants.ACTIVE_MATCH.getConstant());
             sessionMap.remove(SessionConstants.REQUESTED_EDIT.getConstant());
 
-            FacesContext.getCurrentInstance().getExternalContext().dispatch(TOURNAMENT_OVERVIEW_PAGE);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(TOURNAMENT_OVERVIEW_PAGE);
 
         } catch (IOException e) {
             LOGGER.error(

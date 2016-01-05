@@ -27,6 +27,7 @@
                         <h:message for="matchDisplayForm:activeMatch" />
                         <h:message for="matchEditForm:results" />
                     </h:panelGroup>
+
                     <h:form id="matchDisplayForm" styleClass="form-inline">
                         <h:panelGroup layout="block" styleClass="form-group">
                             <h:outputLabel value="MATCH:" />
@@ -44,10 +45,20 @@
                         <h:commandButton value="show" styleClass="btn btn-primary btn-sm" style="margin-left: 1em;"
                                          action="#{tournamentViewWebController.setRequestedEdit(false)}" />
                         <h:commandButton value="edit" styleClass="btn btn-default btn-sm" style="margin-left: 1em;"
-                                         action="#{tournamentViewWebController.setRequestedEdit(true)}" />
+                                         action="#{tournamentViewWebController.setRequestedEdit(true)}"
+                                         rendered="#{tournamentViewWebController.ableToPerformChanges}"/>
                     </h:form>
                     <h:panelGroup layout="block" id="matchDetails" rendered="#{tournamentViewWebController.activeMatch != null}">
                         <hr/>
+
+                        <c:set var="isEditable" value="#{
+                            tournamentViewWebController.ableToPerformChanges and tournamentViewWebController.requestedEdit
+                        }" />
+
+                        <h:panelGroup  layout="block" styleClass="alert alert-info"
+                                       rendered="#{!tournamentViewWebController.isFinalResults and !isEditable}">
+                            <h:outputText value="Results are not final yet!" />
+                        </h:panelGroup>
 
                         <h:panelGroup layout="block" styleClass="centered-body">
                             <h:outputLabel styleClass="startInlineText"><strong>DATE:</strong></h:outputLabel>
@@ -57,10 +68,6 @@
                             <h:outputLabel styleClass="furtherInlineText"><strong>REFEREE:</strong></h:outputLabel>
                             <h:outputText value="#{tournamentViewWebController.activeMatch.referee}" />
                         </h:panelGroup>
-
-                        <c:set var="isEditable" value="#{
-                            tournamentViewWebController.ableToPerformChanges and tournamentViewWebController.requestedEdit
-                        }" />
 
                         <h:panelGroup layout="block" rendered="#{!isEditable}" styleClass="centered-body">
                             <br/>

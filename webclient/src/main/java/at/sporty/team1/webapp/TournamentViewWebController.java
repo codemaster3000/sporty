@@ -148,6 +148,8 @@ public class TournamentViewWebController implements Serializable {
                 getActiveSession()
             );
 
+            setRequestedEdit(false);
+
         } catch (ValidationException e) {
 
             String context = "Error occurred while saving match results. Entered data is not valid.";
