@@ -31,10 +31,11 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
     private static final Logger LOGGER = LogManager.getLogger();
     private static final CommunicationFacade COMMUNICATION_FACADE = CommunicationFacade.getInstance();
     private static final String NOT_AVAILABLE = "N/A";
+    private static final String FINAL_RESULTS_SYMBOL = "✓";
+    private static final String NOT_FINAL_RESULTS_SYMBOL = "✗";
     private static final SimpleBooleanProperty EDIT_VISIBILITY_PROPERTY = new SimpleBooleanProperty(false);
     private static final SimpleBooleanProperty CREATE_VISIBILITY_PROPERTY = new SimpleBooleanProperty(false);
     private static final SimpleObjectProperty<TournamentDTO> ACTIVE_DTO = new SimpleObjectProperty<>();
-
 
     @FXML
     private ListView<String> _competitionTeamsListView;
@@ -54,6 +55,8 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
     private TableColumn<MatchDTO, String> _resultTeam1Col;
     @FXML
     private TableColumn<MatchDTO, String> _resultTeam2Col;
+    @FXML
+    private TableColumn<MatchDTO, String> _isFinalResults;
     @FXML
     private Label _labelTeams;
     @FXML
@@ -154,6 +157,16 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
             if (matchDTO != null && matchDTO.getResultTeam2() != null) return new SimpleStringProperty(matchDTO.getResultTeam2());
             return new SimpleStringProperty(NOT_AVAILABLE);
         });
+
+        _isFinalResults.setCellValueFactory(dto -> {
+            MatchDTO matchDTO = dto.getValue();
+
+            if (matchDTO != null && matchDTO.getIsFinalResults() != null && matchDTO.getIsFinalResults()) {
+
+                return new SimpleStringProperty(FINAL_RESULTS_SYMBOL);
+
+            } return new SimpleStringProperty(NOT_FINAL_RESULTS_SYMBOL);
+        });
     }
 
     @Override
@@ -214,7 +227,7 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
     }
 
 	@FXML
-    private void onEditTournament(ActionEvent event) {
+    private void onEditTournament() {
 		Optional<TournamentDTO> result = new EditViewDialog<>(
             ACTIVE_DTO.get(),
             CompetitionEditViewController.class
@@ -226,7 +239,7 @@ public class CompetitionReadOnlyViewController extends ConsumerViewController<To
     }
 
     @FXML
-    private void onCreateTournament(ActionEvent event) {
+    private void onCreateTournament() {
     	
     	try {
 			List<DepartmentDTO> departments = COMMUNICATION_FACADE.lookupForDepartmentController().searchAllDepartments();

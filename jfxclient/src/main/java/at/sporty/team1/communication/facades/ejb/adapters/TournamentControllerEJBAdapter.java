@@ -69,9 +69,9 @@ public class TournamentControllerEJBAdapter implements ITournamentControllerUniv
 	}
 
 	@Override
-	public Integer createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
+	public Integer createOrSaveMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
 	throws RemoteCommunicationException, ValidationException, UnknownEntityException, NotAuthorisedException {
-		return _iTournamentControllerEJB.createNewMatch(tournamentId, matchDTO, session);
+		return _iTournamentControllerEJB.createOrSaveMatch(tournamentId, matchDTO, session);
 	}
 
 	@Override

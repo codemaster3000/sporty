@@ -2,6 +2,7 @@ package at.sporty.team1.domain;
 
 import at.sporty.team1.domain.interfaces.IMatch;
 import at.sporty.team1.misc.converters.SQLDateConverter;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import javax.persistence.*;
 
@@ -16,6 +17,7 @@ public class Match implements IMatch {
     private String referee;
     private String resultTeam1;
     private String resultTeam2;
+    private Boolean isFinalResults;
     private Tournament tournament;
 
     public Match() {
@@ -120,6 +122,18 @@ public class Match implements IMatch {
     }
 
     @Override
+    @Basic
+    @Column(name = "isFinalResults")
+    public Boolean getIsFinalResults() {
+        return isFinalResults;
+    }
+
+    @Override
+    public void setIsFinalResults(Boolean isFinalResults) {
+        this.isFinalResults = isFinalResults;
+    }
+
+    @Override
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tournamentId")
     public Tournament getTournament() {
@@ -146,6 +160,7 @@ public class Match implements IMatch {
         if (referee != null ? !referee.equals(match.referee) : match.referee != null) return false;
         if (resultTeam1 != null ? !resultTeam1.equals(match.resultTeam1) : match.resultTeam1 != null) return false;
         if (resultTeam2 != null ? !resultTeam2.equals(match.resultTeam2) : match.resultTeam2 != null) return false;
+        if (isFinalResults != null ? !isFinalResults.equals(match.isFinalResults) : match.isFinalResults != null) return false;
         return true;
     }
 
@@ -159,6 +174,7 @@ public class Match implements IMatch {
         result = 31 * result + (referee != null ? referee.hashCode() : 0);
         result = 31 * result + (resultTeam1 != null ? resultTeam1.hashCode() : 0);
         result = 31 * result + (resultTeam2 != null ? resultTeam2.hashCode() : 0);
+        result = 32 * result + (isFinalResults != null ? isFinalResults.hashCode() : 0);
         return result;
     }
 }

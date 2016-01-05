@@ -33,6 +33,12 @@ public class TournamentControllerEJBAdapter implements ITournamentControllerEJB 
     }
 
     @Override
+    public boolean isAbleToPerformChanges(TournamentDTO tournamentDTO, SessionDTO session) {
+
+        return _controller.isAbleToPerformChanges(tournamentDTO, session);
+    }
+
+    @Override
     public TournamentDTO findTournamentById(Integer tournamentId)
     throws UnknownEntityException {
 
@@ -95,10 +101,10 @@ public class TournamentControllerEJBAdapter implements ITournamentControllerEJB 
     }
 
     @Override
-    public Integer createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
+    public Integer createOrSaveMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
     throws ValidationException, UnknownEntityException, NotAuthorisedException {
 
-        return _controller.createNewMatch(tournamentId, matchDTO, session);
+        return _controller.createOrSaveMatch(tournamentId, matchDTO, session);
     }
 
     @Override

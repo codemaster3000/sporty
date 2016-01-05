@@ -1,7 +1,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core"
                 template="WEB-INF/template/template.xhtml">
     <ui:define name="title">SPORTY TOURNAMENTS</ui:define>
 
@@ -13,26 +14,93 @@
                 <h:panelGroup layout="block" styleClass="panel-heading"><strong>TOURNAMENT OVERVIEW PANEL</strong></h:panelGroup>
                 <h:panelGroup layout="block" styleClass="panel-body">
                     <h:panelGroup layout="block">
-                        <h:outputLabel style="margin-right: 0.5em;"><strong>DATE:</strong></h:outputLabel>
+                        <h:outputLabel styleClass="startInlineText"><strong>DATE:</strong></h:outputLabel>
                         <h:outputText value="#{tournamentViewWebController.activeTournament.date}"/>
-                        <h:outputLabel style="margin-left: 2em; margin-right: 0.5em;"><strong>LOCATION:</strong></h:outputLabel>
+                        <h:outputLabel styleClass="furtherInlineText"><strong>LOCATION:</strong></h:outputLabel>
                         <h:outputText value="#{tournamentViewWebController.activeTournament.location}" />
-                        <h:outputLabel style="margin-left: 2em; margin-right: 0.5em;"><strong>DEPARTMENT:</strong></h:outputLabel>
+                        <h:outputLabel styleClass="furtherInlineText"><strong>DEPARTMENT:</strong></h:outputLabel>
                         <h:outputText value="#{tournamentViewWebController.activeTournament.department.sport}" />
                     </h:panelGroup>
                     <hr/>
-                    <h:form styleClass="form-inline">
+                    <h:panelGroup  layout="block" styleClass="alert alert-warning"
+                                   rendered="#{not empty facesContext.messageList}">
+                        <h:message for="matchDisplayForm:activeMatch" />
+                        <h:message for="matchEditForm:results" />
+                    </h:panelGroup>
+                    <h:form id="matchDisplayForm" styleClass="form-inline">
                         <h:panelGroup layout="block" styleClass="form-group">
                             <h:outputLabel value="MATCH:" />
-                            <h:selectOneMenu value="#{tournamentViewWebController.activeMatch}" styleClass="form-control"
-                                             style="margin-left: 1em;">
+                            <h:selectOneMenu id="activeMatch" value="#{tournamentViewWebController.activeMatchId}"
+                                             styleClass="form-control" style="margin-left: 1em;" hideNoSelectionOption="true"
+                                             required="true" requiredMessage="Please select a Match."
+                                             converter="javax.faces.Integer">
+                                <f:selectItem itemValue="#{null}" itemLabel="--MATCH--" noSelectionOption="true"
+                                              itemDisabled="true"/>
                                 <f:selectItems value="#{tournamentViewWebController.tournamentMatches}" var="match"
-                                               itemValue="#{match}" itemLabel="#{match.date} | #{match.team1} vs. #{match.team2}" />
+                                               itemValue="#{match.matchId}"
+                                               itemLabel="#{match.date} | #{match.team1} vs. #{match.team2}" />
                             </h:selectOneMenu>
                         </h:panelGroup>
-                        <h:panelGroup layout="block" styleClass="form-group">
-                        </h:panelGroup>
+                        <h:commandButton value="show" styleClass="btn btn-primary btn-sm" style="margin-left: 1em;"
+                                         action="#{tournamentViewWebController.setRequestedEdit(false)}" />
+                        <h:commandButton value="edit" styleClass="btn btn-default btn-sm" style="margin-left: 1em;"
+                                         action="#{tournamentViewWebController.setRequestedEdit(true)}" />
                     </h:form>
+                    <h:panelGroup layout="block" id="matchDetails" rendered="#{tournamentViewWebController.activeMatch != null}">
+                        <hr/>
+
+                        <h:panelGroup layout="block" styleClass="centered-body">
+                            <h:outputLabel styleClass="startInlineText"><strong>DATE:</strong></h:outputLabel>
+                            <h:outputText value="#{tournamentViewWebController.activeMatch.date}"/>
+                            <h:outputLabel styleClass="furtherInlineText"><strong>LOCATION:</strong></h:outputLabel>
+                            <h:outputText value="#{tournamentViewWebController.activeMatch.location}" />
+                            <h:outputLabel styleClass="furtherInlineText"><strong>REFEREE:</strong></h:outputLabel>
+                            <h:outputText value="#{tournamentViewWebController.activeMatch.referee}" />
+                        </h:panelGroup>
+
+                        <c:set var="isEditable" value="#{
+                            tournamentViewWebController.ableToPerformChanges and tournamentViewWebController.requestedEdit
+                        }" />
+
+                        <h:panelGroup layout="block" rendered="#{!isEditable}" styleClass="centered-body">
+                            <br/>
+
+                            <h:outputLabel styleClass="startInlineText resultsText"
+                                           value="#{tournamentViewWebController.activeMatch.team1}" />
+                            <h:outputText styleClass="resultsText"
+                                          value="#{tournamentViewWebController.activeMatch.resultTeam1}" />
+                            <h:outputLabel styleClass="furtherInlineText resultsText"
+                                           value="#{tournamentViewWebController.activeMatch.team2}" />
+                            <h:outputText styleClass="resultsText"
+                                          value="#{tournamentViewWebController.activeMatch.resultTeam2}" />
+                        </h:panelGroup>
+
+                        <h:form id="messageEditForm" rendered="#{isEditable}" styleClass="form-inline">
+                            <hr/>
+
+                            <h:panelGroup layout="block" styleClass="form-group">
+                                <h:outputLabel value="#{tournamentViewWebController.activeMatch.team1}:"
+                                               styleClass="startInlineText" />
+                                <h:inputText a:placeholder="Enter result for TEAM 1" styleClass="form-control"
+                                             value="#{tournamentViewWebController.resultTeam1}" />
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" styleClass="form-group">
+                                <h:outputLabel value="#{tournamentViewWebController.activeMatch.team2}:"
+                                               styleClass="furtherInlineText" />
+                                <h:inputText a:placeholder="Enter result for TEAM 2" styleClass="form-control"
+                                             value="#{tournamentViewWebController.resultTeam2}" />
+                            </h:panelGroup>
+                            <br/><br/>
+                            <h:panelGroup id="results" layout="block" styleClass="form-group">
+                                <h:outputLabel>
+                                    <h:outputText value="FINAL RESULTS" styleClass="startInlineText"/>
+                                    <h:selectBooleanCheckbox value="#{tournamentViewWebController.isFinalResults}"/>
+                                </h:outputLabel>
+                                <h:commandButton value="SAVE CHANGES" styleClass="btn btn-primary btn-sm" style="margin-left: 2em;"
+                                                 action="#{tournamentViewWebController.saveChangesForActiveMatch()}" />
+                            </h:panelGroup>
+                        </h:form>
+                    </h:panelGroup>
                 </h:panelGroup>
             </h:panelGroup>
         </h:panelGroup>

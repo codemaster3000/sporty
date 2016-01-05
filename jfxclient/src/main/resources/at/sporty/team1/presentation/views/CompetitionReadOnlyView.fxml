@@ -77,6 +77,7 @@
                 <TableColumn fx:id="_refereeCol" text="REFEREE"/>
                 <TableColumn fx:id="_resultTeam1Col" text="RESULT T1"/>
                 <TableColumn fx:id="_resultTeam2Col" text="RESULT T2"/>
+                <TableColumn fx:id="_isFinalResults" text="IS FINAL"/>
             </columns>
         </TableView>
     </children>

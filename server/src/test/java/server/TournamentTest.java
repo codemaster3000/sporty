@@ -107,7 +107,7 @@ public class TournamentTest {
 
 		try {
             TournamentController tournamentController = new TournamentController();
-			tournamentController.createNewMatch(tournamentId, matchDTO, null);
+			tournamentController.createOrSaveMatch(tournamentId, matchDTO, null);
 		} catch (UnknownEntityException | ValidationException | NotAuthorisedException e) {
 			e.printStackTrace();
 		}

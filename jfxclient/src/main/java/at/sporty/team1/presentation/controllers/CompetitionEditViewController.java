@@ -3,6 +3,7 @@ package at.sporty.team1.presentation.controllers;
 import at.sporty.team1.communication.facades.CommunicationFacade;
 import at.sporty.team1.communication.facades.api.IDepartmentControllerUniversal;
 import at.sporty.team1.communication.facades.api.ITournamentControllerUniversal;
+import at.sporty.team1.presentation.dialogs.EditViewDialog;
 import at.sporty.team1.shared.exceptions.RemoteCommunicationException;
 import at.sporty.team1.presentation.controllers.core.EditViewController;
 import at.sporty.team1.presentation.util.GUIHelper;
@@ -15,12 +16,13 @@ import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.shared.exceptions.ValidationException;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,22 +30,19 @@ import org.apache.logging.log4j.Logger;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CompetitionEditViewController extends EditViewController<TournamentDTO> {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final CommunicationFacade COMMUNICATION_FACADE = CommunicationFacade.getInstance();
+    private static final String NOT_AVAILABLE = "N/A";
+    private static final String FINAL_RESULTS_SYMBOL = "✓";
+    private static final String NOT_FINAL_RESULTS_SYMBOL = "✗";
     private static final String VIEW_TEXT_HEADER = "TOURNAMENT EDITING VIEW";
     private static final String SUCCESSFUL_TOURNAMENT_SAVE = "Tournament was saved successfully.";
     private static final String UNSUCCESSFUL_TEAM_TO_TOURNAMENT_SAVE = "Error occurred while saving Teams to Tournament.";
     private static final String UNSUCCESSFUL_MATCH_TO_TOURNAMENT_SAVE = "Error occurred while saving Matches to Tournament.";
-    private static final String COLUMN_PROP_TEAM_1 = "team1";
-    private static final String COLUMN_PROP_TEAM_2 = "team2";
-    private static final String COLUMN_PROP_TIME = "date";
-    private static final String COLUMN_PROP_REFEREE = "referee";
-    private static final String COLUMN_PROP_COURT = "location";
-    private static final String COLUMN_PROP_RESULT_1 = "resultTeam1";
-    private static final String COLUMN_PROP_RESULT_2 = "resultTeam2";
     private static final Label NO_CONTENT_PLACEHOLDER = new Label("No Content");
 
     @FXML
@@ -72,6 +71,8 @@ public class CompetitionEditViewController extends EditViewController<Tournament
     private TableColumn<MatchDTO, String> _resultTeam1Col;
     @FXML
     private TableColumn<MatchDTO, String> _resultTeam2Col;
+    @FXML
+    private TableColumn<MatchDTO, String> _isFinalResults;
     @FXML
     private TextField _competitionExternalTeamTextField;
     @FXML
@@ -133,37 +134,67 @@ public class CompetitionEditViewController extends EditViewController<Tournament
         StringConverter<TeamDTO> teamDTOStringConverter = GUIHelper.getDTOToStringConverter(TeamDTO::getTeamName);
         _teamToCompetitionComboBox.setConverter(teamDTOStringConverter);
 
-        //Cell factories for Match View
-        _team1Col.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
-        _team1Col.setCellValueFactory(new PropertyValueFactory<>(COLUMN_PROP_TEAM_1));
-        _team1Col.setOnEditCommit(cell -> cell.getRowValue().setTeam1(cell.getNewValue()));
+        _matchTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        _team2Col.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
-        _team2Col.setCellValueFactory(new PropertyValueFactory<>(COLUMN_PROP_TEAM_2));
-        _team2Col.setOnEditCommit(cell -> cell.getRowValue().setTeam2(cell.getNewValue()));
+        _team1Col.setCellValueFactory(dto -> {
+            MatchDTO matchDTO = dto.getValue();
 
-        _timeCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
-        _timeCol.setCellValueFactory(new PropertyValueFactory<>(COLUMN_PROP_TIME));
-        _timeCol.setOnEditCommit(cell -> cell.getRowValue().setDate(cell.getNewValue()));
+            if (matchDTO != null && matchDTO.getTeam1() != null) return new SimpleStringProperty(matchDTO.getTeam1());
+            return new SimpleStringProperty(NOT_AVAILABLE);
+        });
 
-        _refereeCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
-        _refereeCol.setCellValueFactory(new PropertyValueFactory<>(COLUMN_PROP_REFEREE));
-        _refereeCol.setOnEditCommit(cell -> cell.getRowValue().setReferee(cell.getNewValue()));
+        _team2Col.setCellValueFactory(dto -> {
+            MatchDTO matchDTO = dto.getValue();
 
-        _courtCol.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
-        _courtCol.setCellValueFactory(new PropertyValueFactory<>(COLUMN_PROP_COURT));
-        _courtCol.setOnEditCommit(cell -> cell.getRowValue().setLocation(cell.getNewValue()));
+            if (matchDTO != null && matchDTO.getTeam2() != null) return new SimpleStringProperty(matchDTO.getTeam2());
+            return new SimpleStringProperty(NOT_AVAILABLE);
+        });
 
-        _resultTeam1Col.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
-        _resultTeam1Col.setCellValueFactory(new PropertyValueFactory<>(COLUMN_PROP_RESULT_1));
-        _resultTeam1Col.setOnEditCommit(cell -> cell.getRowValue().setResultTeam1(cell.getNewValue()));
+        _timeCol.setCellValueFactory(dto -> {
+            MatchDTO matchDTO = dto.getValue();
 
-        _resultTeam2Col.setCellFactory(TextFieldTableCell.<MatchDTO>forTableColumn());
-        _resultTeam2Col.setCellValueFactory(new PropertyValueFactory<>(COLUMN_PROP_RESULT_2));
-        _resultTeam2Col.setOnEditCommit(cell -> cell.getRowValue().setResultTeam2(cell.getNewValue()));
+            if (matchDTO != null && matchDTO.getDate() != null) return new SimpleStringProperty(matchDTO.getDate());
+            return new SimpleStringProperty(NOT_AVAILABLE);
+        });
 
-        //League is not implemented yet
-        //TODO: LeagueComboBox
+        _refereeCol.setCellValueFactory(dto -> {
+            MatchDTO matchDTO = dto.getValue();
+
+            if (matchDTO != null && matchDTO.getReferee() != null) return new SimpleStringProperty(matchDTO.getReferee());
+            return new SimpleStringProperty(NOT_AVAILABLE);
+        });
+
+        _courtCol.setCellValueFactory(dto -> {
+            MatchDTO matchDTO = dto.getValue();
+
+            if (matchDTO != null && matchDTO.getLocation() != null) return new SimpleStringProperty(matchDTO.getLocation());
+            return new SimpleStringProperty(NOT_AVAILABLE);
+        });
+
+        _resultTeam1Col.setCellValueFactory(dto -> {
+            MatchDTO matchDTO = dto.getValue();
+
+            if (matchDTO != null && matchDTO.getResultTeam1() != null) return new SimpleStringProperty(matchDTO.getResultTeam1());
+            return new SimpleStringProperty(NOT_AVAILABLE);
+        });
+
+        _resultTeam2Col.setCellValueFactory(dto -> {
+            MatchDTO matchDTO = dto.getValue();
+
+            if (matchDTO != null && matchDTO.getResultTeam2() != null) return new SimpleStringProperty(matchDTO.getResultTeam2());
+            return new SimpleStringProperty(NOT_AVAILABLE);
+        });
+
+        _isFinalResults.setCellValueFactory(dto -> {
+            MatchDTO matchDTO = dto.getValue();
+
+            if (matchDTO != null && matchDTO.getIsFinalResults() != null && matchDTO.getIsFinalResults()) {
+
+                return new SimpleStringProperty(FINAL_RESULTS_SYMBOL);
+
+            } return new SimpleStringProperty(NOT_FINAL_RESULTS_SYMBOL);
+        });
+
         _tournamentLeagueComboBox.setVisible(false);
         _leagueLabel.setVisible(false);
     }
@@ -407,7 +438,7 @@ public class CompetitionEditViewController extends EditViewController<Tournament
 
 			for(MatchDTO match : _matchTableView.getItems()){
 
-                Integer matchId = tournamentController.createNewMatch(
+                Integer matchId = tournamentController.createOrSaveMatch(
                     tournamentId,
                     match,
                     COMMUNICATION_FACADE.getActiveSession()
@@ -444,17 +475,50 @@ public class CompetitionEditViewController extends EditViewController<Tournament
     }
 
     @FXML
-    private void addNewMatchRowButton(ActionEvent event) {
-        _matchTableView.getItems().add(new MatchDTO());
+    private void addNewMatch() {
+        MatchDTO matchDTO = createOrEditMatch(new MatchDTO());
 
-        if (!_matchTableView.getItems().isEmpty()) {
-            _matchTableView.getSelectionModel().selectLast();
-            _matchTableView.requestFocus();
+        if (matchDTO != null) {
+            _matchTableView.getItems().add(matchDTO);
+
+            if (!_matchTableView.getItems().isEmpty()) {
+                _matchTableView.getSelectionModel().select(matchDTO);
+                _matchTableView.requestFocus();
+            }
         }
     }
 
     @FXML
-    private void removeSelectedMatch(ActionEvent event) {
+    private void editMatch() {
+        MatchDTO matchDTO = createOrEditMatch(_matchTableView.getSelectionModel().getSelectedItem());
+
+        if (matchDTO != null && !_matchTableView.getItems().isEmpty()) {
+            //workaround for table refresh
+            _matchTableView.getColumns().get(0).setVisible(false);
+            _matchTableView.getColumns().get(0).setVisible(true);
+
+            _matchTableView.getSelectionModel().select(matchDTO);
+            _matchTableView.requestFocus();
+        }
+    }
+
+    private MatchDTO createOrEditMatch(MatchDTO matchDTO) {
+
+        if (matchDTO == null) return null;
+
+        EditViewDialog<MatchDTO, MatchEditViewController> dialogController = new EditViewDialog<>(
+            matchDTO,
+            MatchEditViewController.class
+        );
+
+        dialogController.getViewController().loadTeams(_competitionTeamsListView.getItems());
+        Optional<MatchDTO> result = dialogController.showAndWait();
+
+        return result.isPresent() ? result.get() : null;
+    }
+
+    @FXML
+    private void removeSelectedMatch() {
         MatchDTO matchDTO = _matchTableView.getSelectionModel().getSelectedItem();
         _matchTableView.getItems().remove(matchDTO);
     }

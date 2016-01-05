@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <GridPane vgap="5.0" hgap="5.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="at.sporty.team1.presentation.controllers.CompetitionEditViewController" minWidth="700.0">
+          fx:controller="at.sporty.team1.presentation.controllers.CompetitionEditViewController" minWidth="800.0">
     <columnConstraints>
         <ColumnConstraints hgrow="NEVER"/>
         <ColumnConstraints hgrow="SOMETIMES"/>
@@ -78,10 +78,12 @@
             <TableColumn fx:id="_refereeCol" text="REFEREE"/>
             <TableColumn fx:id="_resultTeam1Col" text="RESULT T1"/>
             <TableColumn fx:id="_resultTeam2Col" text="RESULT T2"/>
+            <TableColumn fx:id="_isFinalResults" text="IS FINAL"/>
         </columns>
     </TableView>
     <HBox GridPane.rowIndex="9" GridPane.columnSpan="4" spacing="5.0">
-        <Button onAction="#addNewMatchRowButton" text="Add new Match row" />
+        <Button onAction="#editMatch" text="Edit Match" />
+        <Button onAction="#addNewMatch" text="Add new Match" />
         <Pane HBox.hgrow="ALWAYS"/>
         <Button fx:id="_removeSelectedMatch" mnemonicParsing="false" onAction="#removeSelectedMatch"
                 text="Remove selected Match"/>

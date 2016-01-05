@@ -14,6 +14,17 @@ import java.util.List;
 public interface ITournamentControllerRMI extends IRemoteControllerRMI {
 
     /**
+     * Check if User from the given session is able to perform any changes to the given TournamentDTO.
+     *
+     * @param tournamentDTO DTO for tournament creation or save.
+     * @param session Session object.
+     * @return true if is able, false if not.
+     * @throws RemoteException
+     */
+    boolean isAbleToPerformChanges(TournamentDTO tournamentDTO, SessionDTO session)
+    throws RemoteException;
+
+    /**
      * Search for Tournament with a given id.
      *
      * @param tournamentId target tournament (will be used for search).
@@ -124,7 +135,7 @@ public interface ITournamentControllerRMI extends IRemoteControllerRMI {
      * @throws UnknownEntityException
      * @throws NotAuthorisedException
      */
-    Integer createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
+    Integer createOrSaveMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
     throws RemoteException, ValidationException, UnknownEntityException, NotAuthorisedException;
 
 	/**

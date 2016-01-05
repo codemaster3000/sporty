@@ -102,10 +102,10 @@ public class TournamentControllerRMIAdapter implements ITournamentControllerUniv
 	}
 
 	@Override
-	public Integer createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
+	public Integer createOrSaveMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
     throws RemoteCommunicationException, ValidationException, UnknownEntityException, NotAuthorisedException {
 		try {
-			return _iTournamentControllerRMI.createNewMatch(tournamentId, matchDTO, session);
+			return _iTournamentControllerRMI.createOrSaveMatch(tournamentId, matchDTO, session);
 		} catch (RemoteException e) {
 			throw new RemoteCommunicationException(e);
 		}

@@ -31,7 +31,6 @@ public class HibernateSessionUtil {
     }
 
     public Session getCurrentSession() throws HibernateException {
-        if (!SESSION_FACTORY.getCurrentSession().isOpen()) openSession();
         return SESSION_FACTORY.getCurrentSession();
     }
 

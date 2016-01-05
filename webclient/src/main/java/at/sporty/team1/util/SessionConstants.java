@@ -6,7 +6,10 @@ package at.sporty.team1.util;
 public enum SessionConstants {
     CLIENT_KEY_PAIR("ACTIVE_KEY_PAIR"),
     ACTIVE_SESSION("ACTIVE_SESSION"),
-    ACTIVE_USER("ACTIVE_USER");
+    ACTIVE_USER("ACTIVE_USER"),
+    ACTIVE_TOURNAMENT("ACTIVE_TOURNAMENT"),
+    ACTIVE_MATCH("ACTIVE_MATCH"),
+    REQUESTED_EDIT("REQUESTED_EDIT");
 
     private final String _constant;
 

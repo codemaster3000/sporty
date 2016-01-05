@@ -31,6 +31,13 @@ public class TournamentControllerRMIAdapter extends UnicastRemoteObject implemen
     }
 
     @Override
+    public boolean isAbleToPerformChanges(TournamentDTO tournamentDTO, SessionDTO session)
+    throws RemoteException {
+
+        return _controller.isAbleToPerformChanges(tournamentDTO, session);
+    }
+
+    @Override
     public TournamentDTO findTournamentById(Integer tournamentId)
     throws RemoteException, UnknownEntityException {
 
@@ -94,10 +101,10 @@ public class TournamentControllerRMIAdapter extends UnicastRemoteObject implemen
     }
 
     @Override
-    public Integer createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
+    public Integer createOrSaveMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
     throws RemoteException, ValidationException, UnknownEntityException, NotAuthorisedException {
 
-        return _controller.createNewMatch(tournamentId, matchDTO, session);
+        return _controller.createOrSaveMatch(tournamentId, matchDTO, session);
     }
 
     @Override

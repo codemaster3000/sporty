@@ -13,6 +13,7 @@ public class MatchDTO implements IDTO {
 	private String _date;
     private String _resultTeam1;
     private String _resultTeam2;
+    private Boolean _isFinalResults;
    
     public MatchDTO() {   	
     }
@@ -86,6 +87,13 @@ public class MatchDTO implements IDTO {
 
     public MatchDTO setResultTeam2(String resultTeam2) {
         _resultTeam2 = resultTeam2;
+        return this;
+    }
+
+    public Boolean getIsFinalResults() { return _isFinalResults;}
+
+    public MatchDTO setIsFinalResults(Boolean finalResults) {
+        _isFinalResults = finalResults;
         return this;
     }
 }

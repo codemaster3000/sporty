@@ -23,5 +23,7 @@ public interface IRMatch {
 
     String getResultTeam2();
 
+    Boolean getIsFinalResults();
+
     Tournament getTournament();
 }

@@ -19,10 +19,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -177,7 +174,7 @@ public class MemberReadOnlyViewController extends ConsumerViewController<MemberD
     }
 
     @FXML
-    private void onEditMember(ActionEvent actionEvent) {
+    private void onEditMember() {
         Optional<MemberDTO> result = new EditViewDialog<>(ACTIVE_DTO.get(), MemberEditViewController.class).showAndWait();
         if (result.isPresent()) {
             loadDTO(result.get());
@@ -185,7 +182,7 @@ public class MemberReadOnlyViewController extends ConsumerViewController<MemberD
     }
     
     @FXML
-    private void onCreateMember(ActionEvent actionEvent) {
+    private void onCreateMember() {
         Optional<MemberDTO> result = new EditViewDialog<>(null, MemberEditViewController.class).showAndWait();
         if (result.isPresent()) {
             loadDTO(result.get());

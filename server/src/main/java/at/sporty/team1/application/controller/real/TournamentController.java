@@ -39,6 +39,31 @@ public class TournamentController implements ITournamentController {
     }
 
     @Override
+    public boolean isAbleToPerformChanges(TournamentDTO tournamentDTO, SessionDTO session) {
+
+        //1 STEP
+        if (tournamentDTO == null || tournamentDTO.getDepartment() == null) return false;
+
+        //2 STEP
+        return LoginController.hasEnoughPermissions(
+            session,
+            AccessPolicy.or(
+                BasicAccessPolicies.isInPermissionBound(UserRole.ADMIN),
+
+                AccessPolicy.and(
+                    BasicAccessPolicies.isInPermissionBound(UserRole.DEPARTMENT_HEAD),
+
+                    AccessPolicy.or(
+                        //create new tournament (new tournaments doesn't have id))
+                        AccessPolicy.simplePolicy(user -> tournamentDTO.getTournamentId() == null),
+                        BasicAccessPolicies.isDepartmentHead(tournamentDTO.getDepartment().getDepartmentId())
+                    )
+                )
+            )
+        );
+    }
+
+    @Override
     public TournamentDTO findTournamentById(Integer tournamentId)
     throws UnknownEntityException {
 
@@ -233,28 +258,9 @@ public class TournamentController implements ITournamentController {
     throws ValidationException, NotAuthorisedException {
 
         /* Checking access permissions */
-        //1 STEP
-        if (tournamentDTO == null || tournamentDTO.getDepartment() == null) throw new NotAuthorisedException();
+        if (!isAbleToPerformChanges(tournamentDTO, session)) throw new NotAuthorisedException();
 
-        //2 STEP
-        if (!LoginController.hasEnoughPermissions(
-            session,
-            AccessPolicy.or(
-                BasicAccessPolicies.isInPermissionBound(UserRole.ADMIN),
-
-                AccessPolicy.and(
-                    BasicAccessPolicies.isInPermissionBound(UserRole.DEPARTMENT_HEAD),
-
-                    AccessPolicy.or(
-                        //create new tournament (new tournaments doesn't have id))
-                        AccessPolicy.simplePolicy(user -> tournamentDTO.getTournamentId() == null),
-                        BasicAccessPolicies.isDepartmentHead(tournamentDTO.getDepartment().getDepartmentId())
-                    )
-                )
-            )
-        )) throw new NotAuthorisedException();
-
-		 /* Validating Input */
+        /* Validating Input */
         InputSanitizer inputSanitizer = new InputSanitizer();
         if (
             !inputSanitizer.isValid(tournamentDTO.getLocation(), DataType.TEXT) ||
@@ -303,7 +309,7 @@ public class TournamentController implements ITournamentController {
     }
 
     @Override
-    public Integer createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
+    public Integer createOrSaveMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
     throws ValidationException, UnknownEntityException, NotAuthorisedException {
 
         /* Checking access permissions */

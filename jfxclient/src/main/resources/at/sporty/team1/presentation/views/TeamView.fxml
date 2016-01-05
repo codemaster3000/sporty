@@ -2,18 +2,17 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="at.sporty.team1.presentation.controllers.TeamViewController">
-    <ToolBar AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+    <ToolBar VBox.vgrow="NEVER">
         <Label text="Choose Team:"/>
         <ComboBox fx:id="_chooseTeamComboBox"/>
     </ToolBar>
-    <ListView fx:id="_membersListView" AnchorPane.topAnchor="35.0" AnchorPane.leftAnchor="0.0"
-              AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="35.0"/>
-    <ToolBar AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+    <ListView fx:id="_membersListView" VBox.vgrow="ALWAYS"/>
+    <ToolBar VBox.vgrow="NEVER">
         <Pane HBox.hgrow="ALWAYS"/>
         <Button mnemonicParsing="false" onAction="#saveTeam" text="Save" HBox.hgrow="NEVER"/>
         <Separator orientation="VERTICAL"/>
         <Button mnemonicParsing="false" onAction="#removeSelectedMember" text="Remove selected member"/>
     </ToolBar>
-</AnchorPane>
+</VBox>

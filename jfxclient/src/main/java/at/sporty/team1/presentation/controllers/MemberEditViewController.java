@@ -645,6 +645,7 @@ public class MemberEditViewController extends EditViewController<MemberDTO> {
         memberTeamComboBoxSoccer.setValue(null);
 
         roleComboBox.getSelectionModel().select(null);
+        roleComboBox.setValue(null);
     }
 
     private enum RoleType {

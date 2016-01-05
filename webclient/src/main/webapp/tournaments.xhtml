@@ -16,13 +16,17 @@
                     <h:panelGroup  layout="block" styleClass="alert alert-warning"
                                    rendered="#{not empty facesContext.messageList}">
                         <h:message for="searchForm:searchQuery" />
+                        <h:message for="searchForm:searchType" />
                     </h:panelGroup>
                     <h:form id="searchForm" styleClass="form-inline">
                         <h:outputLabel for="searchQuery" value="SEARCH:" />
                         <h:inputText id="searchQuery" value="#{tournamentSearchWebController.searchQuery}"
                                      a:placeholder="Enter search request" styleClass="form-control" style="margin-left: 1em;"/>
-                        <h:selectOneMenu value="#{tournamentSearchWebController.searchType}" styleClass="form-control"
-                                         style="margin-left: 1em;">
+                        <h:selectOneMenu id="searchType" value="#{tournamentSearchWebController.searchType}"
+                                         styleClass="form-control" style="margin-left: 1em;" hideNoSelectionOption="true"
+                                         required="true" requiredMessage="Please select a search type.">
+                            <f:selectItem itemValue="#{null}" itemLabel="--TYPE--" noSelectionOption="true"
+                                          itemDisabled="true" />
                             <f:selectItems value="#{tournamentSearchWebController.allSearchTypes}" var="searchType"
                                            itemValue="#{searchType}" itemLabel="#{searchType.stringValue}" />
                         </h:selectOneMenu>
@@ -30,30 +34,31 @@
                                          style="margin-left: 1em;"/>
                     </h:form>
                     <hr/>
-                    <h:dataTable value="#{tournamentSearchWebController.searchResults}" var="tournament"
-                                 styleClass="table table-striped">
-                        <h:column>
-                            <f:facet name="header">DATE</f:facet>
-                            #{tournament.date}
-                        </h:column>
+                    <h:form>
+                        <h:dataTable value="#{tournamentSearchWebController.searchResults}" var="tournament"
+                                     styleClass="table table-striped">
+                            <h:column>
+                                <f:facet name="header">DATE</f:facet>
+                                #{tournament.date}
+                            </h:column>
 
-                        <h:column>
-                            <f:facet name="header">LOCATION</f:facet>
-                            #{tournament.location}
-                        </h:column>
+                            <h:column>
+                                <f:facet name="header">LOCATION</f:facet>
+                                #{tournament.location}
+                            </h:column>
 
-                        <h:column>
-                            <f:facet name="header">DEPARTMENT</f:facet>
-                            #{tournament.department.sport}
-                        </h:column>
+                            <h:column>
+                                <f:facet name="header">DEPARTMENT</f:facet>
+                                #{tournament.department.sport}
+                            </h:column>
 
-                        <h:column>
-                            <f:facet name="header">RESULTS</f:facet>
-                            <h:button value="view" outcome="tournament_overview" styleClass="btn btn-primary btn-xs">
-                                <f:param name="tournamentId" value="#{tournament.tournamentId}" />
-                            </h:button>
-                        </h:column>
-                    </h:dataTable>
+                            <h:column>
+                                <f:facet name="header">RESULTS</f:facet>
+                                <h:commandButton value="view" styleClass="btn btn-primary btn-xs"
+                                                 action="#{tournamentSearchWebController.openTournamentView(tournament)}" />
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
                 </h:panelGroup>
             </h:panelGroup>
         </h:panelGroup>

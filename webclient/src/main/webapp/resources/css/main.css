@@ -2,7 +2,7 @@ body {
     background: url("#{resource['img/sos.png']}") fixed;
 }
 
-.auth-body {
+.centered-body {
     text-align: center;
 }
 
@@ -30,4 +30,17 @@ body {
     text-align: center;
     padding-top: 0.5em;
     font-size: 1.25em;
+}
+
+.startInlineText {
+    margin-right: 0.5em;
+}
+
+.furtherInlineText {
+    margin-left: 2em;
+    margin-right: 0.5em;
+}
+
+.resultsText {
+    font-size: 2em;
 }

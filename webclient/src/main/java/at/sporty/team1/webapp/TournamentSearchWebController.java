@@ -3,6 +3,7 @@ package at.sporty.team1.webapp;
 import at.sporty.team1.shared.api.ejb.ITournamentControllerEJB;
 import at.sporty.team1.shared.dtos.TournamentDTO;
 import at.sporty.team1.shared.exceptions.ValidationException;
+import at.sporty.team1.util.SessionConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,6 +12,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,7 @@ public class TournamentSearchWebController implements Serializable {
 
     private static final String SEARCH_QUERY = "searchForm:searchQuery";
     private static final String VALIDATION_EXCEPTION = "Server validation problem occurred. [%s]";
+    private static final String TOURNAMENT_OVERVIEW_PAGE = "tournament_overview.jsf";
 
     @EJB
     private ITournamentControllerEJB _tournamentController;
@@ -78,6 +81,28 @@ public class TournamentSearchWebController implements Serializable {
         return getAllTournaments();
     }
 
+    public void openTournamentView(TournamentDTO selectedTournament) {
+
+        try {
+
+            Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+
+            sessionMap.put(SessionConstants.ACTIVE_TOURNAMENT.getConstant(), selectedTournament);
+
+            sessionMap.remove(SessionConstants.ACTIVE_MATCH.getConstant());
+            sessionMap.remove(SessionConstants.REQUESTED_EDIT.getConstant());
+
+            FacesContext.getCurrentInstance().getExternalContext().dispatch(TOURNAMENT_OVERVIEW_PAGE);
+
+        } catch (IOException e) {
+            LOGGER.error(
+                "Unable to redirect to {} from tournament search page.",
+                TOURNAMENT_OVERVIEW_PAGE,
+                e
+            );
+        }
+    }
+
     private List<TournamentDTO> getAllTournaments() {
         return _tournamentController.searchAllTournaments();
     }
@@ -129,9 +154,9 @@ public class TournamentSearchWebController implements Serializable {
 
     /* private enum*/
     public enum SearchType {
-        DEPARTMENT("sport"),
-        EVENT_DATE("date of the event"),
-        LOCATION("location");
+        DEPARTMENT("SPORT"),
+        EVENT_DATE("DATE OF THE EVENT"),
+        LOCATION("LOCATION");
 
         private final String _stringValue;
 

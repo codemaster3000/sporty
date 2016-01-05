@@ -115,7 +115,7 @@ public interface ITournamentControllerUniversal extends IControllerUniversal {
      * @throws UnknownEntityException
      * @throws NotAuthorisedException
      */
-    Integer createNewMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
+    Integer createOrSaveMatch(Integer tournamentId, MatchDTO matchDTO, SessionDTO session)
     throws RemoteCommunicationException, ValidationException, UnknownEntityException, NotAuthorisedException;
 
 	/**

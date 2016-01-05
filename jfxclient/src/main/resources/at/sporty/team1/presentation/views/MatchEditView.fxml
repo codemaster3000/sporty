@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<GridPane hgap="5.0" vgap="5.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="at.sporty.team1.presentation.controllers.MatchEditViewController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="NEVER" minWidth="200.0"/>
+        <ColumnConstraints hgrow="ALWAYS" minWidth="400.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="NEVER"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="NEVER"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="NEVER"/>
+    </rowConstraints>
+    <padding>
+        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+    </padding>
+
+    <Label text="Date (yyyy-mm-dd):"/>
+    <TextField fx:id="_dateTextField" GridPane.columnIndex="1"/>
+
+    <Label text="Referee:" GridPane.rowIndex="1"/>
+    <TextField fx:id="_refereeTextField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+    <Label text="Location:" GridPane.rowIndex="2"/>
+    <TextField fx:id="_courtTextField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+    <Separator GridPane.columnSpan="2" GridPane.rowIndex="3"/>
+
+    <Label text="TEAM 1:" GridPane.rowIndex="4"/>
+    <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <ComboBox fx:id="_team1ComboBox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+    </AnchorPane>
+
+    <Label text="Result TEAM1:" GridPane.rowIndex="5"/>
+    <TextField fx:id="_resultTeam1TextField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+    <Label text="TEAM 2:" GridPane.rowIndex="6"/>
+    <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="6">
+        <ComboBox fx:id="_team2ComboBox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+    </AnchorPane>
+
+    <Label text="Result TEAM2:" GridPane.rowIndex="7"/>
+    <TextField fx:id="_resultTeam2TextField" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+
+    <Separator GridPane.columnSpan="2" GridPane.rowIndex="8"/>
+
+    <Label text="Results Status:" GridPane.rowIndex="9"/>
+    <CheckBox fx:id="_isFinalResultsCheckBox" mnemonicParsing="false" text="IS FINAL" GridPane.columnIndex="1"
+              GridPane.rowIndex="9"/>
+
+    <Separator GridPane.columnSpan="2" GridPane.rowIndex="10"/>
+</GridPane>

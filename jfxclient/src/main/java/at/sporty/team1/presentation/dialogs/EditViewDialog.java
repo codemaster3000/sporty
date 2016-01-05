@@ -17,16 +17,22 @@ public class EditViewDialog<T extends IDTO, U extends EditViewController<T>> ext
     private static final String DIALOG_TITLE = "Edit View";
     private static final String BUTTON_SAVE_CAPTION = "Save";
 
+    private final U _viewController;
+
     public EditViewDialog(T dto, Class<U> controllerClass) {
-        prepareDialog(dto, controllerClass);
+         _viewController = prepareDialog(dto, controllerClass);
     }
 
-    private void prepareDialog(T dto, Class<U> controllerClass) {
+    public U getViewController() {
+        return _viewController;
+    }
+
+    private U prepareDialog(T dto, Class<U> controllerClass) {
         //loading edit view mask
         ViewLoader<U> viewLoader = ViewLoader.loadView(controllerClass);
         Node content = viewLoader.loadNode();
 
-        EditViewController<T> editViewController = viewLoader.getController();
+        U editViewController = viewLoader.getController();
         editViewController.loadDTO(dto);
 
         //Configuring dialog window
@@ -56,5 +62,7 @@ public class EditViewDialog<T extends IDTO, U extends EditViewController<T>> ext
             }
             return null;
         });
+
+        return editViewController;
     }
 }
