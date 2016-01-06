@@ -27,13 +27,6 @@ public class TeamControllerEJBAdapter implements ITeamControllerEJB {
     }
 
     @Override
-    public Integer createOrSaveTeam(TeamDTO teamDTO, SessionDTO session)
-    throws ValidationException, NotAuthorisedException {
-
-        return _controller.createOrSaveTeam(teamDTO,session);
-    }
-
-    @Override
     public List<TeamDTO> searchTeamsByMember(Integer memberId, SessionDTO session)
     throws UnknownEntityException, NotAuthorisedException {
 

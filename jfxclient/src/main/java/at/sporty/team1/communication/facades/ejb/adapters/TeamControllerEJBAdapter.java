@@ -22,12 +22,6 @@ public class TeamControllerEJBAdapter implements ITeamControllerUniversal {
 	}
 
 	@Override
-	public Integer createOrSaveTeam(TeamDTO teamDTO, SessionDTO session)
-	throws RemoteCommunicationException, ValidationException, NotAuthorisedException {
-		return _iTeamController.createOrSaveTeam(teamDTO, session);
-	}
-
-	@Override
 	public List<TeamDTO> searchTeamsByMember(Integer memberId, SessionDTO session)
 	throws RemoteCommunicationException, UnknownEntityException, NotAuthorisedException {
 		return _iTeamController.searchTeamsByMember(memberId, session);

@@ -39,55 +39,6 @@ public class TeamController implements ITeamController {
     }
 
     @Override
-    public Integer createOrSaveTeam(TeamDTO teamDTO, SessionDTO session)
-    throws ValidationException, NotAuthorisedException {
-
-        /* Checking access permissions */
-        //1 STEP
-        if (teamDTO == null) throw new NotAuthorisedException();
-
-        //2 STEP
-        if (!LoginController.hasEnoughPermissions(
-            session,
-            AccessPolicy.or(
-                BasicAccessPolicies.isInPermissionBound(UserRole.ADMIN),
-
-                AccessPolicy.and(
-                    BasicAccessPolicies.isInPermissionBound(UserRole.TRAINER),
-
-                    AccessPolicy.or(
-                        //create new team (new teams doesn't have id))
-                        AccessPolicy.simplePolicy(user -> teamDTO.getTeamId() == null),
-                        BasicAccessPolicies.isTrainerOfTeam(teamDTO.getTeamId()),
-                        BasicAccessPolicies.isDepartmentHeadOfTeam(teamDTO.getTeamId())
-                    )
-                )
-            )
-        )) throw new NotAuthorisedException();
-
-        /* Validating Input */
-        InputSanitizer inputSanitizer = new InputSanitizer();
-        if (!inputSanitizer.isValid(teamDTO.getTeamName(), DataType.TEXT)) {
-            // There has been bad Input, throw the Exception
-            throw inputSanitizer.getPreparedValidationException();
-        }
-
-        /* Is valid, moving forward */
-        try {
-             /* pulling a TeamDAO and save the Team */
-            PersistenceFacade.getNewTeamDAO().saveOrUpdate(
-                MAPPER.map(teamDTO, Team.class)
-            );
-
-            LOGGER.info("Team \"{}\" was successfully saved.", teamDTO.getTeamName());
-            return teamDTO.getTeamId();
-        } catch (PersistenceException e) {
-            LOGGER.error("Error occurred while communicating with DB.", e);
-            return null;
-        }
-    }
-
-    @Override
     public List<TeamDTO> searchTeamsByMember(Integer memberId, SessionDTO session)
     throws UnknownEntityException, NotAuthorisedException {
 
@@ -109,10 +60,10 @@ public class TeamController implements ITeamController {
             /* pulling a TeamDAO and searching for all teams assigned to given Member */
             List<? extends ITeam> rawResults = PersistenceFacade.getNewTeamDAO().findTeamsByMemberId(memberId);
 
-            //checking if there are any results
+            //checking if there are any results.
             if (rawResults == null || rawResults.isEmpty()) return null;
 
-            //Converting results to TeamDTO
+            //Converting results to TeamDTO.
             return rawResults.stream()
                     .map(team -> MAPPER.map(team, TeamDTO.class))
                     .collect(Collectors.toList());

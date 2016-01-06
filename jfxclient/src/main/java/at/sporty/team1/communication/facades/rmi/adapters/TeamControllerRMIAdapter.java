@@ -21,16 +21,6 @@ public class TeamControllerRMIAdapter implements ITeamControllerUniversal {
 	public TeamControllerRMIAdapter(ITeamControllerRMI iTeamControllerRMI) {
 		_iTeamControllerRMI = iTeamControllerRMI;
 	}
-	
-	@Override
-	public Integer createOrSaveTeam(TeamDTO teamDTO, SessionDTO session)
-	throws RemoteCommunicationException, ValidationException, NotAuthorisedException {
-		try {
-			return _iTeamControllerRMI.createOrSaveTeam(teamDTO, session);
-		} catch (RemoteException e) {
-			throw new RemoteCommunicationException(e);
-		}
-	}
 
 	@Override
 	public List<TeamDTO> searchTeamsByMember(Integer memberId, SessionDTO session)

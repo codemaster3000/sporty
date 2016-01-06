@@ -37,10 +37,17 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
     private static final CommunicationFacade COMMUNICATION_FACADE = CommunicationFacade.getInstance();
     private static final String SUCCESSFUL_TEAM_SAVE = "Team was successfully saved.";
 
+
     @FXML
     private ListView<MemberDTO> _membersListView;
     @FXML
     private ComboBox<TeamDTO> _chooseTeamComboBox;
+    @FXML
+    private Separator _buttonSeparator;
+    @FXML
+    private Button _saveTeamButton;
+    @FXML
+    private Button _removeSelectedMemberButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -116,6 +123,18 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
             _membersListView.getItems().clear();
             displayTeamData(_chooseTeamComboBox.getSelectionModel().getSelectedItem());
         });
+
+        _saveTeamButton.visibleProperty().bind(
+            _chooseTeamComboBox.getSelectionModel().selectedItemProperty().isNotNull()
+        );
+
+        _buttonSeparator.visibleProperty().bind(
+            _chooseTeamComboBox.getSelectionModel().selectedItemProperty().isNotNull()
+        );
+
+        _removeSelectedMemberButton.visibleProperty().bind(
+            _chooseTeamComboBox.getSelectionModel().selectedItemProperty().isNotNull()
+        );
     }
 
     private static TeamDTO _activeTeamDTO;
@@ -210,12 +229,6 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
         if (memberList != null && !memberList.isEmpty()) {
 
             try {
-
-//                ITeamControllerUniversal teamController = COMMUNICATION_FACADE.lookupForTeamController();
-//                teamController.createOrSaveTeam(
-//                    _activeTeamDTO,
-//                    COMMUNICATION_FACADE.getActiveSession()
-//                );
 
                 for (MemberDTO member : memberList) {
                     COMMUNICATION_FACADE.lookupForMemberController().assignMemberToTeam(

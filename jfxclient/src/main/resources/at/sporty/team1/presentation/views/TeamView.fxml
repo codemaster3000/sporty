@@ -11,8 +11,8 @@
     <ListView fx:id="_membersListView" VBox.vgrow="ALWAYS"/>
     <ToolBar VBox.vgrow="NEVER">
         <Pane HBox.hgrow="ALWAYS"/>
-        <Button mnemonicParsing="false" onAction="#saveTeam" text="Save" HBox.hgrow="NEVER"/>
-        <Separator orientation="VERTICAL"/>
-        <Button mnemonicParsing="false" onAction="#removeSelectedMember" text="Remove selected member"/>
+        <Button fx:id="_saveTeamButton" mnemonicParsing="false" onAction="#saveTeam" text="Save" HBox.hgrow="NEVER"/>
+        <Separator fx:id="_buttonSeparator" orientation="VERTICAL"/>
+        <Button fx:id="_removeSelectedMemberButton" mnemonicParsing="false" onAction="#removeSelectedMember" text="Remove selected member"/>
     </ToolBar>
 </VBox>

@@ -32,13 +32,6 @@ public class TeamControllerRMIAdapter extends UnicastRemoteObject implements ITe
     }
 
     @Override
-    public Integer createOrSaveTeam(TeamDTO teamDTO, SessionDTO session)
-    throws RemoteException, ValidationException, NotAuthorisedException {
-
-        return _controller.createOrSaveTeam(teamDTO, session);
-    }
-
-    @Override
     public List<TeamDTO> searchTeamsByMember(Integer memberId, SessionDTO session)
     throws RemoteException, UnknownEntityException, NotAuthorisedException {
 

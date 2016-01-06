@@ -11,12 +11,14 @@ import at.sporty.team1.util.SessionConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +34,7 @@ public class TournamentViewWebController implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String MATCH_RESULTS_EDIT_FORM = "matchEditForm:results";
+    private static final String TOURNAMENT_OVERVIEW_PAGE = "tournament_overview.jsf";
 
     @EJB
     private ITournamentControllerEJB _tournamentController;
@@ -150,6 +153,8 @@ public class TournamentViewWebController implements Serializable {
 
             setRequestedEdit(false);
 
+            FacesContext.getCurrentInstance().getExternalContext().redirect(TOURNAMENT_OVERVIEW_PAGE);
+
         } catch (ValidationException e) {
 
             String context = "Error occurred while saving match results. Entered data is not valid.";
@@ -170,6 +175,12 @@ public class TournamentViewWebController implements Serializable {
 
             LOGGER.error(context, e);
             FacesContext.getCurrentInstance().addMessage(MATCH_RESULTS_EDIT_FORM, new FacesMessage(context));
+        } catch (IOException e) {
+            LOGGER.error(
+                "Unable to execute workaround for form re-submission in Tournament overview.",
+                TOURNAMENT_OVERVIEW_PAGE,
+                e
+            );
         }
     }
 

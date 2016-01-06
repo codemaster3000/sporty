@@ -17,19 +17,6 @@ import java.util.List;
 public interface ITeamControllerRMI extends IRemoteControllerRMI {
 
     /**
-     * Creates new or saves old team in data storage with data from the DTO.
-     *
-     * @param teamDTO DTO for team creation or save.
-     * @param session Session object.
-     * @return Integer Id of the updated or saved entity.
-     * @throws RemoteException
-     * @throws ValidationException
-     * @throws NotAuthorisedException
-     */
-    Integer createOrSaveTeam(TeamDTO teamDTO, SessionDTO session)
-    throws RemoteException, ValidationException, NotAuthorisedException;
-
-    /**
      * Returns a list of all teams to which member with a given id is assigned.
      *
      * @param memberId id of the target member (will be used for search).
