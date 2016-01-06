@@ -211,11 +211,11 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
 
             try {
 
-                ITeamControllerUniversal teamController = COMMUNICATION_FACADE.lookupForTeamController();
-                teamController.createOrSaveTeam(
-                    _activeTeamDTO,
-                    COMMUNICATION_FACADE.getActiveSession()
-                );
+//                ITeamControllerUniversal teamController = COMMUNICATION_FACADE.lookupForTeamController();
+//                teamController.createOrSaveTeam(
+//                    _activeTeamDTO,
+//                    COMMUNICATION_FACADE.getActiveSession()
+//                );
 
                 for (MemberDTO member : memberList) {
                     COMMUNICATION_FACADE.lookupForMemberController().assignMemberToTeam(
