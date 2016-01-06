@@ -211,11 +211,11 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
 
             try {
 
-                ITeamControllerUniversal teamController = COMMUNICATION_FACADE.lookupForTeamController();
-                teamController.createOrSaveTeam(
-                    _activeTeamDTO,
-                    COMMUNICATION_FACADE.getActiveSession()
-                );
+//                ITeamControllerUniversal teamController = COMMUNICATION_FACADE.lookupForTeamController();
+//                teamController.createOrSaveTeam(
+//                    _activeTeamDTO,
+//                    COMMUNICATION_FACADE.getActiveSession()
+//                );
 
                 for (MemberDTO member : memberList) {
                     COMMUNICATION_FACADE.lookupForMemberController().assignMemberToTeam(
@@ -233,11 +233,6 @@ public class TeamViewController extends ConsumerViewController<MemberDTO> {
 
             } catch (RemoteCommunicationException e) {
                 LOGGER.error("Error occurred while saving the team.", e);
-            } catch (ValidationException e) {
-                String context = String.format("Validation exception %s while saving team.", e.getCause());
-
-                GUIHelper.showValidationAlert(context);
-                LOGGER.error(context, e);
             } catch (UnknownEntityException e) {
                 LOGGER.error("Unable to assign Member to Team", e);
             } catch (NotAuthorisedException e) {
