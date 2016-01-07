@@ -64,7 +64,7 @@ public class CommunicationFacade implements ICommunicationFacade {
             }
 
             default: {
-                _subjectCommunicationFacade = new CommunicationFacadeEJB(properties);
+                _subjectCommunicationFacade = new CommunicationFacadeRMI(properties);
 
                 LOGGER.info("Starting client in Default(RMI) mode.");
                 break;
