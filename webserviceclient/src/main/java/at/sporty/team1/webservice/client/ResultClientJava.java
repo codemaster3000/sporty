@@ -11,11 +11,13 @@ import java.net.URL;
  * Created by f00 on 27.12.15.
  */
 public class ResultClientJava {
-    private static final String TARGET_PROVIDER = "http://localhost:8080/webclient-0.1-SNAPSHOT/TournamentResultServiceService?wsdl";
+    private static final String TARGET_PROVIDER = "TournamentResultServiceService?wsdl";
 
     public static void main(String[] args) throws Exception {
 
-        URL url = new URL(TARGET_PROVIDER);
+        System.out.println("Please use a start argument which looks like (remote address): \"http://localhost:8080/webapp\"");
+
+        URL url = new URL(String.format("%s/%s", args[0], TARGET_PROVIDER));
 
         //1st argument service URI, refer to wsdl document above
         //2nd argument is service name, refer to wsdl document above
@@ -25,7 +27,6 @@ public class ResultClientJava {
 
         ITournamentResultService resultService = service.getPort(ITournamentResultService.class);
 
-        //TODO enter a valid matchId here (15 is valid)
-        System.out.println(resultService.getTournamentResult("15"));
+        System.out.println(resultService.getTournamentResult(args[1]));
     }
 }
