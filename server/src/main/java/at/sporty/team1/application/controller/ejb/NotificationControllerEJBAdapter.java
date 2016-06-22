@@ -7,6 +7,7 @@ import at.sporty.team1.shared.dtos.MessageDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.ValidationException;
+import org.jboss.ejb3.annotation.Clustered;
 
 import javax.ejb.Stateless;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 /**
  * Created by f00 on 13.12.15.
  */
+@Clustered
 @Stateless(name = "NOTIFICATION_CONTROLLER_EJB")
 public class NotificationControllerEJBAdapter implements INotificationControllerEJB {
     private static final long serialVersionUID = 1L;

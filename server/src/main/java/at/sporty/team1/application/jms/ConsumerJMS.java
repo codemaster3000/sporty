@@ -1,17 +1,10 @@
 package at.sporty.team1.application.jms;
 
-import at.sporty.team1.shared.dtos.MessageDTO;
-import com.sun.messaging.ConnectionFactory;
-import com.sun.messaging.Queue;
-
-import javax.jms.*;
-import javax.naming.NamingException;
-
 /**
  * Created by sereGkaluv on 30-Nov-15.
  */
 public class ConsumerJMS {
-    private static final String DEFAULT_HOST = "localhost";
+    /*private static final String DEFAULT_HOST = "localhost";
     private static final int DEFAULT_PORT = 7676;
     private static final int TIMEOUT = 5000;
 
@@ -32,5 +25,5 @@ public class ConsumerJMS {
         connection.close();
 
         return message != null ? (MessageDTO) message.getObject() : null;
-    }
+    }*/
 }

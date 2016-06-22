@@ -6,12 +6,14 @@ import at.sporty.team1.shared.api.ejb.ILoginControllerEJB;
 import at.sporty.team1.shared.dtos.AuthorisationDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
 import at.sporty.team1.shared.exceptions.SecurityException;
+import org.jboss.ejb3.annotation.Clustered;
 
 import javax.ejb.Stateless;
 
 /**
  * Created by f00 on 13.12.15.
  */
+@Clustered
 @Stateless(name = "LOGIN_CONTROLLER_EJB")
 public class LoginControllerEJBAdapter implements ILoginControllerEJB {
     private static final long serialVersionUID = 1L;

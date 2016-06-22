@@ -10,6 +10,7 @@ import at.sporty.team1.shared.dtos.TeamDTO;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.UnknownEntityException;
 import at.sporty.team1.shared.exceptions.ValidationException;
+import org.jboss.ejb3.annotation.Clustered;
 
 import javax.ejb.Stateless;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 /**
  * Created by f00 on 13.12.15.
  */
+@Clustered
 @Stateless(name ="TEAM_CONTROLLER_EJB")
 public class TeamControllerEJBAdapter implements ITeamControllerEJB {
     private static final long serialVersionUID = 1L;

@@ -36,9 +36,9 @@ public class AuthWebController implements Serializable {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String TOURNAMENT_SEARCH_PAGE = "tournaments.jsf";
 
-    @EJB
+    @EJB(name = "LOGIN_CONTROLLER_EJB")
     private ILoginControllerEJB _loginController;
-    @EJB
+    @EJB(name = "MEMBER_CONTROLLER_EJB")
     private IMemberControllerEJB _memberController;
 
     private String _username;

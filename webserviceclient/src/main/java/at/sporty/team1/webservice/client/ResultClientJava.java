@@ -17,7 +17,7 @@ public class ResultClientJava {
 
         System.out.println("Please use a start argument which looks like (remote address): \"http://localhost:8080/webapp\"");
 
-        URL url = new URL(String.format("%s/%s", args[0], TARGET_PROVIDER));
+        URL url = new URL(String.format("%s/%s", "http://52.58.91.134:8080/webapp", TARGET_PROVIDER));
 
         //1st argument service URI, refer to wsdl document above
         //2nd argument is service name, refer to wsdl document above
@@ -27,6 +27,6 @@ public class ResultClientJava {
 
         ITournamentResultService resultService = service.getPort(ITournamentResultService.class);
 
-        System.out.println(resultService.getTournamentResult(args[1]));
+        System.out.println(resultService.getTournamentResult("21"));
     }
 }

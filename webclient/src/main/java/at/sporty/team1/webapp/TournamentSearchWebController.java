@@ -27,7 +27,7 @@ public class TournamentSearchWebController implements Serializable {
     private static final String VALIDATION_EXCEPTION = "Server validation problem occurred. [%s]";
     private static final String TOURNAMENT_OVERVIEW_PAGE = "tournament_overview.jsf";
 
-    @EJB
+    @EJB(name = "TOURNAMENT_CONTROLLER_EJB")
     private ITournamentControllerEJB _tournamentController;
 
     private String _searchQuery;

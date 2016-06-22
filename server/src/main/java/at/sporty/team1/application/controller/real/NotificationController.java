@@ -1,21 +1,13 @@
 package at.sporty.team1.application.controller.real;
 
-import at.sporty.team1.application.auth.AccessPolicy;
-import at.sporty.team1.application.auth.BasicAccessPolicies;
 import at.sporty.team1.application.controller.real.api.INotificationController;
-import at.sporty.team1.application.jms.ConsumerJMS;
-import at.sporty.team1.application.jms.ProducerJMS;
 import at.sporty.team1.shared.dtos.MessageDTO;
 import at.sporty.team1.shared.dtos.SessionDTO;
-import at.sporty.team1.shared.enums.UserRole;
 import at.sporty.team1.shared.exceptions.NotAuthorisedException;
 import at.sporty.team1.shared.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.jms.JMSException;
-import javax.naming.NamingException;
-import java.util.LinkedList;
 import java.util.List;
 
 public class NotificationController implements INotificationController {
@@ -30,6 +22,7 @@ public class NotificationController implements INotificationController {
     throws ValidationException, NotAuthorisedException {
 
         /* Checking access permissions */
+        /*
         //1 STEP
         if (messageDTO == null) throw new NotAuthorisedException();
 
@@ -60,6 +53,8 @@ public class NotificationController implements INotificationController {
 
             return false;
         }
+        */
+        return true;
     }
 
     @Override
@@ -67,6 +62,7 @@ public class NotificationController implements INotificationController {
     throws NotAuthorisedException {
 
         /* Checking access permissions */
+        /*
         if (!LoginController.hasEnoughPermissions(
             session,
             BasicAccessPolicies.isSelf(session.getUserId())
@@ -96,5 +92,7 @@ public class NotificationController implements INotificationController {
 
             return null;
         }
+        */
+        return null;
     }
 }

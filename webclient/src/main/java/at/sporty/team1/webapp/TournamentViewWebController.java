@@ -36,7 +36,7 @@ public class TournamentViewWebController implements Serializable {
     private static final String MATCH_RESULTS_EDIT_FORM = "matchEditForm:results";
     private static final String TOURNAMENT_OVERVIEW_PAGE = "tournament_overview.jsf";
 
-    @EJB
+    @EJB(name = "TOURNAMENT_CONTROLLER_EJB")
     private ITournamentControllerEJB _tournamentController;
 
     private Map<Integer, MatchDTO> _matchesMap;

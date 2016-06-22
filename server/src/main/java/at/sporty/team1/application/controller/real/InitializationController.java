@@ -72,11 +72,17 @@ public class InitializationController implements IController {
             if (clazz.isAnnotationPresent(RemoteObject.class)) {
 
                 RemoteObject annotation = clazz.getAnnotation(RemoteObject.class);
-                String objectNaming = annotation.name() != null ? annotation.name() : clazz.getSimpleName();
+                String objectNaming = annotation != null && !annotation.name().isEmpty() ? annotation.name() : clazz.getSimpleName();
 
-                Naming.bind(String.format(DEFAULT_RMI, objectNaming), clazz.newInstance());
+                String bindAddress = String.format(DEFAULT_RMI, objectNaming);
+                Naming.bind(bindAddress, clazz.newInstance());
 
-                LOGGER.info(SERVER_LIFECYCLE_MARKER, "{} bounded to the registry.", objectNaming);
+                LOGGER.info(
+                    SERVER_LIFECYCLE_MARKER,
+                    "{} bounded to the registry and is available on address \"{}\".",
+                    objectNaming,
+                    bindAddress
+                );
 
             } else {
                 throw new Exception("Remote Object \"" + clazz.getSimpleName() + "\" is not annotated.");

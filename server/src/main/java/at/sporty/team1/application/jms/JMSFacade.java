@@ -1,17 +1,10 @@
 package at.sporty.team1.application.jms;
 
-import com.sun.messaging.ConnectionConfiguration;
-import com.sun.messaging.ConnectionFactory;
-import com.sun.messaging.Queue;
-
-import javax.jms.JMSException;
-import javax.naming.NamingException;
-
 /**
  * Created by sereGkaluv on 03-Dec-15.
  */
 public class JMSFacade {
-    private static final String ADDRESS_DELIMITER = ":";
+    /*private static final String ADDRESS_DELIMITER = ":";
     private static final String BOOL_TRUE = "true";
     private static final String BOOL_FALSE = "false";
     private static final String JMS_PREFIX = "Q_";
@@ -37,4 +30,5 @@ public class JMSFacade {
     private static String readBoolean(boolean isValue) {
         return isValue ? BOOL_TRUE : BOOL_FALSE;
     }
+    */
 }
